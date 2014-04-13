@@ -1,4 +1,5 @@
-friday
+Friday
 ======
 
-Basic to-do list/task management
+Basic to-do list and task management
+This is new and doesn't have any features yet.
