@@ -10,16 +10,20 @@
   </thead>
 
   <tbody>
-    <% @todo_items.each do |todo_item| %>
-      <tr>
-        <td><%= link_to 'Show', todo_item %></td>
-        <td><%= link_to 'Edit', edit_todo_item_path(todo_item) %></td>
-        <td><%= link_to 'Destroy', todo_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+    <% if @todo_items.size == 0 %>
+      <p>No to-do items! <%= link_to 'Create one', new_todo_item_path %> here!</p>
+    <% else %>
+      <% @todo_items.each do |todo_item| %>
+        <tr>
+          <td><%= link_to 'Show', todo_item %></td>
+          <td><%= link_to 'Edit', edit_todo_item_path(todo_item) %></td>
+          <td><%= link_to 'Destroy', todo_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Todo item', new_todo_item_path %>
+<%= link_to 'New to-do item', new_todo_item_path %>
