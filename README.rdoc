@@ -1,4 +1,7 @@
 == Friday
 
-Basic to-do list web app
-This is new and doesn't have any features yet.
+# Basic to-do list Rails app.
+# The app currently consists of three models:
+* TodoItem
+* Category
+* Categorization (intermediary to allow many-to-many relationship between TodoItem and Category)
