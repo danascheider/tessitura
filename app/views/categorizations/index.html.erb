@@ -1,0 +1,29 @@
+<h1>Listing categorizations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Todo</th>
+      <th>Category</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @categorizations.each do |categorization| %>
+      <tr>
+        <td><%= categorization.todo_id %></td>
+        <td><%= categorization.category_id %></td>
+        <td><%= link_to 'Show', categorization %></td>
+        <td><%= link_to 'Edit', edit_categorization_path(categorization) %></td>
+        <td><%= link_to 'Destroy', categorization, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Categorization', new_categorization_path %>
