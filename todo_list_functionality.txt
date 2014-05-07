@@ -1,0 +1,10 @@
+CORE FUNCTIONALITY:
+- Display a list of to-do items
+- Allow items to be added to and removed from the list
+- Allow completed items to be hidden or displayed
+
+TO-DO ITEM ATTRIBUTES:
+- Title
+- Description
+- Due date
+- Status (complete/incomplete)
