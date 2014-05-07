@@ -1,4 +1,6 @@
 Friday::Application.routes.draw do
+  resources :categories
+
   resources :categorizations
 
   resources :todo_items
