@@ -1,4 +1,6 @@
 Friday::Application.routes.draw do
+  resources :users
+
   resources :categories
 
   resources :categorizations
