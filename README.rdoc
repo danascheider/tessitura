@@ -3,6 +3,7 @@
 Basic to-do list Rails app.
 
 The app currently consists of three models:
+* User
 * TodoItem
 * Category
 * Categorization (intermediary to allow many-to-many relationship between TodoItem and Category)
