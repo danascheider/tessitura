@@ -62,5 +62,5 @@ Friday::Application.routes.draw do
   #     resources :products
   #   end
 
-  root to: 'todo_items#index'
+  root to: 'categories#index'
 end
