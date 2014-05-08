@@ -1,5 +1,10 @@
 class TodoItemsController < ApplicationController
   before_action :set_todo_item, only: [:show, :edit, :update, :destroy]
+  before_filter :get_user
+
+  def get_user
+    @user = User.find(params[:user_id])
+  end
 
   # GET /todo_items
   # GET /todo_items.json
@@ -10,6 +15,7 @@ class TodoItemsController < ApplicationController
   # GET /todo_items/1
   # GET /todo_items/1.json
   def show
+    @todos = @user.todo_items.find(params[:id])
   end
 
   # GET /todo_items/new

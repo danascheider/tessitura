@@ -1,11 +1,11 @@
 Friday::Application.routes.draw do
-  resources :users
+  resources :users do
+    resources :todo_items
+  end
 
   resources :categories
 
   resources :categorizations
-
-  resources :todo_items
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
