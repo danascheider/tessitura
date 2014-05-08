@@ -30,15 +30,19 @@ class TodoItemsController < ApplicationController
   # POST /todo_items
   # POST /todo_items.json
   def create
-    @todo_item = TodoItem.new(todo_item_params)
+    @todo_item = @user.todo_item.new(params[:todo_item])
 
     respond_to do |format|
       if @todo_item.save
-        format.html { redirect_to @todo_item, notice: 'Todo item was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @todo_item }
+        format.html { redirect_to [@user, @todo_item], 
+                      notice: 'Todo item was successfully created.' }
+        format.json { render action: 'show', 
+                             status: :created, 
+                             location: [@user, @todo_item] }
       else
         format.html { render action: 'new' }
-        format.json { render json: @todo_item.errors, status: :unprocessable_entity }
+        format.json { render json: @todo_item.errors, 
+                             status: :unprocessable_entity }
       end
     end
   end
@@ -48,7 +52,8 @@ class TodoItemsController < ApplicationController
   def update
     respond_to do |format|
       if @todo_item.update(todo_item_params)
-        format.html { redirect_to @todo_item, notice: 'Todo item was successfully updated.' }
+        format.html { redirect_to [@user, @todo_item], 
+                      notice: 'Todo item was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
