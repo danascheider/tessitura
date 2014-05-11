@@ -15,7 +15,7 @@ class TodoItemsController < ApplicationController
   # GET /todo_items/1
   # GET /todo_items/1.json
   def show
-    @todos = @user.todo_items.find(params[:id])
+    @todo_items = @user.todo_items.find(params[:id])
   end
 
   # GET /todo_items/new
@@ -67,7 +67,7 @@ class TodoItemsController < ApplicationController
   def destroy
     @todo_item.destroy
     respond_to do |format|
-      format.html { redirect_to todo_items_url }
+      format.html { redirect_to user_todo_items_url }
       format.json { head :no_content }
     end
   end
