@@ -1,5 +1,5 @@
 class TodoItemsController < ApplicationController
-  before_action :set_todo_item, only: [:show, :edit, :update, :destroy]
+  before_action :get_user, :set_todo_item, only: [:show, :edit, :update, :destroy]
   before_filter :get_user
 
   def get_user
@@ -30,7 +30,7 @@ class TodoItemsController < ApplicationController
   # POST /todo_items
   # POST /todo_items.json
   def create
-    @todo_item = @user.todo_item.new(params[:todo_item])
+    @todo_item = @user.todo_items.new(params[:todo_item])
 
     respond_to do |format|
       if @todo_item.save
