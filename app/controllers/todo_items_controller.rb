@@ -1,5 +1,5 @@
 class TodoItemsController < ApplicationController
-  before_action :get_user, :set_todo_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_todo_item, only: [:show, :edit, :update, :destroy]
   before_filter :get_user
 
   def get_user
@@ -30,7 +30,7 @@ class TodoItemsController < ApplicationController
   # POST /todo_items
   # POST /todo_items.json
   def create
-    @todo_item = @user.todo_items.new(params[:todo_item])
+    @todo_item = @user.todo_items.new(todo_item_params)
 
     respond_to do |format|
       if @todo_item.save
@@ -80,6 +80,6 @@ class TodoItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def todo_item_params
-      params[:todo_item]
+      params.require(:title).permit(:description)
     end
 end
