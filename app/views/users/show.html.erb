@@ -5,5 +5,6 @@
   <%= @user.name %>
 </p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Show To-Do Items', user_todo_items_path(@user) %> |
+<%= link_to 'Edit Profile', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
