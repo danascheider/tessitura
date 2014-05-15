@@ -12,10 +12,24 @@
   <% end %>
 
   <div class="field">
+    <!-- This form needs to have a deadline field, but I'm not sure how to make that work just yet. -->
     <%= f.label :title %>
     <%= f.text_field :title %><br />
+    <%= f.label :priority %>
+    <%= f.label :priority, 'Urgent' %>
+    <%= f.radio_button :priority, 'Urgent' %>
+    <%= f.label :priority, 'Important' %>
+    <%= f.radio_button :priority, 'Important' %>
+    <%= f.label :priority, 'Normal' %>
+    <%= f.radio_button :priority, 'Normal', checked: true %>
+    <%= f.label :priority, 'Low' %>
+    <%= f.radio_button :priority, 'Low' %>
+    <%= f.label :priority, 'Lowest' %>
+    <%= f.radio_button :priority, 'Lowest' %><br />
     <%= f.label :description %>
-    <%= f.text_field :description %><br />
+    <%= f.text_area :description %><br />
+    <%= f.label :status %>
+    <%= f.select :status, ['New', 'In Progress', 'Blocking', 'Complete']%> <br />
   </div>
   <div class="actions">
     <%= f.submit %>
