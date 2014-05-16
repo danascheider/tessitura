@@ -1,4 +1,9 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_todo_item_path(@todo_item) %> |
-<%= link_to 'Back', todo_items_path %>
+<p>
+<strong>Title:</strong> <%= @todo_item.title %><br />
+<strong>Description:</strong> <%= @todo_item.description %>
+</p>
+<%= link_to 'Show All To-Do Items', user_todo_items_path(@user) %> |
+<%= link_to 'Edit', edit_user_todo_item_path(@user, @todo_item) %> |
+<%= link_to 'Back', user_todo_items_path(@user) %>
