@@ -32,6 +32,9 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+# Bootstrap-Sass for GUI
+gem 'bootstrap-sass', '~> 3.1.1'
+
 # Test with Cucumber and RSpec
 group :test do 
   gem 'cucumber-rails', '~> 1.4.0'
