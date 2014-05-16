@@ -19,4 +19,4 @@ To-do items can also be placed in user-created categories.
 
 === Versioning
 
-Version 0.0.1; no stable release available.
+Version 0.0.0; no stable release available.
