@@ -3,7 +3,9 @@
 <table>
   <thead>
     <tr>
-      <th>Name</th>
+      <% unless @categories.size == 0 %>
+        <th>Name</th>
+      <% end %>
       <th></th>
       <th></th>
       <th></th>
@@ -11,13 +13,17 @@
   </thead>
 
   <tbody>
-    <% @categories.each do |category| %>
-      <tr>
-        <td><%= category.name %></td>
-        <td><%= link_to 'Show', category %></td>
-        <td><%= link_to 'Edit', edit_category_path(category) %></td>
-        <td><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+    <% if @categories.size == 0 %>
+      <p>No categories! <%= link_to 'Create one', new_category_path %> here!</p>
+    <% else %>
+      <% @categories.each do |category| %>
+        <tr>
+          <td><%= category.name %></td>
+          <td><%= link_to 'Show', category %></td>
+          <td><%= link_to 'Edit', edit_category_path(category) %></td>
+          <td><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
