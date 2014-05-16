@@ -9,11 +9,11 @@ The User model is a low priority in development due to my particular use case. C
 === To-Do List
 
 Users create to-do items and are able to view them as a list or individually. To-do items belong to the user who created them and are destroyed if the user account is closed. To-do items have the following attributes (i.e., columns in the TodoItem table):
-  * Title
-  * Status ("New", "Complete", "In Progress", or "Blocking")
-  * Priority ("Urgent", "Important", "Normal", or "Low")
-  * Deadline
-  * Description
+- Title
+- Status ("New", "Complete", "In Progress", or "Blocking")
+- Priority ("Urgent", "Important", "Normal", or "Low")
+- Deadline
+- Description
 
 To-do items can also be placed in user-created categories.
 
