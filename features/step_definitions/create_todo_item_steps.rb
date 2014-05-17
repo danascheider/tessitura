@@ -19,4 +19,9 @@ When /^I submit the form with no title$/ do
   choose('todo_item_priority_urgent')
   select('Blocking', {from: 'todo_item_status'})
   click_button('Create Todo item')
-end  
+end
+
+When /^I submit the form with only a title$/ do 
+  fill_in('Title', {with: "Take out the trash"})
+  click_button('Create Todo item')
+end
