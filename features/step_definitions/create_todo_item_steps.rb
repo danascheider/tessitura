@@ -25,3 +25,11 @@ When /^I submit the form with only a title$/ do
   fill_in('Title', {with: "Take out the trash"})
   click_button('Create Todo item')
 end
+
+Then /^a to-do item should be created$/ do 
+  #
+end
+
+Then /^I should see a message that the to-do item was created$/ do 
+  find('#notice').should have_content("Todo item was successfully created")
+end
