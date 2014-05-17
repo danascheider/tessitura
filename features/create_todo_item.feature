@@ -7,10 +7,10 @@ Feature: Create To-Do Item
   Background:
     Given I am a user
     When I navigate to my new to-do item page
-    And I submit the filled-out form
 
   Scenario: Logged-in user creates to-do item
 
+    When I submit the filled-out form
     Then a to-do item should be created
     And I should see a message that the to-do item was created
 
@@ -18,12 +18,13 @@ Feature: Create To-Do Item
     
     User tries to create a to-do item but leaves the title field blank
 
-    But I have left the title field blank
+    When I submit the form with no title
     Then no to-do item should be created
 
   Scenario: Non-required fields are missing
 
     User creates a to-do item, filling out only the title field
 
-    But I have only filled out the title
+    When I submit the form with only a title
     Then a to-do item with that title should be created
+    And I should see a message that the to-do item was created
