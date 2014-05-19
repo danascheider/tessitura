@@ -3,4 +3,5 @@ class TodoItem < ActiveRecord::Base
   has_many :categorizations, foreign_key: :todo_id
   has_many :categories, through: :categorizations
   validates :title, presence: true
+  scope :complete, -> { where(status: 'Complete')}
 end

@@ -5,21 +5,22 @@
 <% else %>
 
   <% @todo_items.each do |item| %>
-    <div class='todo-list-item'>
-      <h3><%= item.title %></h3>
-      <p><strong>Description:</strong> <%= item.description %></p>
-      <table>
-        <tbody>
-          <tr>
-            <td><%= link_to 'Show', [@user, item] %></td>
-            <td><%= link_to 'Edit', edit_user_todo_item_path(@user, item) %></td>
-            <td><%= link_to 'Delete', [@user, item], method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <% unless item.status == 'Complete' %>
+      <div class='todo-list-item'>
+        <h3><%= item.title %></h3>
+        <p><strong>Description:</strong> <%= item.description %></p>
+        <table>
+          <tbody>
+            <tr>
+              <td><%= link_to 'Show', [@user, item] %></td>
+              <td><%= link_to 'Edit', edit_user_todo_item_path(@user, item) %></td>
+              <td><%= link_to 'Delete', [@user, item], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
   <% end %>
-
 <% end %>
 <br />
 
