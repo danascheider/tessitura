@@ -11,15 +11,14 @@ Feature: Create To-Do Item
   Scenario: Logged-in user creates to-do item
 
     When I submit the filled-out form
-    Then a to-do item should be created
-    And I should see a message that the to-do item was created
+    Then I should see a message that the to-do item was created
 
   Scenario: User doesn't give title
     
     User tries to create a to-do item but leaves the title field blank
 
     When I submit the form with no title
-    Then no to-do item should be created
+    Then I should see a message that the title field is required
 
   Scenario: Non-required fields are missing
 
