@@ -22,5 +22,14 @@ Feature: View To-Do List
     Then I should see all of my to-do items
     And I should not see anyone else's to-do items
 
-  Scenario: User has completed task
-    Given I have 3 to-do items
+  Scenario: Some tasks are complete
+    Given I have 5 to-do items
+    And two of them are complete
+    When I navigate to my to-do list
+    Then I shouldn't see the completed items
+
+  Scenario: User marks task complete
+    When I navigate to my to-do list
+    And I click the 'Mark Completed' link on the first to-do item
+    Then the status of the first to-do item should be 'Complete'
+    And it should disappear from the list
