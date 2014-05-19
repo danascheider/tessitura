@@ -6,7 +6,6 @@
   <% i = 1 %>
   <% @todo_items.each do |item| %>
     <% div_id = "item-#{i}" %>
-    <div id=<%= div_id %>>
       <h3><%= item.title %></h3>
       <p><strong>Description:</strong> <%= item.description %></p>
       <table>
@@ -17,10 +16,11 @@
             <td><%= link_to 'Delete', [@user, item], method: :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
         </tbody>
-        <% i += 1 %>
-    </div>
+      </table>
+      <% i += 1 %>
+    <% end %>
   <% end %>
 <% end %>
 <br />
 
-<%= link_to 'New to-do item', new_user_todo_item_path(@user) %>
+<%= link_to 'New to-do item', new_user_todo_item_path(@user.id) %>
