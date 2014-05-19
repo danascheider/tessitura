@@ -13,3 +13,9 @@ Feature: View To-Do List
     When I navigate to my to-do list
     Then I should see a message that I have no to-do items
     And I should see a link to create a new to-do item
+
+  Scenario: To-do list is not empty
+
+    Given I have 3 to-do items
+    When I navigate to my to-do list
+    Then there should be 3 to-do items listed

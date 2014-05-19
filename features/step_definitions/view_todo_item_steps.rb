@@ -1,3 +1,5 @@
+### Scenario 1: To-do list is empty ###
+
 Given /^my to\-do list is empty$/ do 
   assert_empty(@user.todo_items)
 end
@@ -12,4 +14,10 @@ end
 
 Then /^I should see a link to create a new to\-do item$/ do 
   find_link('Create one').should_not be_nil
+end
+
+### Scenario 2: To-do list has 3 items ###
+
+Given /^I have (\d)+ to\-do items$/ do |number|
+  @user.todo_items.count == number
 end
