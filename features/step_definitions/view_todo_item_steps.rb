@@ -19,18 +19,20 @@ end
 ### Scenario 2: To-do list has 3 items ###
 
 Given /^I have (\d)+ to\-do items$/ do |number|
-  @user.todo_items.count == number
+  @user.todo_items.count == (@length = number)
 end
 
 Given /^the to\-do items are called "(.*)", "(.*)", and "(.*)"$/ do |title1, title2, title3|
-  item1 = FactoryGirl.create(:todo_item, title: title1, user_id: @user.id)
-  item2 = FactoryGirl.create(:todo_item, title: title2, user_id: @user.id)
-  item3 = FactoryGirl.create(:todo_item, title: title3, user_id: @user.id)
-  @titles = [title1, title2, title3]
+  @my_todos = [ @item1 = FactoryGirl.create(:todo_item, title: title1, user_id: @user.id),
+                @item2 = FactoryGirl.create(:todo_item, title: title2, user_id: @user.id),
+                @item3 = FactoryGirl.create(:todo_item, title: title3, user_id: @user.id) ]
 end
 
-Then(/^all of the to\-do items should be listed$/) do
-  @titles.each do |title|
-    find('body').should have_content(title)
+Then(/^I should see all of my to\-do items$/) do
+  @my_todos.each do |todo_item|
+    find('body').should have_content(todo_item.title)
   end
+end
+
+Then(/^I should not see anyone else\'s to\-do items$/) do 
 end
