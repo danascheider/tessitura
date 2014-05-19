@@ -47,3 +47,7 @@ Given /^(\d+) of them have been marked (.*)$/ do |number, status|
     @todo_list[i].status = 'Complete'
   end
 end
+
+Then /^I shouldn\'t see the items that have been marked '(.*)'$/ do |status|
+
+end
