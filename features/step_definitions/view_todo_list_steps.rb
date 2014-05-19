@@ -1,7 +1,12 @@
 ### Scenario 1: To-do list is empty ###
 
-Given /^my to\-do list is empty$/ do 
-  assert_empty(@user.todo_items)
+
+Given /^I have (no|\d+) to\-do items$/ do |number|
+  if number == 0 || number == 'no'
+    assert_empty(@user.todo_items)
+  else
+    @user.todo_items.count == (@length = number)
+  end
 end
 
 When /^I navigate to my to\-do list$/ do
@@ -17,10 +22,6 @@ Then /^I should see a link to create a new to\-do item$/ do
 end
 
 ### Scenario 2: To-do list has 3 items ###
-
-Given /^I have (\d)+ to\-do items$/ do |number|
-  @user.todo_items.count == (@length = number)
-end
 
 Given /^the to\-do items are called "(.*)", "(.*)", and "(.*)"$/ do |title1, title2, title3|
   @my_todos = [ @item1 = FactoryGirl.create(:todo_item, title: title1, user_id: @user.id),

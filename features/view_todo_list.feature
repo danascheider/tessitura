@@ -9,7 +9,7 @@ Feature: View To-Do List
 
   Scenario: To-do list is empty
 
-    Given my to-do list is empty
+    Given I have no to-do items
     When I navigate to my to-do list
     Then I should see a message that I have no to-do items
     And I should see a link to create a new to-do item
@@ -21,3 +21,6 @@ Feature: View To-Do List
     When I navigate to my to-do list
     Then I should see all of my to-do items
     And I should not see anyone else's to-do items
+
+  Scenario: User has completed task
+    Given I have 3 to-do items
