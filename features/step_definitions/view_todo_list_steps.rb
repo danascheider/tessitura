@@ -1,6 +1,5 @@
 ### Scenario 1: To-do list is empty ###
 
-
 Given /^I have (no|\d+) to\-do items$/ do |number|
   if number == 0 || number == 'no'
     assert_empty(@user.todo_items)
