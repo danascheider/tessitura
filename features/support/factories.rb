@@ -6,4 +6,9 @@ FactoryGirl.define do
     user.password 'password'
     user.name 'Test User'
   end
+
+  factory :todo_item do |item|
+    item.title 'Dummy item'
+    item.user_id nil
+  end
 end
