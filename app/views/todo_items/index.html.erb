@@ -15,7 +15,7 @@
     <% else %>
       <% @todo_items.each do |todo_item| %>
         <tr>
-          <td><strong><%= todo_item.title %></strong></td>
+          <td><h3 class='title'><%= todo_item.title %></h3></td>
         </tr>
         <tr>
           <td><strong>Description:</strong> <%= todo_item.description %></td>
