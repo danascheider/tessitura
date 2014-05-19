@@ -14,7 +14,7 @@
       <p>No to-do items! <%= link_to 'Create one', new_user_todo_item_path %> here!</p>
     <% else %>
       <% @todo_items.each do |todo_item| %>
-        <tr>
+        <tr class='title'>
           <td><h3 class='title'><%= todo_item.title %></h3></td>
         </tr>
         <tr>
