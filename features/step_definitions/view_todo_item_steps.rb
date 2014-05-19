@@ -21,3 +21,7 @@ end
 Given /^I have (\d)+ to\-do items$/ do |number|
   @user.todo_items.count == number
 end
+
+Then(/^there should be (\d+) to\-do items listed$/) do |arg1|
+  find('#item-3').should have_content(@user.todo_items.last.title)
+end
