@@ -17,16 +17,15 @@ Feature: View To-Do List
   Scenario: To-do list is not empty
 
     Given I have 3 to-do items
-    And the to-do items are called "My Task 1", "My Task 2", and "My Task 3"
     When I navigate to my to-do list
     Then I should see all of my to-do items
     And I should not see anyone else's to-do items
 
   Scenario: Some tasks are complete
     Given I have 5 to-do items
-    And two of them are complete
+    And 2 of them have been marked 'Complete'
     When I navigate to my to-do list
-    Then I shouldn't see the completed items
+    Then I shouldn't see the items that have been marked 'Complete'
 
   Scenario: User marks task complete
     When I navigate to my to-do list

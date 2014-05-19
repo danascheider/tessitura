@@ -1,11 +1,13 @@
 ### Scenario 1: To-do list is empty ###
 
 Given /^I have (no|\d+) to\-do items$/ do |number|
-  if number == 0 || number == 'no'
-    assert_empty(@user.todo_items)
-  else
-    @user.todo_items.count == (@length = number)
+  number = if 'no' then 0; else number.to_i; end
+  i = 1
+  number.times do 
+    FactoryGirl.create(:todo_item, title: "My Task #{i}", user_id: @user.id)
+    i += 1
   end
+  @todo_list = @user.todo_items
 end
 
 When /^I navigate to my to\-do list$/ do
@@ -22,18 +24,19 @@ end
 
 ### Scenario 2: To-do list has 3 items ###
 
-Given /^the to\-do items are called "(.*)", "(.*)", and "(.*)"$/ do |title1, title2, title3|
-  @my_todos = [ @item1 = FactoryGirl.create(:todo_item, title: title1, user_id: @user.id),
-                @item2 = FactoryGirl.create(:todo_item, title: title2, user_id: @user.id),
-                @item3 = FactoryGirl.create(:todo_item, title: title3, user_id: @user.id) ]
-end
-
 Then(/^I should see all of my to\-do items$/) do
-  @my_todos.each do |todo_item|
-    find('body').should have_content(todo_item.title)
+  unless @todo_list.length == 0
+    @todo_list.each do |todo_item|
+      find('body').should have_content(todo_item.title)
+    end
   end
 end
 
 Then(/^I should not see anyone else\'s to\-do items$/) do 
-  page.should have_css(".todo-list-item", count: @my_todos.length )
+  page.should have_css(".todo-list-item", count: @todo_list.length )
+end
+
+### Scenario 3: Some tasks are complete
+Given /^(\d+) of them have been marked (.*)$/ do |number, status|
+  #
 end
