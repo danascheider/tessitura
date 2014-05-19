@@ -35,4 +35,5 @@ Then(/^I should see all of my to\-do items$/) do
 end
 
 Then(/^I should not see anyone else\'s to\-do items$/) do 
+  find('body').should have_content('<div class="todo-list-item">')
 end
