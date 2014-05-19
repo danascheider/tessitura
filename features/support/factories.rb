@@ -10,5 +10,6 @@ FactoryGirl.define do
   factory :todo_item do |item|
     item.title 'Dummy item'
     item.user_id nil
+    item.status 'New'
   end
 end
