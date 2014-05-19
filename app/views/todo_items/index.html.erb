@@ -15,7 +15,7 @@
     <% else %>
       <% @todo_items.each do |todo_item| %>
         <tr>
-          <td><strong>Title:</strong> <%= todo_item.title %></td>
+          <td><strong><%= todo_item.title %></strong></td>
         </tr>
         <tr>
           <td><strong>Description:</strong> <%= todo_item.description %></td>
@@ -29,8 +29,5 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-<h4>Params:</h4> <%= debug(params) %>
 
 <%= link_to 'New to-do item', new_user_todo_item_path(@user) %>
