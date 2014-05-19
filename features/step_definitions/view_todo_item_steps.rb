@@ -22,6 +22,15 @@ Given /^I have (\d)+ to\-do items$/ do |number|
   @user.todo_items.count == number
 end
 
-Then(/^there should be (\d+) to\-do items listed$/) do |arg1|
-  find('#item-3').should have_content(@user.todo_items.last.title)
+Given /^the to\-do items are called "(.*)", "(.*)", and "(.*)"$/ do |title1, title2, title3|
+  item1 = FactoryGirl.create(:todo_item, title: title1, user_id: @user.id)
+  item2 = FactoryGirl.create(:todo_item, title: title2, user_id: @user.id)
+  item3 = FactoryGirl.create(:todo_item, title: title3, user_id: @user.id)
+  @titles = [title1, title2, title3]
+end
+
+Then(/^all of the to\-do items should be listed$/) do
+  @titles.each do |title|
+    find('body').should have_content(title)
+  end
 end
