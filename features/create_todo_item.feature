@@ -25,5 +25,4 @@ Feature: Create To-Do Item
     User creates a to-do item, filling out only the title field
 
     When I submit the form with only a title
-    Then a to-do item with that title should be created
-    And I should see a message that the to-do item was created
+    Then I should see a message that the to-do item was created
