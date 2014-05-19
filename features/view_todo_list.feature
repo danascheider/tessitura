@@ -17,5 +17,6 @@ Feature: View To-Do List
   Scenario: To-do list is not empty
 
     Given I have 3 to-do items
+    And the to-do items are called "My Task 1", "My Task 2", and "My Task 3"
     When I navigate to my to-do list
-    Then there should be 3 to-do items listed
+    Then all of the to-do items should be listed
