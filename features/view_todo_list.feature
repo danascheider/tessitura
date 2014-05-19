@@ -19,4 +19,5 @@ Feature: View To-Do List
     Given I have 3 to-do items
     And the to-do items are called "My Task 1", "My Task 2", and "My Task 3"
     When I navigate to my to-do list
-    Then all of the to-do items should be listed
+    Then I should see all of my to-do items
+    And I should not see anyone else's to-do items
