@@ -1,13 +1,17 @@
 ### Scenario 1: To-do list is empty ###
 
 Given /^I have (no|\d+) to\-do items$/ do |number|
-  number = if 'no' then 0; else number.to_i; end
-  i = 1
-  number.times do 
-    FactoryGirl.create(:todo_item, title: "My Task #{i}", user_id: @user.id)
-    i += 1
+  if number == 'no' || number == 0
+    @user.todo_items.length == 0
+  else
+    number = number.to_i
+    i = 1
+    number.times do 
+      FactoryGirl.create(:todo_item, title: "My Task #{i}", user_id: @user.id)
+      i += 1
+    end
   end
-  @todo_list = @user.todo_items
+  @todo_list = @user.todo_items.to_a
 end
 
 When /^I navigate to my to\-do list$/ do
@@ -38,5 +42,8 @@ end
 
 ### Scenario 3: Some tasks are complete
 Given /^(\d+) of them have been marked (.*)$/ do |number, status|
-  #
+  number = number.to_i
+  for i in 0..(number - 1)
+    @todo_list[i].status = 'Complete'
+  end
 end
