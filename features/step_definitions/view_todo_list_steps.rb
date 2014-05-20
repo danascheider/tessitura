@@ -50,7 +50,7 @@ end
 
 Then /^I shouldn\'t see the items that have been marked '(.*)'$/ do |status|
   @todo_list.each do |todo_item|
-    if todo_item.status == 'Complete'
+    unless TodoItem.incomplete.include? todo_item
       find('body').should_not have_content(todo_item.title)
     end
   end
