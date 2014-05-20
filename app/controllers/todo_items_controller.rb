@@ -20,7 +20,7 @@ class TodoItemsController < ApplicationController
 
   # GET /todo_items/new
   def new
-    @todo_item = TodoItem.new
+    @todo_item = @user.todo_items.new
   end
 
   # GET /todo_items/1/edit
@@ -30,7 +30,7 @@ class TodoItemsController < ApplicationController
   # POST /todo_items
   # POST /todo_items.json
   def create
-    @todo_item = @user.todo_items.new(title: params["todo_item"]["title"], description: params["todo_item"]["description"])
+    @todo_item = @user.todo_items.new(todo_item_params)
 
     respond_to do |format|
       if @todo_item.save
@@ -51,7 +51,7 @@ class TodoItemsController < ApplicationController
   # PATCH/PUT /todo_items/1.json
   def update
     respond_to do |format|
-      if @todo_item.update(title: params["todo_item"]["title"], description: params["todo_item"]["description"])
+      if @todo_item.update(todo_item_params)
         format.html { redirect_to [@user, @todo_item], 
                       notice: 'Todo item was successfully updated.' }
         format.json { head :no_content }
@@ -80,5 +80,10 @@ class TodoItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def todo_item_params
+      param_hash = {}
+      params["todo_item"].each do |key, value|
+        param_hash[key.to_sym] = value
+      end
+      param_hash
     end
 end
