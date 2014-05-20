@@ -4,11 +4,12 @@
   <p>No to-do items! <%= link_to 'Create one', new_user_todo_item_path(@user.id) %> here.</p>
 <% else %>
 
-  <% @todo_items.each do |item| %>
+  <% @todo_items.incomplete.each do |item| %>
     <% unless item.status == 'Complete' %>
       <div class='todo-list-item'>
         <h3><%= item.title %></h3>
         <p><strong>Description:</strong> <%= item.description %></p>
+        <p><strong>Status:</strong> <%= item.status %>
         <table>
           <tbody>
             <tr>
