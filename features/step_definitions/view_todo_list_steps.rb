@@ -49,11 +49,9 @@ Given /^(\d+) of them have been marked (.*)$/ do |number, status|
 end
 
 Then /^I shouldn\'t see the items that have been marked '(.*)'$/ do |status|
-  completed_item_titles = []
   @todo_list.each do |todo_item|
-    completed_item_titles << todo_item.title if todo_item.status == 'Complete'
-  end
-  completed_item_titles.each do |title|
-    find('body').should_not have_content(title)
+    if todo_item.status == 'Complete'
+      find('body').should_not have_content(todo_item.title)
+    end
   end
 end
