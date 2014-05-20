@@ -7,4 +7,4 @@ Feature: View dashboard
 
     Given I am a user
     When I log in 
-    I should see my dashboard
+    Then I should see my dashboard
