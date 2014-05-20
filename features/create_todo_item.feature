@@ -12,7 +12,7 @@ Feature: Create To-Do Item
 
     When I submit the filled-out form
     Then I should see a message that the to-do item was created
-    And the last to-do item should have the information from the form
+    And my last to-do item should have the information from the form
 
   Scenario: User doesn't give title
     
