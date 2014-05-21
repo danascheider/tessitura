@@ -30,8 +30,7 @@ class TodoItemsController < ApplicationController
   # POST /todo_items
   # POST /todo_items.json
   def create
-    args = params.require(:todo_item).permit(:title, :deadline, :priority, :status, :description)
-    @todo_item = @user.todo_items.new(args)
+    @todo_item = @user.todo_items.new(todo_item_params)
 
     respond_to do |format|
       if @todo_item.save
@@ -51,9 +50,8 @@ class TodoItemsController < ApplicationController
   # PATCH/PUT /todo_items/1
   # PATCH/PUT /todo_items/1.json
   def update
-    args = params.require(:todo_item).permit(:title, :deadline, :description, :priority, :status)
     respond_to do |format|
-      if @todo_item.update(args)
+      if @todo_item.update(todo_item_params)
         format.html { redirect_to [@user, @todo_item], 
                       notice: 'Todo item was successfully updated.' }
         format.json { head :no_content }
@@ -78,5 +76,9 @@ class TodoItemsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_todo_item
       @todo_item = TodoItem.find(params[:id])
+    end
+
+    def todo_item_params 
+      params.require(:todo_item).permit(:title, :deadline, :description, :status, :priority)
     end
 end
