@@ -80,8 +80,9 @@ class TodoItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def todo_item_params
-      param_hash = {}
+      allowed_params, param_hash = ["title", "priority", "deadline", "status", "description"], {}
       params["todo_item"].each do |key, value|
+        raise AuthorizationError, "Invalid attribute: #{key}" unless allowed_params.include? key
         param_hash[key.to_sym] = value
       end
       param_hash
