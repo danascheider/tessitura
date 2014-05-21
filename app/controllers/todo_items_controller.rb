@@ -51,8 +51,9 @@ class TodoItemsController < ApplicationController
   # PATCH/PUT /todo_items/1
   # PATCH/PUT /todo_items/1.json
   def update
+    args = params.require(:todo_item).permit(:title, :deadline, :description, :priority, :status)
     respond_to do |format|
-      if @todo_item.update(todo_item_params)
+      if @todo_item.update(args)
         format.html { redirect_to [@user, @todo_item], 
                       notice: 'Todo item was successfully updated.' }
         format.json { head :no_content }
