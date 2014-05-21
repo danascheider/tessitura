@@ -31,4 +31,4 @@ Feature: View To-Do List
     When I navigate to my to-do list
     And I click the 'Mark Completed' link on the first to-do item
     Then the status of the first to-do item should be 'Complete'
-    And it should disappear from the list
+    And the first to-do item should disappear from the list
