@@ -6,10 +6,11 @@ end
 
 ### These two tests go together and need refactoring so they can be separated ###
 When /^I submit the filled-out form$/ do 
-  fill_in('Title', {with: "My To-Do Item"})
-  fill_in('Description', {with: "Test to-do items with Cucumber & Capybara"})
+  fill_in('Title', { with: "My To-Do Item" })
+  fill_in('Description', { with: "Test to-do items with Cucumber & Capybara" })
   choose('todo_item_priority_urgent')
-  select('Blocking', {from: 'todo_item_status'})
+  select('Blocking', { from: 'todo_item_status' })
+  fill_in('Deadline', { with: "September 15 2014 at 5 pm" })
   click_button('Create Todo item')
 end
 
@@ -19,6 +20,7 @@ Then /my last to-do item should have the information from the form$/ do
   expect(todo_item.description).to eql("Test to-do items with Cucumber & Capybara")
   expect(todo_item.priority).to eql('Urgent')
   expect(todo_item.status).to eql('Blocking')
+  expect(todo_item.deadline.to_s).to eql('2014-09-15 17:00:00 UTC')
 end
 ### End grouped tests ###
 
