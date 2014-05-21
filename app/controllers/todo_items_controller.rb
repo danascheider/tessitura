@@ -30,7 +30,8 @@ class TodoItemsController < ApplicationController
   # POST /todo_items
   # POST /todo_items.json
   def create
-    @todo_item = @user.todo_items.new(todo_item_params)
+    args = params.require(:todo_item).permit(:title, :deadline, :priority, :status, :description)
+    @todo_item = @user.todo_items.new(args)
 
     respond_to do |format|
       if @todo_item.save
@@ -76,15 +77,5 @@ class TodoItemsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_todo_item
       @todo_item = TodoItem.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def todo_item_params
-      allowed_params, param_hash = ["title", "priority", "deadline", "status", "description"], {}
-      params["todo_item"].each do |key, value|
-        raise AuthorizationError, "Invalid attribute: #{key}" unless allowed_params.include? key
-        param_hash[key.to_sym] = value
-      end
-      param_hash
     end
 end
