@@ -8,6 +8,7 @@
     <% unless item.status == 'Complete' %>
       <div class='todo-list-item'>
         <h3><%= item.title %></h3>
+        <p><strong>Deadline:</strong> <%= item.deadline %></p>
         <p><strong>Description:</strong> <%= item.description %></p>
         <p><strong>Status:</strong> <%= item.status %>
         <table>
