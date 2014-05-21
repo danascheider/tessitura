@@ -55,3 +55,8 @@ Then /^I shouldn\'t see the items that have been marked '(.*)'$/ do |status|
     end
   end
 end
+
+### Scenario 4: User marks task complete
+When /^I click the '(.*)' link on the first to-do item$/ do |link|
+  click_link(link)
+end
