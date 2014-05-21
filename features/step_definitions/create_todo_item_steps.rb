@@ -25,14 +25,14 @@ end
 ### End grouped tests ###
 
 When /^I submit the form with no title$/ do 
-  fill_in('Description', {with: "Test to-do items with Cucumber & Capybara"})
+  fill_in('Description', { with: "Test to-do items with Cucumber & Capybara" })
   choose('todo_item_priority_urgent')
-  select('Blocking', {from: 'todo_item_status'})
+  select('Blocking', { from: 'todo_item_status' })
   click_button('Create Todo item')
 end
 
 When /^I submit the form with only a title$/ do 
-  fill_in('Title', {with: "Take out the trash"})
+  fill_in('Title', { with: "Take out the trash" })
   click_button('Create Todo item')
 end
 
