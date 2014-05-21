@@ -1,6 +1,6 @@
 class TodoItemsController < ApplicationController
   before_action :set_todo_item, only: [:show, :edit, :update, :destroy]
-  before_filter :get_user
+  before_action :get_user
 
   def get_user
     @user = User.find(params[:user_id])
