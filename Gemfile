@@ -43,9 +43,14 @@ group :test do
   gem 'factory_girl', '~> 4.4.0'
 end
 
+# View errors with better_errors instead of the
+# default Rails error page
 group :development do 
   gem 'better_errors', '~> 1.1.0'
 end
+
+# Use Dalli to access memcached servers
+gem 'dalli', '~> 2.7.2'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
