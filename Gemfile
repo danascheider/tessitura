@@ -38,7 +38,7 @@ gem 'bootstrap-sass', '~> 3.1.1'
 
 # Test with Cucumber and RSpec
 group :test do 
-  gem 'cucumber-rails', '~> 1.4.0'
+  gem 'cucumber-rails', '~> 1.4.0', require: false
   gem 'rspec-rails', '~> 2.14.1'
   gem 'database_cleaner', '~> 1.2.0'
   gem 'factory_girl', '~> 4.4.0'
