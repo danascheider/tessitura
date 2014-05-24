@@ -41,13 +41,17 @@ group :test do
   gem 'cucumber-rails', '~> 1.4.0', require: false
   gem 'rspec-rails', '~> 2.14.1'
   gem 'database_cleaner', '~> 1.2.0'
-  gem 'factory_girl', '~> 4.4.0'
 end
 
 # View errors with better_errors instead of the
 # default Rails error page
 group :development do 
   gem 'better_errors', '~> 1.1.0'
+end
+
+# Use Factory Girl Rails in development and test groups
+group :development, :test do 
+  gem 'factory_girl_rails', '~> 4.4.1'
 end
 
 # Use Dalli to access memcached servers
