@@ -9,6 +9,7 @@ one: {}
   status: Blocking
   priority: Low
   description: Create Cucumber tests for TodoItem and User models
+  user_id: 1
 
 two: {}
 #  column: value
