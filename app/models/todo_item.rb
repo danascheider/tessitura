@@ -1,7 +1,6 @@
 class TodoItem < ActiveRecord::Base
   belongs_to :user
   before_save :ensure_status
-  has_many :categorizations, foreign_key: :todo_id
   validates :title, presence: true
   scope :incomplete, -> { where.not(status: 'Complete')}
 
