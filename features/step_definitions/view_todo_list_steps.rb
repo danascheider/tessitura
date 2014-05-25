@@ -2,11 +2,11 @@
 
 Given /^I have (no|\d+) to\-do items$/ do |number|
   if number == 'no' || (number = number.to_i) == 0
-    @user.todo_items.length == 0
+    (@todo_list = @user.todo_items.to_a).length == 0
   else
-    number.times { FactoryGirl.create(:todo_item, user_id: @user.id) }
+    @todo_list = FactoryGirl.create_list(:todo_item, number, user_id: @user.id)
   end
-  @todo_list = @user.todo_items.to_a
+  @todo_list
 end
 
 When /^I navigate to my to\-do list$/ do
@@ -38,7 +38,6 @@ end
 
 ### Scenario 3: Some tasks are complete
 Given /^(\d+) of them have been marked (.*)$/ do |number, status|
-  pending
   for i in 0..(number.to_i - 1)
     @todo_list[i].status = 'Complete'
   end
