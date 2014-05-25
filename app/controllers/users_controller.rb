@@ -7,6 +7,10 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
+  def get_todo_items
+    @todo_list = TodoItem.find(@user.id)
+  end
+
   # GET /users/1
   # GET /users/1.json
   def show

@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class TodoItemTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "invalid without a title" do 
+    t = TodoItem.new 
+    assert !t.valid?
+  end
 end

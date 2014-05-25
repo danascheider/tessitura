@@ -1,36 +1,30 @@
-<h1>Listing To-Do Items</h1>
+<h1>Listing <%= p @user.name %>'s To-Do Items</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+<% if @todo_items.size == 0 %>
+  <p>No to-do items! <%= link_to 'Create one', new_user_todo_item_path(@user.id) %> here.</p>
+<% else %>
 
-  <tbody>
-    <% if @todo_items.size == 0 %>
-      <p>No to-do items! <%= link_to 'Create one', new_user_todo_item_path %> here!</p>
-    <% else %>
-      <% @todo_items.each do |todo_item| %>
-        <tr>
-          <td><strong>Title:</strong> <%= todo_item.title %></td>
-        </tr>
-        <tr>
-          <td><strong>Description:</strong> <%= todo_item.description %></td>
-        </tr>
-        <tr>
-          <td><%= link_to 'Show', [@user, todo_item] %></td>
-          <td><%= link_to 'Edit', edit_user_todo_item_path(@user, todo_item) %></td>
-          <td><%= link_to 'Destroy', [@user, todo_item], method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr>
-      <% end %>
+  <% @todo_items.incomplete.each do |item| %>
+    <% unless item.status == 'Complete' %>
+      <div class='todo-list-item'>
+        <h3><%= item.title %></h3>
+        <p><strong>Deadline:</strong> <%= item.deadline %></p>
+        <p><strong>Description:</strong> <%= item.description %></p>
+        <p><strong>Status:</strong> <%= item.status %>
+        <table>
+          <tbody>
+            <tr>
+              <td><%= link_to 'Show', [@user, item] %></td>
+              <td><%= link_to 'Edit', edit_user_todo_item_path(@user, item) %></td>
+              <td><%= link_to 'Mark Completed', [@user, item], method: :patch, status: 'Complete' %></td>
+              <td><%= link_to 'Delete', [@user, item], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     <% end %>
-  </tbody>
-</table>
+  <% end %>
+<% end %>
+<br />
 
-<br>
-<h4>Params:</h4> <%= debug(params) %>
-
-<%= link_to 'New to-do item', new_user_todo_item_path(@user) %>
+<%= link_to 'New to-do item', new_user_todo_item_path(@user.id) %>
