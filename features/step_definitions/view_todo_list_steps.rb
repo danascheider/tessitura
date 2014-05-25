@@ -32,7 +32,6 @@ Then(/^I should see all of my to\-do items$/) do
 end
 
 Then(/^I should not see anyone else\'s to\-do items$/) do 
-  pending
   page.should have_css(".todo-list-item", count: @todo_list.length )
 end
 
