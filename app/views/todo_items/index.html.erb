@@ -3,27 +3,7 @@
 <% if @todo_items.size == 0 %>
   <p>No to-do items! <%= link_to 'Create one', new_user_todo_item_path(@user.id) %> here.</p>
 <% else %>
-
-  <% @todo_items.incomplete.each do |item| %>
-    <% unless item.status == 'Complete' %>
-      <div class='todo-list-item'>
-        <h3><%= item.title %></h3>
-        <p><strong>Deadline:</strong> <%= item.deadline %></p>
-        <p><strong>Description:</strong> <%= item.description %></p>
-        <p><strong>Status:</strong> <%= item.status %>
-        <table>
-          <tbody>
-            <tr>
-              <td><%= link_to 'Show', [@user, item] %></td>
-              <td><%= link_to 'Edit', edit_user_todo_item_path(@user, item) %></td>
-              <td><%= link_to 'Mark Completed', [@user, item], method: :patch, status: 'Complete' %></td>
-              <td><%= link_to 'Delete', [@user, item], method: :delete, data: { confirm: 'Are you sure?' } %></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-  <% end %>
+  <%= render 'item' %>
 <% end %>
 <br />
 
