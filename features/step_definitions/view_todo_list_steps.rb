@@ -32,7 +32,7 @@ Then(/^I should see all of my to\-do items$/) do
 end
 
 Then(/^I should not see anyone else\'s to\-do items$/) do 
-  page.should have_css(".todo-list-item", count: @todo_list.length )
+  page.should have_css(".todo_item", count: @todo_list.length )
 end
 
 ### Scenario 3: Some tasks are complete
@@ -53,6 +53,9 @@ end
 ### Scenario 4: User marks task complete
 When /^I click the '(.*)' link on the first to-do item$/ do |link|
   pending
+  within("todo_item_#{@todo_list.first}") do 
+    click_on('Mark Completed')
+  end
 end
 
 Then /^the status of the first to-do item should be (.*)$/ do |status|
