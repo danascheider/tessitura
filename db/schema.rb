@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140524001937) do
+ActiveRecord::Schema.define(version: 20140526203527) do
 
   create_table "todo_items", force: true do |t|
     t.string   "title"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20140524001937) do
     t.string   "password"
     t.boolean  "logged_in"
     t.boolean  "is_admin"
+    t.string   "email"
   end
 
 end
