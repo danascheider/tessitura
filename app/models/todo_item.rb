@@ -7,4 +7,8 @@ class TodoItem < ActiveRecord::Base
   def ensure_status
     self.status ||= 'New'
   end
+
+  def set_complete
+    self.status = 'Complete'
+  end
 end
