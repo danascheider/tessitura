@@ -6,14 +6,13 @@ Feature: User login
 
   Background:
     Given I am a user
+    And I am not logged in
 
   Scenario: Logged-out user visits site
-    Given I am not logged in
     When I navigate to the Canto homepage
     Then there should be a link to log in 
 
   Scenario: User logs in
-    Given I am not logged in
     When I navigate to the login page
     And I enter my username and password
     Then I should see my dashboard
