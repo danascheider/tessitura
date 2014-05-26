@@ -8,7 +8,7 @@
   <table>
     <tbody>
       <tr>
-        <td><%= link_to 'Mark Completed', [@user, item], method: :patch, status: 'Complete' %></td>
+        <td><%= link_to 'Mark Completed', [@user, item], method: :update, status: 'Complete' %></td>
         <td><%= link_to 'Show', [@user, item] %></td>
         <td><%= link_to 'Edit', edit_user_todo_item_path(@user, item) %></td>
         <td><%= link_to 'Delete', [@user, item], method: :delete %></td>
