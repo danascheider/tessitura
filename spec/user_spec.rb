@@ -31,5 +31,9 @@ describe User do
       @user.password = "abc1234"
       expect(@user).not_to be_valid
     end
+
+    it "is not an admin by default" do 
+      expect(@user).not_to be_admin
+    end
   end
 end
