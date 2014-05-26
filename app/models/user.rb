@@ -3,4 +3,5 @@ class User < ActiveRecord::Base
   validates_associated :todo_items
   validates :username, presence: true, uniqueness: true
   validates :password, presence: true
+  validates :email, presence: true
 end
