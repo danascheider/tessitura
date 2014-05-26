@@ -26,5 +26,10 @@ describe User do
       new_user = User.new(username: 'frank', password: 'mypasswd2', email: 'felix@example.com')
       expect(new_user).not_to be_valid
     end
+
+    it "has a password more than 8 characters long" do 
+      @user.password = "abcd1234"
+      expect(@user).not_to be_valid
+    end
   end
 end
