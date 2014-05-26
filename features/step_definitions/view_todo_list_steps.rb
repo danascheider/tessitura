@@ -51,11 +51,13 @@ Then /^I shouldn\'t see the items that have been marked '(.*)'$/ do |status|
 end
 
 ### Scenario 4: User marks task complete
-When /^I click the '(.*)' link on the first to-do item$/ do |link|
-  pending
-  within("todo_item_#{@todo_list.first}") do 
-    click_on('Mark Completed')
-  end
+Given /^the to\-do items are incomplete$/ do 
+  @todo_list.each {|item| item.status = 'In Progress'; item.save }
+end
+
+When /^I click the '(.*)' link on the first to-do item$/ do |link_text|
+  id = @todo_list.first.id 
+  within(:css, "div#todo_item_#{id}") { click_on(link_text) }
 end
 
 Then /^the status of the first to-do item should be (.*)$/ do |status|
