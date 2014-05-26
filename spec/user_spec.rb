@@ -20,5 +20,10 @@ describe User do
       @user.email = nil
       expect(@user).not_to be_valid
     end
+
+    it "has a unique username" do 
+      new_user = User.new(username: 'frank', password: 'mypasswd2', email: 'felix@example.com')
+      expect(new_user).not_to be_valid
+    end
   end
 end
