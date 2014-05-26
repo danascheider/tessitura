@@ -4,6 +4,13 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 
+# Require Canto application files
+def app_path(file_path)
+  File.expand_path("../../app/#{file_path}.rb", __FILE__)
+end
+
+require app_path('models/user')
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
