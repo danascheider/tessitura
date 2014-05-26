@@ -39,7 +39,6 @@ gem 'bootstrap-sass', '~> 3.1.1'
 # Test with Cucumber and RSpec
 group :test do 
   gem 'cucumber-rails', '~> 1.4.0', require: false
-  gem 'rspec-rails', '~> 2.14.1'
   gem 'database_cleaner', '~> 1.2.0'
   gem 'shoulda', '~> 3.5.0'
 end
@@ -53,6 +52,7 @@ end
 # Use Factory Girl Rails in development and test groups
 group :development, :test do 
   gem 'factory_girl_rails', '~> 4.4.1'
+  gem 'rspec-rails', '~> 2.14.1'
 end
 
 # Use Dalli to access memcached servers
