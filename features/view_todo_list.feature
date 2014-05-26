@@ -29,6 +29,7 @@ Feature: View To-Do List
 
   Scenario: User marks task complete
     Given I have 3 to-do items
+    And the to-do items are incomplete
     When I navigate to my to-do list
     And I click the 'Mark Completed' link on the first to-do item
     Then the status of the first to-do item should be 'Complete'
