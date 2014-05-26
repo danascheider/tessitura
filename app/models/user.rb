@@ -3,4 +3,9 @@ class User < ActiveRecord::Base
   validates_associated :todo_items
   validates :username, :password, :email, presence: true
   validates :username, uniqueness: true
+  validates :password, length: { minimum: 8, too_short: "Password must be at least 8 characters long." }
+
+  def admin?
+    self.is_admin
+  end
 end
