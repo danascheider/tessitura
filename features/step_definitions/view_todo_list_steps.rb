@@ -56,14 +56,17 @@ Given /^the to\-do items are incomplete$/ do
 end
 
 When /^I click the '(.*)' link on the first to-do item$/ do |link_text|
+  pending
   id = @todo_list.first.id 
   within(:css, "div#todo_item_#{id}") { click_on(link_text) }
 end
 
 Then /^the status of the first to-do item should be (.*)$/ do |status|
+  pending
   expect(@todo_list.first.status).to eql('Complete')
 end
 
 Then /^the first to-do item should disappear from the list$/ do
+  pending
   @todo_list.first.should_not be_visible
 end
