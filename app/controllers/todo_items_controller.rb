@@ -79,6 +79,6 @@ class TodoItemsController < ApplicationController
     end
 
     def todo_item_params 
-      params.require(:todo_item).permit(:title, :deadline, :description, :status, :priority)
+      params.permit(:todo_item).permit(:title, :deadline, :description, :status, :priority)
     end
 end
