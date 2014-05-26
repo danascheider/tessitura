@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe User do 
   describe 'validating a user' do 
-    before do 
+    before :each do 
       @user = User.new(username: 'frank', password: 'mypasswd1', email: 'frank@example.com')
     end
 
