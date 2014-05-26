@@ -1,6 +1,8 @@
 <%= div_for(@todo_items.incomplete) do |item| %>
   <h3><%= item.title %></h3>
-  <p><strong>Deadline:</strong> <%= item.deadline %></p>
+  <% if item.deadline %>
+    <p><strong>Deadline:</strong> <%= item.deadline %></p>
+  <% end %>
   <p><strong>Status:</strong> <%= item.status %> <strong>Priority:</strong> <%= item.priority %></p>
   <p><strong>Description:</strong> <%= item.description %></p>
   <table>
