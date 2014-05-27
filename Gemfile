@@ -58,9 +58,6 @@ end
 # Use Dalli to access memcached servers
 gem 'dalli', '~> 2.7.2'
 
-# Change name of this mofo from Canto to Canto once and for all
-gem 'rename'
-
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 
