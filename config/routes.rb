@@ -1,6 +1,6 @@
 Canto::Application.routes.draw do
-  get "welcome/index" => 'welcome#index', as: :index
-  get "welcome/login" => 'welcome#login', as: :login
+  get "index" => 'welcome#index', as: :index
+  get "login" => 'welcome#login', as: :login
   resources :users do
     resources :todo_items
   end
