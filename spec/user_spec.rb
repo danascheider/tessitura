@@ -3,7 +3,7 @@ require "spec_helper"
 describe User do 
   describe 'validating a user' do 
     before :each do 
-      @user = User.new(username: 'frank', password: 'mypasswd1', email: 'frank@example.com')
+      @user = User.new(username: 'frank', password_digest: 'mypasswd1', email: 'frank@example.com')
     end
 
     it "is invalid without a username" do 
@@ -12,7 +12,7 @@ describe User do
     end
 
     it "is invalid without a password" do 
-      @user.password = nil
+      @user.password_digest = nil
       expect(@user).not_to be_valid
     end
 
@@ -23,7 +23,7 @@ describe User do
 
     it "has a unique username" do 
       @user.save
-      new_user = User.new(username: 'frank', password: 'mypasswd2', email: 'felix@example.com')
+      new_user = User.new(username: 'frank', password_digest: 'mypasswd2', email: 'felix@example.com')
       expect(new_user).not_to be_valid
     end
 

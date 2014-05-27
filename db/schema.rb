@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140527224237) do
+ActiveRecord::Schema.define(version: 20140527225552) do
 
   create_table "todo_items", force: true do |t|
     t.string   "title"
@@ -29,10 +29,10 @@ ActiveRecord::Schema.define(version: 20140527224237) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username"
-    t.string   "password"
     t.boolean  "logged_in"
     t.boolean  "is_admin"
     t.string   "email"
+    t.string   "password_digest"
   end
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true
