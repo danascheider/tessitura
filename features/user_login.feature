@@ -11,6 +11,7 @@ Feature: User login
   Scenario: Logged-out user visits site
     When I navigate to the Canto homepage
     Then there should be a link to log in 
+    And the link should take me to the login page
 
   Scenario: User logs in
     When I navigate to the login page
