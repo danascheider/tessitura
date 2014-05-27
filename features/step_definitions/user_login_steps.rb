@@ -10,3 +10,9 @@ end
 When /^I navigate to the login page$/ do 
   visit(login_path)
 end
+
+When /^I enter my username and password$/ do 
+  fill_in(:username, with: @user.username)
+  fill_in(:password, with: @user.password)
+  click_button('Log In')
+end
