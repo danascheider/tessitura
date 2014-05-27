@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :todo_items, dependent: :destroy, foreign_key: :user_id
+  before_save { self.email = email.downcase }
   validates_associated :todo_items
   validates :username, :password, :email, presence: true
   validates :username, uniqueness: true
