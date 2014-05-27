@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Friday::Application.config.secret_key_base = '52f6e3a1f8fdf60d9c9bc1c2c53a7ba175d4dad38c27484dd5cba3a5ebd6389d9159e1779a1267adaab772662f2dae54196ab359c55593e5add1eefb2ad6cf9e'
+Canto::Application.config.secret_key_base = '52f6e3a1f8fdf60d9c9bc1c2c53a7ba175d4dad38c27484dd5cba3a5ebd6389d9159e1779a1267adaab772662f2dae54196ab359c55593e5add1eefb2ad6cf9e'

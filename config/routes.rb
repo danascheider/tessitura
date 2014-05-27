@@ -1,4 +1,4 @@
-Friday::Application.routes.draw do
+Canto::Application.routes.draw do
   resources :users do
     resources :todo_items
   end
