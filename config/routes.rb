@@ -1,4 +1,5 @@
 Canto::Application.routes.draw do
+  get "welcome/index"
   resources :users do
     resources :todo_items
   end
