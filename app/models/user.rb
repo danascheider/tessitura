@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  attr_accessor :username, :name, :email
   has_many :todo_items, dependent: :destroy, foreign_key: :user_id
   validates_associated :todo_items
   validates :username, :password, :email, presence: true
@@ -7,5 +8,9 @@ class User < ActiveRecord::Base
 
   def admin?
     self.is_admin
+  end
+
+  def authenticate(password)
+    password == self.password 
   end
 end
