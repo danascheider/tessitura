@@ -6,3 +6,7 @@ Then /^the '(.*)' link should take me to the (.*) page$/ do |link_text, page|
   click_link(link_text)
   current_path.should == login_path
 end
+
+When /^I navigate to the login page$/ do 
+  visit(login_path)
+end
