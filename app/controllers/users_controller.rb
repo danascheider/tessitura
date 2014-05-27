@@ -16,6 +16,11 @@ class UsersController < ApplicationController
   def show
   end
 
+  def login
+    @user = User.where(username: params[:username])
+    return false unless @user.authenticate(params[:password])
+  end
+
   # GET /users/new
   def new
     @user = User.new
