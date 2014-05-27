@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140526203527) do
+ActiveRecord::Schema.define(version: 20140527224237) do
 
   create_table "todo_items", force: true do |t|
     t.string   "title"
@@ -34,5 +34,7 @@ ActiveRecord::Schema.define(version: 20140526203527) do
     t.boolean  "is_admin"
     t.string   "email"
   end
+
+  add_index "users", ["username"], name: "index_users_on_username", unique: true
 
 end
