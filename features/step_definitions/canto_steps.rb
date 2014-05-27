@@ -3,7 +3,7 @@ Given /^I am a user$/ do
 end
 
 Given /^I am (not)? logged in$/ do |negation|
-  @user.logged_in = true unless negation
+  @user.logged_in == true unless negation
 end
 
 When /^I navigate to the Canto homepage$/ do 
