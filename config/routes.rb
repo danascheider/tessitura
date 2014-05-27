@@ -63,5 +63,5 @@ Canto::Application.routes.draw do
   #     resources :products
   #   end
 
-  root to: 'users#index'
+  root to: 'welcome#index'
 end
