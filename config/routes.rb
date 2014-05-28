@@ -1,9 +1,8 @@
 Canto::Application.routes.draw do
   get "index" => 'welcome#index', as: :index
   get "login" => 'welcome#login', as: :login
-  resources :users do
-    resources :todo_items
-  end
+  
+  resources :todo_items
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
