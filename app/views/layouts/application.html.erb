@@ -9,7 +9,7 @@
   <%= javascript_include_tag "js/bootstrap.min.js", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="<%= controller.controller_name %>">
 
 <%= yield %>
 
