@@ -1,28 +1,22 @@
-== README
+== Canto
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Canto is a web-based to-do list and task management app for opera singers. Eventually, this app will provide a variety of functionality tailored to the specific needs of opera singers. I am developing this app primarily for myself, and so will be focusing on the functionality that will be most immediately useful to me personally. At this point in development, that functionality is the to-do list.
 
-Things you may want to cover:
+=== Users
 
-* Ruby version
+The User model is a low priority in development due to my particular use case. Currently, only the name of users is tracked. I may eventually flesh this out to support a more detailed user profile.
 
-* System dependencies
+=== To-Do List
 
-* Configuration
+Users create to-do items and are able to view them as a list or individually. To-do items belong to the user who created them and are destroyed if the user account is closed. To-do items have the following attributes (i.e., columns in the TodoItem table):
+- Title
+- Status ("New", "Complete", "In Progress", or "Blocking")
+- Priority ("Urgent", "Important", "Normal", or "Low")
+- Deadline
+- Description
 
-* Database creation
+To-do items can also be placed in user-created categories.
 
-* Database initialization
+=== Versioning
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Version 0.0.0; no stable release available.
