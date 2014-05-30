@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Task do
   it { should respond_to(:title) }
   it { should respond_to(:complete? ) }
+  it { should respond_to(:incomplete? ) }
 
   describe 'validations' do 
     before :each do
