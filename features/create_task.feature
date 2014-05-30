@@ -6,8 +6,13 @@ Feature: Create task
 
   Background:
     Given there are 4 tasks
+    And I have navigated to the 'New Task' page
 
   Scenario: User creates a task
-    Given I have navigated to the 'New Task' page
     When I submit the form with the title 'Take out the trash'
     Then a new task should be created with the title 'Take out the trash'
+
+  Scenario: User doesn't fill out the title field
+    When I submit the form blank
+    Then no task should be created
+    And I should see a message saying that title is required
