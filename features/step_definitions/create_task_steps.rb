@@ -15,3 +15,7 @@ end
 When /^I submit the form blank$/ do 
   click_button 'Create Task'
 end
+
+Then /^no task should be created$/ do
+  Task.count.should == 4
+end
