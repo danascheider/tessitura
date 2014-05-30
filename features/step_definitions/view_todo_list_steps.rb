@@ -4,7 +4,8 @@ Given /^there are (no||\d+) tasks$/ do |number|
   if number == 'no' || number == 0
     Task.count == 0
   else
-    number.to_i.times {|i| FactoryGirl.create(:task, title: "Task #{i}")}
+    @task_list = [] 
+    number.to_i.times {|i| @task_list << FactoryGirl.create(:task, title: "Task #{i}")}
   end
 end
 
@@ -29,3 +30,8 @@ end
 
 ### Scenario 2
 
+Then /^I should see a list of all the tasks$/ do 
+  @task_list.each do |task|
+    find('table').should have_content(task.title)
+  end
+end
