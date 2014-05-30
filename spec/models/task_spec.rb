@@ -19,4 +19,10 @@ describe Task do
       Task.complete.should == Task.where(complete: true)
     end
   end
+
+  describe 'scope "incomplete"' do 
+    it 'returns all incomplete tasks' do 
+      Task.incomplete.should == Task.where(complete: false)
+    end
+  end
 end
