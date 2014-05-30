@@ -1,7 +1,7 @@
 <h1>Listing tasks</h1>
 
 <% unless @tasks.length > 0 %>
-  <p>No tasks!</p>
+  <p>No tasks! <%= link_to 'Create one', new_task_path %></p>
 <% else %>
   <table>
     <thead>
