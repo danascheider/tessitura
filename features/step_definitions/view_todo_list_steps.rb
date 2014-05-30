@@ -1,5 +1,9 @@
-Given /^there are no tasks$/ do 
-  Task.count == 0
+Given /^there are (no||\d+) tasks$/ do |number|
+  if number == 'no' || number == 0
+    Task.count == 0
+  else
+    number.to_i.times {|i| FactoryGirl.create(:task, title: "Task #{i}")}
+  end
 end
 
 When /^I navigate to the to\-do list$/ do 
