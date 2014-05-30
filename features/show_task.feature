@@ -3,6 +3,9 @@ Feature: Show task
   As a user
   I need to view the full listing for that item.
 
+  Background:
+    Given there are 4 tasks
+
   Scenario: User selects a task from the to-do list
     Given I'm viewing my to-do list
     When I click a task's 'Show' link
