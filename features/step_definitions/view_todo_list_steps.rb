@@ -1,3 +1,5 @@
+### Scenarios 1 and 2
+
 Given /^there are (no||\d+) tasks$/ do |number|
   if number == 'no' || number == 0
     Task.count == 0
@@ -5,6 +7,8 @@ Given /^there are (no||\d+) tasks$/ do |number|
     number.to_i.times {|i| FactoryGirl.create(:task, title: "Task #{i}")}
   end
 end
+
+### Scenario 1
 
 When /^I navigate to the to\-do list$/ do 
   visit tasks_path
@@ -21,3 +25,7 @@ end
 Then /^I should see a link to create a new task$/ do 
   find('p>a').should have_content('Create one')
 end
+
+
+### Scenario 2
+
