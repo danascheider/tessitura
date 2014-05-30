@@ -1,4 +1,4 @@
-### Scenarios 1 and 2
+### All Scenarios
 
 Given /^there are (no||\d+) tasks$/ do |number|
   if number == 'no' || number == 0
@@ -9,11 +9,12 @@ Given /^there are (no||\d+) tasks$/ do |number|
   end
 end
 
-### Scenario 1
 
 When /^I navigate to the to\-do list$/ do 
   visit tasks_path
 end
+
+### Scenario 1
 
 Then /^I should not see any tasks$/ do 
   find('body').should_not have_css('#todo_list')
