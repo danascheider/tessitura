@@ -19,3 +19,8 @@ end
 Then /^no task should be created$/ do
   Task.count.should == 4
 end
+
+Then /^I should see a message saying that (.*) is required$/ do |attribute|
+  page.should have_css('#error_explanation')
+  find('div#error_explanation').should have_content("#{attribute.capitalize} can't be blank")
+end
