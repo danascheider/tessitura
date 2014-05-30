@@ -6,4 +6,8 @@ class Task < ActiveRecord::Base
   def complete?
     self.complete
   end
+
+  def incomplete?
+    true unless self.complete
+  end
 end
