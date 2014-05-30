@@ -15,8 +15,8 @@ Feature: View to-do list
     When I navigate to the to-do list
     Then I should see a list of all the tasks
 
-  Scenario: There's a complete task on the list
+  Scenario: One of the tasks is completed
     Given there are 3 tasks
-    And one of the tasks is complete
+    And one of the tasks is completed
     When I navigate to the to-do list
     Then I should not see the completed task on the list
