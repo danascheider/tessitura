@@ -13,4 +13,10 @@ describe Task do
       expect(@task).not_to be_valid
     end
   end
+
+  describe 'scope "complete"' do 
+    it 'returns all completed tasks' do 
+      Task.complete.should == Task.where(complete: true)
+    end
+  end
 end
