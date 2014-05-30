@@ -15,5 +15,5 @@ Then /^I should see a message stating I have no tasks$/ do
 end
 
 Then /^I should see a link to create a new task$/ do 
-  find('p>a').should have_content('Create one')
+  find('a').should have_content('Create one')
 end
