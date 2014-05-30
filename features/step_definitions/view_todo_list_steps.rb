@@ -39,7 +39,7 @@ end
 
 ### Scenario 3
 Given /^one of the tasks is completed$/ do 
-  @done_task = (@task_list.first {|task| task.completed = true; task.save! })
+  (@done_task = @task_list.first).update(complete: true)
 end
 
 Then /^I should not see the completed task on the list$/ do 
