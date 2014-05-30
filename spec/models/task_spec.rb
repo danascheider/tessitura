@@ -26,4 +26,15 @@ describe Task do
       Task.incomplete.should == Task.where(complete: false)
     end
   end
+
+  describe 'default value of :complete' do 
+    it 'is created with complete: false' do 
+      t = Task.create(title: 'Test Task')
+      t.complete.should be_false
+    end
+
+    it 'sets complete to false on update if left blank' do 
+      pending('More work on the create and edit functionalities')
+    end
+  end
 end
