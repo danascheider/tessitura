@@ -4,4 +4,10 @@ end
 
 When /^I submit the form with the title (.*)$/ do |title|
   fill_in 'Title', with: title 
+  click_button 'Create Task'
+end
+
+Then /^a new task should be created with the title (.*)$/ do |title|
+  Task.count.should == 5 
+  Task.last.title.should eql title
 end
