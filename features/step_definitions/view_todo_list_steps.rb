@@ -36,3 +36,8 @@ Then /^I should see a list of all the tasks$/ do
     find('table').should have_content(task.title)
   end
 end
+
+### Scenario 3
+Given /^one of the tasks is completed$/ do 
+  @task_list.first {|task| task.completed = true; task.save! }
+end
