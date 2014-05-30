@@ -11,3 +11,7 @@ Then /^a new task should be created with the title (.*)$/ do |title|
   Task.count.should == 5 
   Task.last.title.should eql title
 end
+
+When /^I submit the form blank$/ do 
+  click_button 'Create Task'
+end
