@@ -1,9 +1,15 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title:</strong>
-  <%= @task.title %>
-</p>
+<table>
+  <tr>
+    <td class="header-column">Title:</td>
+    <td><%= @task.title %></td>
+  </tr>
+  <tr>
+    <td class="header-column">Complete:</td>
+    <td><%= @task.complete %></td>
+  </tr>
+</table>
 
 <%= link_to 'Edit', edit_task_path(@task) %> |
 <%= link_to 'Back', tasks_path %>
