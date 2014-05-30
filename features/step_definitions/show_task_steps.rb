@@ -8,3 +8,7 @@ When /^I click a task's '(.*)' link$/ do |link_text|
     click_link(link_text, href: task_path(@task))
   end
 end
+
+Then /^I should go to that item's show page$/ do 
+  current_path.should eql task_path(@task)
+end
