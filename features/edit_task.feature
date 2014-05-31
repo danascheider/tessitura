@@ -10,5 +10,6 @@ Feature: Edit task
 
   Scenario: User changes title of task
     When I change its title to "Walk the dog"
-    Then the task's title should be changed to "Walk the dog"
+    Then I should be routed to the task's show page
+    And the task's title should be changed to "Walk the dog"
     And I should see a message that the title was changed
