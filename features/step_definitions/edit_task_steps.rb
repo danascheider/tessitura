@@ -16,9 +16,8 @@ Then /^I should be routed to the task's show page$/ do
 end
 
 Then /^the task's title should be changed to "(.*)"$/ do |title|
-  # So here's the thing about this. @task is stuck with the title 
-  # "Take out the trash", so we have to search for its ID in the 
-  # Task class to get the actual current title of that task.
+  # @task itself doesn't get changed when Capybara submits
+  # the form (only the task object with its ID does). 
   Task.find_by_id(@task.id).title.should == title
 end
 
