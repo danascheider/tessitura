@@ -61,6 +61,11 @@ class TasksController < ApplicationController
     end
   end
 
+  def toggle_complete
+    new_status = if @task.complete then false; else true; end
+    @task.update(complete: new_status)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
@@ -69,6 +74,6 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:title)
+      params.require(:task).permit(:title, :complete)
     end
 end
