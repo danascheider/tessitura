@@ -33,3 +33,7 @@ When /^I click the checkbox next to the "(.*)" task$/ do |title|
   @task = Task.find_by(title: title)
   check("complete-task#{@task.id}")
 end
+
+Then /^the task should disappear from the list$/ do
+  page.should_not have_css("#task-#{@task.id}")
+end
