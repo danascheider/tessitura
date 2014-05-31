@@ -61,11 +61,6 @@ class TasksController < ApplicationController
     end
   end
 
-  def toggle_complete
-    new_status = if @task.complete then false; else true; end
-    @task.update(complete: new_status)
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
