@@ -15,5 +15,6 @@ end
 
 Then /^I should see the task's title and status$/ do 
   find('table').should have_content(@task.title)
-  find('table').should have_content(@task.complete)
+  status = if @task.complete? then 'Complete'; else 'Incomplete'; end
+  find('table').should have_content(status)
 end

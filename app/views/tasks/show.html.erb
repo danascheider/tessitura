@@ -6,8 +6,9 @@
     <td><%= @task.title %></td>
   </tr>
   <tr>
-    <td class="header-column">Complete:</td>
-    <td><%= @task.complete %></td>
+    <td class="header-column">Status:</td>
+    <% status = if @task.complete? then 'Complete'; else 'Incomplete'; end %>
+    <td><%= status %></td>
   </tr>
 </table>
 
