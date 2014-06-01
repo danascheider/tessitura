@@ -13,7 +13,7 @@
     <% @tasks.each do |task| %>
       <% if task.incomplete? %>
         <tr id=<%="task-#{task.id}"%>>
-          <td><%= check_box_tag "complete-task#{task.id}", task.complete %></td>
+          <td><%= check_box_tag "complete-task#{task.id}", task.complete, class: "checkbox" %></td>
           <td><%= task.title %></td>
           <td><%= link_to 'Show', task %></td>
           <td><%= link_to 'Edit', edit_task_path(task) %></td>
