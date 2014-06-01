@@ -17,5 +17,5 @@ Feature: Edit task
   Scenario: User marks task complete from the to-do list
     And I'm viewing my to-do list
     When I click the checkbox next to the "Take out the trash" task
-    Then the task should disappear from the list
-    And the task's 'complete' attribute should be true
+    Then the task's 'complete' attribute should be true
+    And the task should disappear from the list

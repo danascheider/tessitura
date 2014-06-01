@@ -37,3 +37,7 @@ end
 Then /^the task should disappear from the list$/ do
   page.should_not have_css("#task-#{@task.id}")
 end
+
+Then /^the task's 'complete' attribute should be (true|false)$/ do |value|
+  @task.complete.should eql value
+end
