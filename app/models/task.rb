@@ -10,4 +10,8 @@ class Task < ActiveRecord::Base
   def incomplete?
     true unless self.complete
   end
+
+  def mark_complete
+    self.complete = true
+  end
 end
