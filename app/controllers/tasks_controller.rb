@@ -61,6 +61,18 @@ class TasksController < ApplicationController
     end
   end
 
+  def mark_complete
+    respond_to do |format|
+      if @task.update(complete: true)
+        format.html { redirect_to tasks_url }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to tasks_url, notice: 'Sorry, that didn\'t work. Please try again later.' }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
