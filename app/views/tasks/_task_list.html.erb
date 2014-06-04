@@ -13,7 +13,11 @@
     <% @tasks.each do |task| %>
       <% if task.incomplete? %>
         <tr id=<%="task-#{task.id}"%>>
-          <td><%= check_box_tag "complete-task#{task.id}", remote: true %></td>
+          <td>
+            <%= form_for(task) do |f| %>
+              <%= f.button 'Mark Complete', name: 'task[complete]', value: '1' %>
+            <% end %>
+          </td>
           <td><%= task.title %></td>
           <td><%= link_to 'Show', task %></td>
           <td><%= link_to 'Edit', edit_task_path(task) %></td>
