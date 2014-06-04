@@ -14,7 +14,7 @@
       <% if task.incomplete? %>
         <tr id=<%="task-#{task.id}"%>>
           <td>
-            <%= form_for(task) do |f| %>
+            <%= form_for task, url: mark_complete_url(task) do |f| %>
               <%= f.button 'Mark Complete', name: 'task[complete]', value: '1' %>
             <% end %>
           </td>
