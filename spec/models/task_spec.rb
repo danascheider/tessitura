@@ -32,9 +32,5 @@ describe Task do
       t = Task.create(title: 'Test Task')
       t.complete.should be_false
     end
-
-    it 'sets complete to false on update if left blank' do 
-      pending('More work on the create and edit functionalities')
-    end
   end
 end
