@@ -14,7 +14,7 @@ When /^I change its title to "(.*)"$/ do |title|
 end
 
 Then /^I should be routed to the task's show page$/ do 
-  current_url.should eql task_url(@task)
+  current_path.should eql tasks_path(@task)
 end
 
 Then /^the task's title should be changed to "(.*)"$/ do |title|
@@ -29,9 +29,9 @@ end
 
 ### Scenario 2
 
-When /^I click the checkbox next to the "(.*)" task$/ do |title|
+When /^I click the button next to the "(.*)" task$/ do |title|
   @task = Task.find_by(title: title)
-  check("complete-task#{@task.id}")
+  click_on("edit_task_#{@task.id}")
 end
 
 Then /^the task should disappear from the list$/ do
