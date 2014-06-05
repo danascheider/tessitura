@@ -3,6 +3,7 @@
 <% end %>
 
 <h1>Canto Dashboard</h1>
-<div id='todo-list'>
+<div id='todo-list' class="dashboard-widget">
+  <h3><%= link_to 'My To-Do List', tasks_path %></h3>
   <%= render partial: 'tasks/task_list' %>
 </div>
