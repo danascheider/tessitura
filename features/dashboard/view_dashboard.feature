@@ -5,5 +5,6 @@ Feature: View dashboard
   I want to view the dashboard
 
   Scenario: Dashboard displays tasks
+    Given there are 5 tasks
     When I navigate to the dashboard
-    Then I should see my to-do list
+    Then I should see a list of all the tasks
