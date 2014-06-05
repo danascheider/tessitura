@@ -63,7 +63,7 @@ class TasksController < ApplicationController
 
   def mark_complete
     respond_to do |format|
-      if @task.update(complete: true)
+      if @task.mark_complete && @task.save
         format.html { render action: 'index' }
         format.json { head :no_content }
       else
