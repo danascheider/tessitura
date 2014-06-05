@@ -31,7 +31,9 @@ end
 
 When /^I click the button next to the "(.*)" task$/ do |title|
   @task = Task.find_by(title: title)
-  click_on("edit_task_#{@task.id}")
+  within("#edit_task_#{@task.id}") do 
+    click_on 'Mark Complete'
+  end
 end
 
 Then /^the task should disappear from the list$/ do
