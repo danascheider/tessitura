@@ -14,7 +14,7 @@ When /^I change its title to "(.*)"$/ do |title|
 end
 
 Then /^I should be routed to the task's show page$/ do 
-  current_path.should eql tasks_path(@task)
+  current_path.should eql task_path(@task)
 end
 
 Then /^the task's title should be changed to "(.*)"$/ do |title|
