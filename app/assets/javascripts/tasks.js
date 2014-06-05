@@ -2,7 +2,13 @@
 // All this logic will automatically be available in application.js.
 
 $(function() {
-  $("input[type='checkbox']").click(function() {
-    $(this).parents("tr").fadeOut();
+  $("button").click(function() {
+    var tr = $(this).parents("tr");
+    $.ajax({
+      url: '/tasks',
+      content: document.body
+    }).done(function() {
+      tr.fadeOut()
+    });
   })
 });
