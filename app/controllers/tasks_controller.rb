@@ -62,10 +62,14 @@ class TasksController < ApplicationController
   end
 
   def mark_complete
-    @task.update(complete: true)
     respond_to do |format|
-      format.html { render action: 'index' }
-      format.json { head :no_content }
+      if @task.update(complete: true)
+        format.html { render action: 'index' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'index', notice: 'Sorry, something went wrong. Please try again later.' }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
     end
   end
 
