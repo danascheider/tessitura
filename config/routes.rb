@@ -1,5 +1,6 @@
 Canto::Application.routes.draw do
 
+  get "dashboard/index"
   root 'tasks#index'
 
   resources :tasks
