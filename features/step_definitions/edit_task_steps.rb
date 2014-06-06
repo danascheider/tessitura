@@ -34,6 +34,10 @@ When /^I click the button next to the "(.*)" task$/ do |title|
   click_on("edit_task_#{@task.id}")
 end
 
+Then /^I should stay on the to\-do list page$/ do
+  current_path.should eql tasks_path
+end
+
 Then /^the task should disappear from the list$/ do
   page.should_not have_css("#task-#{@task.id}")
 end
