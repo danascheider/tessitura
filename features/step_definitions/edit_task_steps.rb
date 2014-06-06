@@ -31,7 +31,9 @@ end
 
 When /^I click the button next to the "(.*)" task$/ do |title|
   @task = Task.find_by(title: title)
-  click_on("edit_task_#{@task.id}")
+  within("#task-#{@task.id}") do 
+    click_on 'Mark Complete'
+  end
 end
 
 Then /^I should stay on the to\-do list page$/ do
