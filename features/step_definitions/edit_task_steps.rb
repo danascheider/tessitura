@@ -31,9 +31,13 @@ end
 
 When /^I click the button next to the "(.*)" task$/ do |title|
   @task = Task.find_by(title: title)
-  within("#edit_task_#{@task.id}") do 
+  within("#task-#{@task.id}") do 
     click_on 'Mark Complete'
   end
+end
+
+Then /^I should stay on the to\-do list page$/ do
+  current_path.should eql tasks_path
 end
 
 Then /^the task should disappear from the list$/ do
@@ -41,5 +45,6 @@ Then /^the task should disappear from the list$/ do
 end
 
 Then /^the task's 'complete' attribute should be (true|false)$/ do |value|
-  Task.find(@task).complete.should eql true
+  value = if "true" then true else false; end
+  Task.find(@task).complete.should eql value
 end
