@@ -45,5 +45,6 @@ Then /^the task should disappear from the list$/ do
 end
 
 Then /^the task's 'complete' attribute should be (true|false)$/ do |value|
-  @task.complete.should eql value
+  value = if "true" then true else false; end
+  Task.find(@task).complete.should eql value
 end
