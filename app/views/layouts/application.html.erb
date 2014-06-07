@@ -20,8 +20,15 @@
 </head>
 <body>
   <div id="wrapper">
-    <%= yield %>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+    </nav>
+    <!-- .navbar-header -->
+
+    <div id="page-wrapper">
+      <%= yield %>
+    </div>
   </div>
+  <!-- #wrapper -->
 
 </body>
 </html>
