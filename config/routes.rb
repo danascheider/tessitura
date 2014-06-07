@@ -1,7 +1,7 @@
 Canto::Application.routes.draw do
 
-  root 'dashboard#index', as: 'dashboard'
-  get "dashboard/index"
+  root 'dashboard#index'
+  get "dashboard/index", as: 'dashboard'
 
   resources :tasks
   patch 'tasks/:id/complete' => 'tasks#mark_complete', as: 'mark_complete'
