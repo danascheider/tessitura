@@ -37,7 +37,7 @@ When /^I click the button next to the "(.*)" task$/ do |title|
 end
 
 Then /^I should stay on the to\-do list page$/ do
-  current_path.should eql tasks_path
+  current_path.should eql root_path
 end
 
 Then /^the task should disappear from the list$/ do
