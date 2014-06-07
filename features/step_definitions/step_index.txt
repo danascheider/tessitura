@@ -9,8 +9,8 @@ I navigate to the dashboard ................... VIEW_DASHBOARD_STEPS
 
 I should go to that item's show page ............... VIEW_TASK_STEPS
 " " " "  not be redirected .................... VIEW_DASHBOARD_STEPS
-" " " "  not  see any tasks ................... VIEW_TODO_LIST_STEPS
-" " " "  see the completed task on the list VIEW_TODO_LIST_STEPS
+" " " "  not see any tasks .................... VIEW_TODO_LIST_STEPS
+" " " "  not see the completed task on the list VIEW_TODO_LIST_STEPS
 " " " "  see a link to create a new task ...... VIEW_TODO_LIST_STEPS
 " " " "  see a list of all the tasks .......... VIEW_TODO_LIST_STEPS
 " " " "  see a message that I have no tasks ... VIEW_TODO_LIST_STEPS
