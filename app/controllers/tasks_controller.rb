@@ -64,10 +64,10 @@ class TasksController < ApplicationController
   def mark_complete
     respond_to do |format|
       if @task.mark_complete && @task.save
-        format.html { redirect_to dashboard_url }
+        format.html { redirect_to root_url }
         format.json { head :no_content }
       else
-        format.html { redirect_to dashboard_url, notice: 'Sorry, something went wrong. Please try again later.' }
+        format.html { redirect_to root_url, notice: 'Sorry, something went wrong. Please try again later.' }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
