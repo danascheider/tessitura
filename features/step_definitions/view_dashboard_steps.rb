@@ -1,5 +1,5 @@
 When /^I navigate to the dashboard$/ do 
-  visit dashboard_path
+  visit root_path
 end
 
 When /^I mark the "(.*)" task complete$/ do |title|
@@ -10,5 +10,5 @@ When /^I mark the "(.*)" task complete$/ do |title|
 end
 
 Then /^I should not be redirected$/ do 
-  expect(current_path).to eql dashboard_path
+  expect(current_path).to eql root_path
 end
