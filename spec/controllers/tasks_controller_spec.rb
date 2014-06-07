@@ -116,10 +116,10 @@ describe TasksController do
         assigns(:task).should eq(task)
       end
 
-      it "redirects to the to-do list" do
+      it "redirects to task" do
         task = Task.create! valid_attributes
         put :update, {:id => task.to_param, :task => valid_attributes}, valid_session
-        response.should redirect_to(tasks_url)
+        response.should redirect_to(task_url(task))
       end
     end
 
