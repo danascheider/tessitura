@@ -151,10 +151,10 @@ describe TasksController do
         task.should be_complete
       end 
 
-      it "stays on the tasks page" do 
+      it "stays on the main page" do 
         task = Task.create! valid_attributes
         patch :mark_complete, { id: task.to_param }, valid_session
-        response.should redirect_to(tasks_url)
+        response.should redirect_to(root_url)
       end
     end
 
