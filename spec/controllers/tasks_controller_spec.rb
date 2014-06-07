@@ -75,9 +75,9 @@ describe TasksController do
         assigns(:task).should be_persisted
       end
 
-      it "redirects to the to-do list" do
+      it "redirects to the task page" do
         post :create, {:task => valid_attributes}, valid_session
-        response.should redirect_to(tasks_url)
+        response.should redirect_to(task_url(assigns(:task)))
       end
     end
 
