@@ -336,5 +336,12 @@
   </div>
   <!-- #wrapper -->
 
+  <!-- Core Scripts - Include with every page -->
+  <%= javascript_include_tag "jquery-1.10.2", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "bootstrap", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "plugins/metisMenu/jquery.metisMenu", "data-turbolinks-track" => true %>
+
+  <!-- SB Admin Scripts - Include with every page -->
+  <%= javascript_include_tag "sb-admin", "data-turbolinks-track" => true %>
 </body>
 </html>
