@@ -5,7 +5,7 @@
         <tr id=<%="task-#{task.id}"%>>
           <td>
             <%= form_for task, url: mark_complete_url(task) do |f| %>
-              <%= f.button 'Mark Complete', name: 'task[complete]', value: '1', remote: true %>
+              <%= f.button 'Mark Complete', name: 'task[complete]', value: '1', class: "btn btn-outline btn-primary btn-xs",remote: true %>
             <% end %>
           </td>
           <td><%= task.title %></td>
