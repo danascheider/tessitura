@@ -11,7 +11,7 @@ Then /^I should not see any tasks$/ do
 end
 
 Then /^I should see a message stating I have no tasks$/ do 
-  find('p').should have_content('No tasks!')
+  find('p.notice').should have_content('No tasks!')
 end
 
 Then /^I should see a link to create a new task$/ do 

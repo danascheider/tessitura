@@ -1,7 +1,7 @@
 <h1 class="page-header">Listing tasks</h1>
 
 <% unless @tasks.length > 0 %>
-  <p>No tasks! <%= link_to 'Create one', new_task_path %></p>
+  <p class="notice">No tasks! <%= link_to 'Create one', new_task_path %></p>
 <% else %>
   <%= render 'task_list' %>
 <% end %>
