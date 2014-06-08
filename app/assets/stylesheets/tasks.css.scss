@@ -2,6 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-td.header-column {
-  font-weight: bold;
+td {
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+.mark-complete {
+    border-radius: 10px;
+    font-size: 10px;
+    height: 20px;
+    padding: 2px 0;
+    text-align: center;
+    width: 20px;
 }
