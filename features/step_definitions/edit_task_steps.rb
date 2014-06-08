@@ -32,7 +32,7 @@ end
 When /^I click the button next to the "(.*)" task$/ do |title|
   @task = Task.find_by(title: title)
   within("#task-#{@task.id}") do 
-    click_on 'Mark Complete'
+    click_on ''
   end
 end
 
