@@ -1,4 +1,4 @@
-<div id="todo-list" class="dashboard-widget">
-  <h3><%= link_to 'My To-Do List', tasks_path %></h3>
-  <%= render partial: 'tasks/task_list' %>
-</div>
+<%= create_widget(title: "To-Do List", 
+                  icon_class: "fa fa-check-square",
+                  partial: "tasks/task_list",
+                  id: "todo-list") %>
