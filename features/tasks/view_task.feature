@@ -8,6 +8,6 @@ Feature: Show task
 
   Scenario: User selects a task from the to-do list
     Given I'm viewing my to-do list
-    When I click a task's 'Show' link
+    When I click a task's title
     Then I should go to that item's show page
     And I should see the task's title and status
