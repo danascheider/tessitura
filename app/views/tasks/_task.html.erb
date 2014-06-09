@@ -1,0 +1,28 @@
+<table>
+  <tr>
+    <td>
+      <%= form_for @task, url: mark_complete_url(@task) do |f| %>
+        <%= f.button '', name: 'task[complete]',
+                        value: '1',
+                        class: 'fa fa-check btn btn-info btn-circle mark-complete',
+                        remote: true %>
+      <% end %>
+    </td>
+    <td class="todo-list-item-title">
+      <%= @task.title %>
+    </td>
+    <td>
+      <%= link_to 'Edit', edit_task_path(@task) %>
+    </td>
+    <td>
+      <%= link_to 'Delete', @task, method: :delete, data: { confirm: 'Are you sure?' } %>
+    </td>
+  </tr>
+  <tr class="task-details">
+    <td></td>
+    <td>
+      <% status = if @task.complete? then "Complete"; else "Incomplete"; end %>
+      <p><strong>Status:</strong> <%= status %></p>
+    </td>
+  </tr>
+</table>
