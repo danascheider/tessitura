@@ -1,0 +1,10 @@
+# Place all the behaviors and hooks related to the matching controller here.
+# All this logic will automatically be available in application.js.
+
+# This doesn't affect the behavior of the app right now. This is in 
+# the issue tracking system.
+
+$ ->
+  $('li.todo-list-item').click (e) ->
+    e.preventDefault()
+    $(this).find('tr.task-details').toggle()
