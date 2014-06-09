@@ -1,5 +1,6 @@
 Given /^I'm viewing my to\-do list$/ do 
-  visit tasks_path
+  @path = root_path
+  visit @path
 end
 
 Given /^there are (no||\d+) tasks$/ do |number|
@@ -21,4 +22,8 @@ end
 When /^I submit the form with the title (.*)$/ do |title|
   fill_in 'Title', with: title 
   click_button 'Create Task'
+end
+
+Then /^I should not be redirected$/ do 
+  expect(current_path).to eql @path
 end

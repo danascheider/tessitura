@@ -1,5 +1,6 @@
 When /^I navigate to the dashboard$/ do 
-  visit root_path
+  @path = root_path
+  visit @path
 end
 
 When /^I mark the "(.*)" task complete$/ do |title|
@@ -7,8 +8,4 @@ When /^I mark the "(.*)" task complete$/ do |title|
   within("#task-#{@task.id}") do 
     click_button ''
   end
-end
-
-Then /^I should not be redirected$/ do 
-  expect(current_path).to eql root_path
 end
