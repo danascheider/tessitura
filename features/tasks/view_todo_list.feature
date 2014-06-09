@@ -12,6 +12,7 @@ Feature: View to-do list
 
   Scenario: There are tasks on the to-do list
     Given there are 3 tasks
+    And the tasks are incomplete
     When I navigate to the to-do list
     Then I should see a list of all the tasks
 
