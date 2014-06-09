@@ -15,6 +15,7 @@ Feature: View to-do list
     And the tasks are incomplete
     When I navigate to the to-do list
     Then I should see a list of all the tasks
+    And their details should be hidden
 
   Scenario: One of the tasks is completed
     Given there are 3 tasks
