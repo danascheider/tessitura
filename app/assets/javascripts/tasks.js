@@ -5,4 +5,7 @@
 // the issue tracking system.
 
 $(function() {
+  $(".todo-list-item li").click(function(){
+    $(this).children('.task-details').css('display', 'inherit');
+  });
 });
