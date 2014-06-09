@@ -5,13 +5,4 @@
 // the issue tracking system.
 
 $(function() {
-  $("button").click(function() {
-    var tr = $(this).parents("tr");
-    $.ajax({
-      url: '/tasks',
-      content: document.body
-    }).done(function() {
-      tr.fadeOut()
-    });
-  })
 });
