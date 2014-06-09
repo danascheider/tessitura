@@ -2,9 +2,27 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+li.todo-list-item {
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  & a:hover {
+    text-decoration: none;
+  }
+}
+
 td {
   box-sizing: border-box;
   padding: 5px;
+  &.todo-list-item-title {
+    width: 80%;
+  }
+}
+
+tr {
+  &.task-details {
+    display: none
+  }
 }
 
 .mark-complete {
