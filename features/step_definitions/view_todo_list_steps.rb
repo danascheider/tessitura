@@ -21,15 +21,23 @@ end
 
 ### Scenario 2
 
+Given /^the tasks are incomplete$/ do 
+  @task_list.each do |task|
+    task.update(complete: false)
+  end
+end
+
 Then /^I should see a list of all the tasks$/ do 
   @task_list.each do |task|
     find('ul.list-group').should have_content(task.title)
   end
 end
 
-Given /^the tasks are incomplete $/ do 
+Then /^their details should be hidden$/ do 
   @task_list.each do |task|
-    task.update(complete: false)
+    within("li#task-#{task.id}") do 
+      find('tr.task-details').should_not be_visible
+    end
   end
 end
 
