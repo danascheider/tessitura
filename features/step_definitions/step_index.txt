@@ -21,4 +21,5 @@ I submit the form with title '(.*)' .................... CANTO_STEPS
 One of the tasks is completed ................. VIEW_TODO_LIST_STEPS
 The task should disappear from the list ............ EDIT_TASK_STEPS
 The task's complete attribute should be (true|false) EDIT_TASK_STEPS
+The tasks are incomplete ...................... VIEW_TODO_LIST_STEPS
 There are (no|\d+) tasks ............................... CANTO_STEPS
