@@ -9,7 +9,7 @@
       <% end %>
     </td>
     <td class="todo-list-item-title">
-      <%= @task.title %>
+      <%= link_to  "#{@task.title}", "#", remote: true %>
     </td>
     <td>
       <%= link_to 'Edit', edit_task_path(@task) %>
