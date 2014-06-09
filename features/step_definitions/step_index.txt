@@ -8,7 +8,7 @@ I navigate to the dashboard ................... VIEW_DASHBOARD_STEPS
 " " " " " " " the to-do list .................. VIEW_TODO_LIST_STEPS
 
 I should go to that item's show page ............... VIEW_TASK_STEPS
-" " " "  not be redirected .................... VIEW_DASHBOARD_STEPS
+" " " "  not be redirected ............................. CANTO_STEPS
 " " " "  not see any tasks .................... VIEW_TODO_LIST_STEPS
 " " " "  not see the completed task on the list VIEW_TODO_LIST_STEPS
 " " " "  see a link to create a new task ...... VIEW_TODO_LIST_STEPS
@@ -22,4 +22,5 @@ One of the tasks is completed ................. VIEW_TODO_LIST_STEPS
 The task should disappear from the list ............ EDIT_TASK_STEPS
 The task's complete attribute should be (true|false) EDIT_TASK_STEPS
 The tasks are incomplete ...................... VIEW_TODO_LIST_STEPS
+Their details should be hidden ................ VIEW_TODO_LIST_STEPS
 There are (no|\d+) tasks ............................... CANTO_STEPS
