@@ -23,7 +23,13 @@ end
 
 Then /^I should see a list of all the tasks$/ do 
   @task_list.each do |task|
-    find('table').should have_content(task.title)
+    find('ul.list-group').should have_content(task.title)
+  end
+end
+
+Given /^the tasks are incomplete $/ do 
+  @task_list.each do |task|
+    task.update(complete: false)
   end
 end
 
@@ -33,5 +39,5 @@ Given /^one of the tasks is completed$/ do
 end
 
 Then /^I should not see the completed task on the list$/ do 
-  find('table').should_not have_content(@done_task.title)
+  find('ul.list-group').should_not have_content(@done_task.title)
 end
