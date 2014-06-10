@@ -1,7 +1,7 @@
 I click a task's '(.*)' link ........................... CANTO_STEPS
 " " " " the button next to the '(.*)' task ......... EDIT_TASK_STEPS
 
-I'm viewing my to-do list .............................. CANTO_STEPS
+I'm viewing my (to-do list|dashboard) .................. CANTO_STEPS
 I mark the '(.*)' task complete ............... VIEW_DASHBOARD_STEPS
 
 I navigate to the dashboard ................... VIEW_DASHBOARD_STEPS

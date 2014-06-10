@@ -1,4 +1,4 @@
-Given /^I'm viewing my to\-do list$/ do 
+Given /^I'm viewing my (to\-do list|dashboard)$/ do |page|
   @path = root_path
   visit @path
 end
