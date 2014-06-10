@@ -9,15 +9,6 @@ Feature: Edit task
 
   Scenario: User changes title of task
 
-    FIX: This action should route to the show page. However, I haven't
-    found a way to do this without making the mark_complete task also 
-    route to the show page, and it's more important for that to stay
-    on the index, so I'm kicking this one down the road - spent a week
-    already and that's about 6 days too long
-
-    Likewise, I am commenting out the step requiring a message be
-    shown that the title was updated.
-
     And I am on its edit page
     When I change its title to "Walk the dog"
     Then I should be routed to the task's show page
