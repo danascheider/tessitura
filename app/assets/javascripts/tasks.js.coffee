@@ -5,8 +5,8 @@ $ ->
   $(".mark-complete").click (e) ->
     e.stopPropagation()
 
-    parent_li = $(this).closest("li")
-    id = parent_li.attr("id").match(/\d+/)
+    parent_li = $(this).closest "li"
+    id = parent_li.attr("id").match /\d+/
 
     $.ajax ->
       async: true
@@ -14,12 +14,12 @@ $ ->
       type: "POST"
       dataType: "script"
       success: ->
-        $(this).parentsUntil(ul).fadeOut()
+        $(this).parentsUntil('ul').fadeOut()
       error:
         console.log("That asynchronous thing didn't work out so well")
 
   $('li.todo-list-item').click (e) ->
     e.preventDefault()
-    details = $(this).find("tr.task-details")
-    details.toggleClass("visible")
-    details.toggle()
+    details = $(this).find "tr.task-details"
+    details.toggleClass "visible"
+    details.slideToggle()
