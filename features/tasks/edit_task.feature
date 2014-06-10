@@ -24,7 +24,7 @@ Feature: Edit task
     And the task's title should be changed to "Walk the dog"
     And I should see a message that the title was changed
 
-  Scenario: User marks task complete from the to-do list
+  Scenario: User marks task complete from the dashboard
     And I'm viewing my to-do list
     When I click the button next to the "Take out the trash" task
     Then I should stay on the to-do list page
