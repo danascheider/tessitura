@@ -1,10 +1,13 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 
-# This doesn't affect the behavior of the app right now. This is in 
-# the issue tracking system.
-
 $ ->
+  $('.mark-complete').click (e) ->
+    e.stopPropagation()
+    this.parentsUntil(ul).fadeOut()
+
   $('li.todo-list-item').click (e) ->
     e.preventDefault()
-    $(this).find('tr.task-details').toggle()
+    details = $(this).find('tr.task-details')
+    details.toggleClass('visible')
+    details.toggle()
