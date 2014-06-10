@@ -65,6 +65,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       if @task.mark_complete && @task.save
         format.html { redirect_to root_url }
+        format.js   {}
         format.json { head :no_content }
       else
         format.html { redirect_to root_url, notice: 'Sorry, something went wrong. Please try again later.' }
