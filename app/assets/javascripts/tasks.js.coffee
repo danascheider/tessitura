@@ -26,3 +26,5 @@ $ ->
 
   $('.ajax-edit-link').click (e) ->
     e.stopPropagation()
+    $(this).parents('.task-info').hide
+    $(this).siblings('.edit-form').show
