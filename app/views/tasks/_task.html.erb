@@ -2,13 +2,7 @@
   <tr>
     <td>
       <!-- Mark Complete button -->
-      <%= form_for @task, url: mark_complete_url(@task) do |f| %>
-        <%= f.button '', name: 'task[complete]',
-                         value: '1',
-                         class: 'fa fa-check btn btn-info btn-circle mark-complete',
-                         method: :patch,
-                         "data-remote" => true %>
-      <% end %>
+      <%= render 'mark_complete' %>
     </td>
 
     <!-- Task information -->
@@ -29,6 +23,4 @@
       </div>
     </td>
   </tr>
-
-  <tr
 </table>
