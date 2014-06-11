@@ -12,18 +12,19 @@
     <td class="todo-list-item-title">
       <%= link_to  "#{@task.title}", "#", remote: true %>
     </td>
-    <td>
-      <%= link_to 'Edit', edit_task_path(@task) %>
-    </td>
-    <td>
-      <%= link_to 'Delete', @task, method: :delete, data: { confirm: 'Are you sure?' } %>
-    </td>
   </tr>
   <tr class="task-details">
     <td></td>
     <td>
       <% status = if @task.complete? then "Complete"; else "Incomplete"; end %>
       <p><strong>Status:</strong> <%= status %></p>
+    </td>
+  </tr>
+  <tr class="task-details">
+    <td></td>
+    <td>
+      <%= link_to 'Edit', edit_task_path(@task), class: "ajax-link", remote: true %> 
+      | <%= link_to 'Delete', @task, class: "ajax-link", remote: true, method: :delete, data: {confirm: 'Are you sure?' } %>
     </td>
   </tr>
 </table>
