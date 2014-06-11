@@ -17,7 +17,7 @@ Feature: Interact with dashboard widgets
     And the task should disappear from the list
 
   Scenario: User edits task from the dashboard
-    Given the details of the "Take out the trash" task are visible
+    Given the details of the task are visible
     When I click the 'Edit' link
     Then I should not be redirected
     And the edit form should appear right where the task details had been
