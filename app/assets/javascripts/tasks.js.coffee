@@ -20,9 +20,9 @@ $ ->
 
   $('li.todo-list-item').click (e) ->
     e.preventDefault()
-    details = $(this).find "tr.task-details"
+    details = $(this).find "div.task-details"
     details.toggleClass "visible"
     details.slideToggle()
 
-  $('.ajax-link').click (e) ->
+  $('.ajax-edit-link').click (e) ->
     e.stopPropagation()
