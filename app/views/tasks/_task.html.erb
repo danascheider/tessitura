@@ -1,6 +1,7 @@
 <table>
   <tr>
     <td>
+      <!-- Mark Complete button -->
       <%= form_for @task, url: mark_complete_url(@task) do |f| %>
         <%= f.button '', name: 'task[complete]',
                          value: '1',
@@ -9,16 +10,25 @@
                          "data-remote" => true %>
       <% end %>
     </td>
-    <td class="todo-list-item-title">
-      <%= link_to  "#{@task.title}", "#", remote: true %>
 
-      <!-- Here are the details, hidden until clicked -->
-      <% status = if @task.complete? then "Complete"; else "Incomplete"; end %>
-      <div class="task-details">
-        <strong>Status:</strong> <%= status %><br>
-        <%= link_to 'Edit', '#', class: 'ajax-edit-link', 'data-remote' => true %> 
-        | <%= link_to 'Delete', @task, method: :delete, data: {confirm: 'Are you sure?' } %>
+    <!-- Task information -->
+    <td class="todo-list-item">
+      <div class='task-info'>
+        <%= link_to  "#{@task.title}", "#", remote: true %>
+
+        <!-- Task details, hidden until clicked -->
+        <% status = if @task.complete? then "Complete"; else "Incomplete"; end %>
+        <div class="task-details">
+          <strong>Status:</strong> <%= status %><br>
+          <%= link_to 'Edit', '#', class: 'ajax-edit-link', action: :edit, remote: true %> 
+          | <%= link_to 'Delete', @task, method: :delete, data: {confirm: 'Are you sure?' } %>
+        </div>
+      </div>
+      <div class="edit-form">
+        <%= render 'tasks/form' %>
       </div>
     </td>
   </tr>
+
+  <tr
 </table>
