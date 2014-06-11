@@ -19,10 +19,8 @@ td {
   }
 }
 
-tr {
-  &.task-details {
-    display: none;
-  }
+.task-details {
+  display: none;
 }
 
 .mark-complete {
