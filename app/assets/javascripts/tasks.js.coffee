@@ -26,9 +26,3 @@ $ ->
 
   $('.ajax-link').click (e) ->
     e.stopPropagation()
-
-    id = $(this).closest('li').attr('id').match /\d+/
-
-    $.ajax ->
-      async: true
-      url: "/tasks/"
