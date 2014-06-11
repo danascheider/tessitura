@@ -1,4 +1,5 @@
 module DashboardHelper
+
   def create_widget(opts = {})
     @title = opts[:title]
     @icon_class = opts[:icon_class]
