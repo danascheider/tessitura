@@ -23,3 +23,12 @@ $ ->
     details = $(this).find "tr.task-details"
     details.toggleClass "visible"
     details.slideToggle()
+
+  $('.ajax-link').click (e) ->
+    e.stopPropagation()
+
+    id = $(this).closest('li').attr('id').match /\d+/
+
+    $.ajax ->
+      async: true
+      url: "/tasks/"
