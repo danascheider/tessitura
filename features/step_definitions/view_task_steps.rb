@@ -9,6 +9,6 @@ end
 
 Then /^I should see the task's details$/ do 
   within("li#task-#{@task.id}") do 
-    find("tr.task-details").should be_visible
+    find("div.task-details").should be_visible
   end
 end

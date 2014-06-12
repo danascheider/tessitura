@@ -1,6 +1,6 @@
 Given /^the details of the task are visible$/ do
   within("li#task-#{@task.id}") do 
-    find('table tr.task-details').should have_content('Status: Incomplete')
+    find('table div.task-details').should have_content('Status: Incomplete')
   end
 end
 
