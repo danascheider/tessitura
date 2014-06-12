@@ -37,20 +37,3 @@ $ ->
     parentDiv = $(this).closest('.task-info')
     parentDiv.css('display', 'none')
     parentDiv.next().css('display', 'block')
-
-###
-    e.stopPropagation()
-    e.preventDefault()
-    taskInfo = $(this).closest('.task-info')
-    editForm = $(this).closest('.edit-form')
-    id       = $(this).closest('li').match /\d+/
-    $.ajax ->
-      async: true
-      url: '/tasks/' + id + '/edit'
-      type: 'GET'
-      dataType: 'script'
-      success: -> 
-        toggleDisplayContent(taskInfo, editForm, 'none')
-      error: ->
-        alert("That didn't work")
-###
