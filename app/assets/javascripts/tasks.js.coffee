@@ -1,9 +1,9 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 
-toggleDisplayContent = (el1, el2) ->
-  el1.hide()
-  el2.show()
+toggleDisplayContent = (el1, el2, value) ->
+  [el1, el2].each (element) ->
+    if element.display() == 'none' then element.show(); else element.hide()
 
 $ ->
   # Mark-complete functionality 
@@ -33,6 +33,24 @@ $ ->
   # Hide task details and show edit form when edit link clicked
   $('.ajax-edit-link').click (e) ->
     e.stopPropagation()
-    taskInfo = $(this).parents('.task-info')
-    editForm = $(this).next('.edit-form')
-    toggleDisplayContent(taskInfo, editForm)
+    e.preventDefault()
+    parentDiv = $(this).closest('.task-info')
+    parentDiv.css('display', 'none')
+    parentDiv.next().css('display', 'block')
+
+###
+    e.stopPropagation()
+    e.preventDefault()
+    taskInfo = $(this).closest('.task-info')
+    editForm = $(this).closest('.edit-form')
+    id       = $(this).closest('li').match /\d+/
+    $.ajax ->
+      async: true
+      url: '/tasks/' + id + '/edit'
+      type: 'GET'
+      dataType: 'script'
+      success: -> 
+        toggleDisplayContent(taskInfo, editForm, 'none')
+      error: ->
+        alert("That didn't work")
+###

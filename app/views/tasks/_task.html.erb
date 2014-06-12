@@ -6,7 +6,7 @@
     </td>
 
     <!-- Task information -->
-    <td class="todo-list-item">
+    <td>
       <div class='task-info'>
         <%= link_to  "#{@task.title}", "#", remote: true %>
 
@@ -14,11 +14,11 @@
         <% status = if @task.complete? then "Complete"; else "Incomplete"; end %>
         <div class="task-details">
           <strong>Status:</strong> <%= status %><br>
-          <%= link_to 'Edit', '#', class: 'ajax-edit-link', action: :edit, remote: true %> 
+          <%= link_to 'Edit', edit_task_path(@task), class: 'ajax-edit-link', action: :edit, remote: true %> 
           | <%= link_to 'Delete', @task, method: :delete, data: {confirm: 'Are you sure?' } %>
         </div>
       </div>
-      <div class="edit-form">
+      <div class='edit-form'>
         <%= render 'tasks/form' %>
       </div>
     </td>

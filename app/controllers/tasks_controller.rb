@@ -19,6 +19,10 @@ class TasksController < ApplicationController
 
   # GET /tasks/1/edit
   def edit
+    respond_to do |format|
+      format.html { render partial: 'form' }
+      format.json { head :no_content }
+    end
   end
 
   # POST /tasks
