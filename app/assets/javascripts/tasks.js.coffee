@@ -25,9 +25,9 @@ $ ->
 
   # Display/hide task details when li is clicked in list view
   $('li.todo-list-item').click (e) ->
-    e.preventDefault()
-    details = $(this).find "div.task-details"
-    details.toggleClass "visible"
+    e.preventDefault
+    details = $(this).find 'div.task-details'
+    details.toggleClass 'visible'
     details.slideToggle()
 
   # Hide task details and show edit form when edit link clicked
