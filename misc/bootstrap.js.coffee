@@ -16,7 +16,7 @@ Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
 ========================================================================
 ###
 
-+(jQuery) ->
++($) ->
   'use strict'
 
   # CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
@@ -229,4 +229,356 @@ Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
 ========================================================================
 ###
 
-# The next line to be translated in bootstrap.js is line #264
++($) ->
+  'use strict'
+
+  # CAROUSEL CLASS DEFINITION
+  # =========================
+
+  Carousel = (element, options) ->
+    this.$element    = $(element)
+    this.$indicators = this.$element.find('.carousel-indicators')
+    this.options     = options
+    # Assignments with nothing on the left include
+    # this.paused, this.sliding, this.interval, this.$active
+    this.$items      = null
+
+    this.options.pause == 'hover' && this.$element
+      .on('mouseenter', $.proxy(this.pause, this))
+      .on('mouseleave', $.proxy(this.cycle, this))
+
+  Carousel.DEFAULTS = {
+    interval: 5000,
+    pause: 'hover',
+    wrap: true
+  }
+
+  Carousel.prototype.cycle = (e) ->
+    e || (this.paused = false)
+
+    this.interval && clearInterval(this.interval)
+
+    this.options.interval 
+      && !this.paused
+      && (this.interval = setInterval $.proxy(this.next, this), this.options.interval)
+
+    this
+
+  Carousel.prototype.getActiveIndex = ->
+    this.$active = this.$element.find '.item.active'
+    this.$items  = this.$active.parent().children()
+
+    this.$items.index(this.$active)
+
+  Carousel.prototype.to = (pos) ->
+    that        = this
+    activeIndex = this.getActiveIndex
+
+    return if (pos > (this.$items.length - 1) || pos < 0)
+
+    if (this.sliding) then return this.$element.one 'slid.bs.carousel', ->
+      that.to(pos)
+
+    if activeIndex == pos
+      this.pause().cycle()
+
+    this.slide(if poas > activeIndex then 'next' else 'prev', $(this.$items[pos]))
+
+  Carousel.prototype.pause = (e) ->
+    e || (this.paused = true)
+
+    if this.$element.find('.next, .prev').length && $.support.transition
+      this.$element.trigger $.support.transition.end
+      this.cycle true
+
+    this.interval = clearInterval this.interval
+
+    this
+
+  Carousel.prototype.prev = ->
+    return if this.sliding
+    return this.slide('prev')
+
+  Carousel.prototype.slide = (type, next) ->
+    $active   = this.$element.find '.item.active'
+    $next     = next || $active[type]
+    isCycling = this.interval
+    direction = if type == 'next' then 'left' else 'right'
+    fallback  = if type == 'next' then 'first' else 'last'
+    that      = this
+
+    unless $next.length
+      return unless this.options.wrap
+      $next = this.$element.find('.item')[fallback]
+
+    return (this.sliding = false) if $next.hassClass 'active'
+
+    e = $.Event('slide.bs.carousel'), { relatedTarget: $next[0], direction: direction }
+    this.$element.trigger e 
+    return if e.isDefaultPrevented
+
+    this.sliding = true
+
+    isCycling && this.pause()
+
+    if this.$indicators.length 
+      this.$indicators.find('.active').removeClass 'active'
+      this.$element.one 'slid.bs.carousel', ->
+        $nextIndicator = $(that.$indicators.children[that.getActiveIndex])
+        $nextIndicator && $nextIndicator.addClass('active')
+
+    if $.support.transition && this.$element.hasClass 'slide'
+      $next.addclass type 
+        $next[0].offsetWidth # force reflow
+        $active.addClass(direction)
+        $next.addclass(direction)
+        $.active
+          .one $.support.transition.end, ->
+            $next.removeClass([type, direction].join ' ').addClass 'active'
+            $active.removeClass(['active', direction].join ' ')
+            that.sliding = false
+            setTimeout( ->
+              that.$element.trigger 'slid.bs.carousel', 0
+              )
+          .emulateTransitionEnd $active.css('transition-duration').slice(0, -1) * 1000
+    else 
+      $active.removeClass('active')
+      $next.addClass('active')
+      this.sliding = false 
+      this.$element.trigger 'slid.bs.carousel'
+
+    isCycling && this.cycle 
+
+    this 
+
+  # CAROUSEL PLUGIN DEFINITION
+  # ==========================
+
+  old = $.fn.carousel 
+
+  $.fn.carousel = (option) ->
+    this.each( ->
+      $this   = $(this) 
+      data    = $this.data('bs.carousel')
+      options = $.extend {}, Carousel.DEFAULTS, $this.data, (typeof option == 'object' && option)
+      action  = if typeof option == 'string' then option else options.slide
+
+      $this.data'bs.carousel', (data = new Carousel(this, options)) unless data 
+      if typeof option == 'number' then data.to option 
+      else if action then data[action] 
+      else if options.interval then data.pause().cycle
+      )
+
+  $.fn.carousel.Contructor = Carousel
+
+  # CAROUSEL NO CONFLICT
+  # ====================
+
+  $.fn.carousel.noConflict = ->
+    $.fn.carousel = old
+    return this
+
+  # CAROUSEL DATA-API
+  # =================
+
+  $(document).on('click.bs.carousel.data-api', '[data-slide], [data-slide-to]', (e) ->
+    $this   = $(this), href
+    $target = $($this.attr 'data-target' || (href = $this.attr 'href' && href.replace /.*(?=#[^\s]+$)/, '')) # strip for ie7
+    options = $.extend {}, $target.data, $this.data 
+    slideIndex = $this.attr 'data-slide-to'
+    options.interval = false if slideIndex
+
+    $target.carousel options
+
+    if slideIndex = $this.attr 'data-slide-to'
+      $target.data('bs.carousel').to(slideIndex)
+
+    e.preventDefault
+
+  $(window).on 'load', ->
+    $('[data-ride="carousel"]').each ->
+      $carousel = $(this) 
+      $carousel.carousel $carousel.data
+
+###
+========================================================================
+Bootstrap: collapse.js v3.1.0
+http://getbootstrap.com/javascript/#collapse
+========================================================================
+Copyright 2011-2014 Twitter, Inc.
+Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+========================================================================
+###
+
+# NEXT SECTION TO BE TRANSLATED
+###
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.transitioning = null
+
+    if (this.options.parent) this.$parent = $(this.options.parent)
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var actives = this.$parent && this.$parent.find('> .panel > .in')
+
+    if (actives && actives.length) {
+      var hasData = actives.data('bs.collapse')
+      if (hasData && hasData.transitioning) return
+      actives.collapse('hide')
+      hasData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')
+      [dimension](0)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')
+        [dimension]('auto')
+      this.transitioning = 0
+      this.$element.trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one($.support.transition.end, $.proxy(complete, this))
+      .emulateTransitionEnd(350)
+      [dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element
+      [dimension](this.$element[dimension]())
+      [0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse')
+      .removeClass('in')
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .trigger('hidden.bs.collapse')
+        .removeClass('collapsing')
+        .addClass('collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one($.support.transition.end, $.proxy(complete, this))
+      .emulateTransitionEnd(350)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  var old = $.fn.collapse
+
+  $.fn.collapse = function (option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && option == 'show') option = !option
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle=collapse]', function (e) {
+    var $this   = $(this), href
+    var target  = $this.attr('data-target')
+        || e.preventDefault()
+        || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') //strip for ie7
+    var $target = $(target)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+    var parent  = $this.attr('data-parent')
+    var $parent = parent && $(parent)
+
+    if (!data || !data.transitioning) {
+      if ($parent) $parent.find('[data-toggle=collapse][data-parent="' + parent + '"]').not($this).addClass('collapsed')
+      $this[$target.hasClass('in') ? 'addClass' : 'removeClass']('collapsed')
+    }
+
+    $target.collapse(option)
+  })
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: dropdown.js v3.1.0
+ * http://getbootstrap.com/javascript/#dropdowns
+ * ========================================================================
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+###
