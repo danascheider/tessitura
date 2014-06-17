@@ -1,0 +1,26 @@
+<table>
+  <tr>
+    <td>
+      <!-- Mark Complete button -->
+      <%= mark_complete_button(@task) %>
+    </td>
+
+    <!-- Task information -->
+    <td>
+      <div class='task-info'>
+        <%= link_to  "#{@task.title}", "#", remote: true %>
+
+        <!-- Task details, hidden until clicked -->
+        <% status = if @task.complete? then "Complete"; else "Incomplete"; end %>
+        <div class="task-details">
+          <strong>Status:</strong> <%= status %><br>
+          <%= link_to 'Edit', edit_task_path(@task), class: 'ajax-edit-link', action: :edit %> 
+          | <%= link_to 'Delete', @task, method: :delete, data: {confirm: 'Are you sure?' } %>
+        </div>
+      </div>
+      <div class='edit-form'>
+        <%= render 'tasks/form' %>
+      </div>
+    </td>
+  </tr>
+</table>
