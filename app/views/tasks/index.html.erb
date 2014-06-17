@@ -3,7 +3,7 @@
 <% unless @tasks.length > 0 %>
   <p class="notice">No tasks! <%= link_to 'Create one', new_task_path %></p>
 <% else %>
-  <%= render 'task_list' %>
+  <%= render @tasks, as: :task %>
 <% end %>
 
 <br>

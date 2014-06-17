@@ -14,9 +14,8 @@ class Task < ActiveRecord::Base
   def mark_complete
     self.complete = true
   end
-
-  protected
-    def to_partial_path
-      'shared/task'
-    end
+  
+  # def to_partial_path
+  #   'shared/task'
+  # end
 end

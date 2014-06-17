@@ -1,9 +1,3 @@
 <ul id="todo_list" class="list-group">
-  <% @tasks.each do |task| %>
-    <% next if task.complete %>
-    <% @task = task %>
-    <li id=<%= "task-#{task.id}" %> class="list-group-item todo-list-item">
-      <%= render 'shared/task' %>
-    </li>
-  <% end %>
+  <%= render @tasks.incomplete, as: :task %>
 </ul>
