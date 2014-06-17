@@ -3,7 +3,7 @@
     <% next if task.complete %>
     <% @task = task %>
     <li id=<%= "task-#{task.id}" %> class="list-group-item todo-list-item">
-      <%= render 'tasks/task' %>
+      <%= render 'shared/task' %>
     </li>
   <% end %>
 </ul>
