@@ -4,6 +4,7 @@ describe Task do
   it { should respond_to(:title) }
   it { should respond_to(:complete? ) }
   it { should respond_to(:incomplete? ) }
+  it { should respond_to(:mark_complete) }
 
   describe 'validations' do 
     before :each do
@@ -31,6 +32,14 @@ describe Task do
     it 'is created with complete: false' do 
       t = Task.create(title: 'Test Task')
       t.complete.should be false
+    end
+  end
+
+  describe 'mark_complete' do 
+    it 'changes status to complete=true' do 
+      t = Task.create(title: 'Test Task')
+      t.mark_complete
+      t.complete.should be true
     end
   end
 end
