@@ -18,6 +18,6 @@ class Task < ActiveRecord::Base
 
   private
     def set_complete
-      self.complete = false
+      self.complete ||= false
     end
 end
