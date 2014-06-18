@@ -1,5 +1,6 @@
 class Task < ActiveRecord::Base
   validates :title, presence: true
+  before_save :set_complete
   scope :complete, -> { where(complete: true) }
   scope :incomplete, -> { where(complete: false) }
 
@@ -14,8 +15,9 @@ class Task < ActiveRecord::Base
   def mark_complete
     self.complete = true
   end
-  
-  # def to_partial_path
-  #   'shared/task'
-  # end
+
+  private
+    def set_complete
+      self.complete = false
+    end
 end
