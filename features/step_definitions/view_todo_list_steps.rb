@@ -35,8 +35,8 @@ end
 
 Then /^their details should be hidden$/ do 
   @task_list.each do |task|
-    within("li#task-#{task.id}") do 
-      find('div.task-details').should_not be_visible
+    within("li#task-#{task.id}") do
+      expect(page).to have_css("div.task-details", visible: false)
     end
   end
 end
