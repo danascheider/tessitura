@@ -20,7 +20,7 @@ $ ->
       dataType: "script"
       success: ->
         $(this).parentsUntil('ul').fadeOut()
-      error:
+      error: ->
         console.log("That Ajax thing? Yeah, that didn't work so well.")
 
   # Display/hide task details when li is clicked in list view
@@ -29,11 +29,3 @@ $ ->
     details = $(this).find 'div.task-details'
     details.toggleClass 'visible'
     details.slideToggle()
-
-  # Hide task details and show edit form when edit link clicked
-  $('.ajax-edit-link').click (e) ->
-    e.stopPropagation()
-    e.preventDefault()
-    parentDiv = $(this).closest('.task-info')
-    parentDiv.css('display', 'none')
-    parentDiv.next().css('display', 'block')
