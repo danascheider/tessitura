@@ -1,6 +1,6 @@
 module DashboardHelper
 
-  def create_widget(opts = {})
+  def widget_tag(opts = {})
     @title = opts[:title]
     @icon_class = opts[:icon_class]
     @partial = opts[:partial]
@@ -8,7 +8,7 @@ module DashboardHelper
     render 'widget'
   end
 
-  def include_icon(icon_class)
+  def icon_tag(icon_class)
     tag("i", class: icon_class) + tag("/i")
   end
 end
