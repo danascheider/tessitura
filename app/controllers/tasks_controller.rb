@@ -48,6 +48,7 @@ class TasksController < ApplicationController
       if @task.update(task_params)
         format.html { redirect_to root_url }
         format.json { head :no_content }
+        format.js
       else
         format.html { render action: 'edit' }
         format.json { render json: @task.errors, status: :unprocessable_entity }
