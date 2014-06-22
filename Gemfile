@@ -6,6 +6,9 @@ gem 'sinatra', '~> 1.4.5'
 # Use Thin web server
 gem 'thin', '~> 1.6.2'
 
+# Include core extension library for Sinatra
+gem 'sinatra-contrib', '~> 1.4.2'
+
 # Use rerun for reloading code
 gem 'rerun', '~> 0.10.0'
 
