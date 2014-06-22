@@ -1,5 +1,5 @@
 Given /^I'm viewing my (to\-do list|dashboard)$/ do |page|
-  @path = root_path
+  @path = ( page == 'dashboard' ? root_path : tasks_path )
   visit @path
 end
 
