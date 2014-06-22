@@ -18,28 +18,28 @@ describe Task do
 
   describe 'scope "complete"' do 
     it 'returns all completed tasks' do 
-      Task.complete.should == Task.where(complete: true)
+      expect(Task.complete).to eq Task.where(complete: true)
     end
   end
 
   describe 'scope "incomplete"' do 
     it 'returns all incomplete tasks' do 
-      Task.incomplete.should == Task.where(complete: false)
+      expect(Task.incomplete).to eq Task.where(complete: false)
     end
   end
 
   describe 'default value of :complete' do 
     it 'is created with complete: false' do 
-      t = Task.create(title: 'Test Task')
-      t.complete.should be false
+      t = FactoryGirl.create(:task)
+      expect(t.complete).to be false
     end
   end
 
   describe 'mark_complete' do 
     it 'changes status to complete=true' do 
-      t = Task.create(title: 'Test Task')
+      t = FactoryGirl.create(:task)
       t.mark_complete
-      t.complete.should be true
+      expect(t.complete).to be true
     end
   end
 end
