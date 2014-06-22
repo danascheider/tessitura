@@ -3,7 +3,10 @@ source 'https://rubygems.org'
 # Require Sinatra
 gem 'sinatra', '~> 1.4.5'
 
-# Use Cucumber and RSpec for testing
+# Use Thin web server
+gem 'thin', '~> 1.6.2'
+
+# Use Cucumber and RSpec with Capybara for testing
 group :test do 
   gem 'cucumber-sinatra', '~> 0.5.0'
   gem 'rspec',            '~> 3.0.0'
