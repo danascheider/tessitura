@@ -20,7 +20,7 @@ When /^I click a task's '(.*)' link$/ do |link_text|
 end
 
 When /^I submit the form with the title (.*)$/ do |title|
-  fill_in 'Title', with: title 
+  fill_in 'task[title]', with: title 
   click_button 'Create Task'
 end
 
