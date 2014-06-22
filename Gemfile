@@ -6,6 +6,9 @@ gem 'sinatra', '~> 1.4.5'
 # Use Thin web server
 gem 'thin', '~> 1.6.2'
 
+# Use rerun for reloading code
+gem 'rerun', '~> 0.10.0'
+
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
   gem 'cucumber-sinatra', '~> 0.5.0'
