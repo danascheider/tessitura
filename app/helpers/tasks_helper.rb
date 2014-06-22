@@ -1,14 +1,14 @@
 module TasksHelper
   def task_form(task, opts = {})
     @task   = task
+    @action = opts[:action]
+
     case opts[:action]
       when :create
-        @method       = 'post'
         @destination  = tasks_path
         @button_value = 'Create Task'
 
       when :update
-        @method       = 'patch'
         @destination  = task_path(@task)
         @button_value = 'Update Task'
 
