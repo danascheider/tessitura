@@ -1,6 +1,7 @@
-Feature: Creating Tasks
-  In order to remember what I have to get done,
-  as a Canto user, 
+Feature: Create a new task 
+  
+  In order to remember what I have to get done
+  As a user
   I need to create a task for my to-do list
 
   Background:
@@ -9,9 +10,9 @@ Feature: Creating Tasks
 
   Scenario: User creates a task
     When I submit the form with the title 'Take out the trash'
-    Then a new task called 'Take out the trash' should be created
+    Then a new task should be created with the title 'Take out the trash'
 
-  Scenario: User leaves the title field blank
+  Scenario: User doesn't fill out the title field
     When I submit the form blank
     Then no task should be created
     And I should see a message saying that title is required
