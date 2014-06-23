@@ -12,6 +12,9 @@ gem 'sinatra-contrib', '~> 1.4.2'
 # Use rerun for reloading code
 gem 'rerun', '~> 0.10.0'
 
+# Use Backbone.js for client-side JavaScript
+gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
+
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
   gem 'cucumber-sinatra', '~> 0.5.0'
