@@ -6,6 +6,11 @@ gem 'sinatra', '~> 1.4.5'
 # Use Thin web server
 gem 'thin', '~> 1.6.2'
 
+# Use ActiveRecord and SQLite 3 to manage 
+gem 'sinatra-activerecord', '~> 2.0.2'
+gem 'sqlite3',              '~> 1.3.9'
+gem 'rake',                 '~> 10.3.2'
+
 # Include core extension library for Sinatra
 gem 'sinatra-contrib', '~> 1.4.2'
 
