@@ -15,6 +15,7 @@ gem 'rerun', '~> 0.10.0'
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
   gem 'cucumber-sinatra', '~> 0.5.0'
+  gem 'cucumber',         '~> 1.3.11'
   gem 'rspec',            '~> 3.0.0'
   gem 'rack-test',        '~> 0.6.2'
   gem 'capybara',         '~> 2.3.0'
