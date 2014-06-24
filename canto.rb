@@ -1,5 +1,7 @@
 require 'sinatra'
 
-configure do 
-  enable :sessions
+class Canto < Sinatra::Application
+  configure do 
+    enable :sessions
+  end
 end
