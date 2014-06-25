@@ -3,8 +3,9 @@ require          'sinatra/jstpages'
 require          'sinatra/assetpack'
 require          'sinatra/restapi'
 require          'sinatra/activerecord'
+require          'sinatra/asset_pipeline'
 require          'sqlite3'
-require          'sinatra-backbone'
+require          'sinatra/backbone'
 require_relative 'routes/routes'
 
 class Canto < Sinatra::Application
@@ -17,6 +18,7 @@ class Canto < Sinatra::Application
 
   register Sinatra::AssetPack
   register Sinatra::JstPages
+  register Sinatra::AssetPipeline
 
   # RestAPI can create RESTful resources using rest_resources and
   # rest_create methods. An example could be:
