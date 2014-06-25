@@ -23,6 +23,7 @@ gem 'rerun', '~> 0.10.0'
 # Use Backbone.js for client-side JavaScript
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 gem 'sprockets',        '~> 2.12.1'
+gem 'ejs',              '~> 1.1.1'
 
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
