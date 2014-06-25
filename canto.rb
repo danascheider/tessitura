@@ -11,10 +11,18 @@ class Canto < Sinatra::Application
   # The following line pertains to the database. The database
   # is not set up yet. When it is set up, this should be 
   # uncommented.
-  # set :database, {adapter: 'sqlite3', database: task.sqlite3}
+  # => set :database, {adapter: 'sqlite3', database: task.sqlite3}
 
   register Sinatra::AssetPack
   register Sinatra::JstPages
+
+  # RestAPI can create RESTful resources using rest_resources and
+  # rest_create methods. An example could be:
+  #
+  # => rest_resource '/book/:id' do |id|
+  # =>   Book.find(:id => id)
+  # => end
+  register Sinatra::RestAPI
 
   assets {
     serve '/js', from: 'assets/javascripts'
