@@ -4,6 +4,10 @@ class Canto < Sinatra::Application
   end
 
   get '/tasks/?' do 
-    erb :tasks
+    erb 'tasks/index'.to_sym
+  end
+
+  get '/tasks/new' do 
+    erb 'tasks/new'.to_sym
   end
 end
