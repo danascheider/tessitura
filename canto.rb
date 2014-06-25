@@ -9,7 +9,8 @@ require          'sinatra/backbone'
 require_relative 'app/routes/routes'
 
 class Canto < Sinatra::Application
-  set :root, './app'
+  set :root, File.expand_path('../app', __FILE__)
+  set :database_file, '../config/database.yml'
 
   register Sinatra::ActiveRecordExtension
   register Sinatra::AssetPack
