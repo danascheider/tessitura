@@ -24,6 +24,8 @@ class Canto < Sinatra::Application
   # => end
   register Sinatra::RestAPI
 
+  serve_jst 'assets/jst.js'
+
   assets {
     serve '/js', from: 'assets/javascripts'
     serve '/css', from: 'assets/stylesheets'
