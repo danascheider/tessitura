@@ -3,6 +3,8 @@ require          'sinatra/jstpages'
 require          'sinatra/assetpack'
 require          'sinatra/restapi'
 require          'sinatra/activerecord'
+require          'sqlite3'
+require          'sinatra-backbone'
 require_relative 'routes/routes'
 
 class Canto < Sinatra::Application
