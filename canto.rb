@@ -29,7 +29,12 @@ class Canto < Sinatra::Application
     serve '/css', from: 'assets/stylesheets'
     serve '/images', from: 'assets/images'
 
-    js :application, ['/js/application.js', 'js/jst.js']
+    js :application, '/js/application.js', ['js/application.min.js']
+
+    css :application, 'css/application.css', ['css/application.min.css']
+
+    js_compression :jsmin
+    css_compression :simple
   }
 
   configure do 
