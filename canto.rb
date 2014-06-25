@@ -6,11 +6,12 @@ require          'sinatra/activerecord'
 require          'sinatra/asset_pipeline'
 require          'sqlite3'
 require          'sinatra/backbone'
-require_relative 'routes/routes'
+require_relative 'app/routes/routes'
 
 class Canto < Sinatra::Application
-  set :root, File.dirname(__FILE__)
+  set :root, './app'
 
+  register Sinatra::ActiveRecordExtension
   # The following line pertains to the database. The database
   # is not set up yet. When it is set up, this should be 
   # uncommented.
@@ -28,7 +29,7 @@ class Canto < Sinatra::Application
   # => end
   register Sinatra::RestAPI
 
-  serve_jst 'assets/jst.js'
+  serve_jst 'assets/javascripts/jst.js'
 
   assets {
     serve '/js', from: 'assets/javascripts'
