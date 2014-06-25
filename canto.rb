@@ -12,11 +12,6 @@ class Canto < Sinatra::Application
   set :root, './app'
 
   register Sinatra::ActiveRecordExtension
-  # The following line pertains to the database. The database
-  # is not set up yet. When it is set up, this should be 
-  # uncommented.
-  # => set :database, {adapter: 'sqlite3', database: task.sqlite3}
-
   register Sinatra::AssetPack
   register Sinatra::JstPages
   register Sinatra::AssetPipeline
