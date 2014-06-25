@@ -13,8 +13,11 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
 
-    when /the (\')?New Task(\')?\spage/
+    when /(the|my) (\')?New Task(\')?\spage/
       '/tasks/new'
+
+    when /(the|my) to\-do list/
+      'tasks'
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
