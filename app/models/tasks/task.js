@@ -2,4 +2,8 @@
 // to create a persistent Task model.
 
 Task = Backbone.Model.extend({
+
+  // FIX-ME: Obviously this can't point to localhost
+  //         in production.
+  urlRoot: 'http://localhost:4567/tasks/'
 });
