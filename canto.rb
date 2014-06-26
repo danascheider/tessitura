@@ -44,5 +44,3 @@ class Canto < Sinatra::Application
     enable :sessions
   end
 end
-
-Canto.run!
