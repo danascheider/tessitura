@@ -7,6 +7,7 @@ require          'sinatra/asset_pipeline'
 require          'sqlite3'
 require          'sinatra/backbone'
 require_relative 'app/routes/routes'
+require_relative 'app/models/tasks/task'
 
 class Canto < Sinatra::Application
   set :root, File.expand_path('../app', __FILE__)
