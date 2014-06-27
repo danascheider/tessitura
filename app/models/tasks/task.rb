@@ -12,7 +12,7 @@ class Task < ActiveRecord::Base
 
   def to_hash
     {
-      id:         self.id
+      id:         self.id,
       title:      self.title,
       complete:   self.complete,
       created_at: self.created_at,
