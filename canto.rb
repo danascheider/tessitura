@@ -18,7 +18,7 @@ class Canto < Sinatra::Application
   register Sinatra::JstPages
   register Sinatra::AssetPipeline
 
-  # RestAPI can create RESTful resources using rest_resources and
+  # RestAPI can create RESTful resources using rest_resource and
   # rest_create methods. An example could be:
   #
   # => rest_resource '/book/:id' do |id|
