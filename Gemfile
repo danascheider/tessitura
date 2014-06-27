@@ -11,6 +11,10 @@ gem 'sinatra-activerecord', '~> 2.0.2'
 gem 'sqlite3',              '~> 1.3.9'
 gem 'rake',                 '~> 10.3.2'
 
+# Use Sinatra-Backbone for the RestAPI module to prepare for integration
+# with Backbone.js front-end
+gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
+
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
   gem 'cucumber-sinatra', '~> 0.5.0'
