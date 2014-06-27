@@ -1,4 +1,6 @@
 class Canto < Sinatra::Application 
+  register Sinatra::RestAPI
+
   get '/' do 
     erb '/layouts/layout'.to_sym
   end
@@ -7,12 +9,11 @@ class Canto < Sinatra::Application
     Task.new
   end
 
-  rest_resource '/tasks/:id/?' do |id|
-    Task.find(id)
+  rest_get '/tasks/?' do
+    @tasks = Task.all
   end
 
-  get '/tasks/new' do 
-    @task = Task.new
-    erb 'tasks/new'.to_sym
+  rest_resource '/tasks/:id/?' do |id|
+    Task.find(id)
   end
 end
