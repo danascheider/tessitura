@@ -6,3 +6,7 @@ Given /^there are (no||\d+) tasks$/ do |number|
     number.to_i.times {|i| @task_list << FactoryGirl.create(:task, title: "Task #{i}")}
   end
 end
+
+When /^I submit the form with the title '(.*)'$/ do |title|
+  fill_in 'task[title]', with: title
+end
