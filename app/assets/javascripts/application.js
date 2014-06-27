@@ -1,3 +1,3 @@
 //= require jquery
 //= require backbone
-//= require_tree .
+//= require_tree ../..
