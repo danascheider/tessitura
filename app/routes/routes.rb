@@ -3,9 +3,12 @@ class Canto < Sinatra::Application
     erb '/layouts/layout'.to_sym
   end
 
-  get '/tasks/?' do 
-    @tasks = Task.all
-    erb 'tasks/index'.to_sym
+  rest_create '/tasks/?' do 
+    Task.new
+  end
+
+  rest_resource '/tasks/:id/?' do |id|
+    Task.find(id)
   end
 
   get '/tasks/new' do 
