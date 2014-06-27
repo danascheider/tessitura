@@ -7,3 +7,5 @@ Task = Backbone.Model.extend({
   //         in production.
   urlRoot: '/tasks'
 });
+
+var Tasks = Backbone.collection.extend({model: Task});
