@@ -6,6 +6,7 @@ require          'sinatra/activerecord'
 require          'sinatra/asset_pipeline'
 require          'sqlite3'
 require          'sinatra/backbone'
+require          'require_all'
 require_relative 'app/routes/routes'
 require_relative 'app/models/tasks/task'
 
