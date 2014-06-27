@@ -36,3 +36,6 @@ group :test do
   gem 'factory_girl',     '~> 4.4.0'
   gem 'database_cleaner', '~> 1.2.0'
 end
+
+# Use require_all to clean up requires
+gem 'require_all', '~> 1.3.2'
