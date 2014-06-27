@@ -8,4 +8,4 @@ Task = Backbone.Model.extend({
   urlRoot: '/tasks'
 });
 
-var Tasks = Backbone.collection.extend({model: Task});
+var TodoList = Backbone.collection.extend({model: Task});
