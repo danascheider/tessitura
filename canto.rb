@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'json'
 require 'require_all'
 require_all 'models'
 
