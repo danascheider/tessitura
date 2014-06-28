@@ -1,4 +1,5 @@
 class Task < ActiveRecord::Base
+  validates :title, presence: true
 
   def incomplete?
     !self.complete
