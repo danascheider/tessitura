@@ -10,10 +10,4 @@ Feature: Return task information
       | 1 | Take out the trash | false    |
       | 2 | Walk the dog       | false    |
     When the client requests GET /tasks
-    Then the JSON response should be:
-      """
-      [
-        {"id": 1, "complete": false, "title": "Take out the trash" },
-        {"id": 2, "complete": false, "title": "Walk the dog" }
-      ]
-      """
+    Then the JSON response should include all the tasks
