@@ -1,4 +1,4 @@
-Feature: Return task information
+Feature: Get tasks
 
   In order to know what I need to do today
   As an android
@@ -9,11 +9,16 @@ Feature: Return task information
       |id | title              | complete |
       | 1 | Take out the trash | false    |
       | 2 | Walk the dog       | false    |
+      | 3 | Chunky bacon       | true     |
  
-  Scenario: List tasks
+  Scenario: Get all task information
     When the client requests GET /tasks
     Then the JSON response should include all the tasks
 
   Scenario: Get information about a specific task
     When the client requests GET /tasks/1
     Then the JSON response should include only the first task
+
+  Scenario: Get information about incomplete tasks only
+    When the client requests GET /tasks?complete=true
+    Then the JSON response should not include the third task
