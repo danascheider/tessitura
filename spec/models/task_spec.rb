@@ -22,5 +22,11 @@ describe Task do
       @task.save!
       expect(@task.complete).to eql false
     end
+
+    it 'sets :complete to false only if actually false' do 
+      @task.complete, @task.title = true, 'Walk the dog'
+      @task.save!
+      expect(@task.complete).to eql true
+    end
   end
 end
