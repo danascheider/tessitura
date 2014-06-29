@@ -13,3 +13,7 @@ Feature: Return task information
   Scenario: List tasks
     When the client requests GET /tasks
     Then the JSON response should include all the tasks
+
+  Scenario: Get information about a specific task
+    When the client requests GET /tasks/1
+    Then the JSON response should include only the first task
