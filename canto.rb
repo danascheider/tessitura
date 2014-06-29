@@ -13,4 +13,8 @@ class Canto < Sinatra::Application
     content_type :json
     Task.all.to_json
   end
+
+  get '/tasks/:id' do |id|
+    Task.find(id)
+  end
 end
