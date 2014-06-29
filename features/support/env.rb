@@ -8,6 +8,7 @@ require 'capybara'
 require 'capybara/cucumber'
 require 'rspec'
 require 'json_spec/cucumber'
+require 'rack-test'
 
 Capybara.app = Canto
 
