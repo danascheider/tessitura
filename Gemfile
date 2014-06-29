@@ -18,6 +18,8 @@ gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
+  gem 'httparty',         '~> 0.13.1'
+  gem 'childprocess',     '~> 0.5.3'
   gem 'cucumber-sinatra', '~> 0.5.0'
   gem 'cucumber',         '~> 1.3.11'
   gem 'rspec',            '~> 3.0.0'
