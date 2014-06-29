@@ -1,5 +1,6 @@
 class Task < ActiveRecord::Base
   validates :title, presence: true
+  before_save :set_complete
 
   def incomplete?
     !self.complete
@@ -13,4 +14,9 @@ class Task < ActiveRecord::Base
       updated_at: self.updated_at
     }
   end
+
+  private
+    def set_complete
+      true if self.complete ||= false
+    end
 end
