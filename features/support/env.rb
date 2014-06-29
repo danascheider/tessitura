@@ -8,7 +8,7 @@ require 'capybara'
 require 'capybara/cucumber'
 require 'rspec'
 require 'json_spec/cucumber'
-require 'rack-test'
+require 'rack/test'
 
 Capybara.app = Canto
 
@@ -16,6 +16,11 @@ class CantoWorld
   include Capybara::DSL
   include RSpec::Expectations
   include RSpec::Matchers
+  include Rack::Test::Methods
+
+  def app
+    Canto.new
+  end
 end
 
 World do
