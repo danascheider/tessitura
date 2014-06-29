@@ -20,5 +20,5 @@ Feature: Get tasks
     Then the JSON response should include only the 1st task
 
   Scenario: Get information about incomplete tasks only
-    When the client requests GET /tasks?complete=true
+    When the client requests GET /tasks?complete=false
     Then the JSON response should not include the 3rd task
