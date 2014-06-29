@@ -13,7 +13,7 @@ Feature: Return task information
     Then the JSON response should be:
       """
       [
-        {"id": 1, "title": "Take out the trash", "complete": false },
-        {"id": 2, "title": "Walk the dog", "complete": false }
+        {"id": 1, "complete": false, "title": "Take out the trash" },
+        {"id": 2, "complete": false, "title": "Walk the dog" }
       ]
       """
