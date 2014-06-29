@@ -17,9 +17,14 @@ class CantoWorld
   include RSpec::Expectations
   include RSpec::Matchers
   include Rack::Test::Methods
+  include JsonSpec
 
   def app
     Canto.new
+  end
+
+  def last_json
+    page.source
   end
 end
 
