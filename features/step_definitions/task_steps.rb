@@ -1,5 +1,6 @@
 Given(/^there are the following tasks:$/) do |tasks|
-  tasks.hashes.each do |task|
-    FactoryGirl.create(:task, title: task['title'])
+  @tasks = tasks.hashes
+  @tasks.each do |task|
+    task = Task.create(title: task['title'], complete: task['complete'])
   end
 end
