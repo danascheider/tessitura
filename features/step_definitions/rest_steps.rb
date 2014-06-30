@@ -40,6 +40,10 @@ Then(/^the response should indicate the (.*) was (not )?saved successfully$/) do
   expect(last_response.status).to eql negation ? 422 : 201
 end
 
+Then(/^the response should indicate the (.*) was (not )?updated successfully$/) do |resource, negation|
+  expect(last_response.status).to eql negation ? 422 : 200
+end
+
 Then(/^the response should return status (\d{3})$/) do |status|
   expect(last_response.status).to eql 404
 end
