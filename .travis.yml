@@ -4,4 +4,6 @@ rvm:
   - "2.0.0"
   - "2.1.1"
   - rbx
-before_script: 'rake db:test:prepare'
+before_script:
+  - 'rake db:create:test'
+  - 'rake db:test:prepare'
