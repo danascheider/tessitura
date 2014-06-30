@@ -3,4 +3,34 @@ Feature: Update task
   In order to keep the most current information about my tasks & schedule
   I need to edit my tasks
 
-  Scenario: Successful update
+  Background:
+    Given there are the following tasks:
+      |id | title              | complete |
+      | 1 | Take out the trash | false    |
+      | 2 | Walk the dog       | false    |
+      | 3 | Chunky bacon       | true     |
+
+  Scenario: Successfully change task title
+    When the client submits a PUT request to /task/1 with:
+      """
+      { 'title':'Take Out the Trash' }
+      """
+    Then the task's title should be changed to 'Take Out the Trash'
+    And the response should indicate the task was updated successfully
+
+  Scenario: Successfully change status
+    When the client submits a PUT request to /task/1 with:
+      """
+      { 'complete':true }
+      """
+    Then the task should be marked complete
+    And the task's title should not be changed
+    And the response should indicate the task was updated successfully
+
+  Scenario: Attempt to update task with invalid attributes
+    When the client submits a PUT request to /task/1 with:
+      """
+      { 'title':nil }
+      """
+    Then the task's title should not be changed
+    And the response should indicate the task was not updated successfully
