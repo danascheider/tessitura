@@ -12,3 +12,7 @@ end
 Then(/^no task should be created$/) do
   Task.count.should === @task_count
 end
+
+Then(/^the task's title should be changed to '(.*)'$/) do |title|
+  expect(Task.find(@task.id).title).to eql title
+end

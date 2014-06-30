@@ -6,7 +6,7 @@ When(/^the client requests GET \/(.*)$/) do |path|
 end
 
 When(/^the client submits a POST request to \/(.*) with:$/) do |path, string|
-  # @task_count variable is used in task_steps.rb line 13
+  # @task_count variable is used in task_steps.rb
   @task_count = Task.count
   key_value = string.gsub(/[{}']/, '').strip.split(':')
   post path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
@@ -14,6 +14,9 @@ end
 
 When(/^the client submits a PUT request to \/tasks\/(\d+) with:$/) do |id, string|
   path = "/tasks/#{id}"
+
+  # @task instance variable is used in task_steps.rb
+  @task = Task.find(id.to_i)
   key_value = string.gsub(/[{}']/, '').strip.split(':')
   put path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
 end
