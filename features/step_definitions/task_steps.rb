@@ -8,3 +8,7 @@ end
 Then(/^a new task should be created with the title '(.*)'$/) do |title|
   expect(Task.find_by(title: title)).not_to be_nil
 end
+
+Then(/^no task should be created$/) do
+  Task.count.should === @task_count
+end
