@@ -1,3 +1,6 @@
+# REQUEST STEPS
+# =============
+
 When(/^the client requests GET \/(.*)$/) do |path|
   get(path)
 end
@@ -8,6 +11,15 @@ When(/^the client submits a POST request to \/(.*) with:$/) do |path, string|
   key_value = string.gsub(/[{}']/, '').strip.split(':')
   post path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
 end
+
+When(/^the client submits a PUT request to \/tasks\/(\d+) with:$/) do |id, string|
+  path = "/tasks/#{id}"
+  key_value = string.gsub(/[{}']/, '').strip.split(':')
+  put path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
+end
+
+# RESPONSE STEPS
+# ==============
 
 Then(/^the JSON response should include all the tasks$/) do 
   last_response.body.should === Task.all.to_json
