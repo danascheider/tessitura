@@ -16,6 +16,7 @@ class CantoWorld
   include Capybara::DSL
   include RSpec::Expectations
   include RSpec::Matchers
+  include RSpec::Mocks
   include Rack::Test::Methods
   include JsonSpec
 
