@@ -6,7 +6,6 @@ require_all 'models'
 
 class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
-
   set :data, ''
 
   get '/tasks' do 
