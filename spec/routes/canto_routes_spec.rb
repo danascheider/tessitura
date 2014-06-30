@@ -6,6 +6,7 @@ describe Canto do
   before(:all) do 
     Task.create!(title: 'Walk the dog')
     Task.create!(title: 'Take out the trash')
+    Task.create!(title: 'Call mom', complete: true)
   end
 
   context 'GET' do 
@@ -23,7 +24,12 @@ describe Canto do
       end
     end
 
-    describe 'scoped task route'
+    describe 'scoped task route' do 
+      it 'returns only the incomplete tasks' do 
+        get 'tasks?complete=false'
+        expect(last_response.body).not_to include(Task.find(3).to_json)
+      end
+    end
   end
 
   context 'POST' do 
