@@ -11,7 +11,7 @@ Feature: Update task
       | 3 | Chunky bacon       | true     |
 
   Scenario: Successfully change task title
-    When the client submits a PUT request to /task/1 with:
+    When the client submits a PUT request to /tasks/1 with:
       """
       { 'title':'Take Out the Trash' }
       """
@@ -19,7 +19,7 @@ Feature: Update task
     And the response should indicate the task was updated successfully
 
   Scenario: Successfully change status
-    When the client submits a PUT request to /task/1 with:
+    When the client submits a PUT request to /tasks/1 with:
       """
       { 'complete':true }
       """
@@ -28,7 +28,7 @@ Feature: Update task
     And the response should indicate the task was updated successfully
 
   Scenario: Attempt to update task with invalid attributes
-    When the client submits a PUT request to /task/1 with:
+    When the client submits a PUT request to /tasks/1 with:
       """
       { 'title':nil }
       """
