@@ -20,3 +20,7 @@ end
 Then(/^the task should be marked complete$/) do 
   expect(Task.find(@task.id).complete).to be true
 end
+
+Then(/^the task's title should not be changed$/) do 
+  expect(Task.find(@task.id).title).to eql @task.title
+end
