@@ -9,7 +9,7 @@ gem 'thin', '~> 1.6.2'
 
 # Use ActiveRecord and SQLite 3 to manage DB records
 gem 'sinatra-activerecord', '~> 2.0.2'
-gem 'sqlite3',              '~> 1.3.9'
+gem 'sqlite3',              '~> 1.3.9', :platform => :ruby
 gem 'rake',                 '~> 10.3.2'
 
 # Use Sinatra-Backbone for the RestAPI module to prepare for integration
