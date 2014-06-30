@@ -11,20 +11,11 @@ class Canto < Sinatra::Application
 
   get '/tasks' do 
     content_type :json
-
-    if params[:complete]
-      Task.find_by(complete: params[:complete]).to_json
-    else
-      Task.all.to_json
-    end
+    params[:complete]? Task.find_by(complete: params[:complete]).to_json : Task.all.to_json
   end
 
   post '/tasks' do 
-    if @task = Task.create!(JSON.parse request.body.read)
-      201
-    else
-      422
-    end
+    Task.create!(JSON.parse request.body.read) ? 201 : 422
   end
 
   get '/tasks/:id' do |id|
