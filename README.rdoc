@@ -1,6 +1,4 @@
-{<img src="https://travis-ci.org/danascheider/canto.svg?branch=pure-sinatra" alt="Build Status" />}[https://travis-ci.org/danascheider/canto]
-
-== Canto
+== Canto https://travis-ci.org/danascheider/canto.svg?branch=pure-sinatra
 
 Canto is a web-based to-do list and task management app for opera singers. Eventually, this app will provide a variety of functionality tailored to the specific needs of opera singers. I am developing this app primarily for myself, and so will be focusing on the functionality that will be most immediately useful to me personally. At this point in development, that functionality is the to-do list.
 
