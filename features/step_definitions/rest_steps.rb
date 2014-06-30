@@ -4,7 +4,19 @@ end
 
 When(/^the client submits a POST request to \/(.*) with:$/) do |path, string|
   key_value = string.gsub(/[{}']/, '').strip.split(':')
-  post path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
+
+  # This step fails if the response indicates an error. This is a problem when
+  # the step is part of a scenario testing the app's behavior when an invalid
+  # request is submitted. In order for this step to test ONLY the client's 
+  # making the request - this being how Cucumber rolls - I am including a
+  # rather unorthodox rescue, which I hope handles only this error. If you have
+  # a better idea, gentle reader, I would love to hear it.
+
+  begin
+    post path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
+  rescue ActiveRecord::RecordInvalid
+    true
+  end
 end
 
 Then(/^the JSON response should include all the tasks$/) do 
