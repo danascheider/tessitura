@@ -16,3 +16,7 @@ end
 Then(/^the task's title should be changed to '(.*)'$/) do |title|
   expect(Task.find(@task.id).title).to eql title
 end
+
+Then(/^the task should be marked complete$/) do 
+  expect(Task.find(@task.id).complete).to be true
+end
