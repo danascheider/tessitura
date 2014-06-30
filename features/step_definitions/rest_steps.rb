@@ -2,6 +2,10 @@ When(/^the client requests GET \/(.*)$/) do |path|
   get(path)
 end
 
+When(/^the client submits a POST request to \/(.*) with:$/) do |path, string|
+  post path, string.to_json, 'CONTENT_TYPE' => 'application/json'
+end
+
 Then(/^the JSON response should include all the tasks$/) do 
   last_response.body.should === Task.all.to_json
 end
