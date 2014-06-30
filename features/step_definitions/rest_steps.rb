@@ -2,9 +2,9 @@ When(/^the client requests GET \/(.*)$/) do |path|
   get(path)
 end
 
-When(/^the client submits a POST request to \/(.*) with "(.*)"$/) do |path, string|
-  json_obj = {'title' => 'Water the plants'}.to_json
-  post path, json_obj, 'CONTENT_TYPE' => 'application/json'
+When(/^the client submits a POST request to \/(.*) with:$/) do |path, string|
+  key_value = string.gsub(/[{}']/, '').strip.split(':')
+  post path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
 end
 
 Then(/^the JSON response should include all the tasks$/) do 
