@@ -22,3 +22,7 @@ Feature: Get tasks
   Scenario: Get information about incomplete tasks only
     When the client requests GET /tasks?complete=false
     Then the JSON response should not include the 3rd task
+
+  Scenario: Try to get information about a task that doesn't exist
+    When the client requests GET /tasks/10
+    Then the response should return status 404

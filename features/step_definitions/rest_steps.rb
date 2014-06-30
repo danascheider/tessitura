@@ -3,6 +3,7 @@ When(/^the client requests GET \/(.*)$/) do |path|
 end
 
 When(/^the client submits a POST request to \/(.*) with:$/) do |path, string|
+  # @task_count variable is used in task_steps.rb line 13
   @task_count = Task.count
   key_value = string.gsub(/[{}']/, '').strip.split(':')
   post path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
@@ -21,6 +22,9 @@ Then(/^the JSON response should not include the (\d+)(.{2}) task$/) do |id, ordi
 end
 
 Then(/^the response should indicate the (.*) was (not )?saved successfully$/) do |resource, negation|
-  @response ||= last_response
-  expect(@response.status).to eql negation ? 422 : 201
+  expect(last_response.status).to eql negation ? 422 : 201
+end
+
+Then(/^the response should return status (\d)$/) do |status|
+  expect(last_response.status).to eql 404
 end
