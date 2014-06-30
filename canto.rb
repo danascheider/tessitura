@@ -14,7 +14,11 @@ class Canto < Sinatra::Application
   end
 
   post '/tasks' do 
-    Task.create!(JSON.parse request.body.read) ? 201 : 422
+    begin
+      Task.create!(JSON.parse request.body.read) && 201
+    rescue ActiveRecord::RecordInvalid
+      422
+    end
   end
 
   get '/tasks/:id' do |id|
