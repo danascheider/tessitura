@@ -3,6 +3,7 @@ require 'sinatra/activerecord'
 require 'json'
 require 'require_all'
 require_all 'models'
+require_all 'helpers'
 
 class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
@@ -14,18 +15,10 @@ class Canto < Sinatra::Application
   end
 
   post '/tasks' do 
-    begin
-      Task.create!(JSON.parse request.body.read) && 201
-    rescue ActiveRecord::RecordInvalid
-      422
-    end
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { Task.create!(JSON.parse request.body.read) && 201 }
   end
 
   get '/tasks/:id' do |id|
-    begin
-      Task.find(id).to_json
-    rescue ActiveRecord::RecordNotFound
-      404
-    end
+    begin_and_rescue(ActiveRecord::RecordInvalid, 404) { Task.find(id).to_json }
   end
 end
