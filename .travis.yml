@@ -4,7 +4,7 @@ rvm:
   - "2.0.0"
   - "2.1.1"
 env: DB=sqlite3
+install: 'bundle install'
 before_script: 
-  - 'bundle install'
   - 'ENV["RACK_ENV"]="test" rake db:test:create --trace'
 script: 'rake db:test:prepare --trace'
