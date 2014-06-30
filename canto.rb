@@ -19,6 +19,10 @@ class Canto < Sinatra::Application
     end
   end
 
+  post '/tasks' do 
+    @task = Task.create!(JSON.parse request.body.read)
+  end
+
   get '/tasks/:id' do |id|
     Task.find(id).to_json
   end
