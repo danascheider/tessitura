@@ -4,5 +4,5 @@ rvm:
   - "2.0.0"
   - "2.1.1"
 env: DB=sqlite3
-before_script: 'ENV["RACK_ENV"]="test" rake db:test:create'
-script: 'rake db:test:prepare'
+before_script: 'ENV["RACK_ENV"]="test" rake db:test:create --trace'
+script: 'rake db:test:prepare --trace'
