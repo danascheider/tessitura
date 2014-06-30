@@ -18,3 +18,7 @@ end
 Then(/^the JSON response should not include the (\d+)(.{2}) task$/) do |id, ordinal|
   last_response.body.should_not include(Task.find(id).to_json)
 end
+
+Then(/^the response should indicate the (.*) was (not )?saved successfully$/) do |resource, negation|
+  expect(last_response.status).to eql negation ? 422 : 201
+end
