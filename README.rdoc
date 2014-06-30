@@ -1,0 +1,22 @@
+== Canto
+
+Canto is a web-based to-do list and task management app for opera singers. Eventually, this app will provide a variety of functionality tailored to the specific needs of opera singers. I am developing this app primarily for myself, and so will be focusing on the functionality that will be most immediately useful to me personally. At this point in development, that functionality is the to-do list.
+
+=== Users
+
+The User model is a low priority in development due to my particular use case. Currently, only the name of users is tracked. I may eventually flesh this out to support a more detailed user profile.
+
+=== To-Do List
+
+Users create to-do items and are able to view them as a list or individually. To-do items belong to the user who created them and are destroyed if the user account is closed. To-do items have the following attributes (i.e., columns in the TodoItem table):
+- Title
+- Status ("New", "Complete", "In Progress", or "Blocking")
+- Priority ("Urgent", "Important", "Normal", or "Low")
+- Deadline
+- Description
+
+To-do items can also be placed in user-created categories.
+
+=== Versioning
+
+Version 0.0.0; no stable release available.
