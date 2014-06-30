@@ -23,4 +23,8 @@ class Canto < Sinatra::Application
   get '/tasks/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) { Task.find(id).to_json }
   end
+
+  put '/tasks/:id' do |id|
+    Task.find(id).update(JSON.parse request.body.read)
+  end
 end
