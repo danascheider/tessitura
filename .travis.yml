@@ -5,7 +5,6 @@ rvm:
   - "2.1.1"
 env: DB=sqlite3
 install: 'bundle install'
-before_script: 'rake db:test:create --trace'
 script: 'rake'
 notifications:
   email: false
