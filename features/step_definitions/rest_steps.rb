@@ -25,8 +25,7 @@ When(/^the client submits a PUT request to \/tasks\/(\d+) with:$/) do |id, strin
 
   # @task instance variable is used in task_steps.rb
   @task = Task.find(id.to_i)
-  key_value = string.gsub(/[{}']/, '').strip.split(':')
-  put path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
+  put path, string, 'CONTENT_TYPE' => 'application/json'
 end
 
 When(/^the client sends a DELETE request to \/tasks\/(\d+)$/) do |id|
