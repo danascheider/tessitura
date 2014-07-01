@@ -25,4 +25,4 @@ Feature: Get tasks
 
   Scenario: Try to get information about a task that doesn't exist
     When the client requests GET /tasks/10
-    Then the response should return status 404
+    Then the response indicate the task was not found
