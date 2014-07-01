@@ -9,5 +9,5 @@ Feature: Delete task
       | Call mom              | false    |
       | RSVP to Kim's wedding | false    |
     When the client sends a DELETE request to /tasks/1
-    Then the first task should be deleted from the database
+    Then the 1st task should be deleted from the database
     And the response should indicate the task was deleted successfully
