@@ -33,7 +33,7 @@ describe Canto do
     end
   end
 
-  context 'POST' do 
+  describe 'POST' do 
     describe 'new task route' do 
       context 'valid attributes' do 
         before(:all) do 
