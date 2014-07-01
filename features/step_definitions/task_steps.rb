@@ -24,3 +24,7 @@ end
 Then(/^the task's title should not be changed$/) do 
   expect(Task.find(@task.id).title).to eql @task.title
 end
+
+Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordinal|
+  expect(Task.find(id)).not_to exist
+end
