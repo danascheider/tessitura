@@ -24,6 +24,11 @@ describe Task do
       task = Task.create(title: 'Go to Fred Meyer')
       expect(task.update(title: nil)).to be false
     end
+
+    it 'updates with valid attributes' do 
+      task = Task.create(title: 'Go to Fred Meyer')
+      expect(task.update(title: 'Go to Home Depot')).to be true
+    end
   end
 
   describe 'default behavior' do 
