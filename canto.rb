@@ -27,4 +27,8 @@ class Canto < Sinatra::Application
   put '/tasks/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) { Task.find(id).update!(JSON.parse request.body.read) }
   end
+
+  delete '/tasks/:id' do |id|
+    begin_and_rescue(ActiveRecord::RecordNotFound, 404) { Task.find(id).destroy }
+  end
 end
