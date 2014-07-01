@@ -25,6 +25,6 @@ class Canto < Sinatra::Application
   end
 
   put '/tasks/:id' do |id|
-    Task.find(id).update(JSON.parse request.body.read)
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { Task.find(id).update!(JSON.parse request.body.read) }
   end
 end
