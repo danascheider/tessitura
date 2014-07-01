@@ -104,4 +104,13 @@ describe Canto do
       end
     end
   end
+
+  describe 'DELETE' do 
+    context 'when the task exists' do 
+      it 'deletes the task' do 
+        delete '/tasks/1'
+        expect(Task.exists?(id: 1)).to be false
+      end
+    end
+  end
 end
