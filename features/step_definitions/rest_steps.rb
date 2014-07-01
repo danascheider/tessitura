@@ -60,10 +60,10 @@ Then(/^the response should return status (\d{3})$/) do |status|
   expect(last_response.status).to eql status
 end
 
-Then(/^the response should indicate the (.*) was deleted successfully$/) do |resource|
+Then(/^the response should indicate the (?:.*) was deleted successfully$/) do
   expect(last_response.status).to eql 204
 end
 
-Then(/^the response should indicate the (.*) was not found$/) do |resource|
+Then(/^the response should indicate the (?:.*) was not found$/) do
   expect(last_response.status).to eql 404
 end
