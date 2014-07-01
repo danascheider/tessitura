@@ -2,7 +2,7 @@
 # ==========
 
 Transform(/^"{ '.*':'?.*'? }"$/) do |object|
-  key_value = object.gsub(/[{}']/).strip.split(':')
+  key_value = object.gsub(/[{}']/, '').strip.split(':')
   { key_value[0] => key_value[1] }.to_json
 end
 
