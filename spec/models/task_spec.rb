@@ -14,6 +14,16 @@ describe Task do
     it 'is invalid without a title' do 
       expect(@task).not_to be_valid
     end
+
+    it 'instantiates with valid attributes' do 
+      @task.title = 'Call mom'
+      expect(@task.save!) 
+    end
+
+    it 'doesn\'t update without a title' do 
+      task = Task.create(title: 'Go to Fred Meyer')
+      expect(task.update(title: nil)).to be false
+    end
   end
 
   describe 'default behavior' do 
