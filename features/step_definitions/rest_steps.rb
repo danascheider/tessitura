@@ -10,7 +10,7 @@ end
 # REQUEST STEPS
 # =============
 
-When(/^the client requests GET \/(.*)$/) do |path|
+When(/^the client submits a GET request to \/(.*)$/) do |path|
   get(path)
 end
 

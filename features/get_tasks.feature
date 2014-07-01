@@ -12,17 +12,17 @@ Feature: Get tasks
       | 3 | Chunky bacon       | true     |
  
   Scenario: Get all task information
-    When the client requests GET /tasks
+    When the client submits a GET request to /tasks
     Then the JSON response should include all the tasks
 
   Scenario: Get information about a specific task
-    When the client requests GET /tasks/1
+    When the client submits a GET request to /tasks/1
     Then the JSON response should include only the 1st task
 
   Scenario: Get information about incomplete tasks only
-    When the client requests GET /tasks?complete=false
+    When the client submits a GET request to /tasks?complete=false
     Then the JSON response should not include the 3rd task
 
   Scenario: Try to get information about a task that doesn't exist
-    When the client requests GET /tasks/10
+    When the client submits a GET request to /tasks/10
     Then the response should indicate the task was not found
