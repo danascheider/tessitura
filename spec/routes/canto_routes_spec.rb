@@ -119,5 +119,12 @@ describe Canto do
         expect(last_response.status).to eql 204
       end
     end
+
+    context 'when the task doesn\'t exist' do 
+      it 'returns status 404' do 
+        delete '/tasks/15'
+        expect(last_response.status).to eql 404
+      end
+    end
   end
 end
