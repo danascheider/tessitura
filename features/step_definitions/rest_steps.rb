@@ -21,6 +21,11 @@ When(/^the client submits a PUT request to \/tasks\/(\d+) with:$/) do |id, strin
   put path, { key_value[0] => key_value[1] }.to_json, 'CONTENT_TYPE' => 'application/json'
 end
 
+When(/^the client sends a DELETE request to \/tasks\/(\d+)$/) do |id|
+  path = "/tasks/#{id}"
+  delete path
+end
+
 # RESPONSE STEPS
 # ==============
 
