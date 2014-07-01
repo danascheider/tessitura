@@ -72,4 +72,30 @@ describe Canto do
       end
     end
   end
+
+  describe 'PUT' do 
+    describe 'update task route' do 
+      context 'valid attributes' do 
+        before(:all) do
+          put '/tasks/1', { 'title' => 'Take the car for service' }.to_json, 'CONTENT-TYPE' => 'application/json'
+        end
+
+        after(:all) do 
+          Task.update(1, {title: 'Walk the dog'})
+        end
+
+        it 'updates the task' do 
+          expect(Task.find(1).title).to eql 'Take the car for service'
+        end
+
+        it 'returns status code 200' do
+          expect(last_response.status).to eql 200
+        end
+      end
+
+      context 'invalid attributes' do 
+        #
+      end
+    end
+  end
 end
