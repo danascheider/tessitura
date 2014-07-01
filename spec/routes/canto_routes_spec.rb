@@ -107,9 +107,16 @@ describe Canto do
 
   describe 'DELETE' do 
     context 'when the task exists' do 
-      it 'deletes the task' do 
+      before(:all) do 
         delete '/tasks/1'
+      end
+
+      it 'deletes the task' do 
         expect(Task.exists?(id: 1)).to be false
+      end
+
+      it 'returns status code 204' do 
+        expect(last_response.status).to eql 204
       end
     end
   end
