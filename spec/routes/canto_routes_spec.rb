@@ -58,10 +58,6 @@ describe Canto do
           post '/tasks', { }.to_json, 'CONTENT-TYPE' => 'application/json'
         end
 
-        after(:all) do 
-          Task.last.destroy
-        end
-
         it 'doesn\'t create a new task' do 
           expect(Task.count).to eql @task_count
         end
@@ -94,7 +90,17 @@ describe Canto do
       end
 
       context 'invalid attributes' do 
-        #
+        before(:all) do 
+          put '/tasks/1', { 'title' => nil }.to_json, 'CONTENT-TYPE' => 'application/json'
+        end
+
+        it 'doesn\'t update the task' do 
+          expect(Task.find(1).title).to eql 'Walk the dog'
+        end
+
+        it 'returns status code 422' do 
+          expect(last_response.status).to eql 422
+        end
       end
     end
   end
