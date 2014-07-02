@@ -7,25 +7,18 @@ Transform(/^{ '.*':'?.*'? }$/) do |object|
   { key_value[0] => key_value[1] }.to_json
 end
 
+# REQUEST STEPS
+# =============
+
 When(/^the client submits a (.*) request to (\S+)$/) do |method, path|
   make_request(method, path)
 end
 
-
-# REQUEST STEPS
-# =============
-When(/^the client submits a POST request to \/(.*) with:$/) do |path, string|
+When(/^the client submits a (.*) request to \/(.*) with:$/) do |method, path, string|
   # @task_count variable is used in task_steps.rb
   @task_count = Task.count
-  post path, string, 'CONTENT_TYPE' => 'application/json'
-end
-
-When(/^the client submits a PUT request to \/tasks\/(\d+) with:$/) do |id, string|
-  path = "/tasks/#{id}"
-
-  # @task instance variable is used in task_steps.rb
-  @task = Task.find(id.to_i)
-  put path, string, 'CONTENT_TYPE' => 'application/json'
+  @task = (id = (/\d+/.match(path)).to_s) > '' ? Task.find(id) : nil
+  make_request(method, path, string)
 end
 
 # RESPONSE STEPS
