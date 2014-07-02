@@ -5,6 +5,7 @@ require          'json_spec/helpers'
 require          'rack/test'
 require          'database_cleaner'
 require_relative '../canto'
+require_relative '../features/support/helpers'
 require_all      File.dirname(__FILE__) + '/factories'
 
 RSpec.configure do |config|
