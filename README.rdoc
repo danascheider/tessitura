@@ -2,20 +2,19 @@
 
 Canto is a web-based to-do list and task management app for opera singers. Eventually, this app will provide a variety of functionality tailored to the specific needs of opera singers. I am developing this app primarily for myself, and so will be focusing on the functionality that will be most immediately useful to me personally. At this point in development, that functionality is the to-do list.
 
-=== Users
-
-The User model is a low priority in development due to my particular use case. Currently, only the name of users is tracked. I may eventually flesh this out to support a more detailed user profile.
+Current development is taking place on the pure-sinatra and not_passing branches and is focused exclusively on back-end functionality. As the name suggests, the back end is being developed in Sinatra, with ActiveRecord and SQLite3 handling database functionality. The front end will be added later. The current plan has the front end developed using Backbone.js and Twitter Bootstrap.
 
 === To-Do List
 
-Users create to-do items and are able to view them as a list or individually. To-do items belong to the user who created them and are destroyed if the user account is closed. To-do items have the following attributes (i.e., columns in the TodoItem table):
+Users create tasks and are able to view them as a list or individually. Currently there is no user model, so the app is designed for a single user. Tasks have the following attributes (i.e., columns in the Task table):
 - Title
-- Status ("New", "Complete", "In Progress", or "Blocking")
-- Priority ("Urgent", "Important", "Normal", or "Low")
-- Deadline
-- Description
+- Complete (true/false)
+- Created At
+- Updated At
 
-To-do items can also be placed in user-created categories.
+=== Development Approach
+
+This app is being developed using a rigorous test-driven approach, meaning test-first, agile work-flows. Problems implementing Travis CI are causing builds to fail, but I do not commit non-passing code to the pure-sinatra branch. The full test suite is run each time not_passing is merged.
 
 === Versioning
 
