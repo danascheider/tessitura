@@ -15,5 +15,5 @@ Feature: Delete task
     And the response should indicate the task was deleted successfully
 
   Scenario: User attempts to exist a task that doesn't exist
-    When the client sends a DELETE request to /tasks/5
+    When the client submits a DELETE request to /tasks/5
     Then the response should indicate the task was not found
