@@ -3,7 +3,6 @@ def get_changed
 end
 
 def make_request(method, path, string=nil)
-  options = yield if block_given?
   case method
   when 'POST'
     post path, string, 'CONTENT-TYPE' => 'application/json'
