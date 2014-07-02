@@ -1,5 +1,5 @@
-def get_changed(task_variable = @task)
-  Task.find(task_variable.id)
+def get_changed
+  Task.find(@task.id)
 end
 
 def json_task(id_or_all)
