@@ -14,15 +14,15 @@ Then(/^no task should be created$/) do
 end
 
 Then(/^the task's title should be changed to '(.*)'$/) do |title|
-  expect(Task.find(@task.id).title).to eql title
+  expect(get_changed.title).to eql title
 end
 
 Then(/^the task should be marked complete$/) do 
-  expect(Task.find(@task.id).complete).to be true
+  expect(get_changed.complete).to be true
 end
 
 Then(/^the task's title should not be changed$/) do 
-  expect(Task.find(@task.id).title).to eql @task.title
+  expect(get_changed.title).to eql @task.title
 end
 
 Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordinal|

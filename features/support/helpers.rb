@@ -1,3 +1,7 @@
+def get_changed
+  Task.find(@task.id)
+end
+
 def make_request(method, path, string=nil)
   options = yield if block_given?
   case method
