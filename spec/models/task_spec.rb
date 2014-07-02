@@ -22,12 +22,12 @@ describe Task do
 
     it 'doesn\'t update without a title' do 
       task = Task.create(title: 'Go to Fred Meyer')
-      expect(task.update(title: nil)).to be false
+      expect(!task.update(title: nil))
     end
 
     it 'updates with valid attributes' do 
       task = Task.create(title: 'Go to Fred Meyer')
-      expect(task.update(title: 'Go to Home Depot')).to be true
+      expect(task.update(title: 'Go to Home Depot'))
     end
   end
 
