@@ -10,7 +10,7 @@ end
 # REQUEST STEPS
 # =============
 
-When(/^the client submits a (.*) request to (\S+)$/) do |method, path|
+When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   make_request(method, path)
 end
 

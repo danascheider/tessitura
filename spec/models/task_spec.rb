@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Task do 
   it { should respond_to(:title) }
   it { should respond_to(:complete) }
+  it { should respond_to(:index) }
   it { should respond_to(:incomplete?) }
   it { should respond_to(:to_hash) } # to integrate with Sinatra-Backbone
 
@@ -11,6 +12,27 @@ describe Task do
   end
 
   describe 'validations' do 
+    context 'index' do
+      before(:all) do 
+        @task.title = 'Hello world'
+        @task.save!
+        Task.create!(title: 'My string')
+      end
+
+      after(:all) do 
+        Task.last.destroy
+      end
+
+      it 'prioritizes the new task\'s index' do 
+        Task.create!(title: 'Feed the fish', index: 2)
+        expect(Task.last.index).to eql 2
+      end
+
+      it 'changes the index of the other task' do 
+        expect(get_changed.index).to eql 3
+      end
+    end
+
     it 'is invalid without a title' do 
       expect(@task).not_to be_valid
     end
@@ -32,6 +54,12 @@ describe Task do
   end
 
   describe 'default behavior' do 
+    it 'instantiates at index 1' do 
+      @task.title = 'Walk the dog'
+      @task.save!
+      expect(@task.index).to eql 1
+    end
+
     it 'sets :complete to false, not nil' do 
       @task.title = 'Walk the dog'
       @task.save!
