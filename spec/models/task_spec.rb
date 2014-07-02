@@ -19,7 +19,7 @@ describe Task do
       end
 
       after(:all) do 
-        2.times { Task.last.destroy }
+        Task.where.not(id: 1).destroy
       end
 
       it 'prioritizes the new task\'s index' do 
