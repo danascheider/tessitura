@@ -22,6 +22,6 @@ class Task < ActiveRecord::Base
     end
 
     def set_index
-      self.index ||= 1
+      self.index = 1 unless self.index.to_i > 0
     end
 end
