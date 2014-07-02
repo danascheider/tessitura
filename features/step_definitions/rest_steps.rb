@@ -25,33 +25,33 @@ end
 # ==============
 
 Then(/^the JSON response should include all the tasks$/) do 
-  last_response.body.should === Task.all.to_json
+  response_body.should === json_task(:all)
 end
 
-Then(/^the JSON response should (not)? include (?:only)? the (\d+)(?:.{2}) task$/) do |negation, id|
+Then(/^the JSON response should (not )?include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |negation, id|
   if negation
-    last_response.body.should_not include Task.find(id).to_json
+    response_body.should_not include json_task(id)
   else 
-    last_response.body.should === Task.find(id).to_json
+    response_body.should === json_task(id)
   end
 end
 
 Then(/^the response should indicate the (.*) was (not )?saved successfully$/) do |resource, negation|
-  expect(last_response.status).to eql negation ? 422 : 201
+  expect(response_status).to eql negation ? 422 : 201
 end
 
 Then(/^the response should indicate the (.*) was (not )?updated successfully$/) do |resource, negation|
-  expect(last_response.status).to eql negation ? 422 : 200
+  expect(response_status).to eql negation ? 422 : 200
 end
 
 Then(/^the response should return status (\d{3})$/) do |status|
-  expect(last_response.status).to eql status
+  expect(response_status).to eql status
 end
 
 Then(/^the response should indicate the (?:.*) was deleted successfully$/) do
-  expect(last_response.status).to eql 204
+  expect(response_status).to eql 204
 end
 
 Then(/^the response should indicate the (?:.*) was not found$/) do
-  expect(last_response.status).to eql 404
+  expect(response_status).to eql 404
 end
