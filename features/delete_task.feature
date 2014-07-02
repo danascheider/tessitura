@@ -10,7 +10,7 @@ Feature: Delete task
       | RSVP to Kim's wedding | false    |
 
   Scenario: User deletes a task
-    When the client sends a DELETE request to /tasks/1
+    When the client submits a DELETE request to /tasks/1
     Then the 1st task should be deleted from the database
     And the response should indicate the task was deleted successfully
 
