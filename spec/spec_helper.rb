@@ -1,12 +1,14 @@
 ENV['RACK_ENV'] = 'test'
 
+support_path = File.expand_path('../../features/support', __FILE__)
+
 require          'factory_girl'
 require          'json_spec/helpers'
 require          'rack/test'
 require          'database_cleaner'
 require_relative '../canto'
-require_relative '../features/support/helpers'
-require_all      File.dirname(__FILE__) + '/factories'
+require_relative support_path + '/factories'
+require_relative support_path + '/helpers'
 
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
