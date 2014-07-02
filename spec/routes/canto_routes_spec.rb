@@ -14,21 +14,21 @@ describe Canto do
     context 'task list route' do 
       it 'returns all the tasks as a JSON object' do 
         get '/tasks'
-        expect(last_response.body).to eql Task.all.to_json
+        expect(response_body).to eql json_task(:all)
       end
     end
 
     context 'individual task route' do 
       it 'returns a single task as a JSON object' do 
         get '/tasks/1'
-        expect(last_response.body).to eql Task.find(1).to_json
+        expect(response_body).to eql json_task(1)
       end
     end
 
     context 'scoped task route' do 
       it 'returns only the incomplete tasks' do 
         get 'tasks?complete=false'
-        expect(last_response.body).not_to include(Task.find(3).to_json)
+        expect(response_body).not_to include(json_task(3))
       end
     end
   end
@@ -37,7 +37,7 @@ describe Canto do
     describe 'new task route' do 
       context 'valid attributes' do 
         before(:all) do 
-          post '/tasks', { 'title' => 'Water the garden' }.to_json, 'CONTENT-TYPE' => 'application/json'
+          make_request('POST', '/tasks', { 'title' => 'Water the garden' }.to_json)
         end
 
         after(:all) do 
@@ -55,7 +55,7 @@ describe Canto do
 
       context 'invalid attributes' do 
         before(:all) do 
-          post '/tasks', { }.to_json, 'CONTENT-TYPE' => 'application/json'
+          make_request('POST', '/tasks', { }.to_json)
         end
 
         it 'doesn\'t create a new task' do 
@@ -63,7 +63,7 @@ describe Canto do
         end
 
         it 'returns status code 422' do 
-          expect(last_response.status).to eql 422
+          expect(response_status).to eql 422
         end
       end
     end
@@ -73,7 +73,7 @@ describe Canto do
     describe 'update task route' do 
       context 'valid attributes' do 
         before(:all) do
-          put '/tasks/1', { 'title' => 'Take the car for service' }.to_json, 'CONTENT-TYPE' => 'application/json'
+          make_request('PUT', '/tasks/1', { 'title' => 'Take the car for service' }.to_json)
         end
 
         after(:all) do 
@@ -85,13 +85,13 @@ describe Canto do
         end
 
         it 'returns status code 200' do
-          expect(last_response.status).to eql 200
+          expect(response_status).to eql 200
         end
       end
 
       context 'invalid attributes' do 
         before(:all) do 
-          put '/tasks/1', { 'title' => nil }.to_json, 'CONTENT-TYPE' => 'application/json'
+          make_request('PUT', '/tasks/1', { 'title' => nil }.to_json)
         end
 
         it 'doesn\'t update the task' do 
@@ -99,7 +99,7 @@ describe Canto do
         end
 
         it 'returns status code 422' do 
-          expect(last_response.status).to eql 422
+          expect(response_status).to eql 422
         end
       end
     end
@@ -108,7 +108,7 @@ describe Canto do
   describe 'DELETE' do 
     context 'when the task exists' do 
       before(:all) do 
-        delete '/tasks/1'
+        make_request('DELETE', '/tasks/1')
       end
 
       it 'deletes the task' do 
@@ -116,14 +116,14 @@ describe Canto do
       end
 
       it 'returns status code 204' do 
-        expect(last_response.status).to eql 204
+        expect(response_status).to eql 204
       end
     end
 
     context 'when the task doesn\'t exist' do 
       it 'returns status 404' do 
         delete '/tasks/15'
-        expect(last_response.status).to eql 404
+        expect(response_status).to eql 404
       end
     end
   end
