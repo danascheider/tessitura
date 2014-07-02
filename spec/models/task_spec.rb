@@ -12,15 +12,14 @@ describe Task do
   end
 
   describe 'validations' do 
-    context 'index' do
+    context ' pertaining to the index' do
       before(:all) do 
-        @task.title = 'Hello world'
-        @task.save!
+        Task.create!(title: 'Filo mio')
         Task.create!(title: 'My string')
       end
 
       after(:all) do 
-        Task.last.destroy
+        2.times { Task.last.destroy }
       end
 
       it 'prioritizes the new task\'s index' do 
