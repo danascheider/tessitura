@@ -17,7 +17,7 @@ class Canto < Sinatra::Application
   end
 
   post '/tasks' do 
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { Task.create!(request_body) && 201 }
+    create_task(request_body)
   end
 
   get '/tasks/:id' do |id|
