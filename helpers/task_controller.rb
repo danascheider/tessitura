@@ -18,7 +18,16 @@ class Sinatra::Application
     def update_task(id, body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @task = find_task(id)
-        update_indices(body)
+
+        # Check if index needs to be changed
+        if (body.has_key? :index) && (body[:index] != @task.index)
+          update_indices(body)
+        end
+
+        if (body.has_key? :complete) && (body[:complete] != @task.complete)
+          body[:index] = Task.max_index
+        end
+
         @task.update!(body)
       end
     end
@@ -39,7 +48,11 @@ class Sinatra::Application
 
     protected
       def change_index?(object)
-        (object.has_key? :index) && (object[:index] != @task.index)
+        (object.has_key? :index) && !compare_index(@task, object)
+      end
+
+      def compare_index(task,object)
+        task.index == object[:index]
       end
 
       def other_tasks
