@@ -20,11 +20,11 @@ class Sinatra::Application
         @task = find_task(id)
 
         # Check if index needs to be changed
-        if (body.has_key? :index) && (body[:index] != @task.index)
+        if changed_index?(@task, body)
           update_indices(body)
         end
 
-        if (body.has_key? :complete) && (body[:complete] != @task.complete)
+        if changed_completion_status?(@task, body)
           body[:index] = Task.max_index
         end
 
@@ -38,9 +38,12 @@ class Sinatra::Application
 
     # HELPER METHODS
     # ==============
-    
-    def changed_index?(object)
-      (object.has_key? :index) && !compare_index(@task, object)
+    def changed_completion_status?(task, object)
+      (object.has_key? :complete) && (object[:complete] != task.complete)
+    end
+
+    def changed_index?(task, object)
+      (object.has_key? :index) && !compare_index(task, object)
     end
 
     def compare_index(task,object)
@@ -58,7 +61,6 @@ class Sinatra::Application
       end
 
       def update_indices(object)
-        return true unless changed_index? object
         other_tasks.each do |task|
           task.update!(index: index(task) - 1) if (task.index <= object[:index].to_i)
         end
