@@ -18,7 +18,7 @@ class Sinatra::Application
     def update_task(id, body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @task = find_task(id)
-        update_indices(body[:index]) if change_index? body
+        update_indices(body)
         @task.update!(body)
       end
     end
@@ -30,17 +30,25 @@ class Sinatra::Application
     # HELPER METHODS
     # ==============
 
-    def update_indices(index)
-      Task.all.each do |task|
-        if task.index <= index then task.index -= 1 && task.save!; end
+    def update_indices(object)
+      return true unless change_index? object
+      other_tasks.each do |task|
+        task.update!(index: index(task) - 1) if (task.index <= object[:index].to_i)
       end
     end
 
-    private 
+    protected
       def change_index?(object)
-        object.has_key? :index && object[:index] != @task.index
+        (object.has_key? :index) && (object[:index] != @task.index)
       end
 
+      def other_tasks
+        Task.where.not(id: @task.id)
+      end
+
+      def index(task)
+        task.index
+      end
   end
 
   helpers TaskController
