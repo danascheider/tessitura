@@ -9,6 +9,7 @@ class Task < ActiveRecord::Base
 
   def to_hash
     { id: self.id,
+      index: self.index,
       title: self.title, 
       complete: self.complete, 
       created_at: self.created_at,
@@ -22,6 +23,6 @@ class Task < ActiveRecord::Base
     end
 
     def set_index
-      self.index = 1 unless self.index.to_i > 0
+      self.index = self.index.to_i > 0 ? self.index.to_i : 1
     end
 end
