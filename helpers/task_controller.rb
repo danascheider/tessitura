@@ -15,7 +15,7 @@ class Sinatra::Application
     end
 
     def delete_task(id)
-      begin_and_rescue(ActiveRecord::RecordNotFound, 422) { find_task(id).destroy && 204 }
+      begin_and_rescue(ActiveRecord::RecordNotFound, 404) { find_task(id).destroy && 204 }
     end
 
     def update_indices(index)
