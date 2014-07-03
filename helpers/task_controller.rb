@@ -14,6 +14,10 @@ class Sinatra::Application
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) { find_task(id).update!(body) }
     end
 
+    def delete_task(id)
+      begin_and_rescue(ActiveRecord::RecordNotFound, 422) { find_task(id).destroy && 204 }
+    end
+
     def update_indices(index)
       Task.all.each do |task|
         if task.index <= index then task.index -= 1 && task.save!; end

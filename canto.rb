@@ -29,6 +29,6 @@ class Canto < Sinatra::Application
   end
 
   delete '/tasks/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordNotFound, 404) { find_task(id).destroy && 204 }
+    delete_task(id)
   end
 end
