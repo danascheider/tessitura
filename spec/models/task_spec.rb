@@ -10,10 +10,8 @@ describe Task do
   describe 'validations' do 
     context ' pertaining to the index' do
       before(:all) do 
-        Task.create!(title: 'Filo mio')
-        @task = Task.create!(title: 'My string')
-        puts "This is in the before(:all) block"
-        puts "@task = #{@task.to_hash}"
+        @task = Task.create!(title: 'Filo mio')
+        Task.create!(title: 'My string')
       end
 
       after(:all) do 
@@ -21,7 +19,6 @@ describe Task do
       end
 
       it 'prioritizes the new task\'s index' do 
-        puts "@task = #{@task.to_hash}"
         new_task = Task.create!(title: 'Feed the fish', index: 2)
         expect(new_task.index).to eql 2
       end
@@ -33,7 +30,6 @@ describe Task do
 
     context 'pertaining to title' do 
       before(:each) do 
-        puts "This is the before(:each) hook"
         @task = Task.new
       end
 
