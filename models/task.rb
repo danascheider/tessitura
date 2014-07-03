@@ -1,7 +1,7 @@
 class Task < ActiveRecord::Base
   validates :title, presence: true, exclusion: { in: %w(nil null)}
   before_save :set_complete
-  before_save :set_index
+  before_save :set_index, on: :create
 
   def incomplete?
     !self.complete
@@ -23,6 +23,6 @@ class Task < ActiveRecord::Base
     end
 
     def set_index
-      self.index = self.index.to_i > 0 ? self.index.to_i : 1
+      self.index ||= 1
     end
 end
