@@ -4,6 +4,7 @@ require 'json'
 require 'require_all'
 require_all 'models'
 require_all 'helpers'
+require_all 'controllers'
 
 class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
