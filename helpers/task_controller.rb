@@ -54,6 +54,11 @@ class Sinatra::Application
       task.index
     end
 
+    def index_in?(task, val1, val2)
+      val1, val2 = val1.to_i, val2.to_i
+      val1 <= val2 ? task.index.between?(val1, val2) : task.index.between?(val2, val1)
+    end
+
     protected
 
       def other_tasks
@@ -62,7 +67,7 @@ class Sinatra::Application
 
       def update_indices(object)
         other_tasks.each do |task|
-          task.update!(index: index(task) - 1) if (task.index <= object[:index].to_i)
+          task.update!(index: index(task) - 1) if index_in?(task, index(@task), object[:index])
         end
       end
   end
