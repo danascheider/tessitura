@@ -17,6 +17,10 @@ class Task < ActiveRecord::Base
     }
   end
 
+  def self.max_index
+    self.pluck(:index).sort[-1]
+  end
+
   private
     def set_complete
       true if self.complete ||= false
