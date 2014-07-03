@@ -20,12 +20,12 @@ class Sinatra::Application
         @task = find_task(id)
 
         # Check if index needs to be changed
-        if changed_index?(@task, body)
-          update_indices(body)
-        end
-
         if changed_completion_status?(@task, body)
           body[:index] = Task.max_index
+        end
+
+        if changed_index?(@task, body)
+          update_indices(body)
         end
 
         @task.update!(body)
