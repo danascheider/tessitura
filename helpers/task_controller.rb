@@ -38,26 +38,27 @@ class Sinatra::Application
 
     # HELPER METHODS
     # ==============
+    
+    def changed_index?(object)
+      (object.has_key? :index) && !compare_index(@task, object)
+    end
+
+    def compare_index(task,object)
+      task.index == object[:index]
+    end
+
+    def index(task)
+      task.index
+    end
 
     protected
-      def change_index?(object)
-        (object.has_key? :index) && !compare_index(@task, object)
-      end
-
-      def compare_index(task,object)
-        task.index == object[:index]
-      end
 
       def other_tasks
         Task.where.not(id: @task.id)
       end
 
-      def index(task)
-        task.index
-      end
-      
       def update_indices(object)
-        return true unless change_index? object
+        return true unless changed_index? object
         other_tasks.each do |task|
           task.update!(index: index(task) - 1) if (task.index <= object[:index].to_i)
         end
