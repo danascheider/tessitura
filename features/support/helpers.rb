@@ -18,6 +18,10 @@ def response_body
   last_response.body
 end
 
+def neg_task_scope(hash)
+  Task.where.not(hash)
+end
+
 def make_request(method, path, string=nil)
   case method
   when 'POST'
