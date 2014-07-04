@@ -20,6 +20,9 @@ class CantoWorld
   include Rack::Test::Methods
   include JsonSpec
 
+  # Disable SQL logging
+  ActiveRecord::Base.logger.level = 1
+
   def app
     Canto.new
   end

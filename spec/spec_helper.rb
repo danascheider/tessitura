@@ -12,6 +12,9 @@ require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
 require_all      app_path + '/controllers/'
 
+# Disable SQL logging
+ActiveRecord::Base.logger.level = 1
+
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
   config.include Rack::Test::Methods
