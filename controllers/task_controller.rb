@@ -8,7 +8,14 @@ class Sinatra::Application
     # ========================
 
     def create_task(body)
-      begin_and_rescue(ActiveRecord::RecordInvalid, 422) { Task.create!(body) && 201 }
+      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+        if body.has_key? :index 
+          update_on_specified_create(body[:index])
+        else 
+          update_on_default_create
+        end
+        @task = Task.create!(body) && 201
+      end
     end
 
     def get_task(id)
@@ -73,6 +80,14 @@ class Sinatra::Application
         Task.where.not(id: @task.id)
       end
 
+      def update_on_default_create
+        Task.all.each {|task| increment_index(task) }
+      end
+
+      def update_on_specified_create(index)
+        Task.where("index > ?", index).each {|task| increment_index(task)}
+      end
+
       def update_indices(object)
         other_tasks.each do |task|
           decrement_index(task) if index_in?(task, index(@task), object[:index])
@@ -80,5 +95,5 @@ class Sinatra::Application
       end
   end
 
-  helpers TaskController
+  register TaskController
 end
