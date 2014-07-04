@@ -11,7 +11,7 @@ describe Canto::TaskController do
         before(:each) do 
           Task.create!(title: 'My task 1', index: 1)
           create_task(title: "My new task")
-          @task = Task.find_by(title: "My new task")
+          @task = Task.last
         end
 
         it 'sets new task\'s index to 1 by default' do 
@@ -28,7 +28,8 @@ describe Canto::TaskController do
           for i in 1..4
             Task.create!(title: "My task #{i}", index: i)
           end
-          @task = Task.create!(title: "My new task", index: 3)
+          create_task(title: "My new task", index: 3)
+          @task = Task.last
         end
 
         it 'sets the task\'s index to the one specified' do 
@@ -36,7 +37,7 @@ describe Canto::TaskController do
         end
 
         it 'increases index of 3rd and 4th tasks by 1' do 
-          expect(neg_task_scope(id: @task.id).pluck(:id)).to eql [1, 2, 4, 5]
+          expect(Task.where.not(title: "My new task").pluck(:index)).to eql [1, 2, 4, 5]
         end
       end # index explicitly set
     end # CREATE method
