@@ -1,8 +1,10 @@
 Given(/^there are the following tasks:$/) do |tasks|
+  @original_indices = {}
   tasks.hashes.each do |task|
     task = Task.create(title: task['title'], 
                        complete: task['complete'], 
                        index: task['index'])
+    @original_indices[task.id] = task.index
   end
 end
 
@@ -32,4 +34,10 @@ end
 
 Then(/^a task called "(.*?)" should be created with index (\d+)$/) do |title, index|
   expect(Task.exists?(title: title, index: index))
+end
+
+Then(/^all the other tasks' indices should be increased by (\d+)$/) do |increase|
+  Task.where.not(title: "Call mom").each do |task|
+    expect(task.index - @original_indices[task.id]).to eql increase
+  end
 end
