@@ -29,3 +29,7 @@ end
 Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordinal|
   expect(Task.exists?(id: id)).to be false
 end
+
+Then(/^a task called "(.*?)" should be created with index (\d+)$/) do |title, index|
+  expect(Task.exists?(title: title, index: index))
+end
