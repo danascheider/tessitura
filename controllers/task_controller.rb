@@ -30,6 +30,9 @@ class Sinatra::Application
         if changed_index?(@task, body)
           old, n3w = @task.index.to_i, body[:index].to_i
           old > n3w ? (update_on_decrease(old, n3w)) : (update_on_increase(old, n3w))
+        elsif changed_completion_status?(@task, body)
+          body[:index] = Task.max_index
+          update_on_mark_complete(body[:index].to_i)
         end
 
         @task.update!(body)
@@ -85,6 +88,10 @@ class Sinatra::Application
 
       def update_on_decrease(old, n3w)
         Task.all.each {|task| task.increment_index if task.index.between?(n3w, old - 1)}
+      end
+
+      def update_on_mark_complete(index)
+        Task.all.each {|task| task.increment_index(-1) if task.index > index }
       end
 
       def update_indices(object)
