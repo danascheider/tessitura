@@ -27,13 +27,9 @@ class Sinatra::Application
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @task = find_task(id)
 
-        # Check if index needs to be changed
-        if changed_completion_status?(@task, body)
-          body[:index] = Task.max_index
-        end
-
         if changed_index?(@task, body)
-          update_indices(body)
+          old, n3w = @task.index.to_i, body[:index].to_i
+          old > n3w ? (update_on_decrease(old, n3w)) : (update_on_increase(old, n3w))
         end
 
         @task.update!(body)
@@ -73,6 +69,8 @@ class Sinatra::Application
         Task.where.not(id: @task.id)
       end
 
+      # UPDATING INDICES 
+      # ================
       def update_on_default_create
         Task.all.each {|task| task.increment_index }
       end
@@ -81,11 +79,22 @@ class Sinatra::Application
         Task.all.each {|task| task.increment_index if task.index >= index }
       end
 
+      def update_on_increase(old, n3w)
+        Task.all.each {|task| task.increment_index(-1) if task.index.between?(old + 1, n3w)}
+      end
+
+      def update_on_decrease(old, n3w)
+        Task.all.each {|task| task.increment_index if task.index.between?(n3w, old - 1)}
+      end
+
       def update_indices(object)
         other_tasks.each do |task|
           task.increment_index(-1) if index_in?(task, index(@task), object[:index])
         end
       end
+
+      # ================
+      # ================
   end
 
   helpers TaskController
