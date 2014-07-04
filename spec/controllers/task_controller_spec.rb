@@ -4,7 +4,8 @@ describe Canto do
   context 'TaskController' do 
     describe 'task indexing functions' do 
       describe 'CREATE method' do 
-        context 'index not explicitly set' do           before(:all) do 
+        context 'index not explicitly set' do           
+          before(:all) do 
             Task.create!(title: 'My task 1', index: 1)
             Task.create!(title: 'My task 2', index: 2)
           end
@@ -18,7 +19,7 @@ describe Canto do
             expect(task.index).to eql 1
           end
 
-          it 'increases index of all the other tasks by 1'
+          it 'increases index of all the other tasks by 1' do
             expect(Task.find(1).index).to eql 2
             expect(Task.find(2).index).to eql 3
           end
