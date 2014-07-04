@@ -12,16 +12,16 @@ Feature: Update task
 
   Scenario: Successfully change task title
     When the client submits a PUT request to /tasks/1 with:
-      """
-      { 'title':'Take Out the Trash' }
+      """json
+      { "title":"Take Out the Trash" }
       """
     Then the task's title should be changed to 'Take Out the Trash'
     And the response should indicate the task was updated successfully
 
   Scenario: Successfully change status
     When the client submits a PUT request to /tasks/1 with:
-      """
-      { 'complete':true }
+      """json
+      { "complete":true }
       """
     Then the task should be marked complete
     And the task's title should not be changed
@@ -29,8 +29,8 @@ Feature: Update task
 
   Scenario: Attempt to update task with invalid attributes
     When the client submits a PUT request to /tasks/1 with:
-      """
-      { 'title':nil }
+      """json
+      { "title":null }
       """
     Then the task's title should not be changed
     And the response should indicate the task was not updated successfully
