@@ -6,43 +6,34 @@ describe Canto do
 
       describe 'CREATE method' do 
         context 'index not explicitly set' do           
-          before(:all) do 
+          before(:each) do 
             Task.create!(title: 'My task 1', index: 1)
-          end
-
-          after(:all) do 
-            Task.all.each {|task| task.destroy }
+            @task = Task.create!(title: "My new task")
           end
 
           it 'sets new task\'s index to 1 by default' do 
-            task = Task.create!(title: "My new task")
-            expect(task.index).to eql 1
+            expect(@task.index).to eql 1
           end
 
           it 'increases index of other tasks by 1' do
-            expect(Task.find(1).index).to eql 2
+            expect(find_task(1).index).to eql 2
           end
         end # 'index not explicitly set'
 
         context 'index explicitly set' do 
-          before(:all) do 
+          before(:each) do 
             for i in 1..4
               Task.create!(title: "My task #{i}", index: i)
             end
-          end
-
-          after(:all) do 
-            Task.all.each {|task| task.destroy }
+            @task = Task.create!(title: "My new task", index: 3)
           end
 
           it 'sets the task\'s index to the one specified' do 
-            @task = Task.create!(title: "My new task", index: 3)
             expect(@task.index).to eql 3
-            Task.all.to_a.each {|task| puts "#{task.to_hash}\n"}
           end
 
           it 'increases index of 3rd and 4th tasks by 1' do 
-            expect(neg_task_scope(id: @task.id)).to eql [1, 2, 4, 5]
+            expect(neg_task_scope(id: @task.id).pluck(:id)).to eql [1, 2, 4, 5]
           end
         end # index explicitly set
       end # CREATE method
