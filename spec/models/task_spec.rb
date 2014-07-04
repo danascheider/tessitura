@@ -8,26 +8,6 @@ describe Task do
   it { should respond_to(:to_hash) } # to integrate with Sinatra-Backbone
 
   describe 'validations' do 
-    context ' pertaining to the index' do
-      before(:all) do 
-        @task = Task.create!(title: 'Filo mio')
-        Task.create!(title: 'My string')
-      end
-
-      after(:all) do 
-        Task.all.destroy
-      end
-
-      it 'prioritizes the new task\'s index' do 
-        new_task = Task.create!(title: 'Feed the fish', index: 2)
-        expect(new_task.index).to eql 2
-      end
-
-      it 'changes the index of the other task' do 
-        expect(get_changed.index).to eql 3
-      end
-    end 
-
     context 'pertaining to title' do 
       before(:each) do 
         @task = Task.new
