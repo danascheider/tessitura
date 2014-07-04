@@ -1,12 +1,6 @@
 # TRANSFORMS
 # ==========
 
-Transform(/^{ '.*':'?.*'? }$/) do |object|
-  object = object.to_s
-  key_value = object.to_s.gsub(/[{}']/, '').strip.split(':')
-  { key_value[0] => key_value[1] }.to_json
-end
-
 # REQUEST STEPS
 # =============
 
