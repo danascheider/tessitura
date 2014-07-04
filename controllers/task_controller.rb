@@ -14,6 +14,7 @@ class Sinatra::Application
         else 
           update_on_default_create
         end
+
         @task = Task.create!(body) && 201
       end
     end
@@ -50,23 +51,15 @@ class Sinatra::Application
     end
 
     def changed_index?(task, object)
-      (object.has_key? :index) && !compare_index(task, object)
+      (object.has_key? :index) && !equal_index?(task, object)
     end
 
-    def compare_index(task,object)
+    def equal_index?(task,object)
       task.index == object[:index]
-    end
-
-    def decrement_index(task)
-      task.update!(index: task.index - 1)
     end
 
     def index(task)
       task.index
-    end
-
-    def increment_index(task)
-      task.update!(index: task.index + 1)
     end
 
     def index_in?(task, val1, val2)
@@ -81,11 +74,11 @@ class Sinatra::Application
       end
 
       def update_on_default_create
-        Task.all.each {|task| increment_index(task) }
+        Task.all.each {|task| task.increment_index }
       end
 
       def update_on_specified_create(index)
-        Task.where("index > ?", index).each {|task| increment_index(task)}
+        Task.all.each {|task| task.increment_index if task.index >= index }
       end
 
       def update_indices(object)
@@ -95,5 +88,5 @@ class Sinatra::Application
       end
   end
 
-  register TaskController
+  helpers TaskController
 end
