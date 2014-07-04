@@ -83,7 +83,7 @@ class Sinatra::Application
 
       def update_indices(object)
         other_tasks.each do |task|
-          decrement_index(task) if index_in?(task, index(@task), object[:index])
+          task.increment_index(-1) if index_in?(task, index(@task), object[:index])
         end
       end
   end
