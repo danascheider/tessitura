@@ -41,3 +41,7 @@ Then(/^all the other tasks' indices should be increased by (\d+)$/) do |increase
     expect(task.index - @original_indices[task.id]).to eql increase
   end
 end
+
+Then(/^the (\d+)(?:[a-z]{2}) and (\d+)(?:[a-z]{2}) tasks' indices should be increased by (\d+)$/) do |id1, id2, increase|
+  Task.find([id1, id2]).each {|task| expect(task.index - @original_indices[task.id]).to eql increase }
+end
