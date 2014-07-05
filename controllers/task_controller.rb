@@ -29,7 +29,7 @@ class Sinatra::Application
         @task = find_task(id)
 
         if changed_index?(@task, body)
-          validate_index(body)
+          body[:index] = validate_index_on_update(body[:index])
           old, n3w = @task.index.to_i, body[:index].to_i
           old > n3w ? (update_on_decrease(old, n3w)) : (update_on_increase(old, n3w))
         elsif changed_completion_status?(@task, body)
@@ -104,9 +104,13 @@ class Sinatra::Application
         other_tasks.each {|task| task.increment_index(-1) if task.index > index }
       end
 
-      def update_indices(object)
-        other_tasks.each do |task|
-          task.increment_index(-1) if index_in?(task, index(@task), object[:index])
+      def validate_index_on_update(index)
+        if index > Task.max_index 
+          Task.max_index
+        elsif index < 1
+          1
+        else
+          index
         end
       end
 

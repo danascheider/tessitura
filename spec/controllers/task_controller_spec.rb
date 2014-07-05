@@ -69,13 +69,14 @@ describe Canto::TaskController do
 
       context 'task moved higher on the list' do 
         it 'changes the task index' do 
-          (task = Task.find(4)).update!(index: 2)
-          expect(task.index).to eql 2
+          update_task(4, index: 2)
+          expect(Task.find(4).index).to eql 2
         end
 
         it 'moves the other tasks down' do 
-          pending
-          indices = [Task.find([2,3]).index]
+          update_task(4, index: 2)
+          indices = []
+          Task.find([2,3]).each {|task| indices << task.index }
           expect(indices).to eql [3, 4]
         end
       end
