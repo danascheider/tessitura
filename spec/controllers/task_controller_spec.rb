@@ -49,12 +49,12 @@ describe Canto::TaskController do
         end
 
         it 'sets index to highest' do 
-          Task.create!(title: "My new task", index: 6)
+          create_task(title: "My new task", index: 6)
           expect(Task.last.index).to eql 4
         end
 
         it 'sets the index to 1' do 
-          Task.create!(title: "My new task", index: 0)
+          create_task(title: "My new task", index: 0)
           expect(Task.last.index).to eql 1
         end
       end # invalid index

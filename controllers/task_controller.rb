@@ -10,7 +10,7 @@ class Sinatra::Application
     def create_task(body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         if body.has_key? :index 
-          validate_index(body)
+          body[:index] = validate_index_on_create(body[:index])
           update_on_specified_create(body[:index])
         else 
           update_on_default_create
@@ -110,11 +110,13 @@ class Sinatra::Application
         end
       end
 
-      def validate_index(object)
-        if object[:index] > Task.max_index
-          object[:index] = Task.max_index
-        elsif object[:index] < 1
-          object[:index] = 1
+      def validate_index_on_create(index)
+        if index > Task.max_index + 1
+          Task.max_index + 1
+        elsif index < 1
+          1
+        else 
+          index
         end
       end
 
