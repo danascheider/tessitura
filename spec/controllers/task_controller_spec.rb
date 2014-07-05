@@ -75,12 +75,24 @@ describe Canto::TaskController do
 
         it 'moves the other tasks down' do 
           update_task(4, index: 2)
-          indices = []
-          Task.find([2,3]).each {|task| indices << task.index }
+          indices = Task.find([2,3]).map {|task| task.index }
           expect(indices).to eql [3, 4]
         end
       end
-      context 'task moved down on the list'
+
+      context 'task moved down on the list' do 
+        it 'changes the task index' do 
+          update_task(1, index: 3)
+          expect(Task.find(1).index).to eql 3 
+        end
+
+        it 'moves the other tasks up' do 
+          update_task(1, index: 3)
+          indices = Task.find([2,3]).map {|task| task.index }
+          expect(indices).to eql [1,2]
+        end
+      end
+      
       context 'task marked complete'
       context 'complete task changed to incomplete'
       context 'invalid index' 
