@@ -32,7 +32,7 @@ class Sinatra::Application
         if changed_index?(@task, body)
           body[:index] = validate_index_on_update(body[:index])
           old, n3w = @task.index.to_i, body[:index].to_i
-          old > n3w ? (update_on_decrease(old, n3w)) : (update_on_increase(old, n3w))
+          old > n3w ? (update_on_change(n3w, old - 1)) : (update_on_change(old + 1, n3w, -1))
         elsif changed_completion_status?(@task, body)
           body[:index] = Task.max_index
           update_on_mark_complete(@task.index)
@@ -85,12 +85,8 @@ class Sinatra::Application
         Task.all.each {|task| task.increment!(:index) if task.index >= index }
       end
 
-      def update_on_increase(old, n3w)
-        Task.all.each {|task| task.decrement!(:index) if task.index.between?(old + 1, n3w)}
-      end
-
-      def update_on_decrease(old, n3w)
-        Task.all.each {|task| task.increment!(:index) if task.index.between?(n3w, old - 1)}
+      def update_on_change(min, max, amount=1)
+        Task.all.each {|task| task.increment!(:index, amount) if task.index.between?(min, max)}
       end
 
       def update_on_mark_complete(index)
