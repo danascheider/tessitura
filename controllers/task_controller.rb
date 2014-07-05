@@ -32,7 +32,7 @@ class Sinatra::Application
           old > n3w ? (update_on_decrease(old, n3w)) : (update_on_increase(old, n3w))
         elsif changed_completion_status?(@task, body)
           body[:index] = Task.max_index
-          update_on_mark_complete(body[:index].to_i)
+          update_on_mark_complete(@task.index)
         end
 
         @task.update!(body)
@@ -40,6 +40,7 @@ class Sinatra::Application
     end
 
     def delete_task(id)
+      @task = find_task(id)
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) { find_task(id).destroy && 204 }
     end
 
@@ -91,7 +92,7 @@ class Sinatra::Application
       end
 
       def update_on_mark_complete(index)
-        Task.all.each {|task| task.increment_index(-1) if task.index > index }
+        other_tasks.each {|task| task.increment_index(-1) if task.index > index }
       end
 
       def update_indices(object)

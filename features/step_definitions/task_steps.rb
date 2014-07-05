@@ -49,3 +49,11 @@ end
 Then(/^the (\d+)(?:[a-z]{2}) and (\d+)(?:[a-z]{2}) tasks' indices should not be changed$/) do |id1, id2|
   Task.find([id1, id2]).each {|task| expect(task.index).to eql @original_indices[task.id]}
 end
+
+Then(/^the other tasks should be moved up on the list by (\d+)$/) do |increment|
+  puts "TASKS:"
+  Task.all.each {|task| puts "#{task.to_hash}\n" }
+  puts "ORIGINAL INDICES:"
+  @original_indices.each {|key, value| puts "ID #{key} => #{value}"}
+  Task.where.not(id: @task.id).each {|task| expect(@original_indices[task.id] - task.index).to eql increment}
+end
