@@ -67,35 +67,43 @@ describe Canto::TaskController do
         end
       end
 
-      context 'task moved higher on the list' do 
-        it 'changes the task index' do 
-          update_task(4, index: 2)
-          expect(Task.find(4).index).to eql 2
+      context 'with index set explicitly' do 
+        context 'task moved higher on the list' do 
+          it 'changes the task index' do 
+            update_task(4, index: 2)
+            expect(Task.find(4).index).to eql 2
+          end
+
+          it 'moves the other tasks down' do 
+            update_task(4, index: 2)
+            indices = Task.find([2,3]).map {|task| task.index }
+            expect(indices).to eql [3, 4]
+          end
         end
 
-        it 'moves the other tasks down' do 
-          update_task(4, index: 2)
-          indices = Task.find([2,3]).map {|task| task.index }
-          expect(indices).to eql [3, 4]
-        end
-      end
+        context 'task moved down on the list' do 
+          it 'changes the task index' do 
+            update_task(1, index: 3)
+            expect(Task.find(1).index).to eql 3 
+          end
 
-      context 'task moved down on the list' do 
-        it 'changes the task index' do 
-          update_task(1, index: 3)
-          expect(Task.find(1).index).to eql 3 
+          it 'moves the other tasks up' do 
+            update_task(1, index: 3)
+            indices = Task.find([2,3]).map {|task| task.index }
+            expect(indices).to eql [1,2]
+          end
         end
 
-        it 'moves the other tasks up' do 
-          update_task(1, index: 3)
-          indices = Task.find([2,3]).map {|task| task.index }
-          expect(indices).to eql [1,2]
+        context 'task marked complete' do 
+          it 'sets the index to the one specified' do 
+            update_task(1, { complete: true, index: 2 })
+            expect(Task.find(1).index).to eql 2
+          end
         end
-      end
-      
-      context 'task marked complete'
-      context 'complete task changed to incomplete'
-      context 'invalid index' 
+
+        context 'complete task changed to incomplete'
+        context 'invalid index'
+      end # with index explicitly set
     end # UPDATE method
   end # task indexing functions
 end # Canto::TaskController
