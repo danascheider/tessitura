@@ -92,7 +92,7 @@ class Sinatra::Application
       end
 
       def update_on_increase(old, n3w)
-        Task.all.each {|task| task.increment_index(-1) if task.index.between?(old + 1, n3w)}
+        Task.all.each {|task| task.decrement!(:index, 1) if task.index.between?(old + 1, n3w)}
       end
 
       def update_on_decrease(old, n3w)
@@ -100,11 +100,11 @@ class Sinatra::Application
       end
 
       def update_on_mark_complete(index)
-        other_tasks.each {|task| task.increment_index(-1) if task.index > index }
+        other_tasks.each {|task| task.decrement!(:index, 1) if task.index > index }
       end
 
       def update_on_delete(index)
-        other_tasks.each {|task| task.increment_index(-1) if task.index > index }
+        other_tasks.each {|task| task.decrement!(:index, 1) if task.index > index }
       end
 
       def validate_index_on_update(index)
