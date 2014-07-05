@@ -84,27 +84,27 @@ class Sinatra::Application
       # UPDATING INDICES 
       # ================
       def update_on_default_create
-        Task.all.each {|task| task.increment_index }
+        Task.all.each {|task| task.increment!(:index) }
       end
 
       def update_on_specified_create(index)
-        Task.all.each {|task| task.increment_index if task.index >= index }
+        Task.all.each {|task| task.increment!(:index) if task.index >= index }
       end
 
       def update_on_increase(old, n3w)
-        Task.all.each {|task| task.decrement!(:index, 1) if task.index.between?(old + 1, n3w)}
+        Task.all.each {|task| task.decrement!(:index) if task.index.between?(old + 1, n3w)}
       end
 
       def update_on_decrease(old, n3w)
-        Task.all.each {|task| task.increment_index if task.index.between?(n3w, old - 1)}
+        Task.all.each {|task| task.increment!(:index) if task.index.between?(n3w, old - 1)}
       end
 
       def update_on_mark_complete(index)
-        other_tasks.each {|task| task.decrement!(:index, 1) if task.index > index }
+        other_tasks.each {|task| task.decrement!(:index) if task.index > index }
       end
 
       def update_on_delete(index)
-        other_tasks.each {|task| task.decrement!(:index, 1) if task.index > index }
+        other_tasks.each {|task| task.decrement!(:index) if task.index > index }
       end
 
       def validate_index_on_update(index)
