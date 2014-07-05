@@ -29,13 +29,12 @@ class Sinatra::Application
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @task = find_task(id)
 
+        if changed_completion_status?(@task, body) then body[:index] ||= Task.max_index; end
+
         if changed_index?(@task, body)
           body[:index] = validate_index(body[:index])
           old, n3w = @task.index.to_i, body[:index].to_i
           old > n3w ? (update_on_change(n3w, old - 1)) : (update_on_change(old + 1, n3w, -1))
-        elsif changed_completion_status?(@task, body)
-          body[:index] = Task.max_index
-          update_on_mark_complete(@task.index)
         end
 
         @task.update!(body)
@@ -87,10 +86,6 @@ class Sinatra::Application
 
       def update_on_change(min, max, amount=1)
         Task.all.each {|task| task.increment!(:index, amount) if task.index.between?(min, max)}
-      end
-
-      def update_on_mark_complete(index)
-        other_tasks.each {|task| task.decrement!(:index) if task.index > index }
       end
 
       def update_on_delete(index)
