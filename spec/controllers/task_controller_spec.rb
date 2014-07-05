@@ -26,7 +26,21 @@ describe Canto::TaskController do
         it 'increases index of other tasks by 1' do
           expect(find_task(1).index).to eql 2
         end
-      end # 'index not explicitly set'
+
+        context 'when task is complete on creation' do 
+          it 'creates the task as the first complete task' do 
+            Task.create!(title: 'My complete task', complete: true, index: 3)
+            create_task(title: 'Another new complete task', complete: true)
+            expect(Task.last.index).to eql 3
+          end
+
+          it 'moves the other complete tasks down' do 
+            Task.create!(title: 'My complete task', complete: true, index: 3)
+            create_task(title: 'Another new complete task', complete: true)
+            expect(Task.find(3).index).to eql 4
+          end
+        end # context 'when task is complete on creation'
+      end # context 'index not explicitly set'
 
       context 'index explicitly set' do 
         before(:each) do 

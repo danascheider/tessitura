@@ -12,7 +12,10 @@ class Sinatra::Application
         if body.has_key? :index 
           body[:index] = validate_index_on_create(body[:index])
           update_on_specified_create(body[:index])
-        else 
+        elsif body[:complete] == true
+          body[:index] = Task.complete.pluck(:index).sort[0]
+          update_on_specified_create(body[:index])
+        else
           update_on_default_create
         end
 
