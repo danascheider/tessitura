@@ -79,7 +79,7 @@ describe Canto::TaskController do
             indices = Task.find([2,3]).map {|task| task.index }
             expect(indices).to eql [3, 4]
           end
-        end
+        end # context task moved higher on the list
 
         context 'task moved down on the list' do 
           it 'changes the task index' do 
@@ -92,18 +92,53 @@ describe Canto::TaskController do
             indices = Task.find([2,3]).map {|task| task.index }
             expect(indices).to eql [1,2]
           end
-        end
+        end # context task moved down on the list
 
-        context 'task marked complete' do 
-          it 'sets the index to the one specified' do 
+        context 'toggle complete' do 
+          it 'sets the given index when task marked complete' do 
             update_task(1, { complete: true, index: 2 })
             expect(Task.find(1).index).to eql 2
           end
+
+          it 'sets the given index when task marked incomplete' do 
+            Task.find(2).update!(complete: true)
+            update_task(2, complete: false, index: 3)
+            expect(Task.find(2).index).to eql 3
+          end
+        end # context toggle complete
+
+        context 'invalid index' do 
+          it 'sets the index to the max' do 
+            update_task(2, index: 6)
+            expect(Task.find(2).index).to eql 4
+          end
+
+          it 'sets the index to 1' do 
+            update_task(3, index: 0)
+            expect(Task.find(3).index).to eql 1
+          end
+        end # context invalid index
+      end # context with index explicitly set
+
+      context 'without explicit index' do 
+        it 'doesn\'t change the index unnecessarily' do 
+          update_task(3, title: 'Foo bar')
+          expect(Task.find(3).index).to eql 3
         end
 
-        context 'complete task changed to incomplete'
-        context 'invalid index'
-      end # with index explicitly set
+        context 'toggle complete' do 
+          it 'moves complete task to the end of the list' do 
+            update_task(2, complete: true)
+            expect(Task.find(2).index).to eql 4
+          end
+
+          it 'moves incomplete task to the top of the list' do 
+            Task.find(4).update!(complete: true)
+            update_task(4, complete: false)
+            expect(Task.find(4).index).to eql 4
+          end
+        end # context toggle complete
+      end # context without explicit index
     end # UPDATE method
   end # task indexing functions
 end # Canto::TaskController
