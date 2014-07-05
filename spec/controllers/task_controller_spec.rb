@@ -40,6 +40,32 @@ describe Canto::TaskController do
           expect(Task.where.not(title: "My new task").pluck(:index)).to eql [1, 2, 4, 5]
         end
       end # index explicitly set
+
+      context 'invalid index' do 
+        before(:each) do 
+          for i in 1..3
+            Task.create!(title: "My task #{i}", index: i)
+          end
+        end
+
+        it 'sets index to highest' do 
+          Task.create!(title: "My new task", index: 6)
+          expect(Task.last.index).to eql 4
+        end
+
+        it 'sets the index to 1' do 
+          Task.create!(title: "My new task", index: 0)
+          expect(Task.last.index).to eql 1
+        end
+      end # invalid index
     end # CREATE method
+
+    context 'UPDATE method' do 
+      context 'task moved higher on the list'
+      context 'task moved down on the list'
+      context 'task marked complete'
+      context 'complete task changed to incomplete'
+      context 'invalid index' 
+    end # UPDATE method
   end # task indexing functions
 end # Canto::TaskController
