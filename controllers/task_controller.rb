@@ -10,7 +10,7 @@ class Sinatra::Application
     def create_task(body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         if body.has_key? :index 
-          body[:index] = validate_index_on_create(body[:index])
+          body[:index] = validate_index(body[:index], :create)
         elsif body[:complete] == true
           body[:index] = Task.complete.pluck(:index).sort[0]
         end
@@ -30,7 +30,7 @@ class Sinatra::Application
         @task = find_task(id)
 
         if changed_index?(@task, body)
-          body[:index] = validate_index_on_update(body[:index])
+          body[:index] = validate_index(body[:index])
           old, n3w = @task.index.to_i, body[:index].to_i
           old > n3w ? (update_on_change(n3w, old - 1)) : (update_on_change(old + 1, n3w, -1))
         elsif changed_completion_status?(@task, body)
@@ -97,26 +97,10 @@ class Sinatra::Application
         other_tasks.each {|task| task.decrement!(:index) if task.index > index }
       end
 
-      def validate_index_on_update(index)
-        if index > Task.max_index 
-          Task.max_index
-        elsif index < 1
-          1
-        else
-          index
-        end
+      def validate_index(index, method=:update)
+        max = method == :create ? (Task.max_index + 1) : Task.max_index
+        if index < 1 then 1; elsif index > max then max; else index; end
       end
-
-      def validate_index_on_create(index)
-        if index > Task.max_index + 1
-          Task.max_index + 1
-        elsif index < 1
-          1
-        else 
-          index
-        end
-      end
-
       # ================
       # ================
   end
