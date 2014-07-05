@@ -69,4 +69,5 @@ Feature: Manage task list
       """json
       { "index":10 }
       """
-    Then the tasks' indices should not be changed
+    Then the 1st task's index should be changed to 4
+    And the other tasks should be moved up on the list by 1
