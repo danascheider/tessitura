@@ -61,7 +61,24 @@ describe Canto::TaskController do
     end # CREATE method
 
     context 'UPDATE method' do 
-      context 'task moved higher on the list'
+      before(:each) do 
+        for i in 1..4
+          Task.create!(title: "My task #{i}", index: i)
+        end
+      end
+
+      context 'task moved higher on the list' do 
+        it 'changes the task index' do 
+          (task = Task.find(4)).update!(index: 2)
+          expect(task.index).to eql 2
+        end
+
+        it 'moves the other tasks down' do 
+          pending
+          indices = [Task.find([2,3]).index]
+          expect(indices).to eql [3, 4]
+        end
+      end
       context 'task moved down on the list'
       context 'task marked complete'
       context 'complete task changed to incomplete'
