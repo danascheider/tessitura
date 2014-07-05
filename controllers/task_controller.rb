@@ -11,12 +11,12 @@ class Sinatra::Application
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         if body.has_key? :index 
           body[:index] = validate_index_on_create(body[:index])
-          update_on_specified_create(body[:index])
+          update_on_create(body[:index])
         elsif body[:complete] == true
           body[:index] = Task.complete.pluck(:index).sort[0]
-          update_on_specified_create(body[:index])
+          update_on_create(body[:index])
         else
-          update_on_default_create
+          update_on_create
         end
 
         @task = Task.create!(body) && 201
@@ -83,11 +83,7 @@ class Sinatra::Application
 
       # UPDATING INDICES 
       # ================
-      def update_on_default_create
-        Task.all.each {|task| task.increment!(:index) }
-      end
-
-      def update_on_specified_create(index)
+      def update_on_create(index = 1)
         Task.all.each {|task| task.increment!(:index) if task.index >= index }
       end
 
