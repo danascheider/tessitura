@@ -40,8 +40,11 @@ class Sinatra::Application
     end
 
     def delete_task(id)
-      @task = find_task(id)
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) { find_task(id).destroy && 204 }
+      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do  
+        index = (@task = find_task(id)).index 
+        update_on_delete(index)
+        @task.destroy && 204
+      end
     end
 
     # HELPER METHODS
@@ -92,6 +95,10 @@ class Sinatra::Application
       end
 
       def update_on_mark_complete(index)
+        other_tasks.each {|task| task.increment_index(-1) if task.index > index }
+      end
+
+      def update_on_delete(index)
         other_tasks.each {|task| task.increment_index(-1) if task.index > index }
       end
 
