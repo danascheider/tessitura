@@ -1,5 +1,10 @@
 require 'spec_helper'
 
+# Some edge cases still need to be accounted for in indices:
+# => If a task is created with :complete => true, it should be added
+#    as the FIRST complete task
+# => Need to validate uniqueness of indices as well as sequentiality
+
 describe Canto::TaskController do 
   include Canto::TaskController
   include Canto::ErrorHandling
@@ -140,5 +145,18 @@ describe Canto::TaskController do
         end # context toggle complete
       end # context without explicit index
     end # UPDATE method
+
+    context 'DELETE method' do 
+      before(:each) do 
+        for i in 1..4
+          Task.create!(title: "My task #{i}", index: i)
+        end
+      end
+
+      it 'moves the other tasks up on the list' do 
+        delete_task(2)
+        expect(Task.all.map {|task| task.index }).to eql [ 1, 2, 3 ]
+      end
+    end # DELETE method
   end # task indexing functions
 end # Canto::TaskController
