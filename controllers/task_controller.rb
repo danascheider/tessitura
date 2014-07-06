@@ -56,16 +56,7 @@ class Sinatra::Application
     def equal_index?(task,object)
       task.index == object[:index]
     end
-
-    def index(task)
-      task.index
-    end
-
-    def index_in?(task, val1, val2)
-      val1, val2 = val1.to_i, val2.to_i
-      val1 <= val2 ? task.index.between?(val1, val2) : task.index.between?(val2, val1)
-    end
-
+    
     protected
       def assign_default_index(object)
         object[:complete] ? Task.complete.pluck(:index).sort[0] : 1
