@@ -9,7 +9,7 @@ class Sinatra::Application
 
     def create_task(body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        body[:index] = validate_index(body[:index], :create) || assign_default_index(body)
+        body[:index] = body[:index] ? validate_index(body[:index], :create) : assign_default_index(body)
         update_on_create(body[:index])
         @task = Task.create!(body) && 201
       end
@@ -91,12 +91,8 @@ class Sinatra::Application
       end
 
       def validate_index(index, method=:update)
-        begin
-          max = method == :create ? (Task.max_index + 1) : Task.max_index
-          if index < 1 then 1; elsif index > max then max; else index; end
-        rescue
-          false
-        end
+        max = method == :create ? (Task.max_index + 1) : Task.max_index
+        if index < 1 then 1; elsif index > max then max; else index; end
       end
       # ================
       # ================
