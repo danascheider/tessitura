@@ -50,11 +50,7 @@ class Sinatra::Application
     end
 
     def changed_index?(task, object)
-      (object.has_key? :index) && !equal_index?(task, object)
-    end
-
-    def equal_index?(task,object)
-      task.index == object[:index]
+      object[:index] && object[:index] != task.index
     end
     
     protected
