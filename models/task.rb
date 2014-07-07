@@ -9,10 +9,6 @@ class Task < ActiveRecord::Base
     !self.complete
   end
 
-  def increment_index(amount=1)
-    self.index += amount; self.save!
-  end
-
   def to_hash
     { id: self.id,
       index: self.index,
