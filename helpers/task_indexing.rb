@@ -16,7 +16,7 @@ module TaskIndexing
   protected
     def dup
       return nil unless Task.count > 1
-      @indices.take_while {|index| @indices.count(index) }
+      @indices.find {|index| @indices.count(index) == 2 }
     end
 
     def gap
