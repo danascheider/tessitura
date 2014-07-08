@@ -108,9 +108,40 @@ describe TaskIndexing do
       end
     end
 
+    context 'when a task is updated' do 
+      context 'with no index specified' do 
+        it 'doesn\'t change the task\'s index' do 
+          Task.find(4).update!(title: 'Hello world')
+          expect(Task.find(4).index).to eql 4
+        end
+      end
+
+      context 'with an index specified' do 
+        before(:each) do 
+          Task.find(2).update!(index: 4)
+          update_indices
+        end
+
+        it 'changes the task\'s index' do 
+          expect(Task.find(2).index).to eql 4
+        end
+
+        it 'changes the other tasks\' indices' do 
+          indices = Task.find([3, 4]).map {|task| task.index }
+          expect(indices).to eql [2, 3]
+        end
+      end
+    end
+
     context 'when an existing task is deleted' do 
       before(:each) do 
-        3.times {|n| FactoryGirl.create(:task, index: n)}
+        Task.find(4).destroy
+        update_indices
+      end
+      
+      it 'decreases the index of the other tasks' do 
+        @indices = Task.pluck(:index).sort
+        expect(Task.pluck(:index).sort).to eql [1, 2, 3, 4, 5]
       end
     end
   end
