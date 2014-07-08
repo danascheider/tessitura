@@ -79,10 +79,6 @@ describe TaskIndexing do
         Task.all.each {|task| puts "#{task.to_hash}\n"}
       end
 
-      after(:each) do 
-        Task.all.each {|task| task.delete }
-      end
-
       context 'and no index is explicitly set' do 
         before(:each) do 
           FactoryGirl.create(:task, title: "New task", index: nil)
