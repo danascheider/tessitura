@@ -3,6 +3,10 @@ require 'spec_helper'
 describe TaskIndexing do 
   include TaskIndexing 
 
+  before(:each) do 
+    FactoryGirl.sequences.clear
+  end
+
   describe 'dup and gap methods' do 
     describe 'dup method' do 
       before(:each) do 
@@ -63,6 +67,35 @@ describe TaskIndexing do
       it 'identifies a gap' do 
         @indices = [1, 3]
         expect(gap).to eql 2
+      end
+    end
+  end
+
+  describe 'task indexing functionality' do 
+    context 'when new task is created' do 
+      before(:each) do 
+        2.times { FactoryGirl.create(:task) }
+        puts "TASKS BEFORE NEW TASK CREATED:"
+        Task.all.each {|task| puts "#{task.to_hash}\n"}
+      end
+
+      after(:each) do 
+        Task.all.each {|task| task.delete }
+      end
+
+      context 'and no index is explicitly set' do 
+        before(:each) do 
+          FactoryGirl.create(:task, title: "New task", index: nil)
+          update_indices
+        end
+
+        it 'sets the new task\'s index to 1' do 
+          expect(Task.last.index).to eql 1
+        end
+
+        it 'increases the other tasks\' indices' do 
+          expect(Task.pluck(:index).sort).to eql [1, 2, 3]
+        end
       end
     end
   end
