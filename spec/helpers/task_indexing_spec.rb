@@ -3,10 +3,6 @@ require 'spec_helper'
 describe TaskIndexing do 
   include TaskIndexing 
 
-  before(:each) do 
-    FactoryGirl.sequences.clear
-  end
-
   describe 'dup and gap methods' do 
     describe 'dup method' do 
       before(:each) do 
@@ -74,14 +70,12 @@ describe TaskIndexing do
   describe 'task indexing functionality' do 
     context 'when new task is created' do 
       before(:each) do 
-        2.times { FactoryGirl.create(:task) }
-        puts "TASKS BEFORE NEW TASK CREATED:"
-        Task.all.each {|task| puts "#{task.to_hash}\n"}
+        2.times { |n| FactoryGirl.create(:task, index: n+1) }
       end
 
       context 'and no index is explicitly set' do 
         before(:each) do 
-          FactoryGirl.create(:task, title: "New task", index: nil)
+          FactoryGirl.create(:task)
           update_indices
         end
 
@@ -91,6 +85,25 @@ describe TaskIndexing do
 
         it 'increases the other tasks\' indices' do 
           expect(Task.pluck(:index).sort).to eql [1, 2, 3]
+        end
+      end
+
+      context 'and the index is explicitly set' do 
+        before(:each) do 
+          FactoryGirl.create(:task, title: "My New Task", index: 2)
+          update_indices
+        end
+
+        it 'assigns the given index' do 
+          expect(Task.last.index).to eql 2
+        end
+
+        it 'moves the task previously at the given index' do 
+          expect(Task.pluck(:index).sort).to eql [1, 2, 3]
+        end
+
+        it 'doesn\'t move the first task' do 
+          expect(Task.first.index).to eql 1
         end
       end
     end
