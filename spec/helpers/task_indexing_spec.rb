@@ -68,12 +68,12 @@ describe TaskIndexing do
   end
 
   describe 'task indexing functionality' do 
-    context 'when new task is created' do 
-      before(:each) do 
-        2.times { |n| FactoryGirl.create(:task, index: n+1) }
-      end
+    before(:each) do 
+      6.times {|n| FactoryGirl.create(:task, index: n+1)}
+    end
 
-      context 'and no index is explicitly set' do 
+    context 'when a new task is created' do 
+      context 'with no index explicitly set' do 
         before(:each) do 
           FactoryGirl.create(:task)
           update_indices
@@ -84,11 +84,11 @@ describe TaskIndexing do
         end
 
         it 'increases the other tasks\' indices' do 
-          expect(Task.pluck(:index).sort).to eql [1, 2, 3]
+          expect(Task.pluck(:index).sort).to eql [1, 2, 3, 4, 5, 6, 7]
         end
       end
 
-      context 'and the index is explicitly set' do 
+      context 'with the index explicitly set' do 
         before(:each) do 
           FactoryGirl.create(:task, title: "My New Task", index: 2)
           update_indices
@@ -99,12 +99,18 @@ describe TaskIndexing do
         end
 
         it 'moves the task previously at the given index' do 
-          expect(Task.pluck(:index).sort).to eql [1, 2, 3]
+          expect(Task.pluck(:index).sort).to eql [1, 2, 3, 4, 5, 6, 7]
         end
 
         it 'doesn\'t move the first task' do 
           expect(Task.first.index).to eql 1
         end
+      end
+    end
+
+    context 'when an existing task is deleted' do 
+      before(:each) do 
+        3.times {|n| FactoryGirl.create(:task, index: n)}
       end
     end
   end
