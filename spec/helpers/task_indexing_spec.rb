@@ -25,7 +25,7 @@ describe TaskIndexing do
     it 'identifies a duplicate' do 
       FactoryGirl.create(:task, index: 1)
       @indices = Task.pluck(:index).sort
-      expect(dup).to be_an Integer
+      expect(dup).to eql 1
     end
   end
 end
