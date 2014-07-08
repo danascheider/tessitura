@@ -19,6 +19,10 @@ class Task < ActiveRecord::Base
     }
   end
 
+  def self.last_updated 
+    self.order(:updated_at)[-1]
+  end
+
   def self.max_index
     self.pluck(:index).sort[-1]
   end
