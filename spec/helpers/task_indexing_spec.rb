@@ -20,12 +20,11 @@ describe TaskIndexing do
   context 'two tasks' do 
     before(:each) do 
       FactoryGirl.create(:task)
-      @indices = Task.pluck(:index).sort
     end
 
     it 'identifies a duplicate' do 
       FactoryGirl.create(:task, index: 1)
-      expect(dup).to eql 1
+      @indices = Task.pluck(:index).sort
     end
   end
 end
