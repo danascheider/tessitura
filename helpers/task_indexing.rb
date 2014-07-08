@@ -21,7 +21,8 @@ module TaskIndexing
 
     def gap
       return nil unless Task.count > 1
-      1.upto(@indices.last) {|number| return number unless @indices.include? number}
+      1.upto(@indices.last) {|number| @gap = number unless @indices.include? number}
+      @gap
     end
 
     def update(min, max, amt)

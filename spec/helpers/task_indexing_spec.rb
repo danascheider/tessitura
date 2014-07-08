@@ -31,7 +31,7 @@ describe TaskIndexing do
 
     it 'returns nil if there is no missing index' do 
       @indices = [1, 2, 3]
-      expect(gap).to be nil
+      expect(gap).to eql nil
     end
   end 
 
