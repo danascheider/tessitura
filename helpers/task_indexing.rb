@@ -16,13 +16,12 @@ module TaskIndexing
   protected
     def dup
       return nil unless Task.count > 1
-      @indices.find {|index| @indices.count(index) == 2 }
+      duplicates = @indices.find {|index| @indices.count(index) == 2 }
     end
 
     def gap
-      return nil unless Task.count > 2
-      gap = [1..@indices[-1]].to_a - @indices.uniq
-      return gap ? gap[0] : nil
+      return nil unless Task.count > 1
+      1.upto(@indices.last) {|number| return number unless @indices.include? number}
     end
 
     def update(min, max, amt)
