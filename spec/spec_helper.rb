@@ -12,8 +12,8 @@ require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
 require_all      app_path + '/controllers/'
 
-# Disable SQL logging
-ActiveRecord::Base.logger.level = 1
+# Disable SQL logging unless environment variable log is set to true
+ActiveRecord::Base.logger.level = 1 unless ENV['LOG'] == 'true'
 
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
