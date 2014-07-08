@@ -27,5 +27,11 @@ describe TaskIndexing do
       @indices = Task.pluck(:index).sort
       expect(dup).to eql 1
     end
+
+    it 'doesn\'t identify a gap' do 
+      FactoryGirl.create(:task, index: 2)
+      @indices = Task.pluck(:index).sort
+      expect(gap).to be nil
+    end
   end
 end
