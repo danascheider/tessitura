@@ -26,6 +26,6 @@ module TaskIndexing
     end
 
     def update(min, max, amt=1)
-      @updatable.each {|task| task.increment(:index, amt) if task.index.between?(min, max)}
+      @updatable.each {|task| task.increment!(:index, amt) if task.index.between?(min, max)}
     end
 end
