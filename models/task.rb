@@ -27,10 +27,6 @@ class Task < ActiveRecord::Base
     self.pluck(:index).sort[-1]
   end
 
-  def self.update_indices(min, max, amount=1)
-    Task.all.each {|task| task.increment!(:index, amount) if task.index.between?(min, max)}
-  end
-
   private
     def set_complete
       true if self.complete ||= false
