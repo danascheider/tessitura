@@ -30,8 +30,9 @@ class Sinatra::Application
     def update_task(id, body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @task = find_task(id)
+        body[:index] = body[:index] ? validate_index(body[:index]) : nil
         body[:index] ||= index_on_completion_status(@task, body)
-        @task.update!(body) && TaskIndexer.update_indices
+        @task.update!(body) && TaskIndexer.update_indices && 200
       end
     end
 
