@@ -22,16 +22,8 @@ class Sinatra::Application
     def update_task(id, body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @task = find_task(id)
-
-        if changed_completion_status?(@task, body) then body[:index] ||= Task.max_index; end
-
-        if changed_index?(@task, body)
-          body[:index] = validate_index(body[:index])
-          old, n3w = @task.index.to_i, body[:index].to_i
-          old > n3w ? (Task.update_indices(n3w, old - 1)) : (Task.update_indices(old + 1, n3w, -1))
-        end
-
-        @task.update!(body)
+        body[:index] ||= index_on_completion_status(@task, body)
+        @task.update!(body) && update_indices
       end
     end
 
@@ -45,8 +37,10 @@ class Sinatra::Application
 
     # HELPER METHODS
     # ==============
-    def changed_completion_status?(task, object)
-      (object.has_key? :complete) && (object[:complete] != task.complete)
+    def index_on_completion_status(task, object)
+      if (object.has_key? :complete) && (object[:complete] != task.complete)
+        object[:complete] == true ? Task.max_index : 1
+      end
     end
 
     def changed_index?(task, object)

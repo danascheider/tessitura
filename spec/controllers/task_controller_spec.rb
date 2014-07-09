@@ -7,170 +7,105 @@ require 'spec_helper'
 
 describe Canto::TaskController do 
   include Canto::TaskController
+  # include Canto::TaskIndexing
   include Canto::ErrorHandling
 
-  context 'task indexing functions' do 
-
-    context 'CREATE method' do 
-      context 'index not explicitly set' do           
-        before(:each) do 
-          Task.create!(title: 'My task 1', index: 1)
-          create_task(title: "My new task")
-          @task = Task.last
-        end
-
-        it 'sets new task\'s index to 1 by default' do 
-          expect(@task.index).to eql 1
-        end
-
-        it 'increases index of other tasks by 1' do
-          expect(find_task(1).index).to eql 2
-        end
-
-        context 'when task is complete on creation' do 
-          it 'creates the task as the first complete task' do 
-            Task.create!(title: 'My complete task', complete: true, index: 3)
-            create_task(title: 'Another new complete task', complete: true)
-            expect(Task.last.index).to eql 3
-          end
-
-          it 'moves the other complete tasks down' do 
-            Task.create!(title: 'My complete task', complete: true, index: 3)
-            create_task(title: 'Another new complete task', complete: true)
-            expect(Task.find(3).index).to eql 4
-          end
-        end # context 'when task is complete on creation'
-      end # context 'index not explicitly set'
-
-      context 'index explicitly set' do 
-        before(:each) do 
-          for i in 1..4
-            Task.create!(title: "My task #{i}", index: i)
-          end
-          create_task(title: "My new task", index: 3)
-          @task = Task.last
-        end
-
-        it 'sets the task\'s index to the one specified' do 
-          expect(@task.index).to eql 3
-        end
-
-        it 'increases index of 3rd and 4th tasks by 1' do 
-          expect(Task.where.not(title: "My new task").pluck(:index)).to eql [1, 2, 4, 5]
-        end
-      end # index explicitly set
-
-      context 'invalid index' do 
-        before(:each) do 
-          for i in 1..3
-            Task.create!(title: "My task #{i}", index: i)
-          end
-        end
-
-        it 'sets index to highest' do 
-          create_task(title: "My new task", index: 6)
-          expect(Task.last.index).to eql 4
-        end
-
-        it 'sets the index to 1' do 
-          create_task(title: "My new task", index: 0)
-          expect(Task.last.index).to eql 1
-        end
-      end # invalid index
-    end # CREATE method
-
-    context 'UPDATE method' do 
+  describe 'CREATE method' do 
+    before(:each) do 
+      5.times {|n| FactoryGirl.create(:task, index: n + 1)}
+    end
+    
+    context 'normal creation' do 
       before(:each) do 
-        for i in 1..4
-          Task.create!(title: "My task #{i}", index: i)
-        end
+        create_task(title: "New Task")
       end
 
-      context 'with index set explicitly' do 
-        context 'task moved higher on the list' do 
-          it 'changes the task index' do 
-            update_task(4, index: 2)
-            expect(Task.find(4).index).to eql 2
-          end
+      it 'creates a new task' do 
+        create_task(title: "New Task")
+        expect(Task.last.title).to eql "New Task"
+      end
 
-          it 'moves the other tasks down' do 
-            update_task(4, index: 2)
-            indices = Task.find([2,3]).map {|task| task.index }
-            expect(indices).to eql [3, 4]
-          end
-        end # context task moved higher on the list
+      it 'updates the indices' do 
+        expect(Task.pluck(:index).sort).to eql [1, 2, 3, 4, 5, 6]
+      end
+    end
 
-        context 'task moved down on the list' do 
-          it 'changes the task index' do 
-            update_task(1, index: 3)
-            expect(Task.find(1).index).to eql 3 
-          end
-
-          it 'moves the other tasks up' do 
-            update_task(1, index: 3)
-            indices = Task.find([2,3]).map {|task| task.index }
-            expect(indices).to eql [1,2]
-          end
-        end # context task moved down on the list
-
-        context 'toggle complete' do 
-          it 'sets the given index when task marked complete' do 
-            update_task(1, { complete: true, index: 2 })
-            expect(Task.find(1).index).to eql 2
-          end
-
-          it 'sets the given index when task marked incomplete' do 
-            Task.find(2).update!(complete: true)
-            update_task(2, complete: false, index: 3)
-            expect(Task.find(2).index).to eql 3
-          end
-        end # context toggle complete
-
-        context 'invalid index' do 
-          it 'sets the index to the max' do 
-            update_task(2, index: 6)
-            expect(Task.find(2).index).to eql 4
-          end
-
-          it 'sets the index to 1' do 
-            update_task(3, index: 0)
-            expect(Task.find(3).index).to eql 1
-          end
-        end # context invalid index
-      end # context with index explicitly set
-
-      context 'without explicit index' do 
-        it 'doesn\'t change the index unnecessarily' do 
-          update_task(3, title: 'Foo bar')
-          expect(Task.find(3).index).to eql 3
-        end
-
-        context 'toggle complete' do 
-          it 'moves complete task to the end of the list' do 
-            update_task(2, complete: true)
-            expect(Task.find(2).index).to eql 4
-          end
-
-          it 'moves incomplete task to the top of the list' do 
-            Task.find(4).update!(complete: true)
-            update_task(4, complete: false)
-            expect(Task.find(4).index).to eql 4
-          end
-        end # context toggle complete
-      end # context without explicit index
-    end # UPDATE method
-
-    context 'DELETE method' do 
+    context 'task created with completion status true' do 
       before(:each) do 
-        for i in 1..4
-          Task.create!(title: "My task #{i}", index: i)
-        end
+        Task.find([4,5]).each {|task| task.update!(complete: true)}
       end
 
-      it 'moves the other tasks up on the list' do 
-        delete_task(2)
-        expect(Task.all.map {|task| task.index }).to eql [ 1, 2, 3 ]
+      it 'creates the task as the first complete task' do 
+        create_task(title: "New Task", complete: true)
+        expect(Task.last.index).to eql 4
       end
-    end # DELETE method
-  end # task indexing functions
+    end
+  end
+
+  describe 'UPDATE method' do 
+    before(:each) do 
+      5.times {|n| FactoryGirl.create(:task, index: n + 1)}
+    end
+
+    context 'general update' do 
+      before(:each) do 
+        update_task(3, title: 'Task the Third')
+      end
+
+      it 'changes the updated attributes' do 
+        expect(Task.find(3).title).to eql 'Task the Third'
+      end
+    end
+
+    context 'changed index' do 
+      it 'updates the other indices' do 
+        update_task(3, index: 5)
+        puts "TASKS:"
+        Task.all.each {|task| puts "#{task.to_hash}\n"}
+        other_indices = Task.find([4, 5]).map {|task| task.index }
+        expect(other_indices).to eql [3, 4]
+      end
+    end
+
+    context 'toggle complete' do 
+      before(:each) do 
+        Task.find([4,5]).each {|task| task.update!(complete: true)}
+      end
+
+      it 'moves a completed task to the end' do 
+        update_task(2, complete: true)
+        expect(Task.find(2).index).to eql Task.max_index
+      end
+
+      it 'moves a task to the top when changed to incomplete' do 
+        update_task(4, complete: false)
+        expect(Task.find(4).index).to eql 1
+      end
+    end
+
+    describe 'DELETE method' do 
+      before(:each) do 
+        5.times {|n| FactoryGirl.create(:task, index: n+1)}
+        delete_task(4)
+      end
+
+      it 'deletes the task' do 
+        expect(Task.pluck(:id)).not_to include 4
+      end
+
+      it 'updates the indices' do 
+        expect(Task.find(5).index).to eql 4
+      end
+    end
+  end
+
+  describe 'GET method' do 
+    before(:each) do 
+      5.times {|n| FactoryGirl.create(:task, index: n+1)}
+    end
+    
+    it 'returns the task as a JSON object' do 
+      expect(get_task(3)).to eql Task.find(3).to_json
+    end
+  end
 end # Canto::TaskController
