@@ -37,9 +37,11 @@ class Sinatra::Application
 
     def delete_task(id)
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do  
-        index = (@task = find_task(id)).index 
-        TaskIndexer.update_indices
-        @task.destroy && 204
+        puts "TASKS:"
+        Task.all.each {|task| puts "#{task.to_hash}\n"}
+        Task.find(id).destroy 
+        TaskIndexer.update_indices(Task.pluck(:index).sort)
+        204
       end
     end
 

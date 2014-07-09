@@ -2,6 +2,7 @@ class Task < ActiveRecord::Base
   scope :complete, -> { where(complete: true) }
   scope :incomplete, -> { where(complete: false) }
   validates :title, presence: true, exclusion: { in: %w(nil null)}
+  validates :index, exclusion: { in: [0] }
   before_save :set_complete
   before_save :set_index, on: :create
 

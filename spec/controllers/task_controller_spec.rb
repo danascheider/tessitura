@@ -84,15 +84,23 @@ describe Canto::TaskController do
 
     describe 'DELETE method' do 
       before(:each) do 
-        5.times {|n| FactoryGirl.create(:task, index: n+1)}
         delete_task(4)
+        TaskIndexer.refresh_index_array
+      end
+
+      after(:each) do 
+        Task.all.each {|task| task.destroy }
       end
 
       it 'deletes the task' do 
+        puts "TASKS:"
+        Task.all.each {|task| puts "#{task.to_hash}\n"}
         expect(Task.pluck(:id)).not_to include 4
       end
 
       it 'updates the indices' do 
+        puts "TASKS:"
+        Task.all.each {|task| puts "#{task.to_hash}\n"}
         expect(Task.find(5).index).to eql 4
       end
     end

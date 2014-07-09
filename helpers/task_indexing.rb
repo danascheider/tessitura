@@ -1,12 +1,24 @@
 class TaskIndexer
+  @@indices ||= Task.pluck(:index).sort
+
   def self.indices 
-    @indices ||= Task.pluck(:index)
+    @@indices 
+  end
+
+  def self.refresh_index_array(new_indices=nil)
+    @@indices = new_indices || Task.pluck(:index)
+    @@indices.sort! unless @@indices == nil
+  end
+
+  def self.updatable
+    @updatable
   end
 
   def self.update_indices(indices=nil)
-    @indices ||= Task.pluck(:index)
-    @indices.sort!
-    @updatable = (gap = self.gap) && !(dup = self.dup) ? Task.all : Task.where.not(id: Task.last_updated.id)
+    @@indices = indices || Task.pluck(:index).sort
+    @@indices.sort!
+    dup, gap = self.dup, self.gap
+    @updatable = gap && !dup ? Task.all : Task.where.not(id: Task.last_updated.id)
 
     if dup && gap
       dup > gap ? update(gap + 1, dup, -1) : update(dup, gap - 1)
@@ -19,13 +31,12 @@ class TaskIndexer
 
   def self.dup
     return nil unless Task.count > 1
-    duplicates = indices.find {|index| @indices.count(index) == 2 }
+    duplicates = @@indices.find {|index| @@indices.count(index) == 2 }
   end
 
   def self.gap
-    return nil unless Task.count > 1
-    1.upto(indices.last) {|number| @gap = number unless @indices.include? number}
-    @gap
+    return nil unless (Task.count > 1) && @@indices[-1].is_a?(Integer) && @@indices[-1] > 1
+    ((1..@@indices[-1]).to_a - @@indices)[0]
   end
 
   def self.update(min, max, amt=1)

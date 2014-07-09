@@ -5,17 +5,18 @@ describe TaskIndexer do
   describe 'dup and gap methods' do 
     describe 'dup method' do 
       before(:each) do 
+        TaskIndexer.refresh_index_array
         Task.stub(:count).and_return(5)
       end
 
       it 'returns an integer if there is a duplicate index' do
-        @indices = [1, 2, 3, 3, 4]
-        expect(dup).to be_an Integer
+        @@indices = [1, 2, 3, 3, 4]
+        expect(TaskIndexer.dup).to be_an Integer
       end
 
       it 'returns nil if there is no duplicate index' do 
-        @indices = [1, 2, 3]
-        expect(dup).to be nil
+        @@indices = [1, 2, 3]
+        expect(TaskIndexer.dup).to be nil
       end
     end
 
@@ -25,13 +26,13 @@ describe TaskIndexer do
       end
 
       it 'returns an integer if there is a missing index' do 
-        @indices = [1, 3, 4]
-        expect(gap).to be_an Integer 
+        TaskIndexer.refresh_index_array [1, 3, 4]
+        expect(TaskIndexer.gap).to be_an Integer 
       end
 
       it 'returns nil if there is no missing index' do 
-        @indices = [1, 2, 3]
-        expect(gap).to eql nil
+        TaskIndexer.refresh_index_array [1, 2, 3]
+        expect(TaskIndexer.gap).to eql nil
       end
     end 
 
@@ -41,11 +42,11 @@ describe TaskIndexer do
       end
 
       it 'does not identify a duplicate' do 
-        expect(dup).to be nil
+        expect(TaskIndexer.dup).to be nil
       end
 
       it 'does not identify a gap' do 
-        expect(gap).to be nil
+        expect(TaskIndexer.gap).to eql nil
       end
     end
 
@@ -55,13 +56,13 @@ describe TaskIndexer do
       end
 
       it 'identifies a duplicate' do 
-        @indices = [1, 1]
-        expect(dup).to eql 1
+        TaskIndexer.refresh_index_array [1, 1]
+        expect(TaskIndexer.dup).to eql 1
       end
 
       it 'identifies a gap' do 
-        @indices = [1, 3]
-        expect(gap).to eql 2
+        TaskIndexer.refresh_index_array [1, 3]
+        expect(TaskIndexer.gap).to eql 2
       end
     end
   end
@@ -75,7 +76,8 @@ describe TaskIndexer do
       context 'with no index explicitly set' do 
         before(:each) do 
           FactoryGirl.create(:task)
-          update_indices
+          TaskIndexer.refresh_index_array
+          TaskIndexer.update_indices
         end
 
         it 'sets the new task\'s index to 1' do 
@@ -90,7 +92,8 @@ describe TaskIndexer do
       context 'with the index explicitly set' do 
         before(:each) do 
           FactoryGirl.create(:task, title: "My New Task", index: 2)
-          update_indices
+          TaskIndexer.refresh_index_array
+          TaskIndexer.update_indices
         end
 
         it 'assigns the given index' do 
@@ -118,7 +121,8 @@ describe TaskIndexer do
       context 'with an index specified' do 
         before(:each) do 
           Task.find(2).update!(index: 4)
-          update_indices
+          TaskIndexer.refresh_index_array
+          TaskIndexer.update_indices
         end
 
         it 'changes the task\'s index' do 
@@ -135,7 +139,8 @@ describe TaskIndexer do
     context 'when an existing task is deleted' do 
       before(:each) do 
         Task.find(4).destroy
-        update_indices
+        TaskIndexer.refresh_index_array
+        TaskIndexer.update_indices
       end
       
       it 'decreases the index of the other tasks' do 

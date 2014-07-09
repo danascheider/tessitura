@@ -34,12 +34,8 @@ describe Canto do
   describe 'POST' do 
     describe 'new task route' do 
       context 'valid attributes' do 
-        before(:all) do 
+        before(:each) do 
           make_request('POST', '/tasks', { 'title' => 'Water the garden' }.to_json)
-        end
-
-        after(:all) do 
-          Task.last.destroy
         end
 
         it 'creates a new task' do 
@@ -52,7 +48,7 @@ describe Canto do
       end
 
       context 'invalid attributes' do 
-        before(:all) do 
+        before(:each) do 
           make_request('POST', '/tasks', { }.to_json)
         end
 
@@ -70,12 +66,8 @@ describe Canto do
   describe 'PUT' do 
     describe 'update task route' do 
       context 'valid attributes' do 
-        before(:all) do
+        before(:each) do
           make_request('PUT', '/tasks/1', { 'title' => 'Take the car for service' }.to_json)
-        end
-
-        after(:all) do 
-          Task.update(1, {title: 'Walk the dog'})
         end
 
         it 'updates the task' do 
@@ -88,7 +80,8 @@ describe Canto do
       end
 
       context 'invalid attributes' do 
-        before(:all) do 
+        before(:each) do 
+          Task.find(1).update!(title: 'Walk the dog')
           make_request('PUT', '/tasks/1', { 'title' => nil }.to_json)
         end
 
@@ -105,7 +98,7 @@ describe Canto do
 
   describe 'DELETE' do 
     context 'when the task exists' do 
-      before(:all) do 
+      before(:each) do 
         make_request('DELETE', '/tasks/1')
       end
 
