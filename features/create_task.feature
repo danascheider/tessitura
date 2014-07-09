@@ -3,12 +3,17 @@ Feature: Create task
   As a user
   I need to create a new task
 
+  Background:
+    Given there are 3 tasks
+
   Scenario: Create a valid task
     When the client submits a POST request to /tasks with:
       """json
       { "title":"Water the plants" }
       """
-    Then a new task should be created with the title 'Water the plants'
+    Then a new task should be created with the following attributes:
+      | title            | complete | index |
+      | Water the plants | false    | 1     |
     And the response should indicate the task was saved successfully
 
   Scenario: Attempt to create an invalid task

@@ -8,8 +8,18 @@ Given(/^there are the following tasks:$/) do |tasks|
   end
 end
 
-Then(/^a new task should be created with the title '(.*)'$/) do |title|
-  expect(Task.find_by(title: title)).not_to be_nil
+Given(/^there are (\d+|no) tasks$/) do |number|
+  number == 'no' ? Task.count == 0 : number.times { FactoryGirl.create(:task) }
+end
+
+Then(/^a new task should be created with the following attributes:$/) do |attributes|
+  attributes.hashes.each do |hash|
+    expect(Task.last.to_hash).to include( 
+                                          title: hash['title'],
+                                          complete: hash['complete'] == 'true' ? true : false,
+                                          index: hash['index'].to_i 
+                                        )
+  end
 end
 
 Then(/^no task should be created$/) do
