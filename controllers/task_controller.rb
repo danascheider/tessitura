@@ -1,7 +1,6 @@
 class Sinatra::Application
 
   module TaskController
-    include TaskIndexing
 
     # The begin_and_rescue method is defined in the ErrorHandling module.
 
@@ -11,7 +10,8 @@ class Sinatra::Application
     def create_task(body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         body[:index] = body[:index] ? validate_index(body[:index], :create) : assign_default_index(body)
-        @task = Task.create!(body) && update_indices && 201
+        Task.create!(body) && TaskIndexer.update_indices
+        201
       end
     end
 
@@ -19,18 +19,26 @@ class Sinatra::Application
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) { find_task(id).to_json }
     end
 
+    def get_tasks
+      begin
+        Task.all.to_json
+      rescue
+        204
+      end
+    end
+
     def update_task(id, body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @task = find_task(id)
         body[:index] ||= index_on_completion_status(@task, body)
-        @task.update!(body) && update_indices
+        @task.update!(body) && TaskIndexer.update_indices
       end
     end
 
     def delete_task(id)
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do  
         index = (@task = find_task(id)).index 
-        Task.update_indices(index, Task.max_index, -1)
+        TaskIndexer.update_indices
         @task.destroy && 204
       end
     end

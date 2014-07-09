@@ -1,8 +1,12 @@
-module TaskIndexing
-  def update_indices(indices=nil)
+class TaskIndexer
+  def self.indices 
+    @indices ||= Task.pluck(:index)
+  end
+
+  def self.update_indices(indices=nil)
     @indices ||= Task.pluck(:index)
     @indices.sort!
-    @updatable = gap && !dup ? Task.all : Task.where.not(id: Task.last_updated.id)
+    @updatable = (gap = self.gap) && !(dup = self.dup) ? Task.all : Task.where.not(id: Task.last_updated.id)
 
     if dup && gap
       dup > gap ? update(gap + 1, dup, -1) : update(dup, gap - 1)
@@ -13,19 +17,18 @@ module TaskIndexing
     end
   end
 
-  protected
-    def dup
-      return nil unless Task.count > 1
-      duplicates = @indices.find {|index| @indices.count(index) == 2 }
-    end
+  def self.dup
+    return nil unless Task.count > 1
+    duplicates = indices.find {|index| @indices.count(index) == 2 }
+  end
 
-    def gap
-      return nil unless Task.count > 1
-      1.upto(@indices.last) {|number| @gap = number unless @indices.include? number}
-      @gap
-    end
+  def self.gap
+    return nil unless Task.count > 1
+    1.upto(indices.last) {|number| @gap = number unless @indices.include? number}
+    @gap
+  end
 
-    def update(min, max, amt=1)
-      @updatable.each {|task| task.increment!(:index, amt) if task.index.between?(min, max)}
-    end
+  def self.update(min, max, amt=1)
+    @updatable.each {|task| task.increment!(:index, amt) if task.index.between?(min, max)}
+  end
 end

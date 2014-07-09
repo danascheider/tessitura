@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe TaskIndexing do 
-  include TaskIndexing 
+describe TaskIndexer do 
 
   describe 'dup and gap methods' do 
     describe 'dup method' do 

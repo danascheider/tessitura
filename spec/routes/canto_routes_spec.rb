@@ -4,9 +4,7 @@ describe Canto do
   include Rack::Test::Methods 
 
   before(:all) do 
-    Task.create!(title: 'Walk the dog')
-    Task.create!(title: 'Take out the trash')
-    Task.create!(title: 'Call mom', complete: true)
+    3.times {|n| FactoryGirl.create(:task, index: n + 1)}
     @task_count = Task.count
   end
 
@@ -14,7 +12,7 @@ describe Canto do
     context 'task list route' do 
       it 'returns all the tasks as a JSON object' do 
         get '/tasks'
-        expect(response_body).to eql json_task(:all)
+        expect(response_body).to eql Task.all.to_json
       end
     end
 
