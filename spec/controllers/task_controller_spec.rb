@@ -7,7 +7,6 @@ require 'spec_helper'
 
 describe Canto::TaskController do 
   include Canto::TaskController
-  # include Canto::TaskIndexing
   include Canto::ErrorHandling
 
   describe 'CREATE method' do 
