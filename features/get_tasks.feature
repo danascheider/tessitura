@@ -5,23 +5,19 @@ Feature: Get tasks
   I need to see my tasks in JSON format.
 
   Background:
-    Given there are the following tasks:
-      |id | title              | complete |
-      | 1 | Take out the trash | false    |
-      | 2 | Walk the dog       | false    |
-      | 3 | Chunky bacon       | true     |
- 
-  Scenario: Get all task information
-    When the client submits a GET request to /tasks
-    Then the JSON response should include all the tasks
+    Given there are 3 tasks
+    And the 3rd task is complete
 
-  Scenario: Get information about a specific task
-    When the client submits a GET request to /tasks/1
-    Then the JSON response should include only the 1st task
+  Scenario Outline: Get task information
+    When the client submits a GET request to <path>
+    Then the JSON response should include <contents>
 
-  Scenario: Get information about incomplete tasks only
-    When the client submits a GET request to /tasks?complete=false
-    Then the JSON response should not include the 3rd task
+    Examples:
+      | path                  | contents                  |
+      | /tasks                | all the tasks             |
+      | /tasks/1              | only the 1st task         |
+      | /tasks?complete=false | only the incomplete tasks |
+      | /tasks?complete=true  | only the complete tasks   |
 
   Scenario: Try to get information about a task that doesn't exist
     When the client submits a GET request to /tasks/10

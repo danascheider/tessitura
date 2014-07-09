@@ -12,6 +12,10 @@ Given(/^there are (\d+|no) tasks$/) do |number|
   number == 'no' ? Task.count == 0 : number.times { FactoryGirl.create(:task) }
 end
 
+Given(/^the (\d+)(?:[a-z]{2}) task is complete$/) do |id|
+  Task.find(id).update!(complete: true)
+end
+
 Then(/^a new task should be created with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     expect(Task.last.to_hash).to include( 
