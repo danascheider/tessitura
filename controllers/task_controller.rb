@@ -8,32 +8,24 @@ class Sinatra::Application
     # ========================
 
     def create_task(body)
-      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        body[:index] = body[:index] ? validate_index(body[:index], :create) : assign_default_index(body)
-        Task.create!(body) && TaskIndexer.update_indices
-        201
-      end
+      body[:index] = body[:index] ? validate_index(body[:index], :create) : assign_default_index(body)
+      Task.create!(body) && TaskIndexer.update_indices
     end
 
     def get_task(id)
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) { find_task(id).to_json }
+      find_task(id).to_json
     end
 
     def update_task(id, body)
-      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        @task = find_task(id)
-        body[:index] = body[:index] ? validate_index(body[:index]) : nil
-        body[:index] ||= index_on_completion_status(@task, body)
-        @task.update!(body) && TaskIndexer.update_indices && 200
-      end
+      @task = find_task(id)
+      body[:index] = body[:index] ? validate_index(body[:index]) : nil
+      body[:index] ||= index_on_completion_status(@task, body)
+      @task.update!(body) && TaskIndexer.update_indices
     end
 
     def delete_task(id)
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do  
-        Task.find(id).destroy 
-        TaskIndexer.update_indices(Task.pluck(:index).sort)
-        204
-      end
+      Task.find(id).destroy 
+      TaskIndexer.update_indices(Task.pluck(:index).sort)
     end
 
     # HELPER METHODS

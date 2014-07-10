@@ -16,18 +16,18 @@ class Canto < Sinatra::Application
   end
 
   post '/tasks' do 
-    create_task(request_body)
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { create_task(request_body) && 201 }
   end
 
   get '/tasks/:id' do |id|
-    get_task(id)
+    begin_and_rescue(ActiveRecord::RecordNotFound, 404) { get_task(id) }
   end
 
   put '/tasks/:id' do |id|
-    update_task(id, request_body)
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { update_task(id, request_body) }
   end
 
   delete '/tasks/:id' do |id|
-    delete_task(id)
+    begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id) && 204 }
   end
 end
