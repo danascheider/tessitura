@@ -22,11 +22,7 @@ class Task < ActiveRecord::Base
   end
 
   def update!(opts)
-    if opts[:complete] == true && self.complete == false
-      opts[:position] = Task.count
-    elsif opts[:complete] == false && self.complete == true
-      opts[:position] = 1
-    end
+    opts[:position] ||= get_position_on_update(opts)
     super
   end
 
@@ -49,6 +45,18 @@ class Task < ActiveRecord::Base
   end
 
   private
+    def get_position_on_update(opts)
+      newly_complete?(opts) ? Task.count : (newly_incomplete?(opts) ? 1 : self.position)
+    end
+
+    def newly_complete?(opts)
+      opts[:complete] == true && self.complete == false
+    end
+
+    def newly_incomplete?(opts)
+      opts[:complete] == false && self.complete == true
+    end
+
     def set_complete
       true if self.complete ||= false
     end
