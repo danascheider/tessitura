@@ -5,7 +5,7 @@ describe TaskIndexer do
   describe 'dup and gap methods' do 
     describe 'dup method' do 
       before(:each) do 
-        Task.stub(:count).and_return(5)
+        allow(Task).to receive(:count) {5}
       end
 
       it 'returns an integer if there is a duplicate index' do
@@ -21,7 +21,7 @@ describe TaskIndexer do
 
     describe 'gap method' do 
       before(:each) do 
-        Task.stub(:count).and_return(3)
+        allow(Task).to receive(:count) {3}
       end
 
       it 'returns an integer if there is a missing index' do 
@@ -37,7 +37,7 @@ describe TaskIndexer do
 
     context 'no tasks' do 
       before(:each) do 
-        Task.stub(:count).and_return(0)
+        allow(Task).to receive(:count) {0}
       end
 
       it 'does not identify a duplicate' do 
@@ -51,7 +51,7 @@ describe TaskIndexer do
 
     context 'two or more tasks' do 
       before(:each) do 
-        Task.stub(:count).and_return(2)
+        allow(Task).to receive(:count) {2}
       end
 
       it 'identifies a duplicate' do 
