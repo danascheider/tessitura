@@ -5,7 +5,7 @@ describe Canto do
 
   before(:all) do 
     3.times {|n| FactoryGirl.create(:task, index: n + 1)}
-    @task_count = Task.count
+    Task.find(3).update!(complete: true)
   end
 
   describe 'GET' do 
@@ -34,29 +34,15 @@ describe Canto do
   describe 'POST' do 
     describe 'new task route' do 
       context 'valid attributes' do 
-        before(:each) do 
-          make_request('POST', '/tasks', { 'title' => 'Water the garden' }.to_json)
-        end
-
-        it 'creates a new task' do 
-          expect(Task.count - @task_count).to eql 1
-        end
-
         it 'returns status code 201' do 
+          make_request('POST', '/tasks', { 'title' => 'Water the garden' }.to_json)
           expect(last_response.status).to eql 201
         end
       end
 
       context 'invalid attributes' do 
-        before(:each) do 
-          make_request('POST', '/tasks', { }.to_json)
-        end
-
-        it 'doesn\'t create a new task' do 
-          expect(Task.count).to eql @task_count
-        end
-
         it 'returns status code 422' do 
+          make_request('POST', '/tasks', { }.to_json)
           expect(response_status).to eql 422
         end
       end
@@ -65,31 +51,16 @@ describe Canto do
 
   describe 'PUT' do 
     describe 'update task route' do 
-      context 'valid attributes' do 
-        before(:each) do
-          make_request('PUT', '/tasks/1', { 'title' => 'Take the car for service' }.to_json)
-        end
-
-        it 'updates the task' do 
-          expect(Task.find(1).title).to eql 'Take the car for service'
-        end
-
+      context 'with valid attributes' do 
         it 'returns status code 200' do
+          make_request('PUT', '/tasks/1', { 'title' => 'Take the car for service' }.to_json)
           expect(response_status).to eql 200
         end
       end
 
-      context 'invalid attributes' do 
-        before(:each) do 
-          Task.find(1).update!(title: 'Walk the dog')
-          make_request('PUT', '/tasks/1', { 'title' => nil }.to_json)
-        end
-
-        it 'doesn\'t update the task' do 
-          expect(Task.find(1).title).to eql 'Walk the dog'
-        end
-
+      context 'with invalid attributes' do 
         it 'returns status code 422' do 
+          make_request('PUT', '/tasks/1', { 'title' => nil }.to_json)
           expect(response_status).to eql 422
         end
       end
@@ -98,15 +69,8 @@ describe Canto do
 
   describe 'DELETE' do 
     context 'when the task exists' do 
-      before(:each) do 
-        make_request('DELETE', '/tasks/1')
-      end
-
-      it 'deletes the task' do 
-        expect(Task.exists?(id: 1)).to be false
-      end
-
       it 'returns status code 204' do 
+        make_request('DELETE', '/tasks/1')
         expect(response_status).to eql 204
       end
     end
