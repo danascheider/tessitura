@@ -4,11 +4,8 @@ Feature: Update task
   I need to edit my tasks
 
   Background:
-    Given there are the following tasks:
-      |id | title              | complete |
-      | 1 | Take out the trash | false    |
-      | 2 | Walk the dog       | false    |
-      | 3 | Chunky bacon       | true     |
+    Given there are 3 tasks
+    And the 3rd task is complete
 
   Scenario: Successfully change task title
     When the client submits a PUT request to /tasks/1 with:
@@ -24,7 +21,7 @@ Feature: Update task
       { "complete":true }
       """
     Then the task should be marked complete
-    And the task's title should not be changed
+    And the task's index should be changed to 3
     And the response should indicate the task was updated successfully
 
   Scenario: Attempt to update task with invalid attributes

@@ -20,8 +20,7 @@ Then(/^a new task should be created with the following attributes:$/) do |attrib
   attributes.hashes.each do |hash|
     expect(Task.last.to_hash).to include( 
                                           title: hash['title'],
-                                          complete: hash['complete'] == 'true' ? true : false,
-                                          index: hash['index'].to_i 
+                                          complete: hash['complete'] == 'true' ? true : false
                                         )
   end
 end
@@ -71,4 +70,8 @@ end
 
 Then(/^the tasks' indices should not be changed$/) do
   Task.all.each {|task| expect(task.index).to eql @original_indices[task.id] }
+end
+
+Then(/^the task's index should be changed to (\d+)$/) do |number|
+  expect(get_changed.index).to eql number
 end

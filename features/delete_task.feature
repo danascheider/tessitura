@@ -4,10 +4,7 @@ Feature: Delete task
   I need to delete a task.
 
   Background: 
-    Given there are the following tasks:
-      | title                 | complete |
-      | Call mom              | false    |
-      | RSVP to Kim's wedding | false    |
+    Given there are 2 tasks
 
   Scenario: User deletes a task
     When the client submits a DELETE request to /tasks/1

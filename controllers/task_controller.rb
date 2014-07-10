@@ -19,14 +19,6 @@ class Sinatra::Application
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) { find_task(id).to_json }
     end
 
-    def get_tasks
-      begin
-        Task.all.to_json
-      rescue
-        204
-      end
-    end
-
     def update_task(id, body)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @task = find_task(id)
@@ -48,13 +40,14 @@ class Sinatra::Application
     # ==============
     def index_on_completion_status(task, object)
       if (object.has_key? :complete) && (object[:complete] != task.complete)
-        object[:complete] == true ? Task.max_index : 1
+        object[:complete] == true ? Task.count : 1
       end
     end
 
-    def changed_index?(task, object)
-      object[:index] && object[:index] != task.index
-    end
+    # FIX: Should be deleted and tested if app works without this
+    # def changed_index?(task, object)
+    #   object[:index] && object[:index] != task.index
+    # end
     
     protected
       def assign_default_index(object)
