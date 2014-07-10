@@ -1,6 +1,3 @@
-# TRANSFORMS
-# ==========
-
 # REQUEST STEPS
 # =============
 
@@ -8,7 +5,7 @@ When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   make_request(method, path)
 end
 
-When(/^the client submits a (.*) request to \/(.*) with:$/) do |method, path, string|
+When(/^the client submits a (.*) request to \/(\S+) with:$/) do |method, path, string|
   # @task_count variable is used in task_steps.rb and task_list_steps.rb
   @task_count = Task.count
   @task = (id = (/\d+/.match(path)).to_s) > '' ? Task.find(id) : nil
@@ -35,11 +32,11 @@ Then(/^the JSON response should (not )?include (?:only )?the (\d+)(?:[a-z]{2}) t
   end
 end
 
-Then(/^the response should indicate the (.*) was (not )?saved successfully$/) do |resource, negation|
+Then(/^the response should indicate the (?:.*) was (not )?saved successfully$/) do |negation|
   expect(response_status).to eql negation ? 422 : 201
 end
 
-Then(/^the response should indicate the (.*) was (not )?updated successfully$/) do |resource, negation|
+Then(/^the response should indicate the (?:.*) was (not )?updated successfully$/) do |negation|
   expect(response_status).to eql negation ? 422 : 200
 end
 

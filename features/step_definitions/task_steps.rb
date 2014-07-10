@@ -1,12 +1,4 @@
-Given(/^there are the following tasks:$/) do |tasks|
-  @original_indices = {}
-  tasks.hashes.each do |task|
-    task = Task.create(title: task['title'], 
-                       complete: task['complete'], 
-                       index: task['index'])
-    @original_indices[task.id] = task.index
-  end
-end
+Transform(/^\d+$/) {|number| number.to_i }
 
 Given(/^there are (\d+|no) tasks$/) do |number|
   number == 'no' ? Task.count == 0 : number.times { FactoryGirl.create(:task) }

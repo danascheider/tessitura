@@ -16,7 +16,7 @@ class Canto < Sinatra::Application
   end
 
   post '/tasks' do 
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { create_task(request_body) && 201 }
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { create_task(request_body); 201 }
   end
 
   get '/tasks/:id' do |id|
@@ -24,10 +24,10 @@ class Canto < Sinatra::Application
   end
 
   put '/tasks/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { update_task(id, request_body) }
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { update_task(id, request_body); 200 }
   end
 
   delete '/tasks/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id) && 204 }
+    begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id); 204 }
   end
 end
