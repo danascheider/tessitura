@@ -2,8 +2,10 @@ class Task < ActiveRecord::Base
 
   belongs_to :task_list, foreign_key: :task_list_id
   acts_as_list scope: :task_list
+
   scope :complete, -> { where(complete: true) }
   scope :incomplete, -> { where(complete: false) }
+
   validates :title, presence: true, exclusion: { in: %w(nil null)}
   before_save :set_complete
 
@@ -46,12 +48,12 @@ class Task < ActiveRecord::Base
     self.complete.pluck(:position).sort[0] || Task.count
   end
 
-  def self.last_updated 
-    self.order(:updated_at)[-1]
-  end
-
   private
     def set_complete
       true if self.complete ||= false
+    end
+
+    def set_position
+      #
     end
 end
