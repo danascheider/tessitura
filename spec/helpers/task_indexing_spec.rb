@@ -83,7 +83,6 @@ describe TaskIndexer do
       context 'with the index explicitly set' do 
         before(:each) do 
           FactoryGirl.create(:task, title: "My New Task", index: 2)
-          TaskIndexer.refresh_index_array
           TaskIndexer.update_indices
         end
 
@@ -91,33 +90,17 @@ describe TaskIndexer do
           expect(Task.last.index).to eql 2
         end
 
-        it 'moves the task previously at the given index' do 
+        it 'updates the indices accordingly' do 
           expect(Task.pluck(:index).sort).to eql [1, 2, 3, 4, 5, 6, 7]
-        end
-
-        it 'doesn\'t move the first task' do 
-          expect(Task.first.index).to eql 1
         end
       end
     end
 
     context 'when a task is updated' do 
-      context 'with no index specified' do 
-        it 'doesn\'t change the task\'s index' do 
-          Task.find(4).update!(title: 'Hello world')
-          expect(Task.find(4).index).to eql 4
-        end
-      end
-
       context 'with an index specified' do 
         before(:each) do 
           Task.find(2).update!(index: 4)
-          TaskIndexer.refresh_index_array
           TaskIndexer.update_indices
-        end
-
-        it 'changes the task\'s index' do 
-          expect(Task.find(2).index).to eql 4
         end
 
         it 'changes the other tasks\' indices' do 
@@ -130,12 +113,10 @@ describe TaskIndexer do
     context 'when an existing task is deleted' do 
       before(:each) do 
         Task.find(4).destroy
-        TaskIndexer.refresh_index_array
         TaskIndexer.update_indices
       end
       
       it 'decreases the index of the other tasks' do 
-        @indices = Task.pluck(:index).sort
         expect(Task.pluck(:index).sort).to eql [1, 2, 3, 4, 5]
       end
     end
