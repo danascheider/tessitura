@@ -2,7 +2,6 @@ class Task < ActiveRecord::Base
   scope :complete, -> { where(complete: true) }
   scope :incomplete, -> { where(complete: false) }
   validates :title, presence: true, exclusion: { in: %w(nil null)}
-  validates :index, exclusion: { in: [0] }
   before_save :set_complete
   before_save :set_index, on: :create
 
@@ -24,16 +23,8 @@ class Task < ActiveRecord::Base
     self.order(:updated_at)[-1]
   end
 
-  def self.max_index
-    self.pluck(:index).sort[-1]
-  end
-
   private
     def set_complete
       true if self.complete ||= false
-    end
-
-    def set_index
-      self.index ||= 1
     end
 end
