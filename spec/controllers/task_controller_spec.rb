@@ -6,7 +6,7 @@ describe Canto::TaskController do
 
   describe 'create_task method' do 
     before(:each) do 
-      5.times {|n| FactoryGirl.create(:task, index: n + 1)}
+      5.times {|n| FactoryGirl.create(:task)}
     end
     
     context 'normal creation' do 
@@ -26,14 +26,14 @@ describe Canto::TaskController do
 
       it 'creates the task as the first complete task' do 
         create_task(title: "New Task", complete: true)
-        expect(Task.last.index).to eql 4
+        expect(Task.last.position).to eql 4
       end
     end
   end
 
   describe 'update_task method' do 
     before(:each) do 
-      5.times {|n| FactoryGirl.create(:task, index: n + 1)}
+      5.times {|n| FactoryGirl.create(:task)}
     end
 
     context 'general update' do 
@@ -53,12 +53,12 @@ describe Canto::TaskController do
 
       it 'moves a completed task to the end' do 
         update_task(2, complete: true)
-        expect(Task.find(2).index).to eql Task.max_index
+        expect(Task.find(2).position).to eql Task.count
       end
 
       it 'moves a task to the top when changed to incomplete' do 
         update_task(4, complete: false)
-        expect(Task.find(4).index).to eql 1
+        expect(Task.find(4).position).to eql 1
       end
     end
 
@@ -75,7 +75,7 @@ describe Canto::TaskController do
 
   describe 'get_task method' do 
     before(:each) do 
-      5.times {|n| FactoryGirl.create(:task, index: n+1)}
+      5.times {|n| FactoryGirl.create(:task)}
     end
     
     it 'returns the task as a JSON object' do 
