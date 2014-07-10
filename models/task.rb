@@ -1,4 +1,7 @@
 class Task < ActiveRecord::Base
+
+  belongs_to :task_list, foreign_key: :task_list_id
+  acts_as_list scope: :task_list
   scope :complete, -> { where(complete: true) }
   scope :incomplete, -> { where(complete: false) }
   validates :title, presence: true, exclusion: { in: %w(nil null)}

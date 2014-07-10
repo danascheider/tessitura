@@ -11,9 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710192647) do
+ActiveRecord::Schema.define(version: 20140710195212) do
 
-  create_table "task_list", force: true do |t|
+  create_table "task_lists", force: true do |t|
   end
 
   create_table "tasks", force: true do |t|
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20140710192647) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
+    t.integer  "task_list_id"
   end
 
   add_index "tasks", ["position"], name: "index_tasks_on_position", unique: true
