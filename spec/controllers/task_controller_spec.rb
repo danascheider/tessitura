@@ -65,7 +65,6 @@ describe Canto::TaskController do
     describe 'delete_task method' do 
       before(:each) do 
         delete_task(4)
-        TaskIndexer.refresh_index_array
       end
 
       it 'deletes the task' do 
