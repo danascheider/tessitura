@@ -37,33 +37,6 @@ Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordin
   expect(Task.exists?(id: id)).to be false
 end
 
-Then(/^a task called "(.*?)" should be created with index (\d+)$/) do |title, index|
-  expect(Task.exists?(title: title, index: index))
-end
-
-Then(/^all the other tasks' indices should be increased by (\d+)$/) do |increase|
-  Task.where.not(title: "Call mom").each do |task|
-    expect(task.index - @original_indices[task.id]).to eql increase
-  end
-end
-
-Then(/^the (\d+)(?:[a-z]{2}) and (\d+)(?:[a-z]{2}) tasks' indices should be (in|de)creased by (\d+)$/) do |id1, id2, change, amt|
-  amt = change == 'de' ? -(amt.to_i) : amt.to_i
-  Task.find([id1, id2]).each {|task| expect(task.index - @original_indices[task.id]).to eql amt }
-end
-
-Then(/^the (\d+)(?:[a-z]{2}) and (\d+)(?:[a-z]{2}) tasks' indices should not be changed$/) do |id1, id2|
-  Task.find([id1, id2]).each {|task| expect(task.index).to eql @original_indices[task.id]}
-end
-
-Then(/^the other tasks should be moved up on the list by (\d+)$/) do |increment|
-  Task.where.not(id: @task.id).each {|task| expect(@original_indices[task.id] - task.index).to eql increment}
-end
-
-Then(/^the tasks' indices should not be changed$/) do
-  Task.all.each {|task| expect(task.index).to eql @original_indices[task.id] }
-end
-
-Then(/^the task's index should be changed to (\d+)$/) do |number|
-  expect(get_changed.index).to eql number
+Then(/^the task's position should be changed to (\d+)$/) do |number|
+  expect(get_changed.position).to eql number
 end

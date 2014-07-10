@@ -4,7 +4,7 @@ describe Canto do
   include Rack::Test::Methods 
 
   before(:all) do 
-    3.times {|n| FactoryGirl.create(:task, index: n + 1)}
+    3.times { FactoryGirl.create(:task)}
     Task.find(3).update!(complete: true)
   end
 

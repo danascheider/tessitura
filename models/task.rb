@@ -11,10 +11,19 @@ class Task < ActiveRecord::Base
     if opts[:complete] == true
       if Task.complete
         Task.complete.each {|task| task.increment_position }
-        opts[:position] = Task.count - Task.complete
+        opts[:position] = (Task.count + 1) - Task.complete.count
       else
         opts[:position] = Task.count
       end
+    end
+    super
+  end
+
+  def update!(opts)
+    if opts[:complete] == true && self.complete == false
+      opts[:position] = Task.count
+    elsif opts[:complete] == false && self.complete == true
+      opts[:position] = 1
     end
     super
   end

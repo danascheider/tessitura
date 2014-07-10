@@ -26,8 +26,6 @@ describe Canto::TaskController do
 
       it 'creates the task as the first complete task' do 
         create_task(title: "New Task", complete: true)
-        puts "TASKS"
-        Task.all.each {|task| puts "#{task.to_hash}\n"}
         expect(Task.last.position).to eql 4
       end
     end

@@ -21,7 +21,7 @@ Feature: Update task
       { "complete":true }
       """
     Then the task should be marked complete
-    And the task's index should be changed to 3
+    And the task's position should be changed to 3
     And the response should indicate the task was updated successfully
 
   Scenario: Attempt to update task with invalid attributes
