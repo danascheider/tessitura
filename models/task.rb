@@ -52,8 +52,4 @@ class Task < ActiveRecord::Base
     def set_complete
       true if self.complete ||= false
     end
-
-    def set_position
-      #
-    end
 end
