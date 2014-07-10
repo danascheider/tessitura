@@ -5,17 +5,16 @@ describe TaskIndexer do
   describe 'dup and gap methods' do 
     describe 'dup method' do 
       before(:each) do 
-        TaskIndexer.refresh_index_array
         Task.stub(:count).and_return(5)
       end
 
       it 'returns an integer if there is a duplicate index' do
-        @@indices = [1, 2, 3, 3, 4]
+        TaskIndexer.refresh_index_array [1, 2, 3, 3, 4]
         expect(TaskIndexer.dup).to be_an Integer
       end
 
       it 'returns nil if there is no duplicate index' do 
-        @@indices = [1, 2, 3]
+        TaskIndexer.refresh_index_array [1, 2, 3]
         expect(TaskIndexer.dup).to be nil
       end
     end
@@ -74,17 +73,9 @@ describe TaskIndexer do
 
     context 'when a new task is created' do 
       context 'with no index explicitly set' do 
-        before(:each) do 
-          FactoryGirl.create(:task)
-          TaskIndexer.refresh_index_array
-          TaskIndexer.update_indices
-        end
-
-        it 'sets the new task\'s index to 1' do 
-          expect(Task.last.index).to eql 1
-        end
-
         it 'increases the other tasks\' indices' do 
+          FactoryGirl.create(:task)
+          TaskIndexer.update_indices
           expect(Task.pluck(:index).sort).to eql [1, 2, 3, 4, 5, 6, 7]
         end
       end
