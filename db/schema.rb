@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710190213) do
+ActiveRecord::Schema.define(version: 20140710190414) do
 
   create_table "tasks", force: true do |t|
     t.string   "title"
@@ -20,5 +20,7 @@ ActiveRecord::Schema.define(version: 20140710190213) do
     t.datetime "updated_at"
     t.integer  "position"
   end
+
+  add_index "tasks", ["position"], name: "index_tasks_on_position", unique: true
 
 end
