@@ -1,15 +1,10 @@
 require 'spec_helper'
 
-# Some edge cases still need to be accounted for in indices:
-# => If a task is created with :complete => true, it should be added
-#    as the FIRST complete task
-# => Need to validate uniqueness of indices as well as sequentiality
-
 describe Canto::TaskController do 
   include Canto::TaskController
   include Canto::ErrorHandling
 
-  describe 'CREATE method' do 
+  describe 'create_task method' do 
     before(:each) do 
       5.times {|n| FactoryGirl.create(:task, index: n + 1)}
     end
@@ -20,12 +15,7 @@ describe Canto::TaskController do
       end
 
       it 'creates a new task' do 
-        create_task(title: "New Task")
         expect(Task.last.title).to eql "New Task"
-      end
-
-      it 'updates the indices' do 
-        expect(Task.pluck(:index).sort).to eql [1, 2, 3, 4, 5, 6]
       end
     end
 
@@ -41,7 +31,7 @@ describe Canto::TaskController do
     end
   end
 
-  describe 'UPDATE method' do 
+  describe 'update_task method' do 
     before(:each) do 
       5.times {|n| FactoryGirl.create(:task, index: n + 1)}
     end
@@ -53,16 +43,6 @@ describe Canto::TaskController do
 
       it 'changes the updated attributes' do 
         expect(Task.find(3).title).to eql 'Task the Third'
-      end
-    end
-
-    context 'changed index' do 
-      it 'updates the other indices' do 
-        update_task(3, index: 5)
-        puts "TASKS:"
-        Task.all.each {|task| puts "#{task.to_hash}\n"}
-        other_indices = Task.find([4, 5]).map {|task| task.index }
-        expect(other_indices).to eql [3, 4]
       end
     end
 
@@ -82,7 +62,7 @@ describe Canto::TaskController do
       end
     end
 
-    describe 'DELETE method' do 
+    describe 'delete_task method' do 
       before(:each) do 
         delete_task(4)
         TaskIndexer.refresh_index_array
@@ -93,20 +73,12 @@ describe Canto::TaskController do
       end
 
       it 'deletes the task' do 
-        puts "TASKS:"
-        Task.all.each {|task| puts "#{task.to_hash}\n"}
         expect(Task.pluck(:id)).not_to include 4
-      end
-
-      it 'updates the indices' do 
-        puts "TASKS:"
-        Task.all.each {|task| puts "#{task.to_hash}\n"}
-        expect(Task.find(5).index).to eql 4
       end
     end
   end
 
-  describe 'GET method' do 
+  describe 'get_task method' do 
     before(:each) do 
       5.times {|n| FactoryGirl.create(:task, index: n+1)}
     end
