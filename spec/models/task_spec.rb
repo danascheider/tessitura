@@ -3,9 +3,30 @@ require 'spec_helper'
 describe Task do 
   it { should respond_to(:title) }
   it { should respond_to(:complete) }
-  it { should respond_to(:index) }
+  it { should respond_to(:position) }
   it { should respond_to(:incomplete?) }
   it { should respond_to(:to_hash) } # to integrate with Sinatra-Backbone
+
+  describe 'acts_as_list methods' do 
+    it { should respond_to(:insert_at) }
+    it { should respond_to(:move_lower) }
+    it { should respond_to(:move_higher) }
+    it { should respond_to(:move_to_bottom) }
+    it { should respond_to(:move_to_top) }
+    it { should respond_to(:remove_from_list) }
+    it { should respond_to(:increment_position) }
+    it { should respond_to(:decrement_position) }
+    it { should respond_to(:set_list_position) }
+    it { should respond_to(:first?) }
+    it { should respond_to(:last?) }
+    it { should respond_to(:in_list?) }
+    it { should respond_to(:not_in_list?) }
+    it { should respond_to(:default_position?) }
+    it { should respond_to(:higher_item) }
+    it { should respond_to(:lower_item) }
+    it { should respond_to(:higher_items) }
+    it { should respond_to(:lower_items) }
+  end
 
   describe 'validations' do 
     context 'pertaining to title' do 
@@ -24,8 +45,8 @@ describe Task do
       @task = Task.create!(title: 'Walk the dog')
     end
 
-    it 'instantiates at index 1' do 
-      expect(@task.index).to eql 1
+    it 'instantiates at position 1' do 
+      expect(@task.position).to eql 1
     end
 
     it 'sets :complete to false, not nil' do !

@@ -7,6 +7,18 @@ class Task < ActiveRecord::Base
   validates :title, presence: true, exclusion: { in: %w(nil null)}
   before_save :set_complete
 
+  def self.create!(opts)
+    if opts[:complete] == true
+      if Task.complete
+        Task.complete.each {|task| task.increment_position }
+        opts[:position] = Task.count - Task.complete
+      else
+        opts[:position] = Task.count
+      end
+    end
+    super
+  end
+
   def incomplete?
     !self.complete
   end
@@ -19,6 +31,10 @@ class Task < ActiveRecord::Base
       created_at: self.created_at,
       updated_at: self.updated_at
     }
+  end
+
+  def self.first_complete
+    self.complete.pluck(:position).sort[0] || Task.count
   end
 
   def self.last_updated 
