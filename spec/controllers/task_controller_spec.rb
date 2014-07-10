@@ -68,10 +68,6 @@ describe Canto::TaskController do
         TaskIndexer.refresh_index_array
       end
 
-      after(:each) do 
-        Task.all.each {|task| task.destroy }
-      end
-
       it 'deletes the task' do 
         expect(Task.pluck(:id)).not_to include 4
       end
