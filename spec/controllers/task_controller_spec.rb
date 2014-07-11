@@ -21,11 +21,11 @@ describe Canto::TaskController do
 
     context 'task created with completion status true' do 
       before(:each) do 
-        Task.find([4,5]).each {|task| task.update!(complete: true)}
+        Task.find([4,5]).each {|task| task.update!(status: 'complete')}
       end
 
       it 'creates the task as the first complete task' do 
-        create_task(title: "New Task", complete: true)
+        create_task(title: "New Task", status: 'complete')
         expect(Task.last.position).to eql 4
       end
     end
