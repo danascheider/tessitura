@@ -10,8 +10,12 @@ class Task < ActiveRecord::Base
   scope :incomplete, -> { where.not(status: 'complete') }
 
   validates :title, presence: true, exclusion: { in: %w(nil null)}
-  validates :status, inclusion: { in: STATUS_OPTIONS }
-  validates :priority, inclusion: { in: PRIORITY_OPTIONS }
+  validates :status, 
+            inclusion: { in: STATUS_OPTIONS,
+                         message: "Invalid status: Status must be one of: #{STATUS_OPTIONS}" }
+  validates :priority, 
+            inclusion: { in: PRIORITY_OPTIONS,
+                        message: "Invalid priority level: Priority must be one of #{PRIORITY_OPTIONS}" }
 
   def self.create!(opts)
     position ||= opts[:status] == 'complete' ? self.get_position_on_create_complete : 1
