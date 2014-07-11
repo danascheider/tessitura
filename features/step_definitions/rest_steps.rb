@@ -20,8 +20,8 @@ Then(/^the JSON response should include all the tasks$/) do
 end
 
 Then(/^the JSON response should include only the (in)?complete task(?:s)$/) do |scope|
-  value = scope ? false : true
-  response_body.should eql Task.where(complete: value).to_json
+  tasks = scope ? Task.incomplete : Task.complete
+  response_body.should eql tasks.to_json
 end
 
 Then(/^the JSON response should (not )?include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |negation, id|
