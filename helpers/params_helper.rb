@@ -3,7 +3,6 @@ class Sinatra::Application
     ALLOWED_PARAMS = [ 'complete', 'status', 'priority', 'deadline', 'title', 'created', 'updated']
 
     def validate_params(params)
-      @params = params
       params.delete_if {|key, value| !ALLOWED_PARAMS.include? key }
       params
     end
