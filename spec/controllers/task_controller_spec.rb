@@ -48,16 +48,16 @@ describe Canto::TaskController do
 
     context 'toggle complete' do 
       before(:each) do 
-        Task.find([4,5]).each {|task| task.update!(complete: true)}
+        Task.find([4,5]).each {|task| task.update!(status: 'complete')}
       end
 
       it 'moves a completed task to the end' do 
-        update_task(2, complete: true)
+        update_task(2, status: 'complete')
         expect(Task.find(2).position).to eql Task.count
       end
 
       it 'moves a task to the top when changed to incomplete' do 
-        update_task(4, complete: false)
+        update_task(4, status: 'in_progress')
         expect(Task.find(4).position).to eql 1
       end
     end

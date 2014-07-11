@@ -33,7 +33,7 @@ class Task < ActiveRecord::Base
     { id: self.id,
       position: self.position,
       title: self.title, 
-      complete: self.complete, 
+      status: self.status, 
       created_at: self.created_at,
       updated_at: self.updated_at
     }

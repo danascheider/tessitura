@@ -5,7 +5,7 @@ describe Canto do
 
   before(:all) do 
     3.times { FactoryGirl.create(:task)}
-    Task.find(3).update!(complete: true)
+    Task.find(3).update!(status: 'complete')
   end
 
   describe 'GET' do 

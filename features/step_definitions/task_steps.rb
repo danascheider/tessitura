@@ -5,14 +5,14 @@ Given(/^there are (\d+|no) tasks$/) do |number|
 end
 
 Given(/^the (\d+)(?:[a-z]{2}) task is complete$/) do |id|
-  Task.find(id).update!(complete: true)
+  Task.find(id).update!(status: 'complete')
 end
 
 Then(/^a new task should be created with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     expect(Task.last.to_hash).to include( 
                                           title: hash['title'],
-                                          complete: hash['complete'] == 'true' ? true : false
+                                          status: hash['status']
                                         )
   end
 end

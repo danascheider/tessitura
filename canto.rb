@@ -13,7 +13,7 @@ class Canto < Sinatra::Application
 
   get '/tasks' do 
     content_type :json
-    params[:complete] ? Task.where(:complete => to_bool(params[:complete])).to_json : Task.all.to_json
+    params[:complete] ? interpret_complete_param(params[:complete]) : Task.all.to_json
   end
 
   post '/tasks' do 
