@@ -42,7 +42,9 @@ describe Task do
 
   describe 'default behavior' do 
     before(:each) do 
-      @task = Task.create!(title: 'Walk the dog')
+      2.times { FactoryGirl.create(:task) }
+      Task.create!(title: "New task", task_list_id: 1)
+      @task = Task.last
     end
 
     it 'instantiates at position 1' do 

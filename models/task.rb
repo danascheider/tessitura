@@ -10,15 +10,8 @@ class Task < ActiveRecord::Base
   before_save :set_complete
 
   def self.create!(opts)
-    if opts[:complete] == true
-      if Task.complete
-        Task.complete.each {|task| task.increment_position }
-        opts[:position] = (Task.count + 1) - Task.complete.count
-      else
-        opts[:position] = Task.count
-      end
-    end
-    super
+    position ||= opts[:complete] == true ? self.get_position_on_create_complete : 1
+    super.insert_at(position)
   end
 
   def update!(opts)
@@ -45,6 +38,10 @@ class Task < ActiveRecord::Base
   end
 
   private
+    def self.get_position_on_create_complete
+      Task.complete.count ? Task.count - Task.complete.count + 1 : Task.count + 1
+    end
+
     def get_position_on_update(opts)
       newly_complete?(opts) ? Task.count : (newly_incomplete?(opts) ? 1 : self.position)
     end

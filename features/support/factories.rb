@@ -7,6 +7,5 @@ FactoryGirl.define do
   factory :task do 
     association :task_list
     sequence(:title) {|n| "My Task #{n}"}
-    sequence(:position) {|n| n }
   end
 end
