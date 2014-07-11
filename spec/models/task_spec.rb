@@ -55,6 +55,14 @@ describe Task do
         expect(@task).not_to be_valid
       end
     end
+
+    context 'pertaining to priority' do 
+      it 'doesn\'t permit invalid priorities' do 
+        @task.title = 'Foo'
+        @task.priority = 'Bar'
+        expect(@task).not_to be_valid
+      end
+    end
   end
 
   describe 'default behavior' do 
@@ -68,8 +76,12 @@ describe Task do
       expect(@task.position).to eql 1
     end
 
-    it 'status to \'new\'' do
+    it 'sets status to \'new\'' do
       expect(@task.status).to eql 'new'
+    end
+
+    it 'sets priority to \'normal\'' do 
+      expect(@task.priority).to eql 'normal'
     end
   end
 end
