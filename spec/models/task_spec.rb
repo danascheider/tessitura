@@ -31,12 +31,20 @@ describe Task do
   end
 
   describe 'validations' do 
-    context 'pertaining to title' do 
-      before(:each) do 
-        @task = Task.new
-      end
+    before(:each) do 
+      @task = Task.new
+    end
 
+    context 'pertaining to title' do 
       it 'is invalid without a title' do 
+        expect(@task).not_to be_valid
+      end
+    end
+
+    context 'pertaining to status' do 
+      it 'doesn\'t permit invalid status' do 
+        @task.title = "Foo"
+        @task.status = "Bar"
         expect(@task).not_to be_valid
       end
     end

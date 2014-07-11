@@ -3,14 +3,17 @@ class Task < ActiveRecord::Base
   belongs_to :task_list, foreign_key: :task_list_id
   acts_as_list scope: :task_list
 
-  scope :complete, -> { where(complete: true) }
-  scope :incomplete, -> { where(complete: false) }
+  STATUS_OPTIONS = ['new', 'in_progress', 'blocking', 'complete']
+
+  scope :complete, -> { where(status: 'complete') }
+  scope :incomplete, -> { where.not(status: 'complete') }
 
   validates :title, presence: true, exclusion: { in: %w(nil null)}
+  validates :status, inclusion: { in: STATUS_OPTIONS }
   before_save :set_complete
 
   def self.create!(opts)
-    position ||= opts[:complete] == true ? self.get_position_on_create_complete : 1
+    position ||= opts[:status] == 'complete' ? self.get_position_on_create_complete : 1
     super.insert_at(position)
   end
 
@@ -19,8 +22,12 @@ class Task < ActiveRecord::Base
     super
   end
 
+  def complete?
+    self.status == complete 
+  end
+
   def incomplete?
-    !self.complete
+    self.status != complete
   end
 
   def to_hash
@@ -47,11 +54,11 @@ class Task < ActiveRecord::Base
     end
 
     def newly_complete?(opts)
-      opts[:complete] == true && self.complete == false
+      opts[:status] == 'complete' && self.status != 'complete'
     end
 
     def newly_incomplete?(opts)
-      opts[:complete] == false && self.complete == true
+      self.status == 'complete' && opts[:status] != 'complete'
     end
 
     def set_complete
