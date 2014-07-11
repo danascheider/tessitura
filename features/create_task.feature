@@ -12,8 +12,8 @@ Feature: Create task
       { "title":"Water the plants" }
       """
     Then a new task should be created with the following attributes:
-      | title            | status | deadline |
-      | Water the plants | new    | nil      |
+      | title            | status | deadline | priority | description |
+      | Water the plants | new    | nil      | normal   | nil         |
     And the response should indicate the task was saved successfully
 
   Scenario: Attempt to create an invalid task
