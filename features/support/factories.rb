@@ -7,5 +7,9 @@ FactoryGirl.define do
   factory :task do 
     association :task_list
     sequence(:title) {|n| "My Task #{n}"}
+
+    factory :task_with_deadline do 
+      sequence(:deadline) { Time.now }
+    end
   end
 end
