@@ -8,9 +8,23 @@ Current development is taking place on the pure-sinatra and not_passing branches
 
 Users create tasks and are able to view them as a list or individually. Currently there is no user model, so the app is designed for a single user. Tasks have the following attributes (i.e., columns in the Task table):
 - Title
-- Complete (true/false)
-- Created At
+- Status:
+  - 'new'
+  - 'in_progress'
+  - 'blocking'
+  - 'complete'
+- Priority:
+  - 'urgent'
+  - 'high'
+  - 'normal'
+  - 'low'
+  - 'not_important'
+- Description
+- Deadline
+- Created At 
 - Updated At
+
+Tasks are ordered by the position column, which is configured with the acts_like_list gem to re-order the list when a given task changes position.
 
 === Development Approach
 
