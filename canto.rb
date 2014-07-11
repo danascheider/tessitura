@@ -12,8 +12,10 @@ class Canto < Sinatra::Application
   set :data, ''
 
   get '/tasks' do 
-    content_type :json
-    params[:complete] ? interpret_complete_param(params[:complete]) : Task.all.to_json
+    begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
+      content_type :json
+      params[:complete] ? interpret_complete_param(params[:complete]) : Task.all.to_json
+    end
   end
 
   post '/tasks' do 
