@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710202555) do
+ActiveRecord::Schema.define(version: 20140711004959) do
 
   create_table "task_lists", force: true do |t|
   end
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20140710202555) do
     t.datetime "updated_at"
     t.integer  "task_list_id"
     t.integer  "position",     default: 1
+    t.datetime "deadline"
   end
 
 end
