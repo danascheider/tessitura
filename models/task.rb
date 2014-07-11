@@ -6,6 +6,7 @@ class Task < ActiveRecord::Base
   STATUS_OPTIONS = ['new', 'in_progress', 'blocking', 'complete']
   PRIORITY_OPTIONS = ['urgent', 'high', 'normal', 'low', 'not_important']
 
+  # Validations and Callbacks
   scope :complete, -> { where(status: 'complete') }
   scope :incomplete, -> { where.not(status: 'complete') }
 
@@ -17,10 +18,19 @@ class Task < ActiveRecord::Base
             inclusion: { in: PRIORITY_OPTIONS,
                         message: "Invalid priority level: Priority must be one of #{PRIORITY_OPTIONS}" }
 
+  # Public Class Methods
+  # ====================
   def self.create!(opts)
     position ||= opts[:status] == 'complete' ? self.get_position_on_create_complete : 1
     super.insert_at(position)
   end
+
+  def self.first_complete
+    self.complete.pluck(:position).sort[0] || Task.count
+  end
+
+  # Public Instance Methods
+  # =======================
 
   def update!(opts)
     opts[:position] ||= get_position_on_update(opts)
@@ -45,14 +55,17 @@ class Task < ActiveRecord::Base
     }
   end
 
-  def self.first_complete
-    self.complete.pluck(:position).sort[0] || Task.count
-  end
-
   private
+
+    # Private Class Methods
+    # =====================
+
     def self.get_position_on_create_complete
       Task.complete.count ? Task.count - Task.complete.count + 1 : Task.count + 1
     end
+
+    # Private Instance Methods
+    # ========================
 
     def get_position_on_update(opts)
       newly_complete?(opts) ? Task.count : (newly_incomplete?(opts) ? 1 : self.position)
