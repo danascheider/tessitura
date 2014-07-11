@@ -4,12 +4,14 @@ class Task < ActiveRecord::Base
   acts_as_list scope: :task_list
 
   STATUS_OPTIONS = ['new', 'in_progress', 'blocking', 'complete']
+  PRIORITY_OPTIONS = ['urgent', 'high', 'normal', 'low', 'not_important']
 
   scope :complete, -> { where(status: 'complete') }
   scope :incomplete, -> { where.not(status: 'complete') }
 
   validates :title, presence: true, exclusion: { in: %w(nil null)}
   validates :status, inclusion: { in: STATUS_OPTIONS }
+  validates :priority, inclusion: { in: PRIORITY_OPTIONS }
 
   def self.create!(opts)
     position ||= opts[:status] == 'complete' ? self.get_position_on_create_complete : 1
