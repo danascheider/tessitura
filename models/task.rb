@@ -10,7 +10,6 @@ class Task < ActiveRecord::Base
 
   validates :title, presence: true, exclusion: { in: %w(nil null)}
   validates :status, inclusion: { in: STATUS_OPTIONS }
-  before_save :set_complete
 
   def self.create!(opts)
     position ||= opts[:status] == 'complete' ? self.get_position_on_create_complete : 1
@@ -59,9 +58,5 @@ class Task < ActiveRecord::Base
 
     def newly_incomplete?(opts)
       self.status == 'complete' && opts[:status] != 'complete'
-    end
-
-    def set_complete
-      true if self.complete ||= false
     end
 end

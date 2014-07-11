@@ -61,13 +61,8 @@ describe Task do
       expect(@task.position).to eql 1
     end
 
-    it 'sets :complete to false, not nil' do !
-      expect(@task.complete).to eql false
-    end
-
-    it 'sets :complete to false only if actually false' do 
-      @task.update(complete: true, title: 'Go to the store')
-      expect(@task.complete).to eql true
+    it 'status to \'new\'' do
+      expect(@task.status).to eql 'new'
     end
   end
 end
