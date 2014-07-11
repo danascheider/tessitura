@@ -1,9 +1,5 @@
 class Sinatra::Application
   module GeneralHelperMethods
-    def find_by(attribute, value)
-      Task.find_by(attribute, value)
-    end
-
     def to_bool(string)
       string == 'false' || string == 'nil' ? false : true
     end
