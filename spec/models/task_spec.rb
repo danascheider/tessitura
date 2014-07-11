@@ -1,13 +1,20 @@
 require 'spec_helper'
 
 describe Task do 
-  it { should respond_to(:title) }
-  it { should respond_to(:status) }
-  it { should respond_to(:position) }
-  it { should respond_to(:deadline) }
-  it { should respond_to(:complete?) }
-  it { should respond_to(:incomplete?) }
-  it { should respond_to(:to_hash) } # to integrate with Sinatra-Backbone
+  describe 'attributes' do 
+    it { should respond_to(:title) }
+    it { should respond_to(:status) }
+    it { should respond_to(:position) }
+    it { should respond_to(:deadline) }
+    it { should respond_to(:description) }
+    it { should respond_to(:priority) }
+  end
+
+  describe 'general methods' do 
+    it { should respond_to(:complete?) }
+    it { should respond_to(:incomplete?) }
+    it { should respond_to(:to_hash) } # to integrate with Sinatra-Backbone
+  end
 
   describe 'acts_as_list methods' do 
     it { should respond_to(:insert_at) }
