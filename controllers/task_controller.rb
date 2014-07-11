@@ -12,12 +12,11 @@ class Sinatra::Application
     end
 
     def get_task(id)
-      find_task(id).to_json
+      Task.find(id).to_json
     end
 
     def update_task(id, body)
-      @task = find_task(id)
-      @task.update!(body)
+      Task.find(id).update!(body)
     end
 
     def delete_task(id)
