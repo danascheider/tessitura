@@ -30,7 +30,7 @@ Then(/^the task's title should not be changed$/) do
 end
 
 Then(/^the task should be marked complete$/) do 
-  expect(get_changed.status).to be 'complete'
+  expect(get_changed.status).to eql 'complete'
 end
 
 Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordinal|

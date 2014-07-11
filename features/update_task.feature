@@ -18,7 +18,7 @@ Feature: Update task
   Scenario: Successfully change status
     When the client submits a PUT request to /tasks/1 with:
       """json
-      { "complete":true }
+      { "status":"complete" }
       """
     Then the task should be marked complete
     And the task's position should be changed to 3
