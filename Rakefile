@@ -6,5 +6,12 @@ require './canto'
 
 Cucumber::Rake::Task.new
 RSpec::Core::RakeTask.new
+Rake::Task['db:test:prepare'].invoke
 
-task :default => [:cucumber, :spec]
+task :default => [:all]
+
+desc "Run all tests."
+task :all => [
+  :cucumber,
+  :spec,
+]
