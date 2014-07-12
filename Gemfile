@@ -9,6 +9,7 @@ gem 'thin', '~> 1.6.2'
 
 # Use ActiveRecord and SQLite 3 to manage DB records
 gem 'sinatra-activerecord', '~> 2.0.2'
+gem 'activerecord',         '>= 4.1.3'
 gem 'acts_as_list',         '~> 0.4.0'
 gem 'sqlite3',              '~> 1.3.9', :platform => :ruby
 gem 'rake',                 '~> 10.3.2'
