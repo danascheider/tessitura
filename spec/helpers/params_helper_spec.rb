@@ -21,25 +21,4 @@ describe Canto::ParamsHelper do
       end
     end
   end
-
-  describe 'multiple_values? method' do 
-    context 'when a string contains multiple values' do 
-      it 'returns true' do 
-        expect(multiple_values? 'in_progress,blocking').to be true
-      end
-    end
-
-    context 'when a string contains a single value' do 
-      it 'returns false' do 
-        expect(multiple_values? 'high').to be false
-      end
-    end
-  end
-
-  describe 'parse_multiple_values method' do 
-    it 'returns an array of symbols' do 
-      output = parse_multiple_values('urgent,high,normal')
-      expect(output).to eql([:urgent, :high, :normal])
-    end
-  end
 end
