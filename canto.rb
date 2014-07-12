@@ -12,7 +12,7 @@ class Canto < Sinatra::Application
   set :data, ''
 
   before do 
-    validate_params(params) if params
+    validate_params(params)
   end
 
   get '/tasks' do 
