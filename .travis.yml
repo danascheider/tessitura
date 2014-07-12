@@ -3,7 +3,7 @@ rvm:
   - "1.9.3"
   - "2.0.0"
   - "2.1.1"
-env: DB=sqlite3
+env: DB=sqlite3 CODECLIMATE_REPO_TOKEN=f3abaae8ea4c47cb6565914e46390e1eea6216cf55d9eb0f9477169d79d5afe4
 install: 'bundle install'
 script: 'rake'
 notifications:
