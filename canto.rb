@@ -11,6 +11,10 @@ class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
   set :data, ''
 
+  before do 
+    validate_params(params) if params
+  end
+
   get '/tasks' do 
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
       content_type :json

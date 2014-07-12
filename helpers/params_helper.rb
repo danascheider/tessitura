@@ -1,10 +1,9 @@
 class Sinatra::Application
   module ParamsHelper
-    ALLOWED_PARAMS = [ 'complete', 'status', 'priority', 'deadline', 'title', 'created', 'updated']
+    ALLOWED_PARAMS = [ 'complete', 'status', 'priority', 'deadline', 'title', 'created', 'updated' ]
 
     def validate_params(params)
       params.delete_if {|key, value| !ALLOWED_PARAMS.include? key }
-      params
     end
 
     def multiple_values?(value)
