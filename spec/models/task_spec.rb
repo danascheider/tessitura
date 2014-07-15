@@ -37,6 +37,38 @@ describe Task do
     it { should respond_to(:lower_items) }
   end
 
+  describe 'public methods' do 
+    before(:each) do 
+      3.times { FactoryGirl.create(:task) }
+      2.times { FactoryGirl.create(:complete_task) }
+    end
+
+    describe 'self.first_complete' do 
+      it 'returns the ID of the first complete task' do 
+        expect(Task.first_complete).to eql 4
+      end
+    end
+
+    describe 'complete?' do 
+      it 'returns true when a task is complete' do 
+        expect(Task.find(5).complete?).to be true
+
+      it 'returns false when a task is incomplete' do 
+        expect(Task.find(1).complete?).not_to be true
+      end
+    end
+
+    describe 'incomplete?' do 
+      it 'returns true when a task is incomplete' do 
+        expect(Task.find(1).incomplete?).to be true
+      end
+
+      it 'returns false when a task is complete' do 
+        expect(Task.find(5).incomplete?).not_to be true
+      end
+    end
+  end
+
   describe 'validations' do 
     before(:each) do 
       @task = Task.new

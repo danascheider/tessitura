@@ -11,5 +11,9 @@ FactoryGirl.define do
     factory :task_with_deadline do 
       sequence(:deadline) { Time.now }
     end
+
+    factory :complete_task do 
+      status 'complete'
+    end
   end
 end
