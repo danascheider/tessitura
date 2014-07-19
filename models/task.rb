@@ -26,7 +26,7 @@ class Task < ActiveRecord::Base
   end
 
   def self.first_complete
-    self.complete.pluck(:position).sort[0] || Task.count
+    self.complete.order(:position).first.id || Task.count
   end
 
   # Public Instance Methods
@@ -38,11 +38,11 @@ class Task < ActiveRecord::Base
   end
 
   def complete?
-    self.status == complete 
+    self.status == 'complete' 
   end
 
   def incomplete?
-    self.status != complete
+    self.status != 'complete'
   end
 
   def to_hash
