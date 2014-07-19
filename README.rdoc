@@ -28,7 +28,7 @@ Tasks are ordered by the position column, which is configured with the acts_like
 
 === Development Approach
 
-This app is being developed using a rigorous test- and behavior-driven approach, meaning test-first, agile work-flows. Problems implementing Travis CI are causing builds to fail, but I do not commit non-passing code to the pure-sinatra branch. The full test suite is run each time not_passing is merged.
+This app is being developed using a rigorous test- and behavior-driven approach, meaning test-first, agile work-flows. I aim for 100% test coverage and Code Climate rating >= 3.5. Non-passing code will not be merged to master. The full test suite is run each time not_passing is merged.
 
 Refactoring both app code and tests is a major part of the workflow on this project. Everything should stay as DRY as possible.
 
