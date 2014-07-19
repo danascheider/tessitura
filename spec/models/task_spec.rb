@@ -52,6 +52,7 @@ describe Task do
     describe 'complete?' do 
       it 'returns true when a task is complete' do 
         expect(Task.find(5).complete?).to be true
+      end
 
       it 'returns false when a task is incomplete' do 
         expect(Task.find(1).complete?).not_to be true
