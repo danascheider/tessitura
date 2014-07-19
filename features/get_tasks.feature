@@ -16,8 +16,6 @@ Feature: Get tasks
       | path                  | contents                  |
       | /tasks                | all the tasks             |
       | /tasks/1              | only the 1st task         |
-      | /tasks?complete=false | only the incomplete tasks |
-      | /tasks?complete=true  | only the complete tasks   |
 
   Scenario: Try to get information about a task that doesn't exist
     When the client submits a GET request to /tasks/10
