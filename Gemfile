@@ -14,6 +14,9 @@ gem 'acts_as_list',         '~> 0.4.0'
 gem 'sqlite3',              '~> 1.3.9', :platform => :ruby
 gem 'rake',                 '~> 10.3.2'
 
+# Use Sinatra::Warden for user authentication
+gem 'sinatra_warden', '~> 0.3.2'
+
 # Use Sinatra-Backbone for the RestAPI module to prepare for integration
 # with Backbone.js front-end
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
