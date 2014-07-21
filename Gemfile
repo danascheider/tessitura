@@ -19,8 +19,13 @@ gem 'rake',                 '~> 10.3.2'
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 
 # User OmniAuth for user logins
-gem 'omniauth', '~> 1.2.2'
-gem 'omniauth-facebook', '~> 1.6.0'
+gem 'omniauth',               '~> 1.2.2'
+gem 'omniauth-facebook',      '~> 1.6.0'
+gem 'omniauth-tumblr',        '~> 1.1.0'
+gem 'omniauth-twitter',       '~> 1.0.1'
+gem 'omniauth-google-oauth2', '~> 0.2.5'
+gem 'omniauth-instagram',     '~> 1.0.1'
+gem 'omniauth-identity',      '~> 1.1.1'
 
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
