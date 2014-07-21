@@ -18,6 +18,10 @@ gem 'rake',                 '~> 10.3.2'
 # with Backbone.js front-end
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 
+# User OmniAuth for user logins
+gem 'omniauth', '~> 1.2.2'
+gem 'omniauth-facebook', '~> 1.6.0'
+
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
   gem "codeclimate-test-reporter", require: nil
