@@ -29,7 +29,7 @@ gem 'omniauth-identity',      '~> 1.1.1'
 
 # Use Cucumber and RSpec with Capybara for testing
 group :test do 
-  gem "codeclimate-test-reporter", require: nil
+  gem 'codeclimate-test-reporter', require: nil
   gem 'json_spec',        '~> 1.1.2'
   gem 'cucumber-sinatra', '~> 0.5.0'
   gem 'cucumber',         '~> 1.3.11'
