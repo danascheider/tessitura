@@ -6,7 +6,8 @@ Feature: Admin users
       { "email":"user1@example.com", "first_name":"Jane", 
       "last_name":"Doe", "country":"USA"}
       """
-    Then the user named 'Jane Doe' should be an admin
+    Then a user named 'Jane Doe' should be created
+    And the user named 'Jane Doe' should be an admin
 
   Scenario: Invalid attempt to make user an admin
     Given there are 2 users

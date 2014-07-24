@@ -6,6 +6,12 @@ end
 # ===========
 
 Then(/^the user named '(\w+) (\w+)' should be an admin$/) do |first, last|
-  @user = User.find_by(first_name: first, last_name: last)
-  @user.should be_admin
+  User.find_by(first_name: first, last_name: last)[0].should be_admin
+end
+
+# USER CREATION
+# =============
+
+Then(/^a user named '(\w+) (\w+)' should be created$/) do |first, last|
+  User.find_by(first_name: first, last_name: last).should_not eql nil
 end
