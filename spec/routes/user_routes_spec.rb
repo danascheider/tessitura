@@ -5,6 +5,10 @@ describe Canto do
 
   describe 'POST' do 
     context 'with valid attributes' do 
+      before(:each) do 
+        make_request('POST', '/users', {'email' => 'user@example.com', 'country' => 'USA' }.to_json)
+      end
+
       it 'returns an API code' do 
         expect(response_body).to have_key("secret_key")
       end
