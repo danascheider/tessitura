@@ -2,6 +2,7 @@ require 'factory_girl'
 
 FactoryGirl.define do 
   factory :task_list do 
+    association :user
   end
 
   factory :task do 
@@ -14,6 +15,16 @@ FactoryGirl.define do
 
     factory :complete_task do 
       status 'complete'
+    end
+  end
+
+  factory :user do 
+    sequence(:email) {|n| "user#{n}@example.com"}
+    sequence(:secret_key) {|n| "12345abcde#{n}"}
+    country 'USA'
+
+    factory :admin do 
+      admin true
     end
   end
 end
