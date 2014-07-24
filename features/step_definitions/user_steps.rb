@@ -6,7 +6,7 @@ end
 # ===========
 
 Then(/^the user named '(\w+) (\w+)' should be an admin$/) do |first, last|
-  User.find_by(first_name: first, last_name: last)[0].should be_admin
+  User.find_by(first_name: first, last_name: last).should be_admin
 end
 
 # USER CREATION
