@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140711022823) do
+ActiveRecord::Schema.define(version: 20140724221950) do
 
   create_table "task_lists", force: true do |t|
   end
@@ -26,6 +26,19 @@ ActiveRecord::Schema.define(version: 20140711022823) do
     t.string   "status",       default: "new"
     t.string   "priority",     default: "normal"
     t.text     "description"
+  end
+
+  create_table "users", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.date     "birthdate"
+    t.string   "fach"
+    t.string   "city"
+    t.string   "country"
+    t.boolean  "admin"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end
