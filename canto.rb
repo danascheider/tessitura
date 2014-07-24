@@ -41,4 +41,15 @@ class Canto < Sinatra::Application
   delete '/tasks/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id); 204 }
   end
+
+  # USER ROUTES
+  # ===========
+
+  post '/users' do 
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+      User.create!(request_body)
+      content_type :json
+      body({ "secret_key" => User.last.secret_key }.to_json); 201
+    end
+  end
 end
