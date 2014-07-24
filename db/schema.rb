@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140724221950) do
+ActiveRecord::Schema.define(version: 20140724222605) do
 
   create_table "task_lists", force: true do |t|
   end
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20140724221950) do
     t.boolean  "admin"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "secret_key"
   end
 
 end
