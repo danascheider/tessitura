@@ -84,9 +84,7 @@ describe User do
       it 'updates properly' do 
         FactoryGirl.create(:user)
         User.last.update!(first_name: 'Fran', last_name: 'Kessler', email: 'fkessler@example.com')
-        expect(User.last.to_hash).to eql { first_name: 'Fran', last_name: 'Kessler',
-                                           email: 'fkessler@example.com', country: 'USA'
-                                         }
+        expect(User.last.to_hash).to eql(first_name: 'Fran', last_name: 'Kessler', email: 'fkessler@example.com', country: 'USA')
       end
     end
   end
