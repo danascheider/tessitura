@@ -3,18 +3,17 @@ require 'spec_helper'
 describe Canto do 
   include Rack::Test::Methods
 
-  describe 'POST' do 
-    before(:each) do 
-      FactoryGirl.create(:user)
-    end
+  before(:all) do 
+    FactoryGirl.create(:admin)
+  end
 
+  describe 'POST' do 
     context 'with valid attributes' do 
-      before(:each) do 
+      before(:each) do
         make_request('POST', '/users', {'email' => 'user@example.com', 'country' => 'USA' }.to_json)
       end
 
       it 'returns an API key' do 
-        puts "RESPONSE BODY: #{response_body}"
         expect(response_body).to include('secret_key')
       end
 
@@ -32,7 +31,7 @@ describe Canto do
 
     context 'making an admin' do 
       context 'with admin key included in the request' do
-        before(:each) do 
+        before(:each) do
           make_request('POST', '/users', { 'secret_key' => User.first.secret_key, 'email' => 'joe@example.com', 'admin' => true }.to_json)
         end 
 
@@ -64,13 +63,14 @@ describe Canto do
   describe 'PUT' do 
     describe 'updating a user profile' do 
       context 'when a user updates their own profile' do 
-        before(:each) do 
-          2.times { FactoryGirl.create(:user) }
+        before(:each) do
+          FactoryGirl.create(:user)
+          @id = User.last.id
         end
 
         context 'with valid attributes' do 
           before(:each) do 
-            make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'first_name' => 'Donna', 'email' => 'donna@example.com'}.to_json)
+            make_request('PUT', "/users/#{@id}", {'secret_key' => User.last.secret_key, 'first_name' => 'Donna', 'email' => 'donna@example.com'}.to_json)
           end
 
           it 'updates the user' do 
@@ -85,12 +85,12 @@ describe Canto do
 
         context 'with invalid attributes' do 
           before(:each) do 
+            @request_time = Time.now
             make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'first_name' => 'Donna', 'email' => nil }.to_json)
           end
 
           it 'doesn\'t update the record' do 
-            expect(User.email).to eql 'user2@example.com'
-            expect(User.first_name).to eql nil
+            expect(User.find(2).updated_at).not_to eql @request_time
           end
 
           it 'returns status 422' do 
@@ -98,17 +98,36 @@ describe Canto do
           end
         end
       end
+
+      context 'when an admin updates a user\'s profile' do 
+        before(:each) do 
+          2.times { FactoryGirl.create(:user) }
+          @id = User.last.id
+          make_request('PUT', "/users/#{@id}", { 'secret_key' => User.first.secret_key, 'email' => 'joe@example.com'}.to_json)
+        end
+
+        it 'updates the user' do 
+          expect(User.find(@id).email).to eql 'joe@example.com'
+        end
+
+        it 'returns status 200' do 
+          expect(response_status).to eql 200
+        end
+      end
+
+      context 'when a user attempts to update another user\'s profile' do 
+        #
+      end
     end
 
-    describe 'making an admin' do 
+    describe 'conferring admin privileges' do 
       before(:each) do 
-        FactoryGirl.create(:admin)
         FactoryGirl.create(:user)
       end
 
       context 'without authorization' do 
         before(:each) do 
-          make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'admin' => true }.to_json)
+          make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'first_name' => 'Joe Bob', 'admin' => true }.to_json)
         end
 
         it 'doesn\'t make the user an admin' do 
