@@ -33,6 +33,10 @@ Then(/^the JSON response should (not )?include (?:only )?the (\d+)(?:[a-z]{2}) t
   end
 end
 
+Then(/^the response should include an API key for the new user$/) do
+  response_body.should === { 'secret_key' => User.last.secret_key }.to_json
+end
+
 Then(/^the response should indicate the (?:.*) was (not )?saved successfully$/) do |negation|
   expect(response_status).to eql negation ? 422 : 201
 end
