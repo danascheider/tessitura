@@ -8,7 +8,8 @@ class User < ActiveRecord::Base
   before_create :issue_api_key
 
   def self.is_admin_key?(key)
-    User.find_by(secret_key: key).admin?
+    user = User.find_by(secret_key: key)
+    true if user && user.admin
   end
 
   def admin?
@@ -17,6 +18,19 @@ class User < ActiveRecord::Base
 
   def name
     "#{self.first_name} #{self.last_name}"
+  end
+
+  def to_hash
+    { 
+      first_name: self.first_name,
+      last_name: self.last_name,
+      email: self.email,
+      fach: self.fach,
+      birthdate: self.birthdate,
+      city: self.city,
+      country: self.country,
+      admin: self.admin
+    }.delete_if {|key, value| value == nil }
   end
 
   private
