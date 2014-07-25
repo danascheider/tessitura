@@ -4,6 +4,10 @@ describe Canto do
   include Rack::Test::Methods
 
   describe 'POST' do 
+    before(:each) do 
+      2.times { FactoryGirl.create(:user) }
+    end
+
     context 'with valid attributes' do 
       before(:each) do 
         make_request('POST', '/users', {'email' => 'user@example.com', 'country' => 'USA' }.to_json)
@@ -17,16 +21,55 @@ describe Canto do
         expect(response_status).to eql 201
       end
     end
+
+    context 'with invalid attributes' do 
+      it 'returns status 422' do 
+        make_request('POST', '/users', { 'first_name' => 'Frank' }.to_json)
+        expect(response_status).to eql 422
+      end
+    end
+
+    context 'making an admin' do 
+      context 'with admin key included in the request' do
+        before(:each) do 
+          make_request('POST', '/users', 
+            { 'secret_key' => '12345abcde1', 'email' => 'joe@example.com', 'admin' => true }.to_json)
+        end 
+
+        it 'makes an admin' do 
+          expect(User.last).to be_admin
+        end
+
+        it 'returns status 201' do 
+          expect(response_status).to eql 201
+        end
+      end
+
+      context 'with no admin key in the request' do 
+        before(:each) do 
+          make_request('POST', '/users',
+            { 'email' => 'joe@example.com', 'admin' => true }.to_json)
+        end
+
+        it 'doesn\'t create a user' do 
+          expect(User.count).to eql 2
+        end
+
+        it 'returns status 401' do 
+          expect(response_status).to eql 401
+        end
+      end
+    end
   end
 
   describe 'PUT' do 
-    describe 'creating an admin' do 
-      before(:each) do 
-        2.times { FactoryGirl.create(:user) }
-        make_request('PUT', '/users/2', { 'secret_key' => '12345abcde2', 'admin' => true }.to_json)
-      end
-
+    describe 'making an admin' do 
       context 'without authorization' do 
+        before(:each) do 
+          2.times { FactoryGirl.create(:user) }
+          make_request('PUT', '/users/2', {'secret_key' => '12345abcde2', 'admin' => true }.to_json)
+        end
+
         it 'doesn\'t make the user an admin' do 
           expect(User.find(2)).not_to be_admin
         end
@@ -34,6 +77,10 @@ describe Canto do
         it 'returns status 401' do 
           expect(response_status).to eql 401
         end
+      end
+
+      context 'with authorization' do 
+        #
       end
     end
   end
