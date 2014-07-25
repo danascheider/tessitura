@@ -1,5 +1,5 @@
 Given(/^there are (\d+|no) users$/) do |number|
-  # @user_count is used in 'no user should be created', below
+  # @user_count is invoked in 'no user should be created', below
   number == 'no' ? User.count == 0 : number.times { FactoryGirl.create(:user) }
   User.first.update(secret_key: '12345abcde1') unless number == 'no'
   @user_count = User.count
@@ -51,4 +51,8 @@ Then(/^the (\d+)(?:[a-z]{2}) user should have the following attributes:$/) do |i
   attributes.hashes.each do |hash|
     hash.each {|key, value| User.find(id).to_hash[key.to_sym].should eql value }
   end
+end
+
+Then(/^the (\d+)(?:[a-z]{2}) user\'s profile should not be updated$/) do |id|
+  User.find(id).should_not be_changed
 end
