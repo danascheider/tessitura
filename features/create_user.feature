@@ -21,7 +21,7 @@ Feature: Create a new user
       "country":"Canada", "admin":"true" }
       """
     Then no user should be created
-    And the response should indicate the user was not created successfully
+    And the response should indicate the request was unauthorized
 
   Scenario: Attempt to create a user without valid attributes
     When the client submits a POST request to /users with:
@@ -29,4 +29,4 @@ Feature: Create a new user
       { "first_name":"Erin", "last_name":"Baumgartner" }
       """
     Then no user should be created
-    And the response should indicate the user was not created successfully
+    And the response should indicate the user was not saved successfully
