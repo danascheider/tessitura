@@ -22,8 +22,8 @@ Then(/^the (\d+)(?:[a-z]{2}) user should (not )?be an admin$/) do |id, neg|
   User.find(id).should be_admin unless neg
 end
 
-# USER CREATION
-# =============
+# USER CREATION STEPS
+# ===================
 
 Then(/^a new user should be created with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
@@ -43,4 +43,12 @@ end
 
 Then(/^no user should be created$/) do 
   User.count.should == @user_count
+end
+
+# USER UPDATE STEPS
+# =================
+Then(/^the (\d+)(?:[a-z]{2}) user should have the following attributes:$/) do |id, attributes|
+  attributes.hashes.each do |hash|
+    hash.each {|key, value| User.find(id).to_hash[key.to_sym].should eql value }
+  end
 end

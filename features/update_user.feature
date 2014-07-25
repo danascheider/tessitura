@@ -12,7 +12,9 @@ Feature: Update user profile
       """json
       { "secret_key":"12345abcde2", "first_name":"Jacob", "email":"jakeman32@example.com" }
       """
-    Then the 2nd user's profile should be updated
+    Then the 2nd user should have the following attributes:
+      |         email         | first_name |
+      | jakeman32@example.com |   Jacob    |
     And the response should indicate the user was updated successfully
 
   Scenario: User updates their profile with invalid attributes
