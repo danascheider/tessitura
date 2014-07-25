@@ -54,5 +54,5 @@ Then(/^the (\d+)(?:[a-z]{2}) user should have the following attributes:$/) do |i
 end
 
 Then(/^the (\d+)(?:[a-z]{2}) user\'s profile should not be updated$/) do |id|
-  User.find(id).should_not be_changed
+  User.find(id).updated_at.should_not eql Time.now
 end

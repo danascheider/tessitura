@@ -2,6 +2,7 @@
 # =============
 
 When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
+  @request_time = Time.now
   make_request(method, path)
 end
 
@@ -10,6 +11,7 @@ When(/^the client submits a (.*) request to \/(\S+) with:$/) do |method, path, s
   model = /task/ =~ path ? Task : User
   @task_count = model.count
   @task = (id = (/\d+/.match(path)).to_s) > '' ? model.find(id) : nil
+  @request_time = Time.now
   make_request(method, path, string)
 end
 
