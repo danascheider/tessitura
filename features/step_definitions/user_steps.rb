@@ -16,6 +16,17 @@ end
 # USER CREATION
 # =============
 
+Then(/^a new user should be created with the following attributes:$/) do |attributes|
+  attributes.hashes.each do |hash|
+    expect(User.last.to_hash).to include( 
+                                          first_name: hash['first_name'],
+                                          last_name: hash['last_name'],
+                                          email: hash['email'],
+                                          country: hash['country']
+                                        )
+  end
+end
+
 Then(/^a user named '(\w+) (\w+)' should be created$/) do |first, last|
   User.find_by(first_name: first, last_name: last).should_not eql nil
 end
