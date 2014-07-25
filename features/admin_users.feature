@@ -16,4 +16,4 @@ Feature: Admin users
       { "secret_key":"12345abcde2", "admin":"true"}
       """
     Then the 2nd user should not be an admin
-    And the response should return a 401 status code
+    And the response should return status 401
