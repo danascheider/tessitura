@@ -79,5 +79,15 @@ describe User do
         expect(@user).not_to be_valid
       end
     end
+
+    context 'with valid attributes' do 
+      it 'updates properly' do 
+        FactoryGirl.create(:user)
+        User.last.update!(first_name: 'Fran', last_name: 'Kessler', email: 'fkessler@example.com')
+        expect(User.last.to_hash).to eql { first_name: 'Fran', last_name: 'Kessler',
+                                           email: 'fkessler@example.com', country: 'USA'
+                                         }
+      end
+    end
   end
 end

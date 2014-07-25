@@ -62,6 +62,44 @@ describe Canto do
   end
 
   describe 'PUT' do 
+    describe 'updating a user profile' do 
+      context 'when a user updates their own profile' do 
+        before(:each) do 
+          2.times { FactoryGirl.create(:user) }
+        end
+
+        context 'with valid attributes' do 
+          before(:each) do 
+            make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'first_name' => 'Donna', 'email' => 'donna@example.com'}.to_json)
+          end
+
+          it 'updates the user' do 
+            expect(User.last.first_name).to eql 'Donna'
+            expect(User.last.email).to eql 'donna@example.com'
+          end
+
+          it 'returns status 200' do 
+            expect(response_status).to eql 200
+          end
+        end
+
+        context 'with invalid attributes' do 
+          before(:each) do 
+            make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'first_name' => 'Donna', 'email':nil }.to_json)
+          end
+
+          it 'doesn\'t update the record' do 
+            expect(User.email).to eql 'user2@example.com'
+            expect(User.first_name).to eql nil
+          end
+
+          it 'returns status 422' do 
+            expect(response_status).to eql 422
+          end
+        end
+      end
+    end
+
     describe 'making an admin' do 
       before(:each) do 
         FactoryGirl.create(:admin)
