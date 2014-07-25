@@ -85,7 +85,7 @@ describe Canto do
 
         context 'with invalid attributes' do 
           before(:each) do 
-            make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'first_name' => 'Donna', 'email':nil }.to_json)
+            make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'first_name' => 'Donna', 'email' => nil }.to_json)
           end
 
           it 'doesn\'t update the record' do 
