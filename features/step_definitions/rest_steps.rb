@@ -45,6 +45,10 @@ Then(/^the response should indicate the (?:.*) was (not )?updated successfully$/
   expect(response_status).to eql negation ? 422 : 200
 end
 
+Then(/^the response should indicate the request was unauthorized$/) do
+  expect(response_status).to eql 401
+end
+
 Then(/^the response should return status (\d{3})$/) do |status|
   expect(response_status).to eql status
 end
