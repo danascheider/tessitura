@@ -1,8 +1,15 @@
 require 'securerandom'
 
 class User < ActiveRecord::Base
+  validates :email, presence: true, uniqueness: true, 
+                    format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+  validates :secret_key, presence: true, on: :update
   before_create :set_admin_status
   before_create :issue_api_key
+
+  def self.is_admin_key?(key)
+    User.find_by(secret_key: key).admin?
+  end
 
   def admin?
     self.admin 
