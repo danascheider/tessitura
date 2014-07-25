@@ -15,6 +15,12 @@ describe User do
   describe 'instance methods' do
     it { should respond_to(:admin?) }
     it { should respond_to(:name) }
+
+    describe 'to_hash' do 
+      it 'returns a hash of itself' do 
+        FactoryGirl.create(:user)
+      end
+    end
   end
 
   describe 'creating users' do 

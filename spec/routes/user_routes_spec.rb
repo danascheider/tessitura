@@ -5,7 +5,7 @@ describe Canto do
 
   describe 'POST' do 
     before(:each) do 
-      2.times { FactoryGirl.create(:user) }
+      FactoryGirl.create(:user)
     end
 
     context 'with valid attributes' do 
@@ -14,6 +14,7 @@ describe Canto do
       end
 
       it 'returns an API key' do 
+        puts "RESPONSE BODY: #{response_body}"
         expect(response_body).to include('secret_key')
       end
 
@@ -32,8 +33,7 @@ describe Canto do
     context 'making an admin' do 
       context 'with admin key included in the request' do
         before(:each) do 
-          make_request('POST', '/users', 
-            { 'secret_key' => '12345abcde1', 'email' => 'joe@example.com', 'admin' => true }.to_json)
+          make_request('POST', '/users', { 'secret_key' => User.first.secret_key, 'email' => 'joe@example.com', 'admin' => true }.to_json)
         end 
 
         it 'makes an admin' do 
@@ -47,12 +47,11 @@ describe Canto do
 
       context 'with no admin key in the request' do 
         before(:each) do 
-          make_request('POST', '/users',
-            { 'email' => 'joe@example.com', 'admin' => true }.to_json)
+          make_request('POST', '/users', { 'email' => 'joe@example.com', 'admin' => true }.to_json)
         end
 
         it 'doesn\'t create a user' do 
-          expect(User.count).to eql 2
+          expect(User.count).to eql 1
         end
 
         it 'returns status 401' do 
@@ -64,10 +63,14 @@ describe Canto do
 
   describe 'PUT' do 
     describe 'making an admin' do 
+      before(:each) do 
+        FactoryGirl.create(:admin)
+        FactoryGirl.create(:user)
+      end
+
       context 'without authorization' do 
         before(:each) do 
-          2.times { FactoryGirl.create(:user) }
-          make_request('PUT', '/users/2', {'secret_key' => '12345abcde2', 'admin' => true }.to_json)
+          make_request('PUT', '/users/2', {'secret_key' => User.last.secret_key, 'admin' => true }.to_json)
         end
 
         it 'doesn\'t make the user an admin' do 
@@ -80,7 +83,17 @@ describe Canto do
       end
 
       context 'with authorization' do 
-        #
+        before(:each) do 
+          make_request('PUT', '/users/2', { 'secret_key' => User.first.secret_key, 'admin' => true }.to_json)
+        end
+
+        it 'makes the user an admin' do 
+          expect(User.find(2)).to be_admin
+        end
+
+        it 'returns status 200' do 
+          expect(response_status).to eql 200
+        end
       end
     end
   end
