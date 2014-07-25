@@ -1,5 +1,7 @@
 Given(/^there are (\d+|no) users$/) do |number|
+  # @user_count is used in 'no user should be created', below
   number == 'no' ? User.count == 0 : number.times { FactoryGirl.create(:user) }
+  @user_count = User.count
 end
 
 # ADMIN STEPS
@@ -29,4 +31,8 @@ end
 
 Then(/^a user named '(\w+) (\w+)' should be created$/) do |first, last|
   User.find_by(first_name: first, last_name: last).should_not eql nil
+end
+
+Then(/^no user should be created$/) do 
+  User.count.should == @user_count
 end
