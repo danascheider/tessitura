@@ -45,15 +45,3 @@ end
 Then(/^no user should be created$/) do 
   User.count.should == @user_count
 end
-
-# USER UPDATE STEPS
-# =================
-Then(/^the (\d+)(?:[a-z]{2}) user should have the following attributes:$/) do |id, attributes|
-  attributes.hashes.each do |hash|
-    hash.each {|key, value| User.find(id).to_hash[key.to_sym].should eql value }
-  end
-end
-
-Then(/^the (\d+)(?:[a-z]{2}) user\'s profile should not be updated$/) do |id|
-  User.find(id).updated_at.should_not eql Time.now
-end
