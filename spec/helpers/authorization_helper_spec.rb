@@ -48,16 +48,6 @@ describe Canto::AuthorizationHelper do
       end
     end
 
-    describe 'viewing list of all tasks' do 
-      it 'allows viewing all tasks with admin key' do 
-        expect(authorized?('GET', 'tasks', nil, { secret_key: @admin_key })).to eql true
-      end
-
-      it 'doesn\'t allow viewing all tasks without admin key' do 
-        expect(authorized?('GET', 'tasks', nil, nil)).to eql nil
-      end
-    end
-
     describe 'mass updates' do 
       before(:each) do 
         @user = FactoryGirl.create(:user)
