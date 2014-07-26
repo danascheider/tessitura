@@ -2,10 +2,10 @@ Feature: Update user profile
 
   Background:
     Given there are users with the following attributes:
-      |       email       | secret_key  | admin | 
-      | admin@example.com | 12345abcde1 | true  |
-      | user2@example.com | 12345abcde2 | nil   |
-      | user3@example.com | 12345abcde3 | nil   |
+      | secret_key  | admin | 
+      | 12345abcde1 | true  |
+      | 12345abcde2 | nil   |
+      | 12345abcde3 | nil   |
   
   Scenario: User updates their profile with valid attributes
     When the client submits a PUT request to /users/2 with:
