@@ -25,7 +25,7 @@ class CantoWorld
   include JsonSpec
 
   # Disable SQL logging
-  ActiveRecord::Base.logger.level = 1
+  ActiveRecord::Base.logger.level = 1 unless ENV['LOG']
 
   def app
     Canto.new
