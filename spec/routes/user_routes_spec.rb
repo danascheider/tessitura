@@ -36,7 +36,7 @@ describe Canto do
         end 
 
         it 'makes an admin' do 
-          expect(User.last).to be_admin
+          expect(User.find_by(email: 'joe@example.com')).to be_admin
         end
 
         it 'returns status 201' do 

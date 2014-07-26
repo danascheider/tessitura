@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe User do 
+  before(:all) do 
+    FactoryGirl.create(:user, email: 'admin@example.com')
+  end
+
   describe 'attributes' do 
     it { should respond_to(:first_name) }
     it { should respond_to(:last_name) }
@@ -13,12 +17,21 @@ describe User do
   end
 
   describe 'instance methods' do
+    before(:each) do 
+      @user = FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith')
+    end
+
     it { should respond_to(:admin?) }
-    it { should respond_to(:name) }
 
     describe 'to_hash' do 
       it 'returns a hash of itself' do 
-        FactoryGirl.create(:user)
+        expect(@user.to_hash).to eql(id: @user.id, first_name: 'Jacob', email: @user.email, last_name: 'Smith', country: 'USA')
+      end
+    end
+
+    describe 'name' do 
+      it 'concatenates first and last name' do 
+        expect(@user.name).to eql 'Jacob Smith'
       end
     end
   end
@@ -26,7 +39,6 @@ describe User do
   describe 'class methods' do 
     describe 'is_admin_key' do 
       before(:each) do 
-        FactoryGirl.create(:admin)
         FactoryGirl.create(:user)
       end
 
@@ -35,7 +47,7 @@ describe User do
       end
 
       it 'returns false when the key given doesn\'t belong to an admin' do 
-        expect(User.is_admin_key?(User.last.secret_key)).to eql false
+        expect(User.is_admin_key?(User.last.secret_key)).to eql nil
       end
     end
   end
@@ -43,7 +55,6 @@ describe User do
   describe 'creating users' do 
     context 'validations' do 
       before(:each) do 
-        FactoryGirl.create(:user, email: 'user1@example.com')
         @user = User.new
       end
 
@@ -52,7 +63,7 @@ describe User do
       end
 
       it 'is invalid with a duplicate e-mail address' do 
-        @user.email = 'user1@example.com'
+        @user.email = 'admin@example.com'
         expect(@user).not_to be_valid
       end
 
@@ -64,14 +75,12 @@ describe User do
 
     context 'when there are no other users in the database' do 
       it 'is automatically an admin' do 
-        FactoryGirl.create(:user)
         expect(User.first).to be_admin
       end
     end
 
     context 'when a regular user account is created' do 
       before(:each) do 
-        2.times { FactoryGirl.create(:user) }
         @user = User.create!(email: 'joeblow@example.com')
       end
 
