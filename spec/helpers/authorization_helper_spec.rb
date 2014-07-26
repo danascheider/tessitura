@@ -28,29 +28,29 @@ describe Canto::AuthorizationHelper do
       end
 
       it 'allows admin to be set to true with admin key' do 
-        body = { 'secret_key' => @admin_key, 'admin' => true }.to_json
+        body = { secret_key: @admin_key, admin: true }
         expect(authorized?('PUT', 'users', @user.id, body)).to eql true
       end
 
       it 'doesn\'t allow admin to be set to true without admin key' do 
-        body = { 'secret_key' => @user.secret_key, 'admin' => true }.to_json 
+        body = { secret_key: @user.secret_key, admin: true } 
         expect(authorized?('PUT', 'users', @user.id, body)).to eql nil
       end
     end
 
     describe 'viewing list of all users' do 
       it 'authorizes viewing list of users with admin key' do 
-        expect(authorized?('GET', 'users', nil, { 'secret_key' => @admin_key }.to_json)).to eql true
+        expect(authorized?('GET', 'users', nil, { secret_key: @admin_key })).to eql true
       end
 
       it 'does not allow viewing list of users without admin key' do 
-        expect(authorized?('GET', 'users', nil, { 'secret_key' => 'tunafish12' }.to_json)).to eql nil
+        expect(authorized?('GET', 'users', nil, { secret_key: 'tunafish12' })).to eql nil
       end
     end
 
     describe 'viewing list of all tasks' do 
       it 'allows viewing all tasks with admin key' do 
-        expect(authorized?('GET', 'tasks', nil, { 'secret_key' => @admin_key }.to_json)).to eql true
+        expect(authorized?('GET', 'tasks', nil, { secret_key: @admin_key })).to eql true
       end
 
       it 'doesn\'t allow viewing all tasks without admin key' do 
@@ -64,12 +64,12 @@ describe Canto::AuthorizationHelper do
       end
 
       it 'allows users to be updated with admin key' do 
-        body = { 'secret_key' => @admin_key, 'fach' => 'mezzo-soprano' }.to_json
+        body = { secret_key: @admin_key, 'fach' => 'mezzo-soprano' }
         expect(authorized?('PUT', 'users', nil, body)).to eql true
       end
 
       it 'doesn\'t allow users to be updated without admin key' do 
-        body = { 'secret_key' => @user.secret_key, 'fach' => 'mezzo-soprano' }.to_json
+        body = { secret_key: @user.secret_key, 'fach' => 'mezzo-soprano' }
         expect(authorized?('PUT', 'users', nil, body)).to eql false
       end
     end
@@ -80,11 +80,11 @@ describe Canto::AuthorizationHelper do
       end
 
       it 'allows all users to be deleted with admin key' do 
-        expect(authorized?('DELETE', 'users', nil, { 'secret_key' => @admin_key }.to_json)).to eql true
+        expect(authorized?('DELETE', 'users', nil, { secret_key: @admin_key })).to eql true
       end
 
       it 'doesn\'t allow users to be deleted without admin key' do 
-        expect(authorized?('DELETE', 'users', nil, { 'secret_key' => User.last.secret_key }.to_json)).to eql nil
+        expect(authorized?('DELETE', 'users', nil, { secret_key: User.last.secret_key })).to eql nil
       end
     end
   end
@@ -97,7 +97,7 @@ describe Canto::AuthorizationHelper do
 
     describe 'viewing profile' do 
       before(:each) do 
-        @body = { 'secret_key' => @user1.secret_key }
+        @body = { secret_key: @user1.secret_key }
       end
 
       it 'allows the user to view their own profile' do 
@@ -111,7 +111,7 @@ describe Canto::AuthorizationHelper do
 
     describe 'editing profile' do 
       before(:each) do 
-        @body = { 'secret_key' => @user1.secret_key, 'city' => 'Newark' }.to_json 
+        @body = { secret_key: @user1.secret_key, 'city' => 'Newark' } 
       end
 
       it 'allows the user to edit their own profile' do 
@@ -125,7 +125,7 @@ describe Canto::AuthorizationHelper do
 
     describe 'deleting profile' do 
       before(:each) do
-        @body = { 'secret_key' => @user1.secret_key }.to_json
+        @body = { secret_key: @user1.secret_key }
       end
 
       it 'allows the user to delete their own profile' do 
