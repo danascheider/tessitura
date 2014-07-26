@@ -8,6 +8,7 @@ end
 Given(/^there are users with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     FactoryGirl.create(:user, hash)
+    User.last.update(secret_key: hash['secret_key'])
   end
 end
 
