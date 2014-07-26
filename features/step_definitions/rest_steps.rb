@@ -8,9 +8,9 @@ end
 
 When(/^the client submits a (.*) request to \/tasks(\/(\S+))? with:$/) do |method, path, string|
   # @task_count variable is used in task_steps.rb and task_list_steps.rb
-  path = path == nil ? "/tasks" : "/users#{path}"
+  path = path == nil ? "/tasks" : "/tasks#{path}"
   @task_count = Task.count
-  @task = (id = (/\d+/.match(path).to_s) > '' ? Task.find(id) : nil
+  @task = (id = (/\d+/.match(path)).to_s) > '' ? Task.find(id) : nil
   @request_time = Time.now
   make_request(method, path, string)
 end
