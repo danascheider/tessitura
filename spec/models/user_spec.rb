@@ -23,6 +23,23 @@ describe User do
     end
   end
 
+  describe 'class methods' do 
+    describe 'is_admin_key' do 
+      before(:each) do 
+        FactoryGirl.create(:admin)
+        FactoryGirl.create(:user)
+      end
+
+      it 'returns true when the key given belongs to an admin' do 
+        expect(User.is_admin_key?(User.first.secret_key)).to eql true
+      end
+
+      it 'returns false when the key given doesn\'t belong to an admin' do 
+        expect(User.is_admin_key?(User.last.secret_key)).to eql false
+      end
+    end
+  end
+
   describe 'creating users' do 
     context 'validations' do 
       before(:each) do 
