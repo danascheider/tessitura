@@ -6,11 +6,17 @@ When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   make_request(method, path)
 end
 
-When(/^the client submits a (.*) request to \/(\S+) with:$/) do |method, path, string|
+When(/^the client submits a (.*) request to \/tasks(\/(\S+))? with:$/) do |method, path, string|
   # @task_count variable is used in task_steps.rb and task_list_steps.rb
-  model = /task/ =~ path ? Task : User
-  @task_count = model.count
-  @task = (id = (/\d+/.match(path)).to_s) > '' ? model.find(id) : nil
+  @task_count = Task.count
+  @task = (id = (/\d+/.match(path = "/tasks/#{id}")).to_s) > '' ? Task.find(id) : nil
+  @request_time = Time.now
+  make_request(method, path, string)
+end
+
+When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method, path, string|
+  @user_count = User.count 
+  @user = (id = (/\d+/.match(path = "/users/#{path}")).to_s) > '' ? User.find(id) : nil 
   @request_time = Time.now
   make_request(method, path, string)
 end
