@@ -12,12 +12,12 @@ describe Canto::AuthorizationHelper do
   describe 'admin-only actions' do 
     describe 'creating a new admin' do 
       it 'allows an admin to be created with an admin key' do 
-        body = { 'secret_key' => @admin_key, 'email' => 'user1@example.com', 'admin' => true }.to_json
+        body = { secret_key: @admin_key, email: 'user1@example.com', admin: true }
         expect(authorized?('POST', 'users', nil, body)).to eql true
       end
 
       it 'doesn\'t allow an admin to be created without an admin key' do 
-        body = { 'email' => 'user2@example.com', 'admin' => true }.to_json
+        body = { email: 'user2@example.com', admin: true }
         expect(authorized?('POST', 'users', nil, body)).to eql nil
       end
     end
