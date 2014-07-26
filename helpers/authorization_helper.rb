@@ -4,9 +4,6 @@
 
 class Sinatra::Application
   module AuthorizationHelper
-    def authorized?(body)
-    end
-
     def create_authorized?(body)
       admin_approved?(body[:secret_key]) || !body[:admin]
     end
