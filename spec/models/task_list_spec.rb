@@ -21,13 +21,25 @@ describe TaskList do
   end
 
   describe 'associations' do 
+    it 'is destroyed when the user is destroyed' do 
+      last_list = FactoryGirl.create(:task_list)
+      last_list.user.destroy 
+      expect { TaskList.find(last_list.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe 'creation' do 
     before(:each) do 
-      @last_list = FactoryGirl.create(:task_list_with_tasks)
+      @new_list = FactoryGirl.build(:task_list, user_id: nil)
     end
 
-    it 'is destroyed when the user is destroyed' do 
-      @last_list.user.destroy 
-      expect { TaskList.find(@last_list.id) }.to raise_error
+    it 'is invalid without a user' do 
+      expect(@new_list).not_to be_valid
+    end
+
+    it 'is valid when a user is present' do 
+      @new_list.user_id = @task_list.user.id 
+      expect(@new_list).to be_valid
     end
   end
 end
