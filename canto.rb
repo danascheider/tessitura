@@ -47,8 +47,8 @@ class Canto < Sinatra::Application
 
   post '/users' do 
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      if create_authorized?(request_body)
-        User.create!(request_body)
+      if create_authorized?(body = request_body)
+        User.create!(body)
         return body({ 'secret_key' => User.last.secret_key }.to_json) && 201
       end
       401
