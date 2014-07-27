@@ -72,18 +72,19 @@ describe Task do
 
   describe 'validations' do 
     before(:each) do 
-      @task = Task.new
+      @list = FactoryGirl.create(:task_list_with_tasks)
+      @task = Task.new(title: 'Foo', status: 'new', priority: 'high', task_list_id: @list.id)
     end
 
     context 'pertaining to title' do 
       it 'is invalid without a title' do 
+        @task.title = nil
         expect(@task).not_to be_valid
       end
     end
 
     context 'pertaining to status' do 
       it 'doesn\'t permit invalid status' do 
-        @task.title = "Foo"
         @task.status = "Bar"
         expect(@task).not_to be_valid
       end
@@ -91,8 +92,14 @@ describe Task do
 
     context 'pertaining to priority' do 
       it 'doesn\'t permit invalid priorities' do 
-        @task.title = 'Foo'
         @task.priority = 'Bar'
+        expect(@task).not_to be_valid
+      end
+    end
+
+    context 'pertaining to associations' do 
+      it 'can\'t be saved without a task list' do 
+        @task.task_list_id = nil 
         expect(@task).not_to be_valid
       end
     end
@@ -100,9 +107,8 @@ describe Task do
 
   describe 'default behavior' do 
     before(:each) do 
-      2.times { FactoryGirl.create(:task) }
-      Task.create!(title: "New task", task_list_id: 1)
-      @task = Task.last
+      @list = FactoryGirl.create(:task_list_with_tasks)
+      @task = FactoryGirl.create(:task, title: "New task", task_list_id: @list.id)
     end
 
     it 'instantiates at position 1' do 
@@ -115,6 +121,12 @@ describe Task do
 
     it 'sets priority to \'normal\'' do 
       expect(@task.priority).to eql 'normal'
+    end
+  end
+
+  describe 'associations' do 
+    it 'is destroyed with its parent list' do 
+      
     end
   end
 end
