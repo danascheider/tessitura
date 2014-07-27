@@ -27,7 +27,7 @@ describe TaskList do
 
     it 'is destroyed when the user is destroyed' do 
       @last_list.user.destroy 
-      expect(@last_list).not_to be_persisted
+      expect { TaskList.find(@last_list.id) }.to raise_error
     end
   end
 end
