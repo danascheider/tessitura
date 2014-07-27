@@ -10,10 +10,17 @@ end
 
 Then(/^a new task should be created with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
-    expect(Task.last.to_hash).to include( 
-                                          title: hash['title'],
-                                          status: hash['status']
-                                        )
+    hash.each do |key, value|
+      expect(Task.last.to_hash).to include(key => value)
+    end
+  end
+end
+
+Then(/^the new task should have the following attributes$/) do |attributes|
+  attributes.hashes.each do |hash|
+    hash.each do |key, value|
+      expect(@task.to_hash).to include(key => value)
+    end
   end
 end
 

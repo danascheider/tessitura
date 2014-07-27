@@ -23,6 +23,18 @@ describe User do
 
     it { should respond_to(:admin?) }
 
+    describe 'tasks' do 
+      before(:each) do 
+        2.times { FactoryGirl.create(:task_list_with_tasks, user_id: @user.id) }
+      end
+
+      it 'returns all its tasks' do 
+        tasks = []
+        @user.task_lists.each {|list| tasks << list.tasks }
+        expect(@user.tasks).to eql tasks.flatten
+      end
+    end
+
     describe 'to_hash' do 
       it 'returns a hash of itself' do 
         expect(@user.to_hash).to eql(id: @user.id, first_name: 'Jacob', email: @user.email, last_name: 'Smith', country: 'USA')

@@ -3,6 +3,17 @@ require 'factory_girl'
 FactoryGirl.define do 
   factory :task_list do 
     association :user
+    sequence(:title) {|n| "Task List #{n}"}
+
+    factory :task_list_with_tasks do 
+      ignore do 
+        tasks_count 3
+      end
+
+      after(:create) do |list, evaluator|
+        create_list(:task, evaluator.tasks_count, task_list: list)
+      end
+    end
   end
 
   factory :task do 

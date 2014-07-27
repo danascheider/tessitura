@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   before_create :set_admin_status
   before_create :issue_api_key
 
+  # FIX: This belongs in the AuthorizationHelper module
   def self.is_admin_key?(key)
     user = User.find_by(secret_key: key)
     true if user && user.admin
@@ -33,6 +34,12 @@ class User < ActiveRecord::Base
       country: self.country,
       admin: self.admin
     }.delete_if {|key, value| value == nil }
+  end
+
+  def tasks
+    user_tasks = []
+    self.task_lists.all.each {|list| user_tasks << list.tasks }
+    user_tasks.flatten!
   end
 
   private

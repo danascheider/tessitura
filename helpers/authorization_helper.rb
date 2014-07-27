@@ -1,6 +1,3 @@
-# CREATE requests
-# - Always authorized unless request includes 'admin':true
-# - Always
 
 class Sinatra::Application
   module AuthorizationHelper
