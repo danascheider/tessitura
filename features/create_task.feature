@@ -4,7 +4,7 @@ Feature: Create task
   I need to create a new task
 
   Background:
-    Given there are users with the following attributes
+    Given there are users with the following attributes:
       | id | email             | secret_key  | admin |
       | 1  | admin@example.com | 12345abcde1 | true  |
       | 2  | user2@example.com | 12345abcde2 | false |
