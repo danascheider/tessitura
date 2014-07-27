@@ -16,9 +16,10 @@ Feature: Create task
       """json
       { "secret_key":"12345abcde2", "title":"Water the plants" }
       """
-    Then a new task should be created with the following attributes:
-      | user_id | title            | status | deadline | priority | description |
-      | 2       | Water the plants | new    | nil      | normal   | nil         |
+    Then a new task should be created on the 2nd user's task list 
+    And the new task should have the following attributes:
+      | title            | status | deadline | priority | description |
+      | Water the plants | new    | nil      | normal   | nil         |
     And the response should indicate the task was saved successfully
 
   Scenario: User attempts to create an invalid task
