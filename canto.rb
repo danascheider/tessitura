@@ -26,8 +26,11 @@ class Canto < Sinatra::Application
     end
   end
 
-  post '/tasks' do 
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { create_task(request_body); 201 }
+  post 'users/:id/tasks' do |id|
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+      if update_authorized?(id, body = request_body)
+      end
+    end
   end
 
   get '/tasks/:id' do |id|
