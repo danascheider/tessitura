@@ -12,12 +12,22 @@ describe TaskList do
   end
 
   describe 'instance methods' do 
-    describe 'to_a' do 
-      it 'returns an array of its tasks' do 
-        list = []
-        @task_list.tasks.each {|task| list << task }
-        expect(@task_list.to_a).to eql list.flatten
+    describe 'to_hashes' do 
+      it 'returns an array of its tasks as hashes' do 
+        list = @task_list.tasks.map {|task| task.to_hash }
+        expect(@task_list.to_a).to eql list
       end
+    end
+  end
+
+  describe 'associations' do 
+    before(:each) do 
+      @last_list = FactoryGirl.create(:task_list_with_tasks)
+    end
+
+    it 'is destroyed when the user is destroyed' do 
+      @last_list.user.destroy 
+      expect(@last_list).not_to be_persisted
     end
   end
 end
