@@ -12,6 +12,13 @@ Given(/^there are users with the following attributes:$/) do |attributes|
   end
 end
 
+Given(/^each user has (\d+) tasks$/) do |number|
+  User.all.each do |user|
+    @list = TaskList.create!(user_id: user.id)
+    number.times { FactoryGirl.create(:task, task_list_id: @list.id) }
+  end
+end
+
 # ADMIN STEPS
 # ===========
 
