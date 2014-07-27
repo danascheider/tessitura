@@ -1,6 +1,7 @@
 require 'securerandom'
 
 class User < ActiveRecord::Base
+  has_many :task_lists, dependent: :destroy
   validates :email, presence: true, uniqueness: true, 
                     format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   validates :secret_key, presence: true, on: :update
