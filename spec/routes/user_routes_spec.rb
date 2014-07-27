@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Canto do 
   include Rack::Test::Methods
 
-  before(:all) do 
+  before(:each) do 
     FactoryGirl.create(:admin)
   end
 
