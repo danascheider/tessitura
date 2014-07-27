@@ -10,6 +10,7 @@ class Task < ActiveRecord::Base
   scope :complete, -> { where(status: 'complete') }
   scope :incomplete, -> { where.not(status: 'complete') }
 
+  validates :task_list, presence: true
   validates :title, presence: true, exclusion: { in: %w(nil null)}
   validates :status, 
             inclusion: { in: STATUS_OPTIONS,
