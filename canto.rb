@@ -57,7 +57,8 @@ class Canto < Sinatra::Application
 
   put '/users/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      if validate_and_update_user(id, request_body)
+      if update_authorized?(id, body = request_body)
+        User.find(id).update!(body)
         return status(200)
       end
       401
