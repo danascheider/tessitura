@@ -4,6 +4,7 @@ describe Canto do
   include Rack::Test::Methods
 
   before(:each) do 
+    DatabaseCleaner.clean_with(:truncation)
     FactoryGirl.create(:admin)
   end
 
@@ -50,6 +51,7 @@ describe Canto do
         end
 
         it 'doesn\'t create a user' do 
+          dump_users
           expect(User.count).to eql 1
         end
 
