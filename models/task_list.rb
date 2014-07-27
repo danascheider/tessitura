@@ -1,6 +1,7 @@
 class TaskList < ActiveRecord::Base
   belongs_to :user
   has_many :tasks, -> { order("position ASC") }, dependent: :destroy
+  validates :user, presence: true
 
   def owner
     self.user
