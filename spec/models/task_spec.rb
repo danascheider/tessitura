@@ -42,31 +42,33 @@ describe Task do
     before(:each) do 
       3.times { FactoryGirl.create(:task) }
       2.times { FactoryGirl.create(:complete_task) }
+      @incomplete_task = Task.incomplete.first
+      @complete_task = Task.complete.order(:position).first
     end
 
     describe 'self.first_complete' do 
-      it 'returns the ID of the first complete task' do 
-        expect(Task.first_complete).to eql 4
+      it 'returns the  first complete task' do 
+        expect(Task.first_complete).to eql @complete_task
       end
     end
 
     describe 'complete?' do 
       it 'returns true when a task is complete' do 
-        expect(Task.find(5).complete?).to be true
+        expect(@complete_task.complete?).to be true
       end
 
       it 'returns false when a task is incomplete' do 
-        expect(Task.find(1).complete?).not_to be true
+        expect(@incomplete_task.complete?).not_to be true
       end
     end
 
     describe 'incomplete?' do 
       it 'returns true when a task is incomplete' do 
-        expect(Task.find(1).incomplete?).to be true
+        expect(@incomplete_task.incomplete?).to be true
       end
 
       it 'returns false when a task is complete' do 
-        expect(Task.find(5).incomplete?).not_to be true
+        expect(@complete_task.incomplete?).not_to be true
       end
     end
 
