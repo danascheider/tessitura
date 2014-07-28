@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Canto::TaskController do 
   include Canto::TaskController
+  #FIX: Is ErrorHandling actually used here?
   include Canto::ErrorHandling
 
   describe 'create_task method' do 
