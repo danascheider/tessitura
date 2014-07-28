@@ -14,6 +14,7 @@ describe Task do
     it { should respond_to(:complete?) }
     it { should respond_to(:incomplete?) }
     it { should respond_to(:to_hash) } # to integrate with Sinatra-Backbone
+    it { should respond_to(:user) }
   end
 
   describe 'acts_as_list methods' do 
