@@ -51,7 +51,6 @@ describe Canto do
         end
 
         it 'doesn\'t create a user' do 
-          dump_users
           expect(User.count).to eql 1
         end
 
