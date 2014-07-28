@@ -2,8 +2,6 @@ class Sinatra::Application
 
   module TaskController
 
-    # The begin_and_rescue method is defined in the ErrorHandling module.
-
     # BASIC CONTROLLER METHODS
     # ========================
 
