@@ -7,12 +7,12 @@ describe Canto::TaskController do
 
   describe 'create_task method' do 
     before(:each) do 
-      5.times {|n| FactoryGirl.create(:task)}
+      @list = FactoryGirl.create(:task_list_with_tasks)
     end
     
     context 'normal creation' do 
       before(:each) do 
-        create_task(title: "New Task")
+        create_task(title: "New Task", task_list_id: @list.id)
       end
 
       it 'creates a new task' do 
@@ -21,7 +21,18 @@ describe Canto::TaskController do
     end
 
     context 'when there is no task list' do 
-      pending
+      before(:each) do 
+        @user = FactoryGirl.create(:user)
+        create_task(title: 'Brand New Task', user_id: @user.id)
+      end
+
+      it 'creates a new task' do 
+        expect(Task.last.title).to eql 'Brand New Task'
+      end
+
+      it 'creates a new list' do 
+        expect(@user.task_lists.first.title).to eql 'Default List'
+      end
     end
 
     context 'task created with completion status true' do 
