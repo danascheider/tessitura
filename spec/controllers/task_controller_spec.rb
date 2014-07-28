@@ -5,19 +5,18 @@ describe Canto::TaskController do
   #FIX: Is ErrorHandling actually used here?
   include Canto::ErrorHandling
 
+  before(:each) do 
+    @list = FactoryGirl.create(:task_list_with_tasks)
+  end
+
   describe 'create_task method' do 
-    before(:each) do 
-      @list = FactoryGirl.create(:task_list_with_tasks)
+    before(:each) do
       2.times { FactoryGirl.create(:complete_task, task_list_id: @list.id) }
     end
     
     context 'normal creation' do 
-      before(:each) do 
-        create_task(title: "New Task", task_list_id: @list.id)
-      end
-
       it 'creates a new task' do 
-        expect(Task.last.title).to eql "New Task"
+        expect { create_task(title: "New Task", task_list_id: @list.id) }.to change { Task.count }.by(1)
       end
     end
 
@@ -78,15 +77,11 @@ describe Canto::TaskController do
         expect(Task.find(4).position).to eql 1
       end
     end
+  end
 
-    describe 'delete_task method' do 
-      before(:each) do 
-        delete_task(4)
-      end
-
-      it 'deletes the task' do 
-        expect(Task.pluck(:id)).not_to include 4
-      end
+  describe 'delete_task method' do 
+    it 'deletes the task' do 
+      expect { delete_task(Task.last.id) }.to change { Task.count }.by(-1)
     end
   end
 
