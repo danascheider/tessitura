@@ -6,14 +6,14 @@ describe User do
   end
 
   describe 'attributes' do 
-    it { should respond_to(:first_name) }
-    it { should respond_to(:last_name) }
-    it { should respond_to(:email) }
-    it { should respond_to(:birthdate) }
-    it { should respond_to(:city) }
-    it { should respond_to(:country) }
-    it { should respond_to(:fach) }
-    it { should respond_to(:admin) }
+    it { is_expected.to respond_to(:first_name) }
+    it { is_expected.to respond_to(:last_name) }
+    it { is_expected.to respond_to(:email) }
+    it { is_expected.to respond_to(:birthdate) }
+    it { is_expected.to respond_to(:city) }
+    it { is_expected.to respond_to(:country) }
+    it { is_expected.to respond_to(:fach) }
+    it { is_expected.to respond_to(:admin) }
   end
 
   describe 'instance methods' do
@@ -21,11 +21,11 @@ describe User do
       @user = FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith')
     end
 
-    it { should respond_to(:admin?) }
+    it { is_expected.to respond_to(:admin?) }
 
-    it { should respond_to(:default_task_list) }
+    it { is_expected.to respond_to(:default_task_list) }
 
-    describe 'tasks' do 
+    describe '::tasks' do 
       before(:each) do 
         2.times { FactoryGirl.create(:task_list_with_tasks, user_id: @user.id) }
       end
@@ -37,19 +37,19 @@ describe User do
       end
     end
 
-    describe 'to_hash' do 
-      it 'returns a hash of itself' do 
+    describe '#to_hash' do 
+      it 'returns a hash of its attributes' do 
         expect(@user.to_hash).to eql(id: @user.id, first_name: 'Jacob', email: @user.email, last_name: 'Smith', country: 'USA')
       end
     end
 
-    describe 'name' do 
+    describe '#name' do 
       it 'concatenates first and last name' do 
         expect(@user.name).to eql 'Jacob Smith'
       end
     end
 
-    describe 'default_task_list' do 
+    describe '#default_task_list' do 
       it 'creates a task list if there isn\'t one' do 
         expect { @user.default_task_list }.to change { @user.task_lists.count }.by(1)
       end
@@ -62,17 +62,21 @@ describe User do
   end
 
   describe 'class methods' do 
-    describe 'is_admin_key' do 
+    describe '.is_admin_key' do 
       before(:each) do 
         FactoryGirl.create(:user)
       end
 
-      it 'returns true when the key given belongs to an admin' do 
-        expect(User.is_admin_key?(User.first.secret_key)).to eql true
+      context 'when the given key belongs to an admin' do 
+        it 'returns true' do 
+          expect(User.is_admin_key?(User.first.secret_key)).to eql true
+        end
       end
 
-      it 'returns false when the key given doesn\'t belong to an admin' do 
-        expect(User.is_admin_key?(User.last.secret_key)).to eql nil
+      context 'when the given key doesn\'t belong to an admin' do 
+        it 'returns false' do 
+          expect(User.is_admin_key?(User.last.secret_key)).to eql nil
+        end
       end
     end
   end
@@ -80,7 +84,7 @@ describe User do
   describe 'creating users' do 
     context 'validations' do 
       before(:each) do 
-        @user = User.new
+        @user = FactoryGirl.build(:user, email: nil)
       end
 
       it 'is invalid without an e-mail address' do 
@@ -106,7 +110,7 @@ describe User do
 
     context 'when a regular user account is created' do 
       before(:each) do 
-        @user = User.create!(email: 'joeblow@example.com')
+        @user = FactoryGirl.create(:user, email: 'joeblow@example.com')
       end
 
       it 'is not an admin' do 
