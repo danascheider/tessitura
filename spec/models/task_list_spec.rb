@@ -6,9 +6,9 @@ describe TaskList do
   end
 
   describe 'attributes' do 
-    it { should respond_to(:title) }
-    it { should respond_to(:user) }
-    it { should respond_to(:owner) }
+    it { is_expected.to respond_to(:title) }
+    it { is_expected.to respond_to(:user) }
+    it { is_expected.to respond_to(:owner) }
   end
 
   describe 'instance methods' do 
@@ -21,25 +21,33 @@ describe TaskList do
   end
 
   describe 'associations' do 
-    it 'is destroyed when the user is destroyed' do 
-      last_list = FactoryGirl.create(:task_list)
-      last_list.user.destroy 
-      expect { TaskList.find(last_list.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    context 'when its user is destroyed' do 
+      it 'is destroyed' do 
+        list = FactoryGirl.create(:task_list)
+        list.user.destroy 
+        expect { TaskList.find(list.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 
   describe 'creation' do 
-    before(:each) do 
-      @new_list = FactoryGirl.build(:task_list, user_id: nil)
-    end
+    describe 'validations' do 
+      before(:each) do 
+        @new_list = FactoryGirl.build(:task_list, user_id: nil)
+      end
 
-    it 'is invalid without a user' do 
-      expect(@new_list).not_to be_valid
-    end
+      context 'without a user' do 
+        it 'is invalid' do 
+          expect(@new_list).not_to be_valid
+        end
+      end
 
-    it 'is valid when a user is present' do 
-      @new_list.user_id = @task_list.user.id 
-      expect(@new_list).to be_valid
+      context 'with a user' do 
+        it 'is valid' do 
+          @new_list.user_id = @task_list.user.id 
+          expect(@new_list).to be_valid
+        end
+      end
     end
   end
 end
