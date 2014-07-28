@@ -11,7 +11,7 @@ describe Canto::TaskController do
 
   describe 'create_task method' do 
     before(:each) do
-      2.times { FactoryGirl.create(:complete_task, task_list_id: @list.id) }
+      FactoryGirl.create_list(:complete_task, 2, task_list_id: @list.id)
     end
     
     context 'normal creation' do 
@@ -87,7 +87,7 @@ describe Canto::TaskController do
 
   describe 'get_task method' do 
     before(:each) do 
-      5.times {|n| FactoryGirl.create(:task)}
+      FactoryGirl.create_list(:task, 5)
     end
     
     it 'returns the task as a JSON object' do 
