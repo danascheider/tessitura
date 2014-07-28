@@ -1,7 +1,7 @@
 class Task < ActiveRecord::Base
 
   belongs_to :task_list, foreign_key: :task_list_id
-  acts_as_list scope: :task_list
+  acts_as_list scope: :task_list, add_new_at: :top
 
   STATUS_OPTIONS = ['new', 'in_progress', 'blocking', 'complete']
   PRIORITY_OPTIONS = ['urgent', 'high', 'normal', 'low', 'not_important']
