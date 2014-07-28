@@ -27,7 +27,7 @@ class Task < ActiveRecord::Base
   end
 
   def self.first_complete
-    self.complete.order(:position).first.id || Task.count
+    self.complete.order(:position).first || Task.count
   end
 
   # Public Instance Methods
