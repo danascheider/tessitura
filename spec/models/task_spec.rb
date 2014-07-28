@@ -117,8 +117,8 @@ describe Task do
   describe 'default behavior' do 
     before(:each) do 
       @list = FactoryGirl.create(:task_list_with_tasks)
-      @list.create(:task, complete: true, position: 4)
-      @task = FactoryGirl.create(:task, title: "New task", task_list_id: @list.id)
+      @list.tasks.create(status: 'complete', position: 4)
+      @task = @list.tasks.create(title: "New task")
     end
 
     it 'sets status to \'new\'' do
@@ -131,7 +131,7 @@ describe Task do
 
     context 'when status is set to complete' do 
       it 'instantiates as the first complete task' do 
-        #
+        expect(@list.tasks.create(title: 'Foo', status: 'complete').position).to eql 5
       end
     end
 
