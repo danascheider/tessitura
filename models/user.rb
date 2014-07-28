@@ -18,6 +18,10 @@ class User < ActiveRecord::Base
     self.admin 
   end
 
+  def default_task_list
+    self.task_lists.first || TaskList.create(title: 'Default List', user_id: self.id)
+  end
+
   def name
     "#{self.first_name} #{self.last_name}"
   end

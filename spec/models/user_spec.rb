@@ -23,6 +23,8 @@ describe User do
 
     it { should respond_to(:admin?) }
 
+    it { should respond_to(:default_task_list) }
+
     describe 'tasks' do 
       before(:each) do 
         2.times { FactoryGirl.create(:task_list_with_tasks, user_id: @user.id) }
@@ -44,6 +46,17 @@ describe User do
     describe 'name' do 
       it 'concatenates first and last name' do 
         expect(@user.name).to eql 'Jacob Smith'
+      end
+    end
+
+    describe 'default_task_list' do 
+      it 'creates a task list if there isn\'t one' do 
+        expect { @user.default_task_list }.to change { @user.task_lists.count }.by(1)
+      end
+
+      it 'returns its first task list' do 
+        3.times { FactoryGirl.create(:task_list, user_id: @user.id) }
+        expect(@user.default_task_list).to eql @user.task_lists.first
       end
     end
   end
