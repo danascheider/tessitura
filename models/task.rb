@@ -56,6 +56,10 @@ class Task < ActiveRecord::Base
     }
   end
 
+  def user
+    self.task_list.user
+  end
+
   private
 
     # Private Class Methods
