@@ -6,6 +6,8 @@ class Sinatra::Application
     # ========================
 
     def create_task(body)
+      body[:task_list_id] ||= User.find(body[:user_id]).default_task_list.id
+      body.delete(:user_id) 
       Task.create!(body)
     end
 
