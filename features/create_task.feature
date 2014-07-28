@@ -51,7 +51,8 @@ Feature: Create task
       """json
       { "secret_key":"12345abcde1", "title":"Water the plants" }
       """
-    Then a new task should be created with the following attributes:
+    Then a new task should be created on the 3rd user's task list
+    And the task should have the following attributes:
       | user_id | title            | status | deadline | priority | description |
       | 3       | Water the plants | new    | nil      | normal   | nil         |
     And the response should indicate the task was saved successfully
