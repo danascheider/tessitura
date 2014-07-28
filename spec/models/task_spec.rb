@@ -121,6 +121,14 @@ describe Task do
       @task = FactoryGirl.create(:task, title: "New task", task_list_id: @list.id)
     end
 
+    it 'sets status to \'new\'' do
+      expect(@task.status).to eql 'new'
+    end
+
+    it 'sets priority to \'normal\'' do 
+      expect(@task.priority).to eql 'normal'
+    end
+
     context 'when status is set to complete' do 
       it 'instantiates as the first complete task' do 
         #
@@ -131,14 +139,6 @@ describe Task do
       it 'instantiates at position 1' do 
         expect(@task.position).to eql 1
       end
-    end
-
-    it 'sets status to \'new\'' do
-      expect(@task.status).to eql 'new'
-    end
-
-    it 'sets priority to \'normal\'' do 
-      expect(@task.priority).to eql 'normal'
     end
   end
 
