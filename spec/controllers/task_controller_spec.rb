@@ -87,11 +87,11 @@ describe Canto::TaskController do
 
   describe 'get_task method' do 
     before(:each) do 
-      FactoryGirl.create_list(:task, 5)
+      @task = Task.take
     end
-    
+
     it 'returns the task as a JSON object' do 
-      expect(get_task(3)).to eql Task.find(3).to_json
+      expect(get_task(@task.id)).to eql @task.to_json
     end
   end
 end # Canto::TaskController
