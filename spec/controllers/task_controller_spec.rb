@@ -8,6 +8,7 @@ describe Canto::TaskController do
   describe 'create_task method' do 
     before(:each) do 
       @list = FactoryGirl.create(:task_list_with_tasks)
+      2.times { FactoryGirl.create(:complete_task, task_list_id: @list.id) }
     end
     
     context 'normal creation' do 
@@ -41,7 +42,7 @@ describe Canto::TaskController do
       end
 
       it 'creates the task as the first complete task' do 
-        create_task(title: "New Task", status: 'complete')
+        create_task(title: "New Task", status: 'complete', task_list_id: @list.id)
         expect(Task.last.position).to eql 4
       end
     end
