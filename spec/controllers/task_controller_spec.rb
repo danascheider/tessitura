@@ -6,14 +6,12 @@ describe Canto::TaskController do
   include Canto::ErrorHandling
 
   before(:each) do 
-    @list = FactoryGirl.create(:task_list_with_tasks)
+    @list = FactoryGirl.create(:task_list_with_tasks, tasks_count: 5)
+    @list.tasks.first(2).each { |task| task.update(status: 'complete') }
+    @task = Task.take
   end
 
-  describe 'create_task method' do 
-    before(:each) do
-      FactoryGirl.create_list(:complete_task, 2, task_list_id: @list.id)
-    end
-    
+  describe 'create_task method' do     
     context 'normal creation' do 
       it 'creates a new task' do 
         expect { create_task(title: "New Task", task_list_id: @list.id) }.to change { Task.count }.by(1)
@@ -22,6 +20,8 @@ describe Canto::TaskController do
 
     context 'when there is no task list' do 
       before(:each) do 
+        # This user must (obviously) not have a task list. For that reason,
+        # it can't be declared in the before block at the top
         @user = FactoryGirl.create(:user)
         create_task(title: 'Brand New Task', user_id: @user.id)
       end
@@ -36,10 +36,6 @@ describe Canto::TaskController do
     end
 
     context 'task created with completion status true' do 
-      before(:each) do 
-        Task.find([4,5]).each {|task| task.update!(status: 'complete')}
-      end
-
       it 'creates the task as the first complete task' do 
         create_task(title: "New Task", status: 'complete', task_list_id: @list.id)
         expect(Task.last.position).to eql 4
@@ -48,33 +44,30 @@ describe Canto::TaskController do
   end
 
   describe 'update_task method' do 
-    before(:each) do 
-      5.times {|n| FactoryGirl.create(:task)}
-    end
-
     context 'general update' do 
       before(:each) do 
-        update_task(3, title: 'Task the Third')
+        update_task(@task.id, title: 'Task with a New Name')
       end
 
       it 'changes the updated attributes' do 
-        expect(Task.find(3).title).to eql 'Task the Third'
+        expect(Task.find(@task.id).title).to eql 'Task with a New Name'
       end
     end
 
     context 'toggle complete' do 
       before(:each) do 
-        Task.find([4,5]).each {|task| task.update!(status: 'complete')}
+        @incomplete_id = @list.tasks.incomplete.take.id
+        @complete_id = @list.tasks.complete.take.id
       end
 
       it 'moves a completed task to the end' do 
-        update_task(2, status: 'complete')
-        expect(Task.find(2).position).to eql Task.count
+        update_task(@incomplete_id, status: 'complete')
+        expect(Task.find(@incomplete_id).position).to eql Task.count
       end
 
       it 'moves a task to the top when changed to incomplete' do 
-        update_task(4, status: 'in_progress')
-        expect(Task.find(4).position).to eql 1
+        update_task(@complete_id, status: 'in_progress')
+        expect(Task.find(@complete_id).position).to eql 1
       end
     end
   end
@@ -86,10 +79,6 @@ describe Canto::TaskController do
   end
 
   describe 'get_task method' do 
-    before(:each) do 
-      @task = Task.take
-    end
-
     it 'returns the task as a JSON object' do 
       expect(get_task(@task.id)).to eql @task.to_json
     end
