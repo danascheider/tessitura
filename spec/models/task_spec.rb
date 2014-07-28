@@ -69,6 +69,12 @@ describe Task do
         expect(Task.find(5).incomplete?).not_to be true
       end
     end
+
+    describe 'user' do 
+      it 'returns the user who owns the task list containing the task' do 
+        expect(Task.first.user).to eql Task.first.task_list.user
+      end
+    end
   end
 
   describe 'validations' do 
