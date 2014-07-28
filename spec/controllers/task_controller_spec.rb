@@ -19,6 +19,10 @@ describe Canto::TaskController do
       end
     end
 
+    context 'when there is no task list' do 
+      pending
+    end
+
     context 'task created with completion status true' do 
       before(:each) do 
         Task.find([4,5]).each {|task| task.update!(status: 'complete')}
