@@ -5,8 +5,8 @@ describe Canto do
 
   before(:all) do 
     FactoryGirl.create_list(:user_with_task_lists, 2)
-    @admin = User.first.update(admin: true)
-    @user = User.last
+    @admin, @user = User.first, User.last
+    @admin.update(admin: true)
     @user.default_task_list.tasks.last.update!(status: 'complete')
   end
 
@@ -16,13 +16,13 @@ describe Canto do
         before(:each) do 
           make_request('GET', "/users/#{@user.id}/tasks", { secret_key: @user.secret_key }.to_json)
         end
-
+        
         it 'returns all the user\'s tasks' do 
           expect(response_body).to eql @user.tasks.to_json
         end
 
-        it 'returns status code 200' do 
-          expect(repsonse_status).to eql 200
+        it 'returns status code 200' do
+          expect(response_status).to eql 200
         end
       end
 
