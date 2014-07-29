@@ -4,84 +4,142 @@ describe Canto::AuthorizationHelper do
   include Canto::AuthorizationHelper
 
   before(:all) do 
-    @admin = FactoryGirl.create(:admin)
-    @admin_key = @admin.secret_key
-    @admin_id = @admin.id
+    FactoryGirl.create_list(:user_with_task_lists, 2)
+    @admin, @user = User.first, User.last
+    @admin.update(admin: true)
   end
 
-  describe 'admin-only actions' do 
-    describe 'creating a new admin' do 
-      it 'allows an admin to be created with an admin key' do 
-        expect(create_authorized?({ secret_key: @admin_key, email: 'user1@example.com', admin: true })).to eql true
-      end
-
-      it 'doesn\'t allow an admin to be created without an admin key' do 
-        expect(create_authorized?({ email: 'user2@example.com', admin: true })).to eql false
+  describe '::user_match?' do 
+    context 'when the user matches' do 
+      it 'returns true' do 
+        expect(user_match?(@admin.id, @admin.secret_key)).to eql true
       end
     end
 
-    describe 'conferring admin status' do 
-      before(:each) do 
-        @user = FactoryGirl.create(:user)
-      end
-
-      it 'allows admin to be set to true with admin key' do 
-        body = { secret_key: @admin_key, admin: true }
-        expect(update_authorized?(@user.id, body)).to eql true
-      end
-
-      it 'doesn\'t allow admin to be set to true without admin key' do 
-        body = { secret_key: @user.secret_key, admin: true } 
-        expect(update_authorized?(@user.id, body)).to eql false
+    context 'when the user doesn\'t match' do 
+      it 'returns false' do 
+        expect(user_match?(@user.id, @admin.secret_key)).to eql false
       end
     end
   end
 
-  describe 'owner-only actions' do 
-    before(:each) do 
-      @user1 = FactoryGirl.create(:user)
-      @user2 = FactoryGirl.create(:user)
-    end
-
-    describe 'viewing profile' do 
-      before(:each) do 
-        @body = { secret_key: @user1.secret_key }
-      end
-
-      it 'allows the user to view their own profile' do 
-        expect(read_authorized?(@user1.id, @body)).to eql true
-      end
-
-      it 'doesn\'t allow the user to view someone else\'s profile' do 
-        expect(read_authorized?(@user2.id, @body)).to eql false
+  describe '::admin_approved?' do 
+    context 'when the key belongs to an admin' do 
+      it 'returns true' do 
+        expect(admin_approved?(@admin.secret_key)).to eql true
       end
     end
 
-    describe 'editing profile' do 
-      before(:each) do 
-        @body = { secret_key: @user1.secret_key, 'city' => 'Newark' } 
+    context 'when the key belongs to a normal user' do 
+      it 'returns false' do 
+        expect(admin_approved?(@user.secret_key)).to eql false
       end
+    end
+  end
 
-      it 'allows the user to edit their own profile' do 
-        expect(update_authorized?(@user1.id, @body)).to eql true
-      end
-
-      it 'doesn\'t allow the user to edit someone else\'s profile' do 
-        expect(update_authorized?(@user2.id, @body)).to eql false
+  describe '::create_authorized?' do 
+    context 'when not creating an admin' do 
+      it 'returns true' do 
+        expect(create_authorized?({email: 'elspeth@example.com'})).to eql true
       end
     end
 
-    describe 'deleting profile' do 
-      before(:each) do
-        @body = { secret_key: @user1.secret_key }
+    context 'when creating an admin' do 
+      context 'legally' do 
+        it 'returns true' do
+          body = {admin: true, secret_key: @admin.secret_key }
+          expect(create_authorized?(body)).to eql true
+        end
       end
 
-      it 'allows the user to delete their own profile' do 
-        expect(delete_authorized?(@user1.id, @body)).to eql true
+      context 'with no key provided' do 
+        it 'returns false' do 
+          expect(create_authorized?({admin: true})).to eql false
+        end
       end
 
-      it 'doesn\'t allow the user to delete someone else\'s profile' do 
-        expect(delete_authorized?(@user2.id, @body)).to eql false
+      context 'with unauthorized key provided' do 
+        it 'returns false' do
+          expect(create_authorized?({admin: true, secret_key: @user.secret_key})).to eql false
+        end
+      end
+    end
+  end
+
+  describe '::read_authorized?' do 
+    context 'with user\'s secret key' do 
+      it 'returns true' do 
+        expect(read_authorized?(@user.id, {secret_key: @user.secret_key})).to eql true
+      end
+    end
+
+    context 'with admin\'s secret key' do 
+      it 'returns true' do 
+        expect(read_authorized?(@user.id, { secret_key: @admin.secret_key })).to eql true
+      end
+    end
+
+    context 'without secret key' do 
+      it 'returns false' do 
+        expect(read_authorized?(@user.id, { email: 'eve@example.com' })).to eql false
+      end
+    end
+
+    context 'with wrong user\'s key' do 
+      it 'returns false' do 
+        expect(read_authorized?(@admin.id, { secret_key: @user.secret_key })).to eql false
+      end
+    end
+  end
+
+  describe '::update_authorized?' do 
+    context 'with user\'s secret key provided' do 
+      it 'returns true' do 
+        expect(update_authorized?(@user.id, secret_key: @user.secret_key)).to eql true
+      end
+    end
+
+    context 'with admin\'s secret key provided' do 
+      it 'returns true' do 
+        expect(update_authorized?(@user.id, secret_key: @admin.secret_key)).to eql true
+      end
+    end
+
+    context 'with no secret key provided' do 
+      it 'returns false' do 
+        expect(update_authorized?(@user.id, email: 'eve@example.com')).to eql false
+      end
+    end
+
+    context 'with an unauthorized key provided' do 
+      it 'returns false' do 
+        expect(update_authorized?(@admin.id, secret_key: @user.secret_key)).to eql false
+      end
+    end
+  end
+
+  describe '::delete_authorized?' do 
+    context 'with user\'s secret key provided' do 
+      it 'returns true' do 
+        expect(delete_authorized?(@user.id, secret_key: @user.secret_key)).to eql true
+      end
+    end
+
+    context 'with admin\'s secret key provided' do 
+      it 'returns true' do 
+        expect(delete_authorized?(@user.id, secret_key: @admin.secret_key)).to eql true
+      end
+    end
+
+    context 'with no secret key provided' do 
+      it 'returns false' do 
+        expect(delete_authorized?(@user.id)).to eql false
+      end
+    end
+
+    context 'with an unauthorized key provided' do 
+      it 'returns false' do 
+        expect(delete_authorized?(@admin.id, secret_key: @user.secret_key)).to eql false
       end
     end
   end
