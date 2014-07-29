@@ -13,25 +13,37 @@ class Canto < Sinatra::Application
 
   before do 
     validate_params(params)
+    begin
+      @request_body = JSON.parse request.body.read 
+    rescue(JSON::ParserError)
+      @request_body = nil
+    end
+  end
+
+  get '/' do 
+    204
   end
 
   get '/users/:id/tasks' do |id|
     # FIX: This will need a more robust error-handling approach - TBD
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      status(401) unless read_authorized?(id, request_body)
-      User.find(id).tasks.to_json
+      if read_authorized?(id, @request_body)
+        User.find(id).tasks.to_json
+        return status(200)
+      end
+      401
     end
   end
 
   get '/tasks/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      status(401) unless read_authorized?(Task.find(id).user.id, request_body)
+      status(401) unless read_authorized?(Task.find(id).user.id, @request_body)
       get_task(id)
     end
   end
 
   put '/tasks/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { update_task(id, request_body); 200 }
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { update_task(id, @request_body); 200 }
   end
 
   delete '/tasks/:id' do |id|
@@ -43,8 +55,8 @@ class Canto < Sinatra::Application
 
   post '/users' do 
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      if create_authorized?(body = request_body)
-        User.create!(body)
+      if create_authorized?(@request_body)
+        User.create!(@request_body)
         return body({ 'secret_key' => User.last.secret_key }.to_json) && 201
       end
       401
@@ -53,7 +65,7 @@ class Canto < Sinatra::Application
 
   get '/users' do 
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      status(401) unless admin_approved?(request_body)
+      status(401) unless admin_approved?(@request_body)
       content_type :json
       User.all.to_json
     end
@@ -67,8 +79,8 @@ class Canto < Sinatra::Application
 
   put '/users/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      if update_authorized?(id, body = request_body)
-        User.find(id).update!(body)
+      if update_authorized?(id, @request_body)
+        User.find(id).update!(@request_body)
         return status(200)
       end
       401
