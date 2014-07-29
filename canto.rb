@@ -24,7 +24,10 @@ class Canto < Sinatra::Application
   end
 
   get '/tasks/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordNotFound, 404) { get_task(id) }
+    begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
+      status(401) unless read_authorized?(Task.find(id).user.id, request_body)
+      get_task(id)
+    end
   end
 
   put '/tasks/:id' do |id|
