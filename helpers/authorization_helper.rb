@@ -22,7 +22,7 @@ class Sinatra::Application
     end
 
     def admin_approved?(key)
-      User.find_by(secret_key: key) && User.find_by(secret_key: key).admin?
+      User.find_by(secret_key: key) && User.find_by(secret_key: key).admin? ? true : false
     end
 
     def user_match?(id, key)
