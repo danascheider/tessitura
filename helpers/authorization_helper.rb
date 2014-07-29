@@ -1,24 +1,33 @@
 
 class Sinatra::Application
   module AuthorizationHelper
-    def create_authorized?(body)
+    def create_authorized?(body=nil)
+      return false unless body
       admin_approved?(body[:secret_key]) || !body[:admin]
     end
 
-    def read_authorized?(id, body)
+    def read_authorized?(id, body=nil)
       begin
         admin_approved?(body[:secret_key]) || user_match?(id, body[:secret_key])
-      rescue
-        nil
+      rescue(NoMethodError)
+        false
       end
     end
 
-    def update_authorized?(id, body)
-      admin_approved?(body[:secret_key]) || (user_match?(id, body[:secret_key]) && !body[:admin])
+    def update_authorized?(id, body=nil)
+      begin
+        admin_approved?(body[:secret_key]) || (user_match?(id, body[:secret_key]) && !body[:admin])
+      rescue(NoMethodError)
+        false
+      end
     end
 
-    def delete_authorized?(id, body)
-      admin_approved?(body[:secret_key]) || user_match?(id, body[:secret_key])
+    def delete_authorized?(id, body=nil)
+      begin
+        admin_approved?(body[:secret_key]) || user_match?(id, body[:secret_key])
+      rescue(NoMethodError)
+        false
+      end
     end
 
     def admin_approved?(key)
