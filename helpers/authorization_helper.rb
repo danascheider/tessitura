@@ -6,7 +6,11 @@ class Sinatra::Application
     end
 
     def read_authorized?(id, body)
-      admin_approved?(body[:secret_key]) || user_match?(id, body[:secret_key])
+      begin
+        admin_approved?(body[:secret_key]) || user_match?(id, body[:secret_key])
+      rescue
+        nil
+      end
     end
 
     def update_authorized?(id, body)

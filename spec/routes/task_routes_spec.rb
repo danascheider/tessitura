@@ -4,15 +4,16 @@ describe Canto do
   include Rack::Test::Methods 
 
   before(:all) do 
-    3.times { FactoryGirl.create(:task)}
-    Task.find(3).update!(status: 'complete')
+    FactoryGirl.create_list(:user_with_task_lists, 2)
+    @user = User.last
+    @user.default_task_list.tasks.last.update!(status: 'complete')
   end
 
   describe 'GET' do 
     context 'task list route' do 
-      it 'returns all the tasks as a JSON object' do 
-        get '/tasks'
-        expect(response_body).to eql Task.all.to_json
+      it 'returns all the user\'s tasks' do 
+        make_request('GET', "/users/#{@user.id}/tasks", { secret_key: @user.secret_key }.to_json)
+        expect(response_body).to eql @user.tasks.to_json
       end
     end
 

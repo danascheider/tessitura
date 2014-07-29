@@ -37,5 +37,15 @@ FactoryGirl.define do
     factory :admin do 
       admin true
     end
+
+    factory :user_with_task_lists do 
+      ignore do 
+        lists_count 2
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:task_list_with_tasks, evaluator.lists_count, user: user)
+      end
+    end
   end
 end
