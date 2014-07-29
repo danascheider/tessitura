@@ -27,7 +27,7 @@ gem 'omniauth-google-oauth2', '~> 0.2.5'
 gem 'omniauth-instagram',     '~> 1.0.1'
 gem 'omniauth-identity',      '~> 1.1.1'
 
-# Use Cucumber and RSpec with Capybara for testing
+# Use Cucumber, RSpec, Webmock for testing
 group :test do 
   gem 'codeclimate-test-reporter', require: nil
   gem 'json_spec',        '~> 1.1.2'
@@ -38,6 +38,7 @@ group :test do
   gem 'capybara',         '~> 2.3.0'
   gem 'factory_girl',     '~> 4.4.0'
   gem 'database_cleaner', '~> 1.3.0'
+  gem 'webmock',          '~> 1.18.0'
 end
 
 # Use require_all to clean up requires
