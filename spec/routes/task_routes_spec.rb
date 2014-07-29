@@ -5,15 +5,53 @@ describe Canto do
 
   before(:all) do 
     FactoryGirl.create_list(:user_with_task_lists, 2)
+    @admin = User.first.update(admin: true)
     @user = User.last
     @user.default_task_list.tasks.last.update!(status: 'complete')
   end
 
   describe 'GET' do 
-    context 'task list route' do 
-      it 'returns all the user\'s tasks' do 
-        make_request('GET', "/users/#{@user.id}/tasks", { secret_key: @user.secret_key }.to_json)
-        expect(response_body).to eql @user.tasks.to_json
+    describe 'task list route' do 
+      context 'with authorization' do 
+        before(:each) do 
+          make_request('GET', "/users/#{@user.id}/tasks", { secret_key: @user.secret_key }.to_json)
+        end
+
+        it 'returns all the user\'s tasks' do 
+          expect(response_body).to eql @user.tasks.to_json
+        end
+
+        it 'returns status code 200' do 
+          expect(repsonse_status).to eql 200
+        end
+      end
+
+      context 'without authorization' do 
+        before(:each) do 
+          make_request('GET', "/users/#{@user.id}/tasks")
+        end
+
+        it 'doesn\'t return the tasks' do 
+          expect(response_body).not_to include @user.tasks.to_json
+        end
+
+        it 'returns status code 401' do 
+          expect(response_status).to eql 401
+        end
+      end
+
+      context 'as admin' do 
+        before(:each) do 
+          make_request('GET', "/users/#{@user.id}/tasks", {'secret_key' => @admin.secret_key }.to_json)
+        end
+
+        it 'returns the user\'s tasks' do 
+          expect(response_body).to eql @user.tasks.to_json
+        end
+
+        it 'returns status code 200' do 
+          expect(response_status).to eql 200
+        end
       end
     end
 
