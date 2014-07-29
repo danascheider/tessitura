@@ -8,8 +8,6 @@ ENV['RACK_ENV'] = 'test'
 
 require File.join(File.dirname(__FILE__), '..', '..', './canto.rb')
 
-require 'capybara'
-require 'capybara/cucumber'
 require 'rspec'
 require 'json_spec/cucumber'
 require 'rack/test'
