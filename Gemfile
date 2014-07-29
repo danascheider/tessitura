@@ -35,10 +35,8 @@ group :test do
   gem 'cucumber',         '~> 1.3.11'
   gem 'rspec',            '~> 3.0.0'
   gem 'rack-test',        '~> 0.6.2', require: 'rack/test'
-  gem 'capybara',         '~> 2.3.0'
   gem 'factory_girl',     '~> 4.4.0'
   gem 'database_cleaner', '~> 1.3.0'
-  gem 'webmock',          '~> 1.18.0'
 end
 
 # Use require_all to clean up requires
