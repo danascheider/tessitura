@@ -5,7 +5,9 @@ describe Canto do
 
   before(:each) do 
     DatabaseCleaner.clean_with(:truncation)
-    FactoryGirl.create(:admin)
+    FactoryGirl.create_list(:user_with_task_lists, 2)
+    @admin, @user = User.first, User.last
+    @admin.update(admin: true)
   end
 
   describe 'POST' do 
@@ -57,6 +59,64 @@ describe Canto do
         it 'returns status 401' do 
           expect(response_status).to eql 401
         end
+      end
+    end
+  end
+
+  describe 'GET' do 
+    context 'with user\'s secret key' do 
+      before(:each) do 
+        make_request('GET', "/users/#{@user.id}", { secret_key: @user.secret_key }.to_json)
+      end
+
+      it 'returns the user\'s profile' do 
+        expect(response_body).to eql @user.to_json
+      end
+
+      it 'returns status code 200' do 
+        expect(response_status).to eql 200
+      end
+    end
+
+    context 'with admin\'s secret key' do 
+      before(:each) do 
+        make_request('GET', "/users/#{@user.id}", { secret_key: @admin.secret_key }.to_json)
+      end
+
+      it 'returns the user\'s profile' do 
+        expect(response_body).to eql @user.to_json
+      end
+
+      it 'returns status code 200' do 
+        expect(response_status).to eql 200
+      end
+    end
+
+    context 'with unauthorized key' do 
+      before(:each) do
+        make_request('GET', "/users/#{@admin.id}", { secret_key: @user.secret_key }.to_json)
+      end
+
+      it 'doesn\'t return the user\'s profile' do 
+        expect(response_body).not_to include @admin.to_json
+      end
+
+      it 'returns status code 401' do 
+        expect(response_status).to eql 401
+      end
+    end
+
+    context 'with no secret key' do 
+      before(:each) do 
+        make_request('GET', "/users/#{@user.id}")
+      end
+
+      it 'doesn\'t return the user\'s profile' do 
+        expect(response_body).not_to include @user.to_json
+      end
+
+      it 'returns status code 401' do 
+        expect(response_status).to eql 401
       end
     end
   end
