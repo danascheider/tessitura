@@ -11,8 +11,11 @@ class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
   set :data, ''
 
+  use Rack::Auth::Basic, 'User Area' do |username, password|
+    username == 'foo' && password == 'bar'
+  end
+
   before do 
-    validate_params(params)
     begin
       @request_body = JSON.parse request.body.read 
     rescue(JSON::ParserError)
@@ -27,18 +30,13 @@ class Canto < Sinatra::Application
   get '/users/:id/tasks' do |id|
     # FIX: This will need a more robust error-handling approach - TBD
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      if read_authorized?(id, @request_body)
-        User.find(id).tasks.to_json
-        return status(200)
-      end
-      401
+      [ 200, User.find(id).tasks.to_json ]
     end
   end
 
   get '/tasks/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      status(401) unless read_authorized?(Task.find(id).user.id, @request_body)
-      get_task(id)
+      [ 200, get_task(id) ]
     end
   end
 
@@ -55,35 +53,27 @@ class Canto < Sinatra::Application
 
   post '/users' do 
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      if create_authorized?(@request_body)
-        User.create!(@request_body)
-        return body({ 'secret_key' => User.last.secret_key }.to_json) && 201
-      end
-      401
+      User.create!(@request_body)
+      [ 201, { 'secret_key' => User.last.secret_key }.to_json ]
     end
   end
 
   get '/users' do 
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      status(401) unless admin_approved?(@request_body)
       content_type :json
-      User.all.to_json
+      [ 200, User.all.to_json ]
     end
   end
 
   get '/users/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      return User.find(id).to_json
+      [ 200, User.find(id).to_json ]
     end
   end
 
   put '/users/:id' do |id|
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      if update_authorized?(id, @request_body)
-        User.find(id).update!(@request_body)
-        return status(200)
-      end
-      401
+      [ 200, User.find(id).update!(@request_body) ]
     end
   end
 end
