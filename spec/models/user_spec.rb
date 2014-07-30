@@ -89,16 +89,9 @@ describe User do
     end
 
     context 'when a regular user account is created' do 
-      before(:each) do 
-        @user = FactoryGirl.create(:user, email: 'joeblow@example.com')
-      end
-
       it 'is not an admin' do 
+        @user = FactoryGirl.create(:user, email: 'joeblow@example.com')
         expect(@user).not_to be_admin
-      end
-
-      it 'has a secret key' do 
-        expect(@user.secret_key).not_to be_nil
       end
     end
   end
