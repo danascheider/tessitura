@@ -16,10 +16,6 @@ describe Canto do
         make_request('POST', '/users', { 'email' => 'user@example.com', 'country' => 'USA' }.to_json)
       end
 
-      it 'returns an API key' do 
-        expect(response_body).to include('secret_key')
-      end
-
       it 'returns status 201' do 
         expect(response_status).to eql 201
       end
