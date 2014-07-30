@@ -4,12 +4,12 @@ describe Canto::AuthorizationHelper do
   include Rack::Test::Methods
   include Canto::AuthorizationHelper
 
-  describe '::authorized_credentials?' do 
-    before(:each) do 
-      FactoryGirl.create_list(:user, 2)
-      @admin, @user = User.first, User.last
-    end
+  before(:each) do 
+    FactoryGirl.create_list(:user, 2)
+    @admin, @user = User.first, User.last
+  end
 
+  describe '::authorized_credentials?' do 
     context 'with valid credentials' do 
       it 'returns true' do 
         expect(authorized_credentials?([@user.username, @user.password], @user.id)).to eql true
