@@ -10,12 +10,6 @@ class User < ActiveRecord::Base
                        length: { in: 8..100 }
   before_create :set_admin_status
 
-  # FIX: This belongs in the AuthorizationHelper module
-  def self.is_admin_key?(key)
-    user = User.find_by(secret_key: key)
-    true if user && user.admin
-  end
-  
   def admin?
     self.admin 
   end
