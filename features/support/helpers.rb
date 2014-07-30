@@ -14,6 +14,11 @@ def dump_users
   end
 end
 
+def dump_user_tasks(id)
+  puts "USER #{id}'S TASKS:"
+  User.find(id).tasks.each {|task| puts "#{task.to_hash}\n"}
+end
+
 def get_changed_task
   Task.find(@task.id)
 end
@@ -61,7 +66,7 @@ def make_request(method, path, string=nil)
   when 'PUT'
     put path, string, 'CONTENT-TYPE' => 'application/json'
   when 'GET'
-    get path
+    get path, string, 'CONTENT-TYPE' => 'application/json'
   when 'DELETE'
     delete path 
   end
