@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140730033729) do
+ActiveRecord::Schema.define(version: 20140730033913) do
 
   create_table "task_lists", force: true do |t|
     t.integer "user_id"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 20140730033729) do
     t.boolean  "admin"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "username"
+    t.string   "password"
   end
 
 end
