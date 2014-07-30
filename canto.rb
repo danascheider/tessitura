@@ -12,7 +12,14 @@ class Canto < Sinatra::Application
   set :data, ''
 
   use Rack::Auth::Basic, 'Restricted Area' do |username, password|
-    username == 'foo' && password == 'bar'
+    if /^\/users\/(\d+)/ =~ request.path
+      @user_id = params[:id]
+    elsif /^\/tasks\/(\d+)/ =~ request.path 
+      @user_id = Task.find(id).user.id 
+    end
+
+    return false unless @user = User.find_by(username: username)
+    (password == @user.password && @user_id == @user.id) || @user.admin?
   end
 
   before do 
