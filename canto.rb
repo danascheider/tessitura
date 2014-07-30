@@ -11,7 +11,7 @@ class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
   set :data, ''
 
-  use Rack::Auth::Basic, 'User Area' do |username, password|
+  use Rack::Auth::Basic, 'Restricted Area' do |username, password|
     username == 'foo' && password == 'bar'
   end
 
