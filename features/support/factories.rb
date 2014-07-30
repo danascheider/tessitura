@@ -31,7 +31,8 @@ FactoryGirl.define do
 
   factory :user do 
     sequence(:email) {|n| "user#{n}@example.com"}
-    sequence(:secret_key) {|n| "12345abcde#{n}"}
+    sequence(:username) {|n| "user-25#{n}"}
+    sequence(:password) {|n| "p4ssw0rd#{n}"}
     country 'USA'
 
     factory :admin do 
