@@ -7,24 +7,15 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true,
                        length: { in: 8..50 }
   validates :password, presence: true, confirmation: true,
-                       length: { in: 8..100 },
-                       exclusion: { in: PASSWORD_BLACKLIST, message: 'The password you\'ve chosen is known to be insecure.' }
+                       length: { in: 8..100 }
   before_create :set_admin_status
-  before_create :issue_api_key
-
-  # Eventually this will be replaced with some form of password dictionary
-  PASSWORD_BLACKLIST = [ '123456', 'password', '12345678', 'jesus', 'football', 'ninja',
-                         'qwerty', 'abc123', '123456789', '111111', '1234567', 'iloveyou',
-                         'adobe123', '123123', '1234567890', 'letmein', 'photoshop', 
-                         '1234', 'monkey', 'shadow', 'sunshine', '12345', 'password1',
-                         'princess', 'azerty', 'trustno1', '000000' ]
 
   # FIX: This belongs in the AuthorizationHelper module
   def self.is_admin_key?(key)
     user = User.find_by(secret_key: key)
     true if user && user.admin
   end
-
+  
   def admin?
     self.admin 
   end
@@ -58,10 +49,6 @@ class User < ActiveRecord::Base
   end
 
   private
-    def issue_api_key
-      self.secret_key = SecureRandom.urlsafe_base64(30)
-    end
-
     def set_admin_status
       self.admin = true if User.count == 0
     end
