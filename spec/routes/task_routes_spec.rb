@@ -278,12 +278,12 @@ describe Canto do
         it 'deletes the task' do 
           expect_any_instance_of(Task).to receive(:destroy!)
           authorize @user.username, @user.password
-          make_request('DELETE', "/tasks/1000000")
+          make_request('DELETE', "/tasks/#{@user.tasks.first.id}")
         end
 
         it 'returns status 204' do 
           authorize @user.username, @user.password
-          make_request('DELETE', "/tasks/1000000")
+          make_request('DELETE', "/tasks/#{@user.tasks.first.id}")
           expect(response_status).to eql 204
         end
       end
@@ -292,12 +292,12 @@ describe Canto do
         it 'doesn\'t delete anything' do 
           expect_any_instance_of(Task).not_to receive(:destroy!)
           authorize @user.username, @user.password
-          make_request('DELETE', "/tasks/#{@user.tasks.first.id}")
+          make_request('DELETE', "/tasks/1000000")
         end
 
         it 'returns status 404' do 
           authorize @user.username, @user.password
-          make_request('DELETE', "/tasks/#{@user.tasks.first.id}")
+          make_request('DELETE', "/tasks/1000000")
           expect(response_status).to eql 404
         end
       end
