@@ -22,7 +22,7 @@ describe Canto do
           expect(response_body).to eql @user.tasks.to_json
         end
 
-        it 'returns status code 200' do
+        it 'returns status 200' do
           expect(response_status).to eql 200
         end
       end
@@ -36,22 +36,38 @@ describe Canto do
           expect(response_body).not_to include @user.tasks.to_json
         end
 
-        it 'returns status code 401' do 
+        it 'returns status 401' do 
           expect(response_status).to eql 401
         end
       end
 
       context 'as admin' do 
         before(:each) do 
-          make_request('GET', "/users/#{@user.id}/tasks", {'secret_key' => @admin.secret_key }.to_json)
+          authorize @admin.username, @admin.password
+          make_request('GET', "/users/#{@user.id}/tasks")
         end
 
         it 'returns the user\'s tasks' do 
           expect(response_body).to eql @user.tasks.to_json
         end
 
-        it 'returns status code 200' do 
+        it 'returns status 200' do 
           expect(response_status).to eql 200
+        end
+      end
+
+      context 'with invalid authorization' do 
+        before(:each) do 
+          authorize @user.username, @user.id
+          make_request('GET', "/users/#{@admin.id}/tasks")
+        end
+
+        it 'doesn\'t return the tasks' do 
+          expect(response_body).not_to include @admin.tasks.to_json
+        end
+
+        it 'returns status 401' do 
+          expect(response_status).to eql 401
         end
       end
     end
@@ -62,29 +78,73 @@ describe Canto do
         expect(response_body).to eql json_task(1)
       end
     end
-
-    context 'scoped task route' do 
-      it 'returns only the incomplete tasks' do 
-        get 'tasks?complete=false'
-        expect(response_body).not_to include(json_task(3))
-      end
-    end
   end
 
   describe 'POST' do 
-    describe 'new task route' do 
-      context 'valid attributes' do 
-        it 'returns status code 201' do 
-          make_request('POST', '/tasks', { 'title' => 'Water the garden' }.to_json)
+    context 'with user authorization' do 
+      context 'with valid attributes' do 
+        it 'creates a new task' do 
+          expect(Task).to receive(:create!)
+          authorize @user.username, @user.password
+          make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
+        end
+
+        it 'returns status 201' do 
+          make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
           expect(last_response.status).to eql 201
         end
       end
 
-      context 'invalid attributes' do 
-        it 'returns status code 422' do 
-          make_request('POST', '/tasks', { }.to_json)
+      context 'with invalid attributes' do 
+        it 'attempts to create a new task' do 
+          expect(Task).to receive(:create!)
+          authorize @user.username, @user.password
+          make_request('POST', "/users/#{@user.id}/tasks", { }.to_json)
+        end
+
+        it 'returns status 422' do 
+          authorize @user.username, @user.password
+          make_request('POST', "/users/#{@user.id}/tasks", { }.to_json)
           expect(response_status).to eql 422
         end
+      end
+    end
+
+    context 'with admin authorization' do 
+      it 'creates a new task' do 
+        expect(Task).to receive(:create!)
+        authorize @admin.username, @admin.password
+        make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
+      end
+
+      it 'returns status 201' do 
+        make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
+        expect(request_status).to eql 201
+      end
+    end
+
+    context 'with invalid authorization' do 
+      it 'doesn\'t create a new task' do 
+        expect(Task).not_to receive(:create)
+        authorize @user.username, @user.password
+        make_request('POST', "/users/#{@admin.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
+      end
+
+      it 'returns status 401' do 
+        make_request('POST', "/users/#{@admin.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
+        expect(request_status).to eql 401
+      end
+    end
+
+    context 'without authorization' do 
+      it 'doesn\'t attempt to create a task' do 
+        expect(Task).not_to receive(:create)
+        make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
+      end
+
+      it 'returns status 401' do 
+        make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
+        expect(response_status).to eql 401
       end
     end
   end
@@ -92,14 +152,14 @@ describe Canto do
   describe 'PUT' do 
     describe 'update task route' do 
       context 'with valid attributes' do 
-        it 'returns status code 200' do
+        it 'returns status 200' do
           make_request('PUT', '/tasks/1', { 'title' => 'Take the car for service' }.to_json)
           expect(response_status).to eql 200
         end
       end
 
       context 'with invalid attributes' do 
-        it 'returns status code 422' do 
+        it 'returns status 422' do 
           make_request('PUT', '/tasks/1', { 'title' => nil }.to_json)
           expect(response_status).to eql 422
         end
@@ -109,7 +169,7 @@ describe Canto do
 
   describe 'DELETE' do 
     context 'when the task exists' do 
-      it 'returns status code 204' do 
+      it 'returns status 204' do 
         make_request('DELETE', '/tasks/1')
         expect(response_status).to eql 204
       end
