@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'sinatra/basic_auth'
 require 'acts_as_list'
 require 'json'
 require 'require_all'
