@@ -14,7 +14,8 @@ describe Canto do
     describe 'task list route' do 
       context 'with authorization' do 
         before(:each) do 
-          make_request('GET', "/users/#{@user.id}/tasks", { secret_key: @user.secret_key }.to_json)
+          authorize @user.username, @user.password
+          make_request('GET', "/users/#{@user.id}/tasks")
         end
         
         it 'returns all the user\'s tasks' do 
