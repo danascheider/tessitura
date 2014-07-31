@@ -100,10 +100,12 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     delete '/tasks/:id' do |id|
-      user = User.find_by(username: auth.credentials.first)
-      halt 401 unless get_resource(Task, id).user.id == user.id || user.admin?
-      get_resource(Task, id).destroy!
-      204
+      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
+        user = User.find_by(username: auth.credentials.first)
+        halt 401 unless Task.find(id).user.id == user.id || user.admin?
+        Task.find(id).destroy!
+        204
+      end
     end
   end
 
