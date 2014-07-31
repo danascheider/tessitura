@@ -12,12 +12,8 @@ class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
   set :data, ''
 
-  authorize 'General' do |username, password|
-    true
-  end
-
-  authorize 'Admin' do |username, password|
-    true
+  authorize do |username, password|
+    username == 'kchesnell' && password == 'karentheadmin'
   end
 
   before do 
@@ -39,11 +35,9 @@ class Canto < Sinatra::Application
     end
   end
 
-  protect 'General' do 
+  protect do 
     get '/users/:id' do |id|
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-        [ 200, User.find(id).to_json ]
-      end
+      @user = get_resource(User, id) ? [ 200, @user.to_json ] : 404
     end
 
     put '/users/:id' do |id|
