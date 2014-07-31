@@ -12,6 +12,10 @@ class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
   set :data, ''
 
+  authorize do |username, password|
+    #
+  end
+
   before do 
     begin
       @request_body = JSON.parse request.body.read 
@@ -22,6 +26,13 @@ class Canto < Sinatra::Application
 
   get '/' do 
     204
+  end
+
+  post '/users' do 
+    begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+      User.create!(@request_body)
+      201
+    end
   end
 
   get '/users/:id/tasks' do |id|
@@ -47,13 +58,6 @@ class Canto < Sinatra::Application
 
   # USER ROUTES
   # ===========
-
-  post '/users' do 
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      User.create!(@request_body)
-      [ 201, { 'secret_key' => User.last.secret_key }.to_json ]
-    end
-  end
 
   get '/users' do 
     begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
