@@ -9,7 +9,8 @@ def dump_users
   puts "USERS:"
   User.all.each do |user|
     hash = user.to_hash
-    hash[:secret_key] = user.secret_key
+    hash[:username] = user.username
+    hash[:password] = user.password
     puts "#{hash}\n"
   end
 end
@@ -66,7 +67,7 @@ def make_request(method, path, string=nil)
   when 'PUT'
     put path, string, 'CONTENT-TYPE' => 'application/json'
   when 'GET'
-    get path, string, 'CONTENT-TYPE' => 'application/json'
+    get path
   when 'DELETE'
     delete path 
   end
