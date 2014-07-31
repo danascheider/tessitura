@@ -61,6 +61,7 @@ class Canto < Sinatra::Application
       # get around security that way.
       halt 401 unless (user.id == id.to_i || user.admin?)
       @request_body[:task_list_id] = user.default_task_list.id
+
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         Task.create!(@request_body)
         [ 201, @request_body ]
@@ -99,7 +100,10 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     delete '/tasks/:id' do |id|
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id); 204 }
+      user = User.find_by(username: auth.credentials.first)
+      halt 401 unless get_resource(Task, id).user.id == user.id || user.admin?
+      get_resource(Task, id).destroy!
+      204
     end
   end
 
@@ -108,7 +112,9 @@ class Canto < Sinatra::Application
       User.create!(@request_body)
       201
     end
+  end
 
+  protect 'Admin' do 
     get '/admin/users' do 
       [ 200, User.all.to_json ]
     end
