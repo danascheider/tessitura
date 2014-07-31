@@ -13,8 +13,7 @@ class Canto < Sinatra::Application
   set :data, ''
 
   authorize 'General' do |username, password|
-    @user = User.find_by(username: username)
-    password == @user.password
+    password == User.find_by(username: username).password
   end
 
   authorize 'Admin' do |username, password|
@@ -27,7 +26,7 @@ class Canto < Sinatra::Application
   end
 
   get '/' do 
-    204
+    "Welcome to Canto\n"
   end
 
   post '/users' do 
@@ -40,7 +39,10 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     get '/users/:id' do |id|
-      (user = get_resource(User, id)) ? [ 200, user.to_json ] : 404
+      user = User.find_by(username: auth.credentials.first)
+      if user.id == id.to_i || user.admin?
+        [ 200, user.to_json ]
+      end
     end
 
     put '/users/:id' do |id|
