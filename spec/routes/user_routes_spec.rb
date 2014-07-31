@@ -95,7 +95,7 @@ describe Canto do
       end
     end
 
-    context 'with unauthorized key' do 
+    context 'with invalid credentials' do 
       before(:each) do
         authorize @user.username, @user.password
         make_request('GET', "/users/#{@admin.id}")
