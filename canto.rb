@@ -12,8 +12,14 @@ class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
   set :data, ''
 
-  authorize do |username, password|
-    password == User.find_by(username: username).password
+  authorize 'General' do |username, password|
+    @user = User.find_by(username: username)
+    password == @user.password
+  end
+  
+  authorize 'Admin' do |username, password|
+    @user = User.find_by(username: username)
+    password == @user.password && @user.admin?
   end
 
   before do 
@@ -26,12 +32,13 @@ class Canto < Sinatra::Application
 
   post '/users' do 
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+      return 401 if @request_body[:admin] == true
       User.create!(@request_body)
       201
     end
   end
 
-  protect do 
+  protect 'General' do 
     get '/users/:id' do |id|
       @user = get_resource(User, id) ? [ 200, @user.to_json ] : 404
     end
@@ -61,6 +68,17 @@ class Canto < Sinatra::Application
 
     delete '/tasks/:id' do |id|
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id); 204 }
+    end
+  end
+
+  protect 'Admin' do 
+    post '/admin/users' do 
+      User.create!(@request_body)
+      201
+    end
+
+    get '/admin/users' do 
+      [ 200, User.all.to_json ]
     end
   end
 end
