@@ -43,11 +43,19 @@ class Canto < Sinatra::Application
       halt 401 unless user.id == id.to_i || user.admin?
       [ 200, get_resource(User, id).to_json ]
     end
+  end
 
+  protect 'General' do 
     put '/users/:id' do |id|
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         [ 200, User.find(id).update!(@request_body) ]
       end
+    end
+  end
+
+  protect 'General' do 
+    post '/users/:id/tasks' do |id|
+      #
     end
   end
 
@@ -58,6 +66,9 @@ class Canto < Sinatra::Application
         [ 200, User.find(id).tasks.to_json ]
       end
     end
+  end
+
+  protect 'General' do
 
     get '/tasks/:id' do |id|
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
