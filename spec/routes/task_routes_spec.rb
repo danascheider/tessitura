@@ -224,8 +224,8 @@ describe Canto do
 
       context 'with invalid attributes' do 
         it 'returns status 422' do 
-          authorize @user.name, @user.password
-          make_request('PUT', '/tasks/1', { 'title' => nil }.to_json)
+          authorize @user.username, @user.password
+          make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'title' => nil }.to_json)
           expect(response_status).to eql 422
         end
       end
