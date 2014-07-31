@@ -87,7 +87,9 @@ class Canto < Sinatra::Application
     end
 
     put '/tasks/:id' do |id|
-      begin_and_rescue(ActiveRecord::RecordInvalid, 422) { update_task(id, @request_body); 200 }
+      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+        Task.find(id).update!(@request_body)
+      end
     end
 
     delete '/tasks/:id' do |id|
