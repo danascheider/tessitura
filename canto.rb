@@ -16,7 +16,7 @@ class Canto < Sinatra::Application
     @user = User.find_by(username: username)
     password == @user.password
   end
-  
+
   authorize 'Admin' do |username, password|
     @user = User.find_by(username: username)
     password == @user.password && @user.admin?
@@ -32,7 +32,7 @@ class Canto < Sinatra::Application
 
   post '/users' do 
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      return 401 if @request_body[:admin] == true
+      halt 401 if @request_body.has_key? "admin"
       User.create!(@request_body)
       201
     end
