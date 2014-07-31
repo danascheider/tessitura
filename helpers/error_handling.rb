@@ -15,6 +15,14 @@ class Sinatra::Application
         nil
       end
     end
+
+    def parse_json(object)
+      begin
+        JSON.parse object
+      rescue JSON::ParserError
+        nil
+      end
+    end
   end
 
   helpers ErrorHandling

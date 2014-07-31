@@ -17,11 +17,7 @@ class Canto < Sinatra::Application
   end
 
   before do 
-    begin
-      @request_body = JSON.parse request.body.read 
-    rescue(JSON::ParserError)
-      @request_body = nil
-    end
+    @request_body = parse_json(request.body.read)
   end
 
   get '/' do 
