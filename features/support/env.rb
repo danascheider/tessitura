@@ -12,10 +12,7 @@ require 'rspec'
 require 'json_spec/cucumber'
 require 'rack/test'
 
-Capybara.app = Canto
-
 class CantoWorld
-  include Capybara::DSL
   include RSpec::Expectations
   include RSpec::Matchers
   include RSpec::Mocks
