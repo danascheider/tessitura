@@ -233,7 +233,7 @@ describe Canto do
 
     context 'with admin authorization' do 
       it 'updates the task' do 
-        expect(@user.tasks.first).to receive(:update!)
+        expect_any_instance_of(Task).to receive(:update!)
         authorize @admin.username, @admin.password
         make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'status' => 'blocking' }.to_json)
       end
