@@ -73,9 +73,63 @@ describe Canto do
     end
 
     context 'individual task route' do 
-      it 'returns a single task as a JSON object' do 
-        get '/tasks/1'
-        expect(response_body).to eql json_task(1)
+      context 'with user authorization' do 
+        before(:each) do 
+          authorize @user.username, @user.password
+          make_request('GET', "/tasks/#{@user.tasks.first.id}")
+        end
+
+        it 'returns a single task' do 
+          expect(response_body).to eql @user.tasks.first.to_json
+        end
+
+        it 'returns status 200' do 
+          expect(response_status).to eql 200
+        end
+      end
+
+      context 'with admin authorization' do 
+        before(:each) do 
+          authorize @admin.username, @admin.password
+          make_request('GET', "/tasks/#{@user.tasks.first.id}")
+        end
+
+        it 'returns a single task' do 
+          expect(response_body).to eql @user.tasks.first.to_json
+        end
+
+        it 'returns status 200' do 
+          expect(response_status).to eql 200
+        end
+      end
+
+      context 'with invalid authorization' do 
+        before(:each) do 
+          authorize @user.username, @user.password
+          make_request('GET', "/tasks/#{@admin.tasks.first.id}")
+        end
+
+        it 'doesn\'t return a task' do 
+          expect(response_body).not_to include @admin.tasks.first.to_json
+        end
+
+        it 'returns status 401' do 
+          expect(response_status).to eql 401
+        end
+      end
+
+      context 'with no authorization' do 
+        before(:each) do 
+          make_request('GET', "/tasks/#{@user.tasks.first.id}")
+        end
+
+        it 'doesn\'t return a task' do 
+          expect(response_body).not_to include @user.tasks.first.to_json
+        end
+
+        it 'returns status 401' do 
+          expect(response_status).to eql 401
+        end
       end
     end
   end
