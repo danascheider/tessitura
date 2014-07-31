@@ -247,7 +247,7 @@ describe Canto do
 
     context 'with invalid authorization' do 
       it 'doesn\'t update the task' do 
-        expect(@admin.tasks.first).not_to receive(:update)
+        expect_any_instance_of(Task).not_to receive(:update!)
         authorize @user.username, @user.password
         make_request('PUT', "/tasks/#{@admin.tasks.first.id}", { 'status' => 'complete' }.to_json)
       end
