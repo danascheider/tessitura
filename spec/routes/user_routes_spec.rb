@@ -36,14 +36,29 @@ describe Canto do
     end
 
     context 'attempting to create an admin' do 
-      it 'doesn\'t create a user' do 
-        expect(User).not_to receive(:create!)
-        make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
+      context 'without providing credentials'
+        it 'doesn\'t create a user' do 
+          expect(User).not_to receive(:create!)
+          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
+        end
+
+        it 'returns status 401' do 
+          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
+          expect(response_status).to eql 401
+          puts last_response.body
+        end
       end
 
-      it 'returns status 401' do 
-        make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-        expect(response_status).to eql 401
+      context 'without providing admin credentials' do 
+        it 'doesn\'t create a user' do 
+          expect(User).not_to receive(:create!)
+          authorize @user.username, @user.password
+          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
+        end
+
+        it 'returns status 401' do 
+          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
+          expect(response_status).to eql 401
       end
     end
 
