@@ -206,19 +206,68 @@ describe Canto do
   end
 
   describe 'PUT' do 
-    describe 'update task route' do 
+    context 'with user authorization' do
       context 'with valid attributes' do 
+        it 'updates the task' do 
+          # FIX: Might it be better to use :update instead of :update!?
+          expect(@user.tasks.first).to receive(:update!)
+          authorize @user.username, @user.password
+          make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'title' => 'Take the car for service' }.to_json)
+        end
+
         it 'returns status 200' do
-          make_request('PUT', '/tasks/1', { 'title' => 'Take the car for service' }.to_json)
+          authorize@user.username, @user.password
+          make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'title' => 'Take the car for service' }.to_json)
           expect(response_status).to eql 200
         end
       end
 
       context 'with invalid attributes' do 
         it 'returns status 422' do 
+          authorize @user.name, @user.password
           make_request('PUT', '/tasks/1', { 'title' => nil }.to_json)
           expect(response_status).to eql 422
         end
+      end
+    end
+
+    context 'with admin authorization' do 
+      it 'updates the task' do 
+        expect(@user.tasks.first).to receive(:update!)
+        authorize @admin.username, @admin.password
+        make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'status' => 'blocking' }.to_json)
+      end
+
+      it 'returns status 200' do 
+        authorize @admin.username, @admin.password
+        make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'status' => 'blocking' }.to_json)
+        expect(response_status).to eql 200
+      end
+    end
+
+    context 'with invalid authorization' do 
+      it 'doesn\'t update the task' do 
+        expect(@admin.tasks.first).not_to receive(:update)
+        authorize @user.username, @user.password
+        make_request('PUT', "/tasks/#{@admin.tasks.first.id}", { 'status' => 'complete' }.to_json)
+      end
+
+      it 'returns status 401' do 
+        authorize @user.username, @user.password
+        make_request('PUT', "/tasks/#{@admin.tasks.first.id}", { 'status' => 'complete' }.to_json)
+        expect(response_status).to eql 401
+      end
+    end
+
+    context 'without authorization' do 
+      it 'doesn\'t update the task' do 
+        expect(@user.tasks.first).not_to receive(:update!)
+        make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'priority' => 'high' }.to_json)
+      end
+
+      it 'returns status 401' do 
+        make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'priority' => 'high' }.to_json)
+        expect(response_status).to eql 401
       end
     end
   end
