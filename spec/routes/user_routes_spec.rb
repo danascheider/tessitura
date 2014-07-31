@@ -13,7 +13,11 @@ describe Canto do
   describe 'POST' do 
     context 'with valid attributes' do 
       before(:each) do
-        make_request('POST', '/users', { 'email' => 'user@example.com', 'country' => 'USA' }.to_json)
+        make_request('POST', '/users', { 'email' => 'user@example.com', 'username' => 'justine', 'password' => 'validpassword666', 'country' => 'USA' }.to_json)
+      end
+
+      it 'calls the User create method' do 
+        expect(User).to receive(:create)
       end
 
       it 'returns status 201' do 
