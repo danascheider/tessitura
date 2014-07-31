@@ -85,7 +85,9 @@ class Canto < Sinatra::Application
         [ 200, get_resource(Task, id).to_json ]
       end
     end
+  end
 
+  protect 'General' do 
     put '/tasks/:id' do |id|
       user = User.find_by(username: auth.credentials.first)
       halt 401 unless get_resource(Task, id).user.id == user.id || user.admin?
