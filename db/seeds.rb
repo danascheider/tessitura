@@ -6,8 +6,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.create(first_name: 'Karen', last_name: 'Chesnell', email: 'karen@example.com', birthdate: 19830728, fach: 'soprano', city: 'Buffalo', country: 'USA', admin: true)
-User.create(first_name: 'Simon', last_name: 'Bundy', email: 'simon@example.com', birthdate: 19880902, fach: 'countertenor', city: 'Brisbane', country: 'Australia', admin: false)
+User.create(username: 'kchesnell1', password: 'karentheadmin', first_name: 'Karen', last_name: 'Chesnell', email: 'karen@example.com', birthdate: 19830728, fach: 'soprano', city: 'Buffalo', country: 'USA', admin: true)
+User.create(username: 'simonbundy1', password: 'simonthecountertenor', first_name: 'Simon', last_name: 'Bundy', email: 'simon@example.com', birthdate: 19880902, fach: 'countertenor', city: 'Brisbane', country: 'Australia', admin: false)
 
 TaskList.create(title: 'Default Tasks', user_id: 1)
 TaskList.create(title: 'Default Tasks', user_id: 2)
