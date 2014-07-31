@@ -80,9 +80,10 @@ describe Canto do
       end
     end
 
-    context 'with admin\'s secret key' do 
+    context 'with admin credentials' do 
       before(:each) do 
-        make_request('GET', "/users/#{@user.id}", { secret_key: @admin.secret_key }.to_json)
+        authorize @admin.username, @admin.password
+        make_request('GET', "/users/#{@user.id}")
       end
 
       it 'returns the user\'s profile' do 
