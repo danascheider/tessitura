@@ -18,14 +18,8 @@ gem 'rake',                 '~> 10.3.2'
 # with Backbone.js front-end
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 
-# User OmniAuth for user logins
-gem 'omniauth',               '~> 1.2.2'
-gem 'omniauth-facebook',      '~> 1.6.0'
-gem 'omniauth-tumblr',        '~> 1.1.0'
-gem 'omniauth-twitter',       '~> 1.0.1'
-gem 'omniauth-google-oauth2', '~> 0.2.5'
-gem 'omniauth-instagram',     '~> 1.0.1'
-gem 'omniauth-identity',      '~> 1.1.1'
+# Use sinatra-basic-auth to handle user authorization
+gem 'sinatra-basic-auth', '~> 0.1.0', require: 'sinatra/basic_auth'
 
 # Use Cucumber, RSpec, Webmock for testing
 group :test do 
