@@ -261,7 +261,7 @@ describe Canto do
 
     context 'without authorization' do 
       it 'doesn\'t update the task' do 
-        expect(@user.tasks.first).not_to receive(:update!)
+        expect_any_instance_of(Task).not_to receive(:update!)
         make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'priority' => 'high' }.to_json)
       end
 
