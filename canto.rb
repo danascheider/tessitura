@@ -95,7 +95,9 @@ class Canto < Sinatra::Application
         Task.find(id).update!(@request_body)
       end
     end
+  end
 
+  protect 'General' do 
     delete '/tasks/:id' do |id|
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id); 204 }
     end
