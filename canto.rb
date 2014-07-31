@@ -69,7 +69,6 @@ class Canto < Sinatra::Application
   end
 
   protect 'General' do
-
     get '/tasks/:id' do |id|
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
         [ 200, get_task(id) ]
