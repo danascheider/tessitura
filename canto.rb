@@ -73,7 +73,7 @@ class Canto < Sinatra::Application
       user = User.find_by(username: auth.credentials.first)
       halt 401 unless get_resource(Task, id).user.id == user.id || user.admin?
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-        [ 200, get_resource(Task).id ]
+        [ 200, get_resource(Task, id) ]
       end
     end
 
