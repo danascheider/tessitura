@@ -7,6 +7,14 @@ class Sinatra::Application
         status
       end
     end
+
+    def get_resource(klass, id)
+      begin
+        klass.find(id)
+      rescue ActiveRecord::RecordNotFound
+        nil
+      end
+    end
   end
 
   helpers ErrorHandling
