@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, uniqueness: true, 
                     format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   validates :username, presence: true, uniqueness: true,
-                       length: { in: 8..50 }
+                       length: { in: 6..50 }
   validates :password, presence: true, confirmation: true,
                        length: { in: 8..100 }
   before_create :set_admin_status
