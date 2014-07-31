@@ -15,13 +15,18 @@ When(/^the client submits a (.*) request to users\/(\d+)\/tasks with:$/) do |met
   make_request(method, path, string)
 end
 
-When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method, path, string|
-  path = path == nil ? "/users" : "/users#{path}"
-  @user_count = User.count 
-  @user = (id = (/\d+/.match(path)).to_s) > '' ? User.find(id) : nil
+When(/^the client submits a POST request to \/users with:$/) do |string|
+  @user_count = User.count
   @request_time = Time.now.utc
-  make_request(method, path, string)
-end
+  make_request('POST', '/users', string)
+
+# When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method, path, string|
+#   path = path == nil ? "/users" : "/users#{path}"
+#   @user_count = User.count 
+#   @user = (id = (/\d+/.match(path)).to_s) > '' ? User.find(id) : nil
+#   @request_time = Time.now.utc
+#   make_request(method, path, string)
+# end
 
 # RESPONSE STEPS
 # ==============
