@@ -13,7 +13,7 @@ class Canto < Sinatra::Application
   set :data, ''
 
   authorize do |username, password|
-    username == 'kchesnell' && password == 'karentheadmin'
+    password == User.find_by(username: username).password
   end
 
   before do 
