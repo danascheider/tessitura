@@ -97,7 +97,8 @@ describe Canto do
 
     context 'with unauthorized key' do 
       before(:each) do
-        make_request('GET', "/users/#{@admin.id}", { secret_key: @user.secret_key }.to_json)
+        authorize @user.username, @user.password
+        make_request('GET', "/users/#{@admin.id}")
       end
 
       it 'doesn\'t return the user\'s profile' do 
