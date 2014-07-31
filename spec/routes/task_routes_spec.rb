@@ -210,7 +210,7 @@ describe Canto do
       context 'with valid attributes' do 
         it 'updates the task' do 
           # FIX: Might it be better to use :update instead of :update!?
-          expect(@user.tasks.first).to receive(:update!)
+          expect_any_instance_of(Task).to receive(:update!)
           authorize @user.username, @user.password
           make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'title' => 'Take the car for service' }.to_json)
         end
