@@ -35,35 +35,18 @@ describe Canto do
       end
     end
 
-    context 'making an admin' do 
-      context 'with admin key included in the request' do
-        before(:each) do
-          make_request('POST', '/users', { 'secret_key' => User.first.secret_key, 'email' => 'joe@example.com', 'admin' => true }.to_json)
-        end 
-
-        it 'makes an admin' do 
-          expect(User.find_by(email: 'joe@example.com')).to be_admin
-        end
-
-        it 'returns status 201' do 
-          expect(response_status).to eql 201
-        end
+    context 'attempting to create an admin' do 
+      it 'doesn\'t create a user' do 
+        expect(User).not_to receive(:create!)
+        make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
       end
 
-      context 'with no admin key in the request' do 
-        before(:each) do 
-          make_request('POST', '/users', { 'email' => 'joe@example.com', 'admin' => true }.to_json)
-        end
-
-        it 'doesn\'t create a user' do 
-          expect(User.count).to eql 1
-        end
-
-        it 'returns status 401' do 
-          expect(response_status).to eql 401
-        end
+      it 'returns status 401' do 
+        make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
+        expect(response_status).to eql 401
       end
     end
+
   end
 
   describe 'GET' do 
