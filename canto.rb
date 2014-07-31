@@ -40,7 +40,7 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     get '/users/:id' do |id|
-      @user = get_resource(User, id) ? [ 200, @user.to_json ] : 404
+      (user = get_resource(User, id)) ? [ 200, user.to_json ] : 404
     end
 
     put '/users/:id' do |id|
