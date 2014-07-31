@@ -65,9 +65,10 @@ describe Canto do
   end
 
   describe 'GET' do 
-    context 'with user\'s secret key' do 
+    context 'with user\'s credentials' do 
       before(:each) do 
-        make_request('GET', "/users/#{@user.id}", { secret_key: @user.secret_key }.to_json)
+        authorize @user.username, @user.password
+        make_request('GET', "/users/#{@user.id}")
       end
 
       it 'returns the user\'s profile' do 
