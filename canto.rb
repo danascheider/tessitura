@@ -55,11 +55,19 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     post '/users/:id/tasks' do |id|
-      #
+      user = User.find_by(username: auth.credentials.first)
+      # User should be able to specify a task list, but I'm saving that feature
+      # for later to make sure they can't specify somebody else's task list and
+      # get around security that way.
+      @request_body[:task_list_id] = user.default_task_list.id
+      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+        Task.create!(@request_body)
+        [ 201, @request_body ]
+      end
     end
   end
 
-  protect 'General' do 
+  protect 'General' do
     get '/users/:id/tasks' do |id|
       # FIX: This will need a more robust error-handling approach - TBD
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 

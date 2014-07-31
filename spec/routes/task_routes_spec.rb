@@ -144,6 +144,7 @@ describe Canto do
         end
 
         it 'returns status 201' do 
+          authorize @user.username, @user.password
           make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
           expect(last_response.status).to eql 201
         end
