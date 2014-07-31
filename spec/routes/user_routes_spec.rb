@@ -24,6 +24,11 @@ describe Canto do
     end
 
     context 'with invalid attributes' do 
+      it 'attempts to create a user' do 
+        expect(User).to receive(:create!)
+        make_request('POST', '/users', { 'first_name' => 'Frank' }.to_json)
+      end
+
       it 'returns status 422' do 
         make_request('POST', '/users', { 'first_name' => 'Frank' }.to_json)
         expect(response_status).to eql 422
