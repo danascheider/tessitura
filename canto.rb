@@ -49,7 +49,9 @@ class Canto < Sinatra::Application
         [ 200, User.find(id).update!(@request_body) ]
       end
     end
+  end
 
+  protect 'General' do 
     get '/users/:id/tasks' do |id|
       # FIX: This will need a more robust error-handling approach - TBD
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
