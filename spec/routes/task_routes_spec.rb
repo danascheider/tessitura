@@ -173,8 +173,9 @@ describe Canto do
       end
 
       it 'returns status 201' do 
+        authorize @admin.username, @admin.password
         make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
-        expect(request_status).to eql 201
+        expect(response_status).to eql 201
       end
     end
 
@@ -187,7 +188,7 @@ describe Canto do
 
       it 'returns status 401' do 
         make_request('POST', "/users/#{@admin.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
-        expect(request_status).to eql 401
+        expect(response_status).to eql 401
       end
     end
 
