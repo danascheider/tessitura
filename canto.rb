@@ -12,8 +12,12 @@ class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
   set :data, ''
 
-  authorize do |username, password|
-    #
+  authorize 'General' do |username, password|
+    true
+  end
+
+  authorize 'Admin' do |username, password|
+    true
   end
 
   before do 
@@ -35,46 +39,38 @@ class Canto < Sinatra::Application
     end
   end
 
-  get '/users/:id/tasks' do |id|
-    # FIX: This will need a more robust error-handling approach - TBD
-    begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      [ 200, User.find(id).tasks.to_json ]
+  protect 'General' do 
+    get '/users/:id' do |id|
+      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
+        [ 200, User.find(id).to_json ]
+      end
     end
-  end
 
-  get '/tasks/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      [ 200, get_task(id) ]
+    put '/users/:id' do |id|
+      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+        [ 200, User.find(id).update!(@request_body) ]
+      end
     end
-  end
 
-  put '/tasks/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) { update_task(id, @request_body); 200 }
-  end
-
-  delete '/tasks/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id); 204 }
-  end
-
-  # USER ROUTES
-  # ===========
-
-  get '/users' do 
-    begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      content_type :json
-      [ 200, User.all.to_json ]
+    get '/users/:id/tasks' do |id|
+      # FIX: This will need a more robust error-handling approach - TBD
+      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
+        [ 200, User.find(id).tasks.to_json ]
+      end
     end
-  end
 
-  get '/users/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-      [ 200, User.find(id).to_json ]
+    get '/tasks/:id' do |id|
+      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
+        [ 200, get_task(id) ]
+      end
     end
-  end
 
-  put '/users/:id' do |id|
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-      [ 200, User.find(id).update!(@request_body) ]
+    put '/tasks/:id' do |id|
+      begin_and_rescue(ActiveRecord::RecordInvalid, 422) { update_task(id, @request_body); 200 }
+    end
+
+    delete '/tasks/:id' do |id|
+      begin_and_rescue(ActiveRecord::RecordNotFound, 404) { delete_task(id); 204 }
     end
   end
 end
