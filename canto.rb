@@ -59,6 +59,7 @@ class Canto < Sinatra::Application
       # User should be able to specify a task list, but I'm saving that feature
       # for later to make sure they can't specify somebody else's task list and
       # get around security that way.
+      halt 401 unless (user.id == id.to_i || user.admin?)
       @request_body[:task_list_id] = user.default_task_list.id
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         Task.create!(@request_body)
