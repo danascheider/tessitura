@@ -1,7 +1,6 @@
 Given(/^there are (\d+|no) users$/) do |number|
   # @user_count is invoked in 'no user should be created', below
   number == 'no' ? User.count == 0 : number.times { FactoryGirl.create(:user) }
-  User.first.update(secret_key: '12345abcde1') unless number == 'no'
   @user_count = User.count
 end
 
