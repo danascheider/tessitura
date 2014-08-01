@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Canto do 
   include Rack::Test::Methods 
 
-  before(:all) do 
+  before(:each) do 
     FactoryGirl.create_list(:user_with_task_lists, 2)
     @admin, @user = User.first, User.last
     @admin.update(admin: true)
