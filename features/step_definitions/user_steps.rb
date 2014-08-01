@@ -38,7 +38,7 @@ Then(/^(a|no) new user should be created with the following attributes:$/) do |a
         expect(hash[key.to_s]).to eql value if hash.has_key? key.to_s
       end
     else 
-      expect{ User.find_by(username: hash['username']) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(User.find_by(username: hash[:username])).to eql nil
     end
   end
 end
