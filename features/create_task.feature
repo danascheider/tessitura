@@ -5,10 +5,10 @@ Feature: Create task
 
   Background:
     Given there are users with the following attributes:
-      | id | email             | secret_key  | admin |
-      | 1  | admin@example.com | 12345abcde1 | true  |
-      | 2  | user2@example.com | 12345abcde2 | false |
-      | 3  | user3@example.com | 12345abcde3 | false |
+      | id | email             | username | password    | admin |
+      | 1  | admin@example.com | admin1   | adminpasswd | true  |
+      | 2  | user2@example.com | abc123   | abcde12345  | false |
+      | 3  | user3@example.com | bcd234   | bcdef23456  | false |
     And each user has 3 tasks
 
   Scenario: User creates a valid task
