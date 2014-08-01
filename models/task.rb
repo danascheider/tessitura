@@ -50,7 +50,11 @@ class Task < ActiveRecord::Base
     { id: self.id,
       position: self.position,
       title: self.title, 
+      priority: self.priority,
       status: self.status, 
+      description: self.description,
+      owner_id: self.user.id,
+      task_list_id: self.task_list.id,
       created_at: self.created_at,
       updated_at: self.updated_at
     }
