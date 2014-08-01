@@ -31,10 +31,14 @@ end
 # USER CREATION STEPS
 # ===================
 
-Then(/^a new user should be created with the following attributes:$/) do |attributes|
+Then(/^(a|no) new user should be created with the following attributes:$/) do |art, attributes|
   attributes.hashes.each do |hash|
-    User.last.to_hash.each do |key, value|
-      expect(hash[key.to_s]).to eql value if hash.has_key? key.to_s
+    if art == 'a'
+      User.last.to_hash.each do |key, value|
+        expect(hash[key.to_s]).to eql value if hash.has_key? key.to_s
+      end
+    else 
+      expect{ User.find_by(username: hash['username']) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

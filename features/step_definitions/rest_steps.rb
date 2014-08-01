@@ -8,6 +8,7 @@ end
 
 When(/^the client submits a POST request to (.*) with (user|admin) credentials and:$/) do |path, type, string|
   user = type == 'admin' ? User.first : User.last
+  @request_time = Time.now.utc
   make_request('POST', path, string)
 end
 

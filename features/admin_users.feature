@@ -10,7 +10,9 @@ Feature: Admin users
       """json
       { "username":"cde345", "password":"cdefg34567", "email":"user3@example.com", "admin":"true" }
       """
-    Then <article> user should be created
+    Then <article> user should be created with the following attributes:
+      | username | password   | email             | admin |
+      | cde345   | cdefg34567 | user3@example.com | true  |
     And the response should return status <status>
 
     Examples:
