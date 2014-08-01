@@ -65,7 +65,6 @@ describe Canto do
         expect { 
           make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
           }.to change(User.count).by(1)
-        end
       end
 
       it 'returns status 201' do 
