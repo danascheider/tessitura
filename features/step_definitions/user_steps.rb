@@ -8,6 +8,8 @@ Given(/^there are users with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     FactoryGirl.create(:user, hash)
   end
+  @admin = User.where(admin: true).first 
+  @user = User.find(2)
 end
 
 Given(/^each user has (\d+) tasks$/) do |number|
@@ -24,8 +26,8 @@ Then(/^the user should be an admin$/) do
   @user.should be_admin
 end
 
-Then(/^the (\d+)(?:[a-z]{2}) user should (not )?be an admin$/) do |id, neg|
-  User.find(id).should be_admin unless neg
+Then(/^the (\d+)(?:[a-z]{2}) user should (not|yes)?(?: )?be an admin$/) do |id, neg|
+  User.find(id).should be_admin unless neg == 'not'
 end
 
 # USER CREATION STEPS

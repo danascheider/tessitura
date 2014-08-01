@@ -24,7 +24,7 @@ Feature: Admin users
     | /admin/users | no     |    no   |  401   |
 
   Scenario Outline: Making a user an admin
-    When the client submits a PUT request to /users/2 with admin credentials and:
+    When the client submits a PUT request to /users/3 with admin credentials and:
       """json
       { "admin":"true" }
       """
@@ -33,7 +33,7 @@ Feature: Admin users
 
     Examples:
       | type  | negation | status |
-      | admin |          | 200    |
+      | admin |   yes    | 200    |
       | user  |   not    | 401    |
       | no    |   not    | 401    |
 
