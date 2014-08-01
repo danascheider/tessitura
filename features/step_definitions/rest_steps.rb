@@ -102,3 +102,7 @@ end
 Then(/^the response should indicate the (?:.*) was not found$/) do
   expect(response_status).to eql 404
 end
+
+Then(/^the response should indicate the request was unauthorized$/) do 
+  expect(response_status).to eql 401
+end
