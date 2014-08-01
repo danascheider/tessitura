@@ -6,28 +6,21 @@ When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   make_request(method, path)
 end
 
-When(/^the client submits a (.*) request to users\/(\d+)\/tasks with:$/) do |method, uid, task_id, string|
-  # @task_count variable is used in task_steps.rb and task_list_steps.rb
+When(/^the client submits a (.*) request to users\/(\d+)\/tasks with:$/) do |method, uid, string|
+  # @user_task_count variable is used in task_steps.rb and task_list_steps.rb
   path = "users/#{uid}/tasks"
   @user_task_count = User.find(uid).task_lists.first.tasks.count
-  @task = (id = (/\d+/.match(path)).to_s) > '' ? Task.find(id) : nil
   @request_time = Time.now.utc
   make_request(method, path, string)
 end
 
-When(/^the client submits a POST request to \/users with:$/) do |string|
-  @user_count = User.count
+When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method, path, string|
+  path = path == nil ? "/users" : "/users#{path}"
+  @user_count = User.count 
+  @user = (id = (/\d+/.match(path)).to_s) > '' ? User.find(id) : nil
   @request_time = Time.now.utc
-  make_request('POST', '/users', string)
+  make_request(method, path, string)
 end
-
-# When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method, path, string|
-#   path = path == nil ? "/users" : "/users#{path}"
-#   @user_count = User.count 
-#   @user = (id = (/\d+/.match(path)).to_s) > '' ? User.find(id) : nil
-#   @request_time = Time.now.utc
-#   make_request(method, path, string)
-# end
 
 # RESPONSE STEPS
 # ==============
