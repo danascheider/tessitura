@@ -166,6 +166,8 @@ describe Canto do
     end
 
     context 'with admin authorization' do 
+      # FIX: These tests don't make sure that the task that is created is created on the
+      #      user's task list, not the admin's. Careful!
       it 'creates a new task' do 
         expect(Task).to receive(:create!)
         authorize @admin.username, @admin.password

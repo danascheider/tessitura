@@ -31,7 +31,7 @@ Feature: Create task
     And the response should indicate the task was not saved successfully
 
   Scenario: User attempts to create a task for someone else
-    When the client submits a POST request to users/2/tasks with the 3rd user credentials and:
+    When the client submits a POST request to /users/2/tasks with the 3rd user's credentials and:
       """json
       { "title":"Water the plants" }
       """
@@ -39,7 +39,7 @@ Feature: Create task
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to create a task without authenticating
-    When the client submits a POST request to users/2/tasks with:
+    When the client submits a POST request to /users/2/tasks with:
       """json
       { "title":"Water the plants" }
       """
