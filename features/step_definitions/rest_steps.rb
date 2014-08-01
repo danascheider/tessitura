@@ -42,6 +42,12 @@ When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method,
   make_request(method, path, string)
 end
 
+When(/^the client submits a DELETE request to (.*) with the (\d+)(?:[a-z]{2}) user\'s credentials$/) do |path, id|
+  user = User.find(id)
+  authorize user.username, user.password
+  make_request('DELETE', path)
+end
+
 # RESPONSE STEPS
 # ==============
 

@@ -4,7 +4,7 @@ Given(/^there are (\d+|no) users$/) do |number|
   @user_count = User.count
 end
 
-Given(/^there are users with the following attributes:$/) do |attributes|
+Given(/^there (?:are users|is a user) with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     FactoryGirl.create(:user, hash)
   end

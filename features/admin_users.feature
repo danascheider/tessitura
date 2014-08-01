@@ -47,5 +47,5 @@ Feature: Admin users
 
     Examples:
       | id  |
-      | 3rd |
+      | 4th |
       | 1st |
