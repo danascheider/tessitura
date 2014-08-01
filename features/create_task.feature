@@ -12,7 +12,7 @@ Feature: Create task
     And each user has 3 tasks
 
   Scenario: User creates a valid task
-    When the client submits a POST request to users/2/tasks with the 2nd user's credentials and:
+    When the client submits a POST request to /users/2/tasks with the 2nd user's credentials and:
       """json
       { "title":"Water the plants" }
       """
