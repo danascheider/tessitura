@@ -42,7 +42,7 @@ Feature: Admin users
       | id | email              | username | password  |
       | 4  | admin2@example.com | admin2   | admin2pwd |
     When the client submits a DELETE request to /users/4 with the <id> user's credentials
-    Then the 3rd user should be deleted
+    Then the 4th user should be deleted
     And the response should return status 201
 
     Examples:
