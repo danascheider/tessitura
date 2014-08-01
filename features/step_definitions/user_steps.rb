@@ -27,6 +27,7 @@ Then(/^the user should be an admin$/) do
 end
 
 Then(/^the (\d+)(?:[a-z]{2}) user should (not|yes)?(?: )?be an admin$/) do |id, neg|
+  puts "RESPONSE BODY: #{response_body}"
   User.find(id).should be_admin unless neg == 'not'
 end
 

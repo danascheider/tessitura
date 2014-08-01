@@ -47,11 +47,10 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     put '/users/:id' do |id|
+      user = User.find_by(username: auth.credentials.first)
+      halt 401 unless user.admin? # || (user.id == id.to_i && !@request_body['admin'])
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        user = User.find_by(username: auth.credentials.first)
-        halt 401 unless user.id == id.to_i || user.admin?
-        User.find(id).update!(@request_body)
-        200
+        User.find(id).update!(admin: true)
       end
     end
   end
@@ -67,7 +66,7 @@ class Canto < Sinatra::Application
 
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         Task.create!(@request_body)
-        [ 201, @request_body ]
+        201
       end
     end
   end
