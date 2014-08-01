@@ -19,6 +19,7 @@ When(/^the client submits a POST request to \/users with:$/) do |string|
   @user_count = User.count
   @request_time = Time.now.utc
   make_request('POST', '/users', string)
+end
 
 # When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method, path, string|
 #   path = path == nil ? "/users" : "/users#{path}"

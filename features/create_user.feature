@@ -6,12 +6,11 @@ Feature: Create a new user
   Scenario: Normal user creation
     When the client submits a POST request to /users with:
       """json
-      { "email":"jdoe@example.com", "first_name":"John", "last_name":"Doe",
-      "country":"Australia" }
+      { "email":"jdoe@example.com", "username":"johndoe", "password":"johnspassword" }
       """
     Then a new user should be created with the following attributes:
-      | first_name | last_name | country   | email            | admin |
-      | John       | Doe       | Australia | jdoe@example.com | nil   |
+      | username | password      | email            | admin |
+      | johndoe  | johnspassword | jdoe@example.com | nil   |
     And the response should include an API key for the new user
 
   Scenario: Unauthorized attempt to create an admin

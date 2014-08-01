@@ -34,12 +34,7 @@ end
 
 Then(/^a new user should be created with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
-    expect(User.last.to_hash).to include( 
-                                          first_name: hash['first_name'],
-                                          last_name: hash['last_name'],
-                                          email: hash['email'],
-                                          country: hash['country']
-                                        )
+    hash.each {|key, value| expect(User.last.to_hash[key]).to eql value }
   end
 end
 
