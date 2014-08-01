@@ -4,15 +4,16 @@ Feature: Admin users
       | id | email             | username  | password    | admin |
       | 1  | admin@example.com | abc123    | abcde12345  | true  |
       | 2  | user2@example.com | bcd234    | bcdef23456  | false |
+      | 3  | user3@example.com | cde345    | cdefg34567  | false |
 
   Scenario Outline: Creating an admin user
     When the client submits a POST request to <url> with <type> credentials and:
       """json
-      { "username":"cde345", "password":"cdefg34567", "email":"user3@example.com", "admin":"true" }
+      { "username":"def456", "password":"defgh45678", "email":"user4@example.com", "admin":"true" }
       """
     Then <article> new user should be created with the following attributes:
       | username | password   | email             | admin |
-      | cde345   | cdefg34567 | user3@example.com | true  |
+      | def456   | defgh45678 | user4@example.com | true  |
     And the response should return status <status>
 
     Examples:
@@ -23,7 +24,7 @@ Feature: Admin users
     | /admin/users | no     |    no   |  401   |
 
   Scenario Outline: Making a user an admin
-    When the client submits a PUT request to /admin/users/2 with admin credentials and:
+    When the client submits a PUT request to /users/2 with admin credentials and:
       """json
       { "admin":"true" }
       """
@@ -39,8 +40,8 @@ Feature: Admin users
   Scenario Outline: Deleting an admin account 
     And there is a user with the following attributes:
       | id | email              | username | password  |
-      | 3  | admin2@example.com | admin2   | admin2pwd |
-    When the client submits a DELETE request to /users/3 with the <id> user's credentials
+      | 4  | admin2@example.com | admin2   | admin2pwd |
+    When the client submits a DELETE request to /users/4 with the <id> user's credentials
     Then the 3rd user should be deleted
     And the response should return status 201
 
