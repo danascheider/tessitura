@@ -11,7 +11,7 @@ Feature: Create a new user
     Then a new user should be created with the following attributes:
       | username | password      | email            | admin |
       | johndoe  | johnspassword | jdoe@example.com | nil   |
-    And the response should include an API key for the new user
+    And the response should indicate the user was saved successfully
 
   Scenario: Unauthorized attempt to create an admin
     When the client submits a POST request to /users with:
