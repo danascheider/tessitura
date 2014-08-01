@@ -82,12 +82,6 @@ describe User do
       end
     end
 
-    context 'when there are no other users in the database' do 
-      it 'is automatically an admin' do 
-        expect(User.first).to be_admin
-      end
-    end
-
     context 'when a regular user account is created' do 
       it 'is not an admin' do 
         @user = FactoryGirl.create(:user, email: 'joeblow@example.com')
