@@ -69,11 +69,10 @@ class Canto < Sinatra::Application
     post '/users/:id/tasks' do |id|
       user = User.find_by(username: auth.credentials.first)
       halt 401 unless (user.id == id.to_i || user.admin?)
-      @request_body[:task_list_id] = user.default_task_list.id
-
+      @request_body[:task_list_id] = User.find(id).default_task_list.id
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         Task.create!(@request_body)
-        201
+        [ 201, { body: @request_body }]
       end
     end
   end

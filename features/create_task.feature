@@ -38,7 +38,7 @@ Feature: Create task
     Then no task should be created
     And the response should indicate the request was unauthorized
 
-  Scenario: User attempts to create a task without a secret key
+  Scenario: User attempts to create a task without authenticating
     When the client submits a POST request to users/2/tasks with:
       """json
       { "title":"Water the plants" }
@@ -47,12 +47,12 @@ Feature: Create task
     And the response should indicate that the request was unauthorized
 
   Scenario: Admin creates a task for a user
-    When the client submits a POST request to users/3/tasks with:
+    When the client submits a POST request to users/3/tasks with admin credentials and:
       """json
-      { "secret_key":"12345abcde1", "title":"Water the plants" }
+      { "title":"Water the plants" }
       """
     Then a new task should be created on the 3rd user's task list
-    And the task should have the following attributes:
-      | user_id | title            | status | deadline | priority | description |
-      | 3       | Water the plants | new    | nil      | normal   | nil         |
+    And the new task should have the following attributes:
+      | title            | status | priority |
+      | Water the plants | new    | normal   |
     And the response should indicate the task was saved successfully
