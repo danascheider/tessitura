@@ -144,8 +144,6 @@ describe Task do
   end
 
   describe 'associations' do 
-    it 'is destroyed with its parent list' do 
-      
-    end
+    it 'is destroyed with its parent list'
   end
 end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe TaskList do 
-  before(:all) do 
+  before(:each) do 
     @task_list = FactoryGirl.create(:task_list_with_tasks)
   end
 
