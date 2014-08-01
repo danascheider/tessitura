@@ -133,17 +133,19 @@ describe Canto do
       context 'with valid attributes' do 
         it 'updates the profile' do 
           expect_any_instance_of(User).to receive(:update!)
-          make_request('PUT', "/users/#{@user.id}", { 'priority' => 'urgent' }.to_json)
+          puts "THE USER IN QUESTION: #{@user.to_hash}"
+          puts "THE USER'S ID: #{@user.id}"
+          make_request('PUT', "/users/#{@user.id}", { 'fach' => 'soprano' }.to_json)
         end
 
         it 'returns status 200' do 
-          make_request('PUT', "/users/#{@user.id}", { 'priority' => 'urgent' }.to_json)
+          make_request('PUT', "/users/#{@user.id}", { 'fach' => 'soprano' }.to_json)
         end
       end
 
       context 'with invalid attributes' do 
         it 'returns status 422' do 
-          make_request('PUT', "/users/#{@user.id}", { 'priority' => 'urgent' }.to_json)
+          make_request('PUT', "/users/#{@user.id}", { 'email' => nil }.to_json)
           expect(response_status).to eql 422
         end
       end
@@ -155,7 +157,7 @@ describe Canto do
         end
 
         it 'returns status 401' do 
-          make_request('PUT', "/users/#{@user.id}", { 'face' => 'soprano' }.to_json)
+          make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
           expect(response_status).to eql 401
         end
       end

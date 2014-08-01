@@ -48,9 +48,9 @@ class Canto < Sinatra::Application
   protect 'General' do 
     put '/users/:id' do |id|
       user = User.find_by(username: auth.credentials.first)
-      halt 401 unless user.admin? # || (user.id == id.to_i && !@request_body['admin'])
+      halt 401 unless user.admin? || (user.id == id.to_i && !@request_body['admin'])
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        User.find(id).update!(admin: true)
+        User.find(id).update!(@request_body)
       end
     end
   end
@@ -58,9 +58,6 @@ class Canto < Sinatra::Application
   protect 'General' do 
     post '/users/:id/tasks' do |id|
       user = User.find_by(username: auth.credentials.first)
-      # User should be able to specify a task list, but I'm saving that feature
-      # for later to make sure they can't specify somebody else's task list and
-      # get around security that way.
       halt 401 unless (user.id == id.to_i || user.admin?)
       @request_body[:task_list_id] = user.default_task_list.id
 
