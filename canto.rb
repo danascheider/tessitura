@@ -59,7 +59,9 @@ class Canto < Sinatra::Application
     delete '/users/:id' do |id|
       user = User.find_by(username: auth.credentials.first)
       halt 401 unless user.id == id.to_i || user.admin?
-      get_resource(User, id) { |user| user.destroy! } ? 204 : 404
+      begin_and_rescue(ActiveRecord::RecordNotDestroyed, 403) do
+        get_resource(User, id) { |user| user.destroy! } ? 204 : 404
+      end
     end
   end
 

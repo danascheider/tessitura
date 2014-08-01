@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe User do 
-  before(:all) do 
-    FactoryGirl.create(:user, email: 'admin@example.com')
+  before(:each) do 
+    @admin = FactoryGirl.create(:admin, email: 'admin@example.com')
   end
 
   describe 'attributes' do 
@@ -86,6 +86,35 @@ describe User do
       it 'is not an admin' do 
         @user = FactoryGirl.create(:user, email: 'joeblow@example.com')
         expect(@user).not_to be_admin
+      end
+    end
+  end
+
+  describe 'admin issues' do 
+    before(:each) do 
+      FactoryGirl.create_list(:user, 3)
+      @admins = [FactoryGirl.create_list(:admin, 2), @admin].flatten!
+    end
+
+    it 'includes all the admins' do 
+      expect(User.admin.to_a.sort).to eql @admins.sort
+    end
+  end
+
+  describe 'admin deletion' do 
+    context 'last admin' do 
+      it 'doesn\'t destroy the last admin' do 
+        expect{ @admin.destroy! }.to raise_error(ActiveRecord::RecordNotDestroyed)
+      end
+    end
+
+    context 'not last admin' do 
+      before(:each) do 
+        @admin_2 = FactoryGirl.create(:admin)
+      end
+
+      it 'destroys user' do 
+        expect{ @admin_2.destroy! }.not_to raise_error
       end
     end
   end

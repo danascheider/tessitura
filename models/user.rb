@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
                        length: { in: 6..50 }
   validates :password, presence: true, confirmation: true,
                        length: { in: 8..100 }
+  before_destroy :ensure_admin_exists
+  scope :admin, -> { where(admin: true) }
 
   def admin?
     self.admin 
@@ -40,4 +42,9 @@ class User < ActiveRecord::Base
     self.task_lists.all.each {|list| user_tasks << list.tasks }
     user_tasks.flatten!
   end
+
+  private 
+    def ensure_admin_exists
+      false if self.admin? && User.admin.count == 1
+    end
 end
