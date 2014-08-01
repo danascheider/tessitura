@@ -34,7 +34,9 @@ end
 
 Then(/^a new user should be created with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
-    hash.each {|key, value| expect(User.last.to_hash[key]).to eql value }
+    User.last.to_hash.each do |key, value|
+      expect(hash[key.to_s]).to eql value if hash.has_key? key.to_s
+    end
   end
 end
 
