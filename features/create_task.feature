@@ -18,8 +18,8 @@ Feature: Create task
       """
     Then a new task should be created on the 2nd user's task list 
     And the new task should have the following attributes:
-      | title            | status | deadline | priority | description |
-      | Water the plants | new    | nil      | normal   | nil         |
+      | title            | status | priority |
+      | Water the plants | new    | normal   |
     And the response should indicate the task was saved successfully
 
   Scenario: User attempts to create an invalid task
