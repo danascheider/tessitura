@@ -117,7 +117,7 @@ class Canto < Sinatra::Application
   end
 
   protect 'Admin' do 
-    get '/admin/users' do 
+    get '/users' do 
       [ 200, User.all.to_json ]
     end
   end
