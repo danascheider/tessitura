@@ -78,9 +78,8 @@ describe Canto do
       end
 
       it 'doesn\'t create the user' do 
-        expect { 
-          make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-          }.not_to change(User.count)
+        expect(User).not_to receive(:create!)
+        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
       end
 
       it 'returns status 401' do 
@@ -91,9 +90,8 @@ describe Canto do
 
     context 'with no authorization' do 
       it 'doesn\'t create the user' do 
-        expect { 
-          make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-          }.not_to change(User.count)
+        expect(User).not_to receive(:create!) 
+        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
       end
 
       it 'returns status 401' do 
