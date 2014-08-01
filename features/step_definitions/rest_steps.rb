@@ -43,9 +43,9 @@ When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method,
 end
 
 When(/^the client submits a POST request to (.*) with the (\d+)(?:[a-z]{2}) user\'s credentials and:$/) do |path, id, string|
-  user = User.find(id)
-  @user_task_count = user.tasks.count
-  authorize user.username, user.password
+  @user = User.find(id)
+  @user_task_count = @user.tasks.count
+  authorize @user.username, @user.password
   make_request('POST', path, string)
 end
 

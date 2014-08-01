@@ -14,8 +14,7 @@ end
 
 Given(/^each user has (\d+) tasks$/) do |number|
   User.all.each do |user|
-    @list = TaskList.create!(user_id: user.id)
-    number.times { FactoryGirl.create(:task, task_list_id: @list.id) }
+    FactoryGirl.create(:task_list_with_tasks, tasks_count: number, user_id: user.id)
   end
 end
 

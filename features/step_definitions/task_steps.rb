@@ -25,7 +25,7 @@ Then(/^the new task should have the following attributes:$/) do |attributes|
 end
 
 Then(/^no task should be created$/) do
-  Task.count.should === @task_count
+  @user.tasks.count.should == @user_task_count
 end
 
 Then(/^the task's title should be changed to '(.*)'$/) do |title|
