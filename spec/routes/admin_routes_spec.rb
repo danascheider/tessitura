@@ -62,9 +62,8 @@ describe Canto do
       end
 
       it 'creates a new user' do 
-        expect { 
-          make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-          }.to change(User.count).by(1)
+        expect(User).to receive(:create!)
+        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
       end
 
       it 'returns status 201' do 
