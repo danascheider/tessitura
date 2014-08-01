@@ -12,9 +12,9 @@ Feature: Create task
     And each user has 3 tasks
 
   Scenario: User creates a valid task
-    When the client submits a POST request to users/2/tasks with:
+    When the client submits a POST request to users/2/tasks with the 2nd user's credentials and:
       """json
-      { "secret_key":"12345abcde2", "title":"Water the plants" }
+      { "title":"Water the plants" }
       """
     Then a new task should be created on the 2nd user's task list 
     And the new task should have the following attributes:
@@ -23,17 +23,17 @@ Feature: Create task
     And the response should indicate the task was saved successfully
 
   Scenario: User attempts to create an invalid task
-    When the client submits a POST request to users/2/tasks with:
+    When the client submits a POST request to users/2/tasks with the 2nd user's credentials and:
       """json
-      { "secret_key":"12345abcde2", "status":"new" }
+      { "status":"blocking" }
       """
     Then no task should be created
     And the response should indicate the task was not saved successfully
 
   Scenario: User attempts to create a task for someone else
-    When the client submits a POST request to users/2/tasks with:
+    When the client submits a POST request to users/2/tasks with the 3rd user credentials and:
       """json
-      { "secret_key":"12345abcde3", "title":"Water the plants" }
+      { "title":"Water the plants" }
       """
     Then no task should be created
     And the response should indicate the request was unauthorized
