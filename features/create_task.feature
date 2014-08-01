@@ -39,7 +39,7 @@ Feature: Create task
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to create a task without authenticating
-    When the client submits a POST request to /users/2/tasks with:
+    When the client submits a POST request to /users/2/tasks with no credentials and:
       """json
       { "title":"Water the plants" }
       """
