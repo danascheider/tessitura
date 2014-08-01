@@ -57,6 +57,6 @@ end
 
 # USER DELETION STEPS
 # ===================
-Then(/^the (\d+)(?:[a-z]{2}) user should be deleted$/) do |id|
-  expect {User.find(id)}.to raise_error ActiveRecord::RecordNotFound
+Then(/^the (\d+)(?:[a-z]{2}) user should( not)? be deleted$/) do |id, neg|
+  expect {User.find(id)}.to raise_error ActiveRecord::RecordNotFound unless neg
 end
