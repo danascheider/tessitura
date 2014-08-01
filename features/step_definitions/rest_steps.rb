@@ -15,6 +15,8 @@ When(/^the client submits a POST request to (.*) with (user|admin) credentials a
 end
 
 When(/^the client submits a POST request to (.*) with no credentials and:$/) do |path, string|
+  id = /(\d+)/.match(path).to_s
+  @user, @user_task_count = User.find(id), @user.tasks.count
   make_request('POST', path, string)
 end
 
