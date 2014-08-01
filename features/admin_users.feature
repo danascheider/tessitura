@@ -53,4 +53,4 @@ Feature: Admin users
   Scenario: Deleting the last admin account 
     When the client submits a DELETE request to /users/1 with the 1st user's credentials
     Then the 1st user should not be deleted
-    And the response should return status 204
+    And the response should return status 403
