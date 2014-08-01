@@ -44,7 +44,7 @@ Feature: Create task
       { "title":"Water the plants" }
       """
     Then no task should be created
-    And the response should indicate that the request was unauthorized
+    And the response should indicate the request was unauthorized
 
   Scenario: Admin creates a task for a user
     When the client submits a POST request to users/3/tasks with admin credentials and:
