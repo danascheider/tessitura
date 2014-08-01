@@ -19,15 +19,34 @@ describe Canto::ErrorHandling do
 
   describe '::get_resource' do 
     context 'when the resource exists' do 
-      it 'returns the resource' do 
-        user = FactoryGirl.create(:user)
-        expect(get_resource(User, user.id)).to eql user
+      before(:each) do 
+        @user = FactoryGirl.create(:user)
+      end
+
+      context 'no block given' do 
+        it 'returns the resource' do 
+          expect(get_resource(User, @user.id)).to eql @user
+        end
+      end
+
+      context 'block given' do 
+        it 'returns the output of the block' do 
+          expect(get_resource(User, @user.id) {|user| user.username.upcase! }).to eql @user.username.upcase!
+        end
       end
     end
 
     context 'when the resource doesn\'t exist' do 
-      it 'returns nil' do 
-        expect(get_resource(User, 1000)).to eql nil
+      context 'no block given' do 
+        it 'returns nil' do 
+          expect(get_resource(User, 20000)).to eql nil
+        end
+      end
+
+      context 'block given' do 
+        it 'returns nil' do 
+          expect(get_resource(User, 20000) {|user| user.username.upcase! }).to eql nil
+        end
       end
     end
   end
