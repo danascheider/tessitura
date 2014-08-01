@@ -35,6 +35,7 @@ Then(/^(a|no) new user should be created with the following attributes:$/) do |a
   attributes.hashes.each do |hash|
     if art == 'a'
       User.last.to_hash.each do |key, value|
+        value = value == 'true' : true : value
         expect(hash[key.to_s]).to eql value if hash.has_key? key.to_s
       end
     else 
