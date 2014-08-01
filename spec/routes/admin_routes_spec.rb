@@ -21,7 +21,7 @@ describe Canto do
       end
 
       it 'returns status 200' do 
-        expect (response_status).to eql 200
+        expect(response_status).to eql 200
       end
     end
 
@@ -32,7 +32,7 @@ describe Canto do
       end
 
       it 'doesn\'t return any data' do 
-        expect(response_body).to eql nil
+        expect(response_body).to eql 'Authorization Required'
       end
 
       it 'returns status 401' do 
@@ -46,7 +46,7 @@ describe Canto do
       end
 
       it 'doesn\'t return any data' do 
-        expect(response_body).to eql nil 
+        expect(response_body).to eql 'Authorization Required' 
       end
 
       it 'returns status 401' do 
