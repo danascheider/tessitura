@@ -1,14 +1,4 @@
 Feature: Admin users
-  Scenario: Create an initial user
-    Given there are no users
-    When the client submits a POST request to /users with:
-      """json
-      { "email":"user1@example.com", "first_name":"Jane", 
-      "last_name":"Doe", "country":"USA" }
-      """
-    Then a user named 'Jane Doe' should be created
-    And the user should be an admin
-
   Scenario: Invalid attempt to make user an admin
     Given there are users with the following attributes:
       | id | email             | secret_key  | admin |

@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
                        length: { in: 6..50 }
   validates :password, presence: true, confirmation: true,
                        length: { in: 8..100 }
-  before_create :set_admin_status
 
   def admin?
     self.admin 
@@ -41,9 +40,4 @@ class User < ActiveRecord::Base
     self.task_lists.all.each {|list| user_tasks << list.tasks }
     user_tasks.flatten!
   end
-
-  private
-    def set_admin_status
-      self.admin = true if User.count == 0
-    end
 end
