@@ -50,8 +50,16 @@ class Canto < Sinatra::Application
       user = User.find_by(username: auth.credentials.first)
       halt 401 unless user.admin? || (user.id == id.to_i && !@request_body['admin'])
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        User.find(id).update!(@request_body)
+        get_resource(User, id) {|user| user.update!(@request_body) }
       end
+    end
+  end
+
+  protect 'General' do 
+    delete '/users/:id' do |id|
+      user = User.find_by(username: auth.credentials.first)
+      halt 401 unless user.id == id.to_i || user.admin?
+      get_resource(User, id) { |user| user.destroy! } ? 204 : 404
     end
   end
 

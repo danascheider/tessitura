@@ -8,9 +8,10 @@ class Sinatra::Application
       end
     end
 
-    def get_resource(klass, id)
+    def get_resource(klass, id, &block)
       begin
         klass.find(id)
+        yield klass.find(id) if block_given?
       rescue ActiveRecord::RecordNotFound
         nil
       end
