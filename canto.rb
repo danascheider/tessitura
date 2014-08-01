@@ -80,7 +80,7 @@ class Canto < Sinatra::Application
     get '/users/:id/tasks' do |id|
       # FIX: This will need a more robust error-handling approach - TBD
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-        [ 200, User.find(id).tasks.to_json ]
+        [ 200, get_resource(User, id) {|user| user.tasks.to_json } ]
       end
     end
   end
@@ -100,7 +100,7 @@ class Canto < Sinatra::Application
       user = User.find_by(username: auth.credentials.first)
       halt 401 unless get_resource(Task, id).user.id == user.id || user.admin?
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        Task.find(id).update!(@request_body)
+        get_resource(Task, id) {|task| task.update!(@request_body) }
       end
     end
   end
@@ -110,7 +110,7 @@ class Canto < Sinatra::Application
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
         user = User.find_by(username: auth.credentials.first)
         halt 401 unless Task.find(id).user.id == user.id || user.admin?
-        Task.find(id).destroy!
+        get_resource(Task, id) {|task| task.destroy! }
         204
       end
     end
