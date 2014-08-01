@@ -43,9 +43,14 @@ Feature: Admin users
       | 4  | admin2@example.com | admin2   | admin2pwd |
     When the client submits a DELETE request to /users/4 with the <id> user's credentials
     Then the 4th user should be deleted
-    And the response should return status 201
+    And the response should return status 204
 
     Examples:
       | id  |
       | 4th |
       | 1st |
+
+  Scenario: Deleting the last admin account 
+    When the client submits a DELETE request to /users/1 with the 1st user's credentials
+    Then the 1st user should not be deleted
+    And the response should return status 204

@@ -54,3 +54,9 @@ end
 Then(/^no user should be created$/) do 
   User.count.should == @user_count
 end
+
+# USER DELETION STEPS
+# ===================
+Then(/^the (\d+)(?:[a-z]{2}) user should be deleted$/) do |id|
+  expect {User.find(id)}.to raise_error ActiveRecord::RecordNotFound
+end
