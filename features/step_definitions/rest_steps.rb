@@ -6,6 +6,11 @@ When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   make_request(method, path)
 end
 
+When(/^the client submits a POST request to (.*) with (user|admin) credentials and:$/) do |path, type, string|
+  user = type == 'admin' ? User.first : User.last
+  make_request('POST', path, string)
+end
+
 When(/^the client submits a (.*) request to users\/(\d+)\/tasks with:$/) do |method, uid, string|
   # @user_task_count variable is used in task_steps.rb and task_list_steps.rb
   path = "users/#{uid}/tasks"
