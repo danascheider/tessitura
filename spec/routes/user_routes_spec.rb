@@ -61,7 +61,6 @@ describe Canto do
           expect(response_status).to eql 401
       end
     end
-
   end
 
   describe 'GET' do 
@@ -120,6 +119,150 @@ describe Canto do
       end
 
       it 'returns status code 401' do 
+        expect(response_status).to eql 401
+      end
+    end
+  end
+
+  describe 'PUT' do 
+    context 'with user credentials' do 
+      before(:each) do 
+        authorize @user.username, @user.password
+      end
+
+      context 'with valid attributes' do 
+        it 'updates the profile' do 
+          expect_any_instance_of(User).to receive(:update!)
+          make_request('PUT', "/users/#{@user.id}", { 'priority' => 'urgent' }.to_json)
+        end
+
+        it 'returns status 200' do 
+          make_request('PUT', "/users/#{@user.id}", { 'priority' => 'urgent' }.to_json)
+        end
+      end
+
+      context 'with invalid attributes' do 
+        it 'returns status 422' do 
+          make_request('PUT', "/users/#{@user.id}", { 'priority' => 'urgent' }.to_json)
+          expect(response_status).to eql 422
+        end
+      end
+
+      context 'attempting to set admin status to true' do 
+        it 'doesn\'t update the profile' do 
+          expect_any_instance_of(User).not_to receive(:update!)
+          make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+        end
+
+        it 'returns status 401' do 
+          make_request('PUT', "/users/#{@user.id}", { 'face' => 'soprano' }.to_json)
+          expect(response_status).to eql 401
+        end
+      end
+    end
+
+    context 'with admin credentials' do 
+      before(:each) do 
+        authorize @admin.username, @admin.password
+      end
+
+      it 'updates the profile' do 
+        expect_any_instance_of(User).to receive(:update!)
+        make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+      end
+
+      it 'returns status 200' do 
+        make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+        expect(response_status).to eql 200
+      end
+    end
+
+    context 'with invalid credentials' do 
+      before(:each) do 
+        authorize @user.username, @user.password
+      end
+
+      it 'doesn\'t update the profile' do 
+        expect_any_instance_of(User).not_to receive(:update!)
+        make_request('PUT', "/users/#{@admin.id}", { 'country' => 'Kyrgyzstan' })
+      end
+
+      it 'returns status 401' do 
+        make_request('PUT', "/users/#{@admin.id}", { 'country' => 'Kyrgyzstan' })
+        expect(response_status).to eql 401
+      end
+    end
+
+    context 'with no credentials' do 
+      it 'doesn\'t update the profile' do 
+        expect_any_instance_of(User).not_to receive(:update!)
+        make_request('PUT', "/users/#{@user.id}", { 'last_name' => 'Seligman' }.to_json)
+      end
+
+      it 'returns status 401' do 
+        make_request('PUT', "/users/#{@user.id}", { 'last_name' => 'Seligman' }.to_json)
+        expect(response_status).to eql 401
+      end 
+    end
+  end
+
+  describe 'DELETE' do 
+    context 'with user credentials' do 
+      before(:each) do 
+        authorize @user.username, @user.password
+      end
+
+      it 'deletes the profile' do 
+        expect_any_instance_of(User).to receive(:destroy!)
+        make_request('DELETE', "/users/#{@user.id}")
+      end
+
+      it 'returns status 204' do 
+        make_request('DELETE', "/users/#{@user.id}")
+        expect(response_status).to eql 204
+      end
+    end
+
+    context 'with admin credentials' do 
+      before(:each) do 
+        authorize @admin.username, @admin.password
+      end
+
+      it 'deletes the user' do 
+        expect_any_instance_of(User).to receive(:destroy!)
+        make_request('DELETE', "/users/#{@user.id}")
+      end
+
+      it 'returns status 204' do 
+        make_request('DELETE', "/users/#{@user.id}")
+        expect(response_status).to eql 204
+      end
+    end
+
+    context 'with invalid credentials' do 
+      before(:each) do 
+        authorize @user.username, @user.password
+      end
+
+      it 'doesn\'t delete the user' do 
+        expect_any_instance_of(User).not_to receive(:destroy!)
+        make_request('DELETE', "/users/#{@admin.id}")
+      end
+
+      it 'returns status 401' do 
+        make_request('DELETE', "/users/#{@admin.id}")
+        expect(response_status).to eql 401
+      end
+    end
+
+    context 'with no credentials' do 
+      it 'doesn\'t delete the user' do 
+        expect_any_instance_of(User).not_to receive(:destroy!)
+        make_request('DELETE', "/users/#{@user.id}")
+      end
+
+      it 'returns status 401' do 
+        make_request('DELETE', "/users/#{@user.id}")
         expect(response_status).to eql 401
       end
     end
