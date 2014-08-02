@@ -90,9 +90,10 @@ class Canto < Sinatra::Application
   protect 'General' do
     get '/tasks/:id' do |id|
       user = User.find_by(username: auth.credentials.first)
-      halt 401 unless get_resource(Task, id).user.id == user.id || user.admin?
+      return 404 unless (@task = get_resource(Task, id))
+      halt 401 unless @task.user.id == user.id || user.admin?
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-        [ 200, get_resource(Task, id).to_json ]
+        [ 200, @task.to_json ]
       end
     end
   end

@@ -17,6 +17,12 @@ When(/^the client submits a GET request to \/users\/(\d+)\/tasks with no credent
   make_request('GET', "/users/#{id}/tasks")
 end
 
+When(/^the client submits a GET request to \/tasks\/(\d+) with admin credentials$/) do |id|
+  @admin = User.admin.first
+  authorize @admin.username, @admin.password
+  make_request('GET', "/tasks/#{id}")
+end
+
 When(/^the client submits a GET request to the (first|last) task URL with (owner|admin) credentials$/) do |order, user|
   @task = order == 'first' ? Task.first : Task.last
   @user = user == 'owner' ? @task.user : User.admin.first
