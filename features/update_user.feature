@@ -21,7 +21,7 @@ Feature: Updating user profiles
       """json
       { "username":null }
       """
-    Then the 3rd user's username should not be changed
+    Then the user's username should not be changed
     And the respones should indicate the user was not updated successfully
 
   Scenario: Admin updates user's profile

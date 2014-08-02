@@ -65,6 +65,10 @@ Then(/^the (\d+)(?:[a-z]{2}) user's (.*) should be changed to '(.*)'$/) do |id, 
   expect(@user.to_hash[attr.intern]).to eql value
 end
 
+Then(/^the user's (.*) should not be changed$/) do |attr|
+  expect(get_changed_user.to_hash[attr.intern]).to eql @user.to_hash[attr.intern]
+end
+
 # USER DELETION STEPS
 # ===================
 Then(/^the (\d+)(?:[a-z]{2}) user should( not)? be deleted$/) do |id, neg|
