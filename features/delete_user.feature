@@ -27,3 +27,8 @@ Feature: Delete user account
     When the client submits a DELETE request to /users/2 with no credentials
     Then the 2nd user should not be deleted
     And the response should indicate the request was unauthorized
+
+  Scenario: Admin attempts to delete an account that doesn't exist
+    When the client submits a DELETE request to /users/1000000 with admin credentials
+    Then no user should be deleted
+    And the response should return status 404

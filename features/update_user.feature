@@ -63,3 +63,10 @@ Feature: Updating user profiles
       """
     Then the 3rd user should be an admin
     And the response should indicate the user was updated successfully
+
+  Scenario: Admin attempts to update a profile that doesn't exist
+    When the client submits a PUT request to /users/1000000 with admin credentials and
+      """json
+      { "city":"Mexico City" }
+      """
+    Then the response should return status 404

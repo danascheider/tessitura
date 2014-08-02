@@ -143,6 +143,12 @@ When(/^the client submits a POST request to (.*) with the (\d+)(?:[a-z]{2}) user
   make_request('POST', path, string)
 end
 
+When(/^the client submits a PUT request to \/users\/(\d+) with admin credentials and$/) do |id, string|
+  @user, @admin = get_resource(User, id), User.admin.first
+  authorize @admin.username, @admin.password
+  make_request('PUT', "/users/#{id}", string)
+end
+
 When(/^the client submits a DELETE request to \/users\/(\d+) with no credentials$/) do |id|
   make_request('DELETE', "/users/#{id}")
 end

@@ -46,3 +46,7 @@ Feature: View user profile
     When the client submits a GET request to /admin/users with admin credentials
     Then the JSON response should include all the users
     And the response should return status 200
+
+  Scenario: Admin attempts to view user that doesn't exist
+    When the client submits a GET request to /users/1000000 with admin credentials
+    Then the response should return status 404
