@@ -8,15 +8,15 @@ end
 
 When(/^the client submits a POST request to (.*) with (user|admin) credentials and:$/) do |path, type, string|
   @user = type == 'admin' ? User.admin.first : User.last
-  id = /(\d+)/.match(path).to_s 
-  @user_task_count = User.find(id).tasks.count
+  id = /(\d+)/.match(path).to_s
+  @user_task_count = get_resource(User, id) {|user| user.tasks.count }
   authorize @user.username, @user.password
   make_request('POST', path, string)
 end
 
 When(/^the client submits a POST request to (.*) with no credentials and:$/) do |path, string|
   id = /(\d+)/.match(path).to_s
-  @user, @user_task_count = User.find(id), @user.tasks.count
+  @user, @user_task_count = get_resource(User, id), get_resource(User, id) {|user| user.tasks.count}
   make_request('POST', path, string)
 end
 

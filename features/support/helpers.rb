@@ -28,6 +28,14 @@ def get_changed_user
   User.find(@user.id)
 end
 
+def get_resource(klass, id, &block) 
+  begin 
+    if block_given? then yield klass.find(id); else klass.find(id); end
+  rescue
+    nil
+  end
+end
+
 def find_task(id)
   Task.find(id)
 end
