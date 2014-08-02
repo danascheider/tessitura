@@ -65,7 +65,7 @@ Feature: Update task
       { "status":"complete" }
       """
     Then the task's status should be 'complete'
-    And the task should be moved to position 2
+    And the task's position should be changed to 2
     And the response should indicate the task was updated successfully
 
   Scenario: Change task status to incomplete
