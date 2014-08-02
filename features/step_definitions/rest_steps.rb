@@ -62,8 +62,12 @@ When(/^the client submits a PUT request to (.*) with (user|admin) credentials an
   make_request('PUT', path, string)
 end
 
-When(/^the client submits a PUT request to (.*) with no credentials and:$/) do |path, string|
-  make_request('PUT', path, string)
+When(/^the client submits a PUT request to \/users\/(.*) with no credentials and:$/) do |path, string|
+  make_request('PUT', "/users/#{path}", string)
+end
+
+When(/^the client submits a PUT request to the last task URL with no credentials and:$/) do |string|
+  make_request('PUT', "/tasks/#{Task.last.id}", string)
 end
 
 When(/^the client submits a PUT request to the (first|last) task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |order, id, string|
