@@ -167,6 +167,10 @@ Then(/^the JSON response should include the (first|last) task$/) do |order|
   expect(response_body).to eql task.to_json
 end
 
+Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile information$/) do |id|
+  expect(response_body).to eql User.find(id).to_json
+end
+
 Then(/^the response should not include any data$/) do 
   ok_values = [nil, '', 'null', false, 'Authorization Required']
   expect(ok_values).to include response_body
