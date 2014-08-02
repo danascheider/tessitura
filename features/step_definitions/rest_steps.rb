@@ -7,6 +7,12 @@ When(/^the client submits a GET request to (.*) with the (\d+)(?:[a-z]{2}) user'
   make_request('GET', path)
 end
 
+When(/^the client submits a GET request to \/users\/(\d+)\/tasks with admin credentials$/) do |id|
+  @admin, @user = User.admin.first, User.find(id)
+  authorize @admin.username, @admin.password
+  make_request('GET', "/users/#{id}/tasks")
+end
+
 When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   @request_time = Time.now.utc
   make_request(method, path)
