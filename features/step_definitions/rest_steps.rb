@@ -102,6 +102,11 @@ Then(/^the JSON response should (not )?include (?:only )?the (\d+)(?:[a-z]{2}) t
   end
 end
 
+Then(/^the JSON response should include the (first|last) task$/) do |order|
+  task = order == 'first' ? Task.first : Task.last
+  expect(response_body).to eql task.to_json
+end
+
 Then(/^the response should not include any data$/) do 
   ok_values = [nil, '', 'null', false, 'Authorization Required']
   expect(ok_values).to include response_body
