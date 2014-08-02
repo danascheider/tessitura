@@ -107,6 +107,12 @@ When(/^the client submits a DELETE request to the last task URL with no credenti
   make_request('DELETE', "/tasks/#{Task.last.id}")
 end
 
+When(/^the client submits a DELETE request to \/tasks\/(\d+) with admin credentials$/) do |task_id|
+  @admin = User.admin.first
+  authorize @admin.username, @admin.password
+  make_request('DELETE', "/tasks/#{task_id}")
+end
+
 # RESPONSE STEPS
 # ==============
 
