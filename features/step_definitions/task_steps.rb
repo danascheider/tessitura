@@ -36,8 +36,12 @@ Then(/^the (first|last) task should (not )?be deleted from the database$/) do |o
   end
 end
 
-Then(/^the task's title should be changed to "(.*)"$/) do |title|
-  expect(get_changed_task.title).to eql title
+Then(/^the task's title should (not )?be changed to "(.*)"$/) do |title, negation|
+  if negation
+    expect(get_changed_task.title).not_to eql title
+  else
+    expect(get_changed_task.title).to eql title
+  end
 end
 
 Then(/^the task's title should not be changed$/) do 
