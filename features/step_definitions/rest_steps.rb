@@ -56,18 +56,25 @@ When(/^the client submits a POST request to (.*) with no credentials and:$/) do 
   make_request('POST', path, string)
 end
 
-When(/^the client submits a PUT request to (.*) with (user|admin) credentials and:$/) do |path, type, string|
+When(/^the client submits a PUT request to \/users\/(.*) with (user|admin) credentials and:$/) do |path, type, string|
   user = type == 'admin' ? User.first : User.last
   authorize user.username, user.password
-  make_request('PUT', path, string)
-end
-
-When(/^the client submits a PUT request to \/users\/(.*) with no credentials and:$/) do |path, string|
   make_request('PUT', "/users/#{path}", string)
 end
 
+When(/^the client submits a PUT request to \/users\/(\c+) with no credentials and:$/) do |id, string|
+  make_request('PUT', "/users/#{id}", string)
+end
+
 When(/^the client submits a PUT request to the last task URL with no credentials and:$/) do |string|
-  make_request('PUT', "/tasks/#{Task.last.id}", string)
+  @task = Task.last
+  make_request('PUT', "/tasks/#{@task.id}", string)
+end
+
+When(/^the client submits a PUT request to \/tasks\/(\d+) with admin credentials and:$/) do |id, string|
+  @admin = User.admin.first
+  authorize @admin.username, @admin.password
+  make_request('PUT', "/tasks/#{id}", string)
 end
 
 When(/^the client submits a PUT request to the (first|last) task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |order, id, string|

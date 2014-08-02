@@ -101,7 +101,8 @@ class Canto < Sinatra::Application
   protect 'General' do 
     put '/tasks/:id' do |id|
       user = User.find_by(username: auth.credentials.first)
-      halt 401 unless get_resource(Task, id).user.id == user.id || user.admin?
+      return 404 unless (@task = get_resource(Task, id))
+      halt 401 unless (get_resource(Task, id).user.id == user.id || user.admin?)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         get_resource(Task, id) {|task| task.update!(@request_body) }
       end
