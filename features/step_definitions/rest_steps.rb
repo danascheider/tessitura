@@ -24,10 +24,10 @@ When(/^the client submits a GET request to the (first|last) task URL with (owner
   make_request('GET', "/tasks/#{@task.id}")
 end
 
-When(/^the client submits a GET request to the (first|last) task URL with user credentials$/) do |order|
+When(/^the client submits a GET request to the (first|last) task URL with (user|no) credentials$/) do |order, type|
   @task = order == 'first' ? Task.first : Task.last
-  @user = User.where(admin: false).first
-  authorize @user.username, @user.password
+  @user = type == 'user' ? User.where(admin: false).first : nil
+  authorize @user.username, @user.password if @user
   make_request('GET', "/tasks/#{@task.id}")
 end
 
