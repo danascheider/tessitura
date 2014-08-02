@@ -68,8 +68,8 @@ end
 # RESPONSE STEPS
 # ==============
 
-Then(/^the JSON response should include all the tasks$/) do 
-  response_body.should === json_task(:all)
+Then(/^the JSON response should include all the (\d+)nd user's tasks$/) do |id|
+  expect(response_body).to eql User.find(id).tasks.to_json
 end
 
 Then(/^the JSON response should include only the (in)?complete task(?:s)$/) do |scope|
