@@ -5,6 +5,12 @@ When(/^the client submits a PUT request to \/users\/(\d+) with no credentials an
   make_request('GET', "/users/#{id}", string)
 end
 
+When(/^the client submits a GET request to \/users\/(\d+) with admin credentials$/) do |id|
+  @admin = User.admin.first
+  authorize @admin.username, @admin.password
+  make_request('GET', "/users/#{id}")
+end
+
 When(/^the client submits a GET request to (.*) with the (\d+)(?:[a-z]{2}) user's credentials$/) do |path, id|
   user = get_resource(User, id)
   authorize user.username, user.password
