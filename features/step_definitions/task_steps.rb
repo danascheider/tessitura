@@ -53,6 +53,10 @@ Then(/^the task's title should not be changed$/) do
   expect(get_changed_task.title).to eql @task.title
 end
 
+Then(/^the task's status should be '(.*)'$/) do |status|
+  expect(get_changed_task.status).to eql status
+end
+
 Then(/^the task should be marked complete$/) do 
   expect(get_changed_task.status).to eql 'complete'
 end
