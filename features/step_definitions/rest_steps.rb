@@ -1,6 +1,10 @@
 # REQUEST STEPS
 # =============
 
+When(/^the client submits a PUT request to \/users\/(\d+) with no credentials and:$/) do |id, string|
+  make_request('GET', "/users/#{id}", string)
+end
+
 When(/^the client submits a GET request to (.*) with the (\d+)(?:[a-z]{2}) user's credentials$/) do |path, id|
   user = get_resource(User, id)
   authorize user.username, user.password
