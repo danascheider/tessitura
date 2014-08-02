@@ -23,10 +23,10 @@ gem 'sinatra-basic-auth', '~> 0.1.0', require: 'sinatra/basic_auth'
 
 # Use Cucumber, RSpec, Webmock for testing
 group :test do 
-  gem 'codeclimate-test-reporter', require: nil
+  gem 'codeclimate-test-reporter', '>= 0.4.0', require: nil
   gem 'json_spec',        '~> 1.1.2'
   gem 'cucumber-sinatra', '~> 0.5.0'
-  gem 'cucumber',         '~> 1.3.11'
+  gem 'cucumber',         '~> 1.3.16'
   gem 'rspec',            '~> 3.0.0'
   gem 'rack-test',        '~> 0.6.2', require: 'rack/test'
   gem 'factory_girl',     '~> 4.4.0'
