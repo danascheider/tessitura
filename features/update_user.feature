@@ -22,7 +22,7 @@ Feature: Updating user profiles
       { "username":null }
       """
     Then the user's username should not be changed
-    And the respones should indicate the user was not updated successfully
+    And the response should indicate the user was not updated successfully
 
   Scenario: Admin updates user's profile
     When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
