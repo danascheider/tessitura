@@ -143,6 +143,10 @@ When(/^the client submits a POST request to (.*) with the (\d+)(?:[a-z]{2}) user
   make_request('POST', path, string)
 end
 
+When(/^the client submits a DELETE request to \/users\/(\d+) with no credentials$/) do |id|
+  make_request('DELETE', "/users/#{id}")
+end
+
 When(/^the client submits a DELETE request to \/users\/(\d+) with the (\d+)(?:[a-z]{2}) user\'s credentials$/) do |path, id|
   user = User.find(id)
   authorize user.username, user.password

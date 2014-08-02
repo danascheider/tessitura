@@ -26,4 +26,4 @@ Feature: Delete user account
   Scenario: User attempts to delete account without authenticating
     When the client submits a DELETE request to /users/2 with no credentials
     Then the 2nd user should not be deleted
-    And the repsonse should indicate the request was unauthorized
+    And the response should indicate the request was unauthorized
