@@ -10,20 +10,20 @@ Feature: Delete user account
 
   Scenario: User deletes own account
     When the client submits a DELETE request to /users/3 with the 3rd user's credentials
-    Then the user should be deleted from the database
+    Then the 3rd user should be deleted
     And the response should indicate the user was deleted successfully
 
   Scenario: Admin deletes user's account
     When the client submits a DELETE request to /users/3 with the 1st user's credentials
-    Then the user should be deleted from the database
+    Then the 3rd user should be deleted
     And the response should indicate the user was deleted successfully
 
   Scenario: User attempts to delete someone else's account
     When the client submits a DELETE request to /users/2 with the 3rd user's credentials
-    Then the user should not be deleted from the database
+    Then the 2nd user should not be deleted
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to delete account without authenticating
     When the client submits a DELETE request to /users/2 with no credentials
-    Then the user should not be deleted from the database
+    Then the 2nd user should not be deleted
     And the repsonse should indicate the request was unauthorized
