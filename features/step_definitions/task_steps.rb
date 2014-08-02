@@ -28,6 +28,10 @@ Then(/^no task should be created$/) do
   @user.tasks.count.should == @user_task_count
 end
 
+Then(/^the (first|last) task should be deleted from the database$/) do |order|
+  expect(get_resource(Task, @task.id)).to eql nil
+end
+
 Then(/^the task's title should be changed to '(.*)'$/) do |title|
   expect(get_changed.title).to eql title
 end
