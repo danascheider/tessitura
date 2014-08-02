@@ -40,7 +40,7 @@ Feature: Update task
       """json
       { "title":"Rescue Princess Peach" }
       """
-    Then the task's title should not be changed to 'Rescue Princess Peach'
+    Then the task's title should not be changed to "Rescue Princess Peach"
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to update a task that doesn't exist
