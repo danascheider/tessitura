@@ -13,6 +13,10 @@ When(/^the client submits a GET request to \/users\/(\d+)\/tasks with admin cred
   make_request('GET', "/users/#{id}/tasks")
 end
 
+When(/^the client submits a GET request to \/users\/(\d+)\/tasks with no credentials$/) do |id|
+  make_request('GET', "/users/#{id}/tasks")
+end
+
 When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   @request_time = Time.now.utc
   make_request(method, path)
@@ -92,7 +96,7 @@ Then(/^the JSON response should (not )?include (?:only )?the (\d+)(?:[a-z]{2}) t
 end
 
 Then(/^the response should not include any data$/) do 
-  ok_values = [nil, '', 'null', false]
+  ok_values = [nil, '', 'null', false, 'Authorization Required']
   expect(ok_values).to include response_body
 end
 
