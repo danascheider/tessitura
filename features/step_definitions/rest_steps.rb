@@ -114,6 +114,11 @@ When(/^the client submits a PUT request to that task URL with the (\d+)(?:[a-z]{
   make_request('PUT', "/tasks/#{@task.id}", string)
 end
 
+When(/^the client submits a PUT request to \/users\/(\d+) with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |path_id, user_id, string|
+  @user, @requesting_user = User.find(path_id), User.find(user_id)
+  authorize @requesting_user.username, @requesting_user.password
+  make_request('PUT', "/users/#{path_id}", string)
+end
 
 When(/^the client submits a (.*) request to users\/(\d+)\/tasks with:$/) do |method, uid, string|
   # @user_task_count variable is used in task_steps.rb and task_list_steps.rb
