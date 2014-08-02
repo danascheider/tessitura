@@ -13,7 +13,7 @@ describe Canto do
     context 'with valid authorization' do 
       before(:each) do 
         authorize @admin.username, @admin.password
-        make_request('GET', '/users')
+        make_request('GET', '/admin/users')
       end
 
       it 'returns a list of all the users' do 
@@ -28,7 +28,7 @@ describe Canto do
     context 'without valid authorization' do 
       before(:each) do 
         authorize @user.username, @user.password
-        make_request('GET', '/users')
+        make_request('GET', '/admin/users')
       end
 
       it 'doesn\'t return any data' do 
@@ -42,7 +42,7 @@ describe Canto do
 
     context 'with no authorization' do 
       before(:each) do 
-        make_request('GET', '/users')
+        make_request('GET', '/admin/users')
       end
 
       it 'doesn\'t return any data' do 
