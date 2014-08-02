@@ -79,7 +79,8 @@ class Canto < Sinatra::Application
 
   protect 'General' do
     get '/users/:id/tasks' do |id|
-      # FIX: This will need a more robust error-handling approach - TBD
+      user = User.find_by(username: auth.credentials.first)
+      halt 401 unless (user.id == id.to_i || user.admin?)
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
         [ 200, get_resource(User, id) {|user| user.tasks.to_json } ]
       end
