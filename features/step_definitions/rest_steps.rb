@@ -66,6 +66,12 @@ When(/^the client submits a PUT request to (.*) with no credentials and:$/) do |
   make_request('PUT', path, string)
 end
 
+When(/^the client submits a PUT request to the last task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
+  @task, @user = Task.last, User.find(id)
+  authorize @user.username, @user.password
+  make_request('PUT', "/tasks/#{@task.id}", string)
+end
+
 When(/^the client submits a (.*) request to users\/(\d+)\/tasks with:$/) do |method, uid, string|
   # @user_task_count variable is used in task_steps.rb and task_list_steps.rb
   path = "users/#{uid}/tasks"
