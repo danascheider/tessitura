@@ -37,6 +37,10 @@ class Canto < Sinatra::Application
     end
   end
 
+  get '/users' do 
+    405
+  end
+
   protect 'General' do 
     get '/users/:id' do |id|
       user = User.find_by(username: auth.credentials.first)
