@@ -51,6 +51,10 @@ When(/^the client submits a GET request to the (first|last) task URL with (user|
   make_request('GET', "/tasks/#{@task.id}")
 end
 
+When(/^the client submits a GET request to \/admin\/users with no credentials$/) do
+  make_request('GET', '/admin/users')
+end
+
 When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   @request_time = Time.now.utc
   make_request(method, path)
