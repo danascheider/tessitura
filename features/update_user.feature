@@ -45,7 +45,7 @@ Feature: Updating user profiles
       """json
       { "country":"Togo" }
       """
-    Then the 3rd user's city should not be changed to 'Togo'
+    Then the user's country should not be changed
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to confer admin status on self
