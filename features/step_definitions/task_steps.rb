@@ -26,7 +26,7 @@ end
 
 Given(/^the (\d+)st user's (\d+)rd task is complete$/) do |uid, task_id|
   @user, @task = User.find(uid), @user.tasks[2]
-  @task.update(status: 'complete')
+  @task.update!(status: 'complete')
 end
 
 Then(/^no task should be created$/) do
