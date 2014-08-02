@@ -55,6 +55,12 @@ When(/^the client submits a GET request to \/admin\/users with no credentials$/)
   make_request('GET', '/admin/users')
 end
 
+When(/^the client submits a GET request to \/admin\/users with admin credentials$/) do
+  @admin = User.admin.first 
+  authorize @admin.username, @admin.password
+  make_request('GET', '/admin/users')
+end
+
 When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   @request_time = Time.now.utc
   make_request(method, path)
