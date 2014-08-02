@@ -169,6 +169,10 @@ Then(/^the JSON response should include all the (\d+)nd user's tasks$/) do |id|
   expect(response_body).to eql User.find(id).tasks.to_json
 end
 
+Then(/^the JSON response should include all the users$/) do 
+  expect(response_body).to eql User.all.to_json
+end
+
 Then(/^the JSON response should include only the (in)?complete task(?:s)$/) do |scope|
   tasks = scope ? Task.incomplete : Task.complete
   response_body.should eql tasks.to_json
