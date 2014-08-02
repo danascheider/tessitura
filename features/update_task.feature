@@ -16,7 +16,7 @@ Feature: Update task
       """json
       { "title":"Take Out the Trash" }
       """
-    Then the task's title should be changed to 'Take Out the Trash'
+    Then the task's title should be changed to "Take Out the Trash"
     And the response should indicate the task was updated successfully
 
   Scenario: Admin updates user's task
@@ -24,7 +24,7 @@ Feature: Update task
       """json
       { "title":"Feed the neighbor's cat" }
       """
-    Then the task's title should be changed to 'Feed the neighbor\'s cat'
+    Then the task's title should be changed to "Feed the neighbor's cat"
     And the response should indicate the task was updated successfully
 
   Scenario: User attempts to update someone else's task
@@ -32,7 +32,7 @@ Feature: Update task
       """json
       { "title":"Feed the neighbor's cat" }
       """
-    Then the task's title should not be changed to 'Feed the neighbor\'s cat'
+    Then the task's title should not be changed to "Feed the neighbor's cat"
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to update a task without authenticating

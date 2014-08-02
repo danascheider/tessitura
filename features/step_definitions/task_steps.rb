@@ -36,16 +36,16 @@ Then(/^the (first|last) task should (not )?be deleted from the database$/) do |o
   end
 end
 
-Then(/^the task's title should be changed to '(.*)'$/) do |title|
-  expect(get_changed.title).to eql title
+Then(/^the task's title should be changed to "(.*)"$/) do |title|
+  expect(get_changed_task.title).to eql title
 end
 
 Then(/^the task's title should not be changed$/) do 
-  expect(get_changed.title).to eql @task.title
+  expect(get_changed_task.title).to eql @task.title
 end
 
 Then(/^the task should be marked complete$/) do 
-  expect(get_changed.status).to eql 'complete'
+  expect(get_changed_task.status).to eql 'complete'
 end
 
 Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordinal|
@@ -53,5 +53,5 @@ Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordin
 end
 
 Then(/^the task's position should be changed to (\d+)$/) do |number|
-  expect(get_changed.position).to eql number
+  expect(get_changed_task.position).to eql number
 end

@@ -66,8 +66,9 @@ When(/^the client submits a PUT request to (.*) with no credentials and:$/) do |
   make_request('PUT', path, string)
 end
 
-When(/^the client submits a PUT request to the last task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
-  @task, @user = Task.last, User.find(id)
+When(/^the client submits a PUT request to the (first|last) task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |order, id, string|
+  @task = order == 'first' ? Task.first : Task.last
+  @user = User.find(id)
   authorize @user.username, @user.password
   make_request('PUT', "/tasks/#{@task.id}", string)
 end
