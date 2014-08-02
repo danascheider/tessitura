@@ -17,6 +17,10 @@ When(/^the client submits a GET request to (.*) with the (\d+)(?:[a-z]{2}) user'
   make_request('GET', path)
 end
 
+When(/^the client submits a GET request to \/users\/(\d+) with no credentials$/) do |id|
+  make_request('GET', "/users/#{id}")
+end
+
 When(/^the client submits a GET request to \/users\/(\d+)\/tasks with admin credentials$/) do |id|
   @admin, @user = User.admin.first, User.find(id)
   authorize @admin.username, @admin.password
