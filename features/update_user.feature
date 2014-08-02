@@ -37,7 +37,7 @@ Feature: Updating user profiles
       """json
       { "first_name":"Jerry" }
       """
-    Then the 3rd user's first_name should not be changed to 'Jerry'
+    Then the user's first_name should not be changed
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to update profile without authenticating
