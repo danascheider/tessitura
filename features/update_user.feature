@@ -14,7 +14,7 @@ Feature: Updating user profiles
       { "fach":"lyric baritone" }
       """
     Then the 3rd user's fach should be changed to 'lyric baritone'
-    And the response should indicate the user was saved successfully
+    And the response should indicate the user was updated successfully
 
   Scenario: User updates their own profile with invalid attributes
     When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
@@ -22,7 +22,7 @@ Feature: Updating user profiles
       { "username":null }
       """
     Then the 3rd user's username should not be changed
-    And the respones should indicate the user was not saved successfully
+    And the respones should indicate the user was not updated successfully
 
   Scenario: Admin updates user's profile
     When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
@@ -30,7 +30,7 @@ Feature: Updating user profiles
       { "fach":"heldentenor" }
       """
     Then the 3rd user's fach should be changed to 'heldentenor'
-    And the response should indicate the user was saved successfully
+    And the response should indicate the user was update successfully
 
   Scenario: User attempts to update someone else's profile
     When the client submits a PUT request to /users/3 with the 2nd user's credentials and:
@@ -62,4 +62,4 @@ Feature: Updating user profiles
       { "admin":true }
       """
     Then the 3rd user should be an admin
-    And the response should indicate the user was saved successfully
+    And the response should indicate the user was updated successfully
