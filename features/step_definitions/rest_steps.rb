@@ -1,6 +1,12 @@
 # REQUEST STEPS
 # =============
 
+When(/^the client submits a GET request to (.*) with the (\d+)(?:[a-z]{2}) user's credentials$/) do |path, id|
+  user = get_resource(User, id)
+  authorize user.username, user.password
+  make_request('GET', path)
+end
+
 When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   @request_time = Time.now.utc
   make_request(method, path)
