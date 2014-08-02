@@ -78,3 +78,7 @@ Then(/^the (\d+)(?:[a-z]{2}) user should( not)? be deleted$/) do |id, neg|
     expect(User.find(id)).to be_a(User)
   end
 end
+
+Then(/^no user should be deleted$/) do
+  expect(User.count).to eql @user_count
+end

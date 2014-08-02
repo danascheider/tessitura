@@ -177,6 +177,12 @@ When(/^the client submits a DELETE request to \/tasks\/(\d+) with admin credenti
   make_request('DELETE', "/tasks/#{task_id}")
 end
 
+When(/^the client submits a DELETE request to \/users\/(\d+) with admin credentials$/) do |id|
+  @user, @admin, @user_count = get_resource(User, id), User.admin.first, User.count
+  authorize @admin.username, @admin.password
+  make_request('DELETE', "/users/#{id}")
+end
+
 # RESPONSE STEPS
 # ==============
 
