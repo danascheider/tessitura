@@ -70,7 +70,7 @@ Feature: Update task
 
   Scenario: Change task status to incomplete
     Given the 1st user's 3rd task is complete
-    When the client submits a PUT request to that task URL with the 1st users credentials and:
+    When the client submits a PUT request to that task URL with the 1st user's credentials and:
       """json
       { "status":"in_progress" }
       """
