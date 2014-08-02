@@ -75,5 +75,5 @@ Feature: Update task
       { "status":"in_progress" }
       """
     Then the task's status should be 'in_progress'
-    And the task should be moved to position 1
+    And the task's position should be changed to 1
     And the response should indicate the task was updated successfully
