@@ -30,14 +30,14 @@ Feature: Updating user profiles
       { "fach":"heldentenor" }
       """
     Then the 3rd user's fach should be changed to 'heldentenor'
-    And the response should indicate the user was update successfully
+    And the response should indicate the user was updated successfully
 
   Scenario: User attempts to update someone else's profile
     When the client submits a PUT request to /users/3 with the 2nd user's credentials and:
       """json
       { "first_name":"Jerry" }
       """
-    Then the 3rd user's fach should not be changed to 'Jerry'
+    Then the 3rd user's first_name should not be changed to 'Jerry'
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to update profile without authenticating
