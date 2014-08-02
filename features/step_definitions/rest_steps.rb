@@ -89,10 +89,17 @@ When(/^the client submits a POST request to (.*) with the (\d+)(?:[a-z]{2}) user
   make_request('POST', path, string)
 end
 
-When(/^the client submits a DELETE request to (.*) with the (\d+)(?:[a-z]{2}) user\'s credentials$/) do |path, id|
+When(/^the client submits a DELETE request to \/users\/(\d+) with the (\d+)(?:[a-z]{2}) user\'s credentials$/) do |path, id|
   user = User.find(id)
   authorize user.username, user.password
-  make_request('DELETE', path)
+  make_request('DELETE', "/users/#{path}")
+end
+
+When(/^the client submits a DELETE request to the (first|last) task URL with the (\d+)(?:[a-z]{2}) user's credentials$/) do |order, id|
+  user = User.find(id)
+  @task = order == 'first' ? Task.first : Task.last
+  authorize user.username, user.password
+  make_request('DELETE', "/tasks/#{@task.id}")
 end
 
 # RESPONSE STEPS
