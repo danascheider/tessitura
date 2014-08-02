@@ -17,6 +17,13 @@ When(/^the client submits a GET request to \/users\/(\d+)\/tasks with no credent
   make_request('GET', "/users/#{id}/tasks")
 end
 
+When(/^the client submits a GET request to the (first|last) task URL with owner credentials$/) do |order|
+  @task = order == 'first' ? Task.first : Task.last
+  @owner = @task.user
+  authorize @owner.username, @owner.password
+  make_request('GET', "/tasks/#{@task.id}")
+end
+
 When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   @request_time = Time.now.utc
   make_request(method, path)
