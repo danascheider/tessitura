@@ -12,6 +12,10 @@ Given(/^there (?:are users|is a user) with the following attributes:$/) do |attr
   @user = User.find(2)
 end
 
+Given(/^there is a user with (\d+) tasks$/) do |count|
+  FactoryGirl.create(:task_list_with_tasks, tasks_count: count)
+end
+
 Given(/^each user has (\d+) tasks$/) do |number|
   User.all.each do |user|
     FactoryGirl.create(:task_list_with_tasks, tasks_count: number, user_id: user.id)

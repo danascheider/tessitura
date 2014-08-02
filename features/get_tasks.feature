@@ -5,7 +5,7 @@ Feature: Get tasks
   I need to see my tasks in JSON format.
 
   Background:
-    Given there are 3 tasks
+    Given there is a user with 3 tasks
     And the 3rd task is complete
 
   Scenario Outline: Get task information
