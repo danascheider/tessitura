@@ -91,6 +91,10 @@ Then(/^the JSON response should (not )?include (?:only )?the (\d+)(?:[a-z]{2}) t
   end
 end
 
+Then(/^the response should not include any data$/) do 
+  expect(response_body).to eql nil
+end
+
 Then(/^the response should indicate the (?:.*) was (not )?saved successfully$/) do |negation|
   expect(response_status).to eql negation ? 422 : 201
 end

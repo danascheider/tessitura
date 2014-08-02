@@ -24,12 +24,12 @@ Feature: Get tasks
 
   Scenario: User attempts to view other user's tasks
     When the client submits a GET request to /users/2/tasks with the 3rd user's credentials
-    Then the JSON response should not include any data
+    Then the response should not include any data
     And the response should indicate the request is unauthorized
 
   Scenario: User attempts to view tasks without authenticating
     When the client submits a GET request to /users/2/tasks with no credentials
-    Then the JSON response should not include any data
+    Then the response should not include any data
     And the response should indicate the request is unauthorized
 
   Scenario: User views one of their own tasks
@@ -44,12 +44,12 @@ Feature: Get tasks
 
   Scenario: User attempts to view someone else's task
     When the client submits a GET request to the first task URL with user credentials
-    Then the JSON response should not include any data
+    Then the response should not include any data
     And the response should indicate the request is unauthorized
 
   Scenario: User attempts to view task without authenticating
     When the client submits a GET request to the first task URL with no credentials
-    Then the JSON response should not include any data
+    Then the response should not include any data
     And the response should indicate the request is unauthorized
 
   Scenario: Try to get information about a task that doesn't exist
