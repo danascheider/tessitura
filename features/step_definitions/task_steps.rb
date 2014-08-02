@@ -30,9 +30,9 @@ end
 
 Then(/^the (first|last) task should (not )?be deleted from the database$/) do |order, negation|
   if negation 
-    expect(get_resource(Task, @task.id)).to eql @task
+    expect(get_resource(Task, @task_id)).to eql @task
   else
-    expect(get_resource(Task, @task.id)).to eql nil
+    expect(get_resource(Task, @task_id)).to eql nil
   end
 end
 

@@ -32,5 +32,5 @@ Feature: Delete task
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to exist a task that doesn't exist
-    When the client submits a DELETE request to /tasks/1000000
+    When the client submits a DELETE request to /tasks/1000000 with admin credentials
     Then the response should indicate the task was not found

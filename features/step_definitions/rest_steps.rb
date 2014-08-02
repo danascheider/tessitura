@@ -98,8 +98,13 @@ end
 When(/^the client submits a DELETE request to the (first|last) task URL with the (\d+)(?:[a-z]{2}) user's credentials$/) do |order, id|
   user = User.find(id)
   @task = order == 'first' ? Task.first : Task.last
+  @task_id = @task.id
   authorize user.username, user.password
   make_request('DELETE', "/tasks/#{@task.id}")
+end
+
+When(/^the client submits a DELETE request to the last task URL with no credentials$/) do 
+  make_request('DELETE', "/tasks/#{Task.last.id}")
 end
 
 # RESPONSE STEPS
