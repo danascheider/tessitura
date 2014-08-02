@@ -44,6 +44,7 @@ class Canto < Sinatra::Application
   protect 'General' do 
     get '/users/:id' do |id|
       user = User.find_by(username: auth.credentials.first)
+      return 404 unless get_resource(User, id)
       halt 401 unless user.id == id.to_i || user.admin?
       [ 200, get_resource(User, id) {|profile| profile.to_json } ]
     end
