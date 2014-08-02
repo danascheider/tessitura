@@ -24,6 +24,13 @@ When(/^the client submits a GET request to the (first|last) task URL with (owner
   make_request('GET', "/tasks/#{@task.id}")
 end
 
+When(/^the client submits a GET request to the (first|last) task URL with user credentials$/) do |order|
+  @task = order == 'first' ? Task.first : Task.last
+  @user = User.where(admin: false).first
+  authorize @user.username, @user.password
+  make_request('GET', "/tasks/#{@task.id}")
+end
+
 When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
   @request_time = Time.now.utc
   make_request(method, path)
