@@ -49,9 +49,7 @@ class Canto < Sinatra::Application
   protect 'General' do 
     put '/users/:id' do |id|
       user_route_boilerplate(id)
-      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        @user ? @user.update!(@request_body) : 404
-      end
+      update_resource(@request_body, @user)
     end
   end
 
@@ -68,10 +66,7 @@ class Canto < Sinatra::Application
     post '/users/:id/tasks' do |id|
       user_route_boilerplate(id)
       @request_body[:task_list_id] = User.find(id).default_task_list.id
-      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        Task.create!(@request_body)
-        [ 201, { body: @request_body }]
-      end
+      create_resource(Task, @request_body)
     end
   end
 
@@ -94,9 +89,7 @@ class Canto < Sinatra::Application
   protect 'General' do 
     put '/tasks/:id' do |id|
       task_route_boilerplate(id)
-      begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        @task ? @task.update!(@request_body) : 404
-      end
+      update_resource(@request_body, @task)
     end
   end
 
@@ -115,7 +108,7 @@ class Canto < Sinatra::Application
 
   protect 'Admin' do 
     get '/admin/users' do 
-      [ 200, User.all.to_json ]
+      User.all.to_json
     end
   end
 end
