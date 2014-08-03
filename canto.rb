@@ -90,9 +90,7 @@ class Canto < Sinatra::Application
   protect 'General' do
     get '/tasks/:id' do |id|
       task_route_boilerplate(id)
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-        [ 200, @task.to_json ]
-      end
+      @task ? @task.to_json : 404
     end
   end
 
@@ -100,7 +98,7 @@ class Canto < Sinatra::Application
     put '/tasks/:id' do |id|
       task_route_boilerplate(id)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        get_resource(Task, id) {|task| task.update!(@request_body) }
+        @task ? @task.update!(@request_body) : 404
       end
     end
   end

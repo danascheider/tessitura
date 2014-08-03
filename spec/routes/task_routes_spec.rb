@@ -131,6 +131,14 @@ describe Canto do
           expect(response_status).to eql 401
         end
       end
+
+      context 'when the task doesn\'t exist' do 
+        it 'returns status 404' do 
+          authorize @user.username, @user.password
+          make_request('GET', '/tasks/1000000')
+          expect(response_status).to eql 404
+        end
+      end
     end
   end
 
@@ -166,12 +174,16 @@ describe Canto do
     end
 
     context 'with admin authorization' do 
-      # FIX: These tests don't make sure that the task that is created is created on the
-      #      user's task list, not the admin's. Careful!
       it 'creates a new task' do 
         expect(Task).to receive(:create!)
         authorize @admin.username, @admin.password
         make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
+      end
+
+      it 'assigns task ownership to the user, not the admin' do 
+        authorize @admin.username, @admin.password
+        make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
+        expect(Task.last.user.id).to eql @user.id
       end
 
       it 'returns status 201' do 
@@ -270,6 +282,14 @@ describe Canto do
       it 'returns status 401' do 
         make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'priority' => 'high' }.to_json)
         expect(response_status).to eql 401
+      end
+    end
+
+    context 'when the task doesn\'t exist' do 
+      it 'returns status 404' do 
+        authorize @admin.username, @admin.password
+        make_request('PUT', '/tasks/1000000', { 'status' => 'blocking' }.to_json)
+        expect(response_status).to eql 404
       end
     end
   end
