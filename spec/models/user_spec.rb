@@ -25,7 +25,7 @@ describe User do
 
     it { is_expected.to respond_to(:default_task_list) }
 
-    describe '::tasks' do 
+    describe '#tasks' do 
       before(:each) do 
         2.times { FactoryGirl.create(:task_list_with_tasks, user_id: @user.id) }
       end

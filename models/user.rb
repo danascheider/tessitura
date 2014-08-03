@@ -1,5 +1,3 @@
-require 'securerandom'
-
 class User < ActiveRecord::Base
   has_many :task_lists, dependent: :destroy
   validates :email, presence: true, uniqueness: true, 
