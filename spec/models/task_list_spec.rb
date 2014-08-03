@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe TaskList do 
   before(:each) do 
-    @task_list = FactoryGirl.create(:task_list_with_tasks)
+    @owner = FactoryGirl.create(:user_with_task_lists)
+    @task_list = @owner.default_task_list
   end
 
   describe 'attributes' do 
@@ -12,10 +13,16 @@ describe TaskList do
   end
 
   describe 'instance methods' do 
-    describe 'to_hashes' do 
+    describe '#to_hashes' do 
       it 'returns an array of its tasks as hashes' do 
         list = @task_list.tasks.map {|task| task.to_hash }
         expect(@task_list.to_a).to eql list
+      end
+    end
+
+    describe '#owner' do 
+      it 'returns the task list\'s associated user' do
+        expect(@task_list.owner).to eql @owner
       end
     end
   end
