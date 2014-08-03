@@ -2,7 +2,7 @@ class Sinatra::Application
   module AuthorizationHelper
     def user_route_boilerplate(id)
       return 404 unless (@user = get_resource(User, id))
-      halt 401 unless current_user.admin? || current_user.id == id.to_i && !setting_admin?
+      halt 401 unless current_user.admin? || (current_user.id == id.to_i && !setting_admin?)
     end
 
     def task_route_boilerplate(id)

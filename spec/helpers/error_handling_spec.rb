@@ -129,4 +129,61 @@ describe Canto::ErrorHandling do
       end
     end
   end
+
+  describe '::update_resource' do 
+    before(:each) do 
+      @user = FactoryGirl.create(:user_with_task_lists)
+      @task = User.first.tasks.first
+    end
+
+    context 'with valid attributes' do 
+      context 'users' do 
+        it 'updates the user' do 
+          expect_any_instance_of(User).to receive(:update!)
+          update_resource({ city: 'Honolulu' }, @user)
+        end
+      end
+
+      context 'tasks' do 
+        it 'updates the task' do 
+          expect_any_instance_of(Task).to receive(:update!)
+          update_resource({ priority: 'high' }, @task)
+        end
+      end
+    end
+
+    context 'with invalid attributes' do 
+      context 'users' do 
+        it 'returns 422' do 
+          expect(update_resource({ username: nil }, @user)).to eql 422
+        end
+      end
+
+      context 'tasks' do 
+        it 'returns 422' do 
+          expect(update_resource({ task_list_id: nil }, @task)).to eql 422
+        end
+      end
+    end
+
+    context 'with unknown attributes' do 
+      context 'users' do 
+        it 'returns 422' do 
+          expect(update_resource({ foo: 'bar' }, @user)).to eql 422
+        end
+      end
+
+      context 'tasks' do 
+        it 'returns 422' do 
+          expect(update_resource({ foo: 'bar' }, @task)).to eql 422
+        end
+      end
+    end
+
+    context 'with a missing resource' do 
+      it 'returns 404' do 
+        expect(update_resource({ country: 'Peru' }, nil)).to eql 404
+      end
+    end
+  end
 end
