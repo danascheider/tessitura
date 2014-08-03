@@ -17,6 +17,14 @@ class Sinatra::Application
       end
     end
 
+    def destroy_resource(object=nil)
+      begin
+        object ? object.destroy! && 204 : 404
+      rescue ActiveRecord::RecordNotDestroyed
+        403
+      end
+    end
+
     def get_resource(klass, id, &block)
       begin
         if block_given? then yield klass.find(id); else klass.find(id); end

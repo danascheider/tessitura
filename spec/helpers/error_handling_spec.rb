@@ -130,6 +130,50 @@ describe Canto::ErrorHandling do
     end
   end
 
+  describe '::destroy_resource' do 
+    before(:each) do 
+      @user = FactoryGirl.create(:user_with_task_lists)
+      @task = @user.tasks.first
+    end
+
+    context 'when the resource exists' do 
+      context 'users' do 
+        it 'deletes the user' do 
+          expect_any_instance_of(User).to receive(:destroy!)
+          destroy_resource(@user)
+        end
+
+        it 'returns 204' do 
+          expect(destroy_resource(@user)).to eql 204
+        end
+      end
+
+      context 'tasks' do 
+        it 'deletes the task' do 
+          expect_any_instance_of(Task).to receive(:destroy!)
+          destroy_resource(@task)
+        end
+
+        it 'returns 204' do 
+          expect(destroy_resource(@task)).to eql 204
+        end
+      end
+    end
+
+    context 'when the resource doesn\'t exist' do 
+      it 'returns 404' do 
+        expect(destroy_resource(nil)).to eql 404
+      end
+    end
+
+    context 'when the resource can\'t be destroyed' do 
+      it 'returns status 403' do
+        @user.update!(admin: true) # Last admin can't be deleted
+        expect(destroy_resource(@user)).to eql 403
+      end
+    end
+  end
+
   describe '::update_resource' do 
     before(:each) do 
       @user = FactoryGirl.create(:user_with_task_lists)
