@@ -64,4 +64,69 @@ describe Canto::ErrorHandling do
       end
     end
   end
+  
+  describe '::create_resource' do 
+    before(:each) do 
+      FactoryGirl.create_list(:user_with_task_lists, 2)
+      @list_id = User.last.default_task_list.id
+    end
+
+    context 'with valid attributes' do 
+      context 'users' do 
+        it 'creates a new user' do 
+          expect(User).to receive(:create!)
+          create_resource(User, username: 'frankjones', password: 'frankjonespwd', email: 'fj@a.com')
+        end
+
+        it 'returns status 201' do 
+          expect(create_resource(User, username: 'frankjones', password: 'frankjonespwd', email: 'fj@a.com')).to eql 201
+        end
+      end
+
+      context 'tasks' do 
+        it 'creates a new task' do 
+          expect(Task).to receive(:create!)
+          create_resource(Task, title: 'Water the lawn', task_list_id: @list_id)
+        end
+
+        it 'returns status 201' do 
+          expect(create_resource(Task, title: 'Water the lawn', task_list_id: @list_id)).to eql 201
+        end
+      end
+    end
+
+    context 'with invalid attributes' do 
+      context 'user' do 
+        it 'returns 422' do 
+          expect(create_resource(User, username: 'abcdefg')).to eql 422
+        end
+      end
+
+      context 'task' do 
+        it 'returns 422' do 
+          expect(create_resource(Task, title: nil)).to eql 422
+        end
+      end
+    end
+
+    context 'with no attribute hash' do 
+      it 'returns 422' do 
+        expect(create_resource(User, nil)).to eql 422
+      end
+    end
+
+    context 'with unknown attributes' do 
+      context 'users' do 
+        it 'returns 422' do 
+          expect(create_resource(User, username: 'u3jfuo', password: 'apssowdr', email: 'b@c.com', foo: 'bar')).to eql 422
+        end
+      end
+
+      context 'tasks' do 
+        it 'returns 422' do 
+          expect(create_resource(Task, title: 'My Task', foo: 12)).to eql 422
+        end
+      end
+    end
+  end
 end
