@@ -43,16 +43,15 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     get '/users/:id' do |id|
-      return 404 unless get_resource(User, id)
-      halt 401 unless current_user.id == id.to_i || current_user.admin?
+      user_route_boilerplate(id)
       [ 200, get_resource(User, id) {|profile| profile.to_json } ]
     end
   end
 
   protect 'General' do 
     put '/users/:id' do |id|
-      return 404 unless get_resource(User, id)
-      halt 401 unless current_user.admin? || (current_user.id == id.to_i && !@request_body['admin'])
+      user_route_boilerplate(id)
+      halt 401 if @request_body.has_key?(:admin) && !current_user.admin?
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         get_resource(User, id) {|user| user.update!(@request_body) }
       end
@@ -61,8 +60,7 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     delete '/users/:id' do |id|
-      return 404 unless get_resource(User, id)
-      halt 401 unless current_user.id == id.to_i || current_user.admin?
+      user_route_boilerplate(id)
       begin_and_rescue(ActiveRecord::RecordNotDestroyed, 403) do
         get_resource(User, id) { |user| user.destroy! } ? 204 : 404
       end
@@ -71,7 +69,7 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     post '/users/:id/tasks' do |id|
-      halt 401 unless (current_user.id == id.to_i || current_user.admin?)
+      user_route_boilerplate(id)
       @request_body[:task_list_id] = User.find(id).default_task_list.id
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         Task.create!(@request_body)
@@ -82,7 +80,7 @@ class Canto < Sinatra::Application
 
   protect 'General' do
     get '/users/:id/tasks' do |id|
-      halt 401 unless (current_user.id == id.to_i || current_user.admin?)
+      user_route_boilerplate(id)
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
         [ 200, get_resource(User, id) {|user| user.tasks.to_json } ]
       end
