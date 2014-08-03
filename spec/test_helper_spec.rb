@@ -42,4 +42,24 @@ describe 'test helper methods' do
       expect { dump_user_tasks(@user.id) }.to output(@output).to_stdout
     end
   end
+
+  describe '::get_changed_task' do 
+    before(:each) do 
+      @task = FactoryGirl.create(:task, priority: 'not_important')
+      @id = @task.id
+      Task.find(@id).update!(priority: 'urgent')
+    end
+
+    context '@task' do 
+      it 'does\'t update its attributes' do 
+        expect(@task.priority).to eql 'not_important'
+      end
+    end
+
+    context 'changed task' do 
+      it 'gets the new attributes' do 
+        expect(get_changed_task.priority).to eql 'urgent'
+      end
+    end
+  end
 end
