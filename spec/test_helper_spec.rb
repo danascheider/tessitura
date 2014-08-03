@@ -82,4 +82,74 @@ describe 'test helper methods' do
       end
     end
   end
+
+  describe '::get_resource' do 
+    before(:each) do 
+      FactoryGirl.create_list(:user_with_task_lists, 4)
+    end
+
+    context 'with no block given' do 
+      context 'users' do 
+        context 'when the user exists' do 
+          it 'returns the user object' do 
+            id = User.first.id
+            expect(get_resource(User, id)).to eql User.first
+          end
+        end
+
+        context 'when the user doesn\'t exist' do 
+          it 'returns nil' do 
+            expect(get_resource(User, 1000000)).to eql nil
+          end
+        end
+      end
+
+      context 'tasks' do 
+        context 'when the task exists' do 
+          it 'returns the task' do 
+            id = Task.first.id
+            expect(get_resource(Task, id)).to eql Task.first
+          end
+        end
+
+        context 'when the task doesn\'t exist' do 
+          it 'returns nil' do 
+            expect(get_resource(Task, 1000000)).to eql nil
+          end
+        end
+      end
+    end
+
+    context 'block given' do 
+      context 'users' do 
+        context 'when the user exists' do 
+          it 'executes the block' do 
+            id = User.first.id
+            expect(get_resource(User, id) {|user| user.username.upcase }).to eql User.first.username.upcase
+          end
+        end
+
+        context 'when the user doesn\'t exist' do 
+          it 'returns nil' do 
+            expect(get_resource(User, 1000000) {|user| user.username.upcase }).to eql nil
+          end
+        end
+      end
+
+      context 'tasks' do 
+        context 'when the task exists' do 
+          it 'returns the output of the block' do
+            id = Task.first.id
+            expect(get_resource(Task, id) {|task| task.title.upcase }).to eql Task.first.title.upcase
+          end
+        end
+      end
+
+      context 'when the task doesn\'t exist' do 
+        it 'returns nil' do 
+          expect(get_resource(Task, 1000000) {|task| task.title.upcase }).to eql nil
+        end
+      end
+    end
+  end
 end
