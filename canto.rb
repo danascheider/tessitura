@@ -71,9 +71,7 @@ class Canto < Sinatra::Application
   protect 'General' do
     get '/users/:id/tasks' do |id|
       user_route_boilerplate(id)
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-        [ 200, get_resource(User, id) {|user| user.tasks.to_json } ]
-      end
+      get_resource(User, id) {|user| user.tasks.to_json } || 404
     end
   end
 
