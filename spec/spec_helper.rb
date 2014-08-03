@@ -13,7 +13,6 @@ require          'database_cleaner'
 require_relative '../canto'
 require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
-require_all      app_path + '/controllers/'
 
 # Disable SQL logging unless environment variable log is set to true
 ActiveRecord::Base.logger.level = 1 unless ENV['LOG'] == 'true'
