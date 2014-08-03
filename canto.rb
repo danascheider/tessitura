@@ -89,8 +89,7 @@ class Canto < Sinatra::Application
 
   protect 'General' do
     get '/tasks/:id' do |id|
-      return 404 unless (@task = get_resource(Task, id))
-      halt 401 unless @task.user.id == current_user.id || current_user.admin?
+      task_route_boilerplate(id)
       begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
         [ 200, @task.to_json ]
       end
@@ -99,8 +98,7 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     put '/tasks/:id' do |id|
-      return 404 unless (@task = get_resource(Task, id))
-      halt 401 unless (get_resource(Task, id).user.id == current_user.id || current_user.admin?)
+      task_route_boilerplate(id)
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         get_resource(Task, id) {|task| task.update!(@request_body) }
       end
@@ -109,11 +107,8 @@ class Canto < Sinatra::Application
 
   protect 'General' do 
     delete '/tasks/:id' do |id|
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-        halt 401 unless Task.find(id).user.id == current_user.id || current_user.admin?
-        get_resource(Task, id) {|task| task.destroy! }
-        204
-      end
+      task_route_boilerplate(id)
+      @task ? @task.destroy! && 204 : 404
     end
   end
 

@@ -5,7 +5,8 @@ class Sinatra::Application
       halt 401 unless current_user.admin? || current_user.id == id.to_i && !setting_admin?
     end
 
-    def authorize_to_view_tasks(id)
+    def task_route_boilerplate(id)
+      return 404 unless (@task = get_resource(Task, id))
       halt 401 unless current_user.id == @task.user.id || current_user.admin?
     end
 
