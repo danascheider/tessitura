@@ -32,6 +32,15 @@ class Sinatra::Application
         nil
       end
     end
+
+
+    def update_resource(attributes, object=nil)
+      begin
+        object ? object.update!(attributes) : 404
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::UnknownAttributeError
+        422
+      end
+    end
   end
 
   helpers ErrorHandling
