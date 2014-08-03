@@ -30,4 +30,16 @@ describe 'test helper methods' do
       expect { dump_tasks }.to output(@output).to_stdout
     end
   end
+
+  describe '::dump_user_tasks' do 
+    before(:each) do 
+      @user = FactoryGirl.create(:user_with_task_lists)
+      @output = "USER #{@user.id}'S TASKS:\n"
+      @user.tasks.each {|task| @output << "#{task.to_hash}\n"}
+    end
+
+    it 'lists data about the user\'s tasks' do 
+      expect { dump_user_tasks(@user.id) }.to output(@output).to_stdout
+    end
+  end
 end
