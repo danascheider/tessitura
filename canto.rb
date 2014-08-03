@@ -28,11 +28,9 @@ class Canto < Sinatra::Application
     "Welcome to Canto\n"
   end
 
-  post '/users' do 
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+  post '/users' do  
       halt 401 if @request_body.has_key? "admin"
       create_resource(User, @request_body)
-    end
   end
 
   get '/users' do 
