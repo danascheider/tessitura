@@ -61,11 +61,6 @@ When(/^the client submits a GET request to \/admin\/users with admin credentials
   make_request('GET', '/admin/users')
 end
 
-When(/^the client submits a (.*) request to \/(\S+)$/) do |method, path|
-  @request_time = Time.now.utc
-  make_request(method, path)
-end
-
 When(/^the client submits a POST request to (.*) with (user|admin) credentials and:$/) do |path, type, string|
   @user = type == 'admin' ? User.admin.first : User.last
   id = /(\d+)/.match(path).to_s
@@ -84,10 +79,6 @@ When(/^the client submits a PUT request to \/users\/(.*) with (user|admin) crede
   user = type == 'admin' ? User.first : User.last
   authorize user.username, user.password
   make_request('PUT', "/users/#{path}", string)
-end
-
-When(/^the client submits a PUT request to \/users\/(\c+) with no credentials and:$/) do |id, string|
-  make_request('PUT', "/users/#{id}", string)
 end
 
 When(/^the client submits a PUT request to the last task URL with no credentials and:$/) do |string|
