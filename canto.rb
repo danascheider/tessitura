@@ -29,8 +29,8 @@ class Canto < Sinatra::Application
   end
 
   post '/users' do  
-      halt 401 if @request_body.has_key? "admin"
-      create_resource(User, @request_body)
+    halt 401 if @request_body.has_key? "admin"
+    create_resource(User, @request_body)
   end
 
   get '/users' do 
