@@ -62,4 +62,24 @@ describe 'test helper methods' do
       end
     end
   end
+
+  describe '::get_changed_user' do 
+    before(:each) do 
+      @user = FactoryGirl.create(:user, city: 'Buenos Aires')
+      @id = @user.id
+      User.find(@id).update!(city: 'Stockholm')
+    end
+
+    context '@user' do 
+      it 'doesn\'t update its attributes' do 
+        expect(@user.city).to eql 'Buenos Aires'
+      end
+    end
+
+    context 'changed user' do 
+      it 'gets the user\'s current attributes' do 
+        expect(get_changed_user.city).to eql 'Stockholm'
+      end
+    end
+  end
 end
