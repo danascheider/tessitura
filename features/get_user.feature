@@ -49,4 +49,5 @@ Feature: View user profile
 
   Scenario: Admin attempts to view user that doesn't exist
     When the client submits a GET request to /users/1000000 with admin credentials
-    Then the response should return status 404
+    Then the response should not include any data
+    And the response should return status 404

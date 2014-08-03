@@ -44,7 +44,7 @@ class Canto < Sinatra::Application
   protect 'General' do 
     get '/users/:id' do |id|
       user_route_boilerplate(id)
-      [ 200, get_resource(User, id) {|profile| profile.to_json } ]
+      @user ? @user.to_json : 404
     end
   end
 
@@ -53,7 +53,7 @@ class Canto < Sinatra::Application
       user_route_boilerplate(id)
       halt 401 if @request_body.has_key?(:admin) && !current_user.admin?
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
-        get_resource(User, id) {|user| user.update!(@request_body) }
+        @user ? @user.update!(@request_body) : 404
       end
     end
   end

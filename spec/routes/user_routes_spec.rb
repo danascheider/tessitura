@@ -109,7 +109,7 @@ describe Canto do
       end
     end
 
-    context 'with no secret key' do 
+    context 'with no credentials' do 
       before(:each) do 
         make_request('GET', "/users/#{@user.id}")
       end
@@ -120,6 +120,14 @@ describe Canto do
 
       it 'returns status code 401' do 
         expect(response_status).to eql 401
+      end
+    end
+
+    context 'when the user doesn\'t exist' do 
+      it 'returns status 404' do 
+        authorize @admin.username, @admin.password
+        make_request('GET', '/users/1000000')
+        expect(response_status).to eql 404
       end
     end
   end
@@ -133,8 +141,6 @@ describe Canto do
       context 'with valid attributes' do 
         it 'updates the profile' do 
           expect_any_instance_of(User).to receive(:update!)
-          puts "THE USER IN QUESTION: #{@user.to_hash}"
-          puts "THE USER'S ID: #{@user.id}"
           make_request('PUT', "/users/#{@user.id}", { 'fach' => 'soprano' }.to_json)
         end
 
@@ -206,6 +212,14 @@ describe Canto do
         expect(response_status).to eql 401
       end 
     end
+
+    context 'when the user doesn\'t exist' do 
+      it 'returns status 404' do 
+        authorize @admin.username, @admin.password
+        make_request('PUT', '/users/1000000', { "fach" => "lyric coloratura" }.to_json)
+        expect(response_status).to eql 404
+      end
+    end
   end
 
   describe 'DELETE' do 
@@ -266,6 +280,14 @@ describe Canto do
       it 'returns status 401' do 
         make_request('DELETE', "/users/#{@user.id}")
         expect(response_status).to eql 401
+      end
+    end
+
+    context 'when the user doesn\'t exist' do 
+      it 'returns status 404' do 
+        authorize @admin.username, @admin.password
+        make_request('DELETE', '/users/1000000')
+        expect(response_status).to eql 404
       end
     end
   end
