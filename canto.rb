@@ -56,9 +56,7 @@ class Canto < Sinatra::Application
   protect 'General' do 
     delete '/users/:id' do |id|
       user_route_boilerplate(id)
-      begin_and_rescue(ActiveRecord::RecordNotDestroyed, 403) do
-       @user && @user.destroy! ? 204 : 404
-      end
+      destroy_resource(@user)
     end
   end
 
@@ -96,7 +94,7 @@ class Canto < Sinatra::Application
   protect 'General' do 
     delete '/tasks/:id' do |id|
       task_route_boilerplate(id)
-      @task ? @task.destroy! && 204 : 404
+      destroy_resource(@task)
     end
   end
 
