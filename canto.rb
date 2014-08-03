@@ -109,8 +109,7 @@ class Canto < Sinatra::Application
 
   protect 'Admin' do 
     post '/admin/users' do 
-      User.create!(@request_body)
-      201
+      create_resource(User, @request_body)
     end
   end
 
