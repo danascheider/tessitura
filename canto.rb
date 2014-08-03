@@ -31,8 +31,7 @@ class Canto < Sinatra::Application
   post '/users' do 
     begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
       halt 401 if @request_body.has_key? "admin"
-      User.create!(@request_body)
-      201
+      create_resource(User, @request_body)
     end
   end
 
@@ -50,7 +49,6 @@ class Canto < Sinatra::Application
   protect 'General' do 
     put '/users/:id' do |id|
       user_route_boilerplate(id)
-      halt 401 if setting_admin? && !current_user.admin?
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @user ? @user.update!(@request_body) : 404
       end
