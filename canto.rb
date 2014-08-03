@@ -28,11 +28,9 @@ class Canto < Sinatra::Application
     "Welcome to Canto\n"
   end
 
-  post '/users' do 
-    begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
+  post '/users' do  
       halt 401 if @request_body.has_key? "admin"
       create_resource(User, @request_body)
-    end
   end
 
   get '/users' do 
@@ -71,9 +69,7 @@ class Canto < Sinatra::Application
   protect 'General' do
     get '/users/:id/tasks' do |id|
       user_route_boilerplate(id)
-      begin_and_rescue(ActiveRecord::RecordNotFound, 404) do 
-        [ 200, get_resource(User, id) {|user| user.tasks.to_json } ]
-      end
+      get_resource(User, id) {|user| user.tasks.to_json } || 404
     end
   end
 
