@@ -8,6 +8,15 @@ class Sinatra::Application
       end
     end
 
+    def create_resource(klass, attributes)
+      begin
+        klass.create!(attributes)
+        201
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::UnknownAttributeError
+        422
+      end
+    end
+
     def get_resource(klass, id, &block)
       begin
         if block_given? then yield klass.find(id); else klass.find(id); end

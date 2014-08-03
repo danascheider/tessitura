@@ -50,7 +50,7 @@ class Canto < Sinatra::Application
   protect 'General' do 
     put '/users/:id' do |id|
       user_route_boilerplate(id)
-      halt 401 if @request_body.has_key?(:admin) && !current_user.admin?
+      halt 401 if setting_admin? && !current_user.admin?
       begin_and_rescue(ActiveRecord::RecordInvalid, 422) do 
         @user ? @user.update!(@request_body) : 404
       end
