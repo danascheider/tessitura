@@ -22,5 +22,12 @@ describe Canto::AuthorizationHelper do
         expect(admin_access?).to eql true
       end
     end
+
+    context 'when logged-in user is not an admin' do 
+      it 'returns false' do 
+        @auth = Rack::Auth::Basic::Request.new(@ENV2)
+        expect(admin_access?).to be_falsey
+      end
+    end
   end
 end
