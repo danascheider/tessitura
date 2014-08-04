@@ -45,7 +45,7 @@ class Canto < Sinatra::Application
 
   post '/users/:id/tasks' do |id|
     protect(User)
-    @request_body[:task_list_id] = @resource.default_task_list.id
+    @request_body[:task_list_id] ||= @resource.default_task_list.id
     create_resource(Task, @request_body)
   end
 
