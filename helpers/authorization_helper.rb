@@ -19,6 +19,10 @@ class Sinatra::Application
       @auth.provided? && @auth.basic? && valid_credentials?
     end
 
+    def authorized_for_resource?(user_id)
+      current_user.id == user_id || admin_access?
+    end
+
     def current_user
       User.find_by(username: @auth.credentials.first)
     end
@@ -33,8 +37,7 @@ class Sinatra::Application
     end
 
     def task_route_boilerplate(id)
-      return 404 unless (@task = get_resource(Task, id))
-      halt 401 unless current_user.id == @task.user.id || current_user.admin?
+      halt 401 unless authorized_for_resource?(@task.user.id)
     end
 
     def user_route_boilerplate(id)
