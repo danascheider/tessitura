@@ -15,6 +15,8 @@ describe Task do
     it { is_expected.to respond_to(:incomplete?) }
     it { is_expected.to respond_to(:to_hash) } # to integrate with Sinatra-Backbone
     it { is_expected.to respond_to(:user) }
+    it { is_expected.to respond_to(:owner_id) }
+    it { is_expected.to respond_to(:owner) }
   end
 
   describe 'acts_as_list methods' do 
@@ -75,6 +77,22 @@ describe Task do
     describe '#user' do 
       it 'returns the user who owns the task list containing the task' do 
         expect(Task.first.user).to eql Task.first.task_list.user
+      end
+    end
+
+    describe '#owner' do 
+      it 'returns a user model' do 
+        expect(Task.first.owner).to be_a(User)
+      end
+
+      it 'is equivalent to #user' do 
+        expect(Task.first.owner).to eql Task.first.user
+      end
+    end
+
+    describe '#owner_id' do
+      it 'returns its user\'s ID' do 
+        expect(Task.first.owner_id).to eql Task.first.user.id
       end
     end
   end

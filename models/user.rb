@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
     "#{self.first_name} #{self.last_name}"
   end
 
+  def owner_id
+    self.id 
+  end
+
   def to_hash
     { 
       id: self.id,

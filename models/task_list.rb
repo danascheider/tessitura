@@ -7,6 +7,10 @@ class TaskList < ActiveRecord::Base
     self.user
   end
 
+  def owner_id
+    self.user.id 
+  end
+
   def to_a
     self.tasks.map {|task| task.to_hash }
   end
