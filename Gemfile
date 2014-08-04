@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 # Require Sinatra and JSON for back-end
-gem 'sinatra', '~> 1.4.5'
-gem 'json',    '~> 1.8.1'
+gem 'sinatra',         '~> 1.4.5'
+gem 'sinatra-contrib', '~> 1.4.2'
 
 # Use Thin web server
 gem 'thin', '~> 1.6.2'
