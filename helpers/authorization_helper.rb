@@ -37,14 +37,12 @@ class Sinatra::Application
     end
 
     def task_route_boilerplate(id)
-      @task = get_resource(Task, id)
-      return 404 unless @task
+      return 404 unless(@task = get_resource(Task, id))
       halt 401 unless authorized_for_resource?(@task.user.id)
     end
 
     def user_route_boilerplate(id)
-      @user = get_resource(User, id)
-      return 404 unless @user
+      return 404 unless @user = get_resource(User, id)
       halt 401 unless current_user.admin? || (current_user.id == id.to_i && !setting_admin?)
     end
 
