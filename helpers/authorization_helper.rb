@@ -20,30 +20,21 @@ class Sinatra::Application
     end
 
     def authorized_for_resource?(user_id)
-      current_user.id == user_id || admin_access?
+      (current_user.id == user_id && !setting_admin?) || admin_access?
     end
 
     def current_user
       User.find_by(username: @auth.credentials.first)
     end
 
-    def protected!
-      return if authorized?
+    def protect(klass)
+      return 404 unless klass.exists?(@id) && (@resource = klass.find(@id))
+      return if authorized? && authorized_for_resource?(@resource.owner_id)
       access_denied
     end
 
     def setting_admin?
       @request_body && @request_body.has_key?('admin')
-    end
-
-    def task_route_boilerplate(id)
-      return 404 unless(@task = get_resource(Task, id))
-      halt 401 unless authorized_for_resource?(@task.user.id)
-    end
-
-    def user_route_boilerplate(id)
-      return 404 unless @user = get_resource(User, id)
-      halt 401 unless current_user.admin? || (current_user.id == id.to_i && !setting_admin?)
     end
 
     def valid_credentials?

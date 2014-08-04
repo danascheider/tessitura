@@ -12,6 +12,7 @@ class Canto < Sinatra::Application
 
   before do
     @request_body = parse_json(request.body.read)
+    @id = request.path_info.match(/\d+/).to_s
   end
 
   get '/' do 
@@ -28,52 +29,44 @@ class Canto < Sinatra::Application
   end
 
   get '/users/:id' do |id|
-    protected!
-    user_route_boilerplate(id)
-    return_json(@user) || 404
+    protect(User)
+    return_json(@resource) || 404
   end
 
   put '/users/:id' do |id|
-    protected!
-    user_route_boilerplate(id)
-    update_resource(@request_body, @user)
+    protect(User)
+    update_resource(@request_body, @resource)
   end
 
   delete '/users/:id' do |id|
-    protected!
-    user_route_boilerplate(id)
-    destroy_resource(@user)
+    protect(User)
+    destroy_resource(@resource)
   end
 
   post '/users/:id/tasks' do |id|
-    protected!
-    user_route_boilerplate(id)
-    @request_body[:task_list_id] = @user.default_task_list.id
+    protect(User)
+    @request_body[:task_list_id] = @resource.default_task_list.id
     create_resource(Task, @request_body)
   end
 
   get '/users/:id/tasks' do |id|
-    protected!
-    user_route_boilerplate(id)
-    return_json(@user.tasks) || 404
+    protect(User)
+    return_json(@resource.tasks)
   end
 
   get '/tasks/:id' do |id|
-    protected!
-    task_route_boilerplate(id)
-    return_json(@task) || 404
+    protect(Task)
+    return_json(@resource) || 404
   end
 
   put '/tasks/:id' do |id|
-    protected!
-    task_route_boilerplate(id)
-    update_resource(@request_body, @task)
+    protect(Task)
+    update_resource(@request_body, @resource)
   end
 
   delete '/tasks/:id' do |id|
-    protected!
-    task_route_boilerplate(id)
-    destroy_resource(@task)
+    protect(Task)
+    destroy_resource(@resource)
   end
 
   # Admin-Only Routes
