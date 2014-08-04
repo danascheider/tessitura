@@ -19,6 +19,7 @@ gem 'rake',                 '~> 10.3.2'
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 
 # Use Cucumber, RSpec, Webmock for testing
+# Coveralls and SimpleCov monitor test coverage
 group :test do 
   gem 'simplecov',        '>= 0.8.2'
   gem 'coveralls',        '>= 0.7.0'
