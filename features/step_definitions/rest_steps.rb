@@ -208,7 +208,7 @@ Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile inf
 end
 
 Then(/^the response should not include any data$/) do 
-  ok_values = [nil, '', 'null', false, 'Authorization Required']
+  ok_values = [nil, '', 'null', false, "Authorization Required\n"]
   expect(ok_values).to include response_body
 end
 
