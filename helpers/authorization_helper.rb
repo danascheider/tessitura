@@ -7,8 +7,7 @@ class Sinatra::Application
 
     def protected!
       return if authorized?
-      headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
-      halt 401, "Authorization Required\n"
+      access_denied
     end
 
     def admin_access?
@@ -17,7 +16,11 @@ class Sinatra::Application
 
     def admin_only!
       return if authorized? && admin_access?
-      headers['WWW-Authenticate'] = 'Basic realm="Admin Area"'
+      access_denied
+    end
+
+    def access_denied
+      headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
       halt 401, "Authorization Required\n"
     end
 
