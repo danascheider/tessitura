@@ -25,7 +25,7 @@ describe User do
 
     it { is_expected.to respond_to(:default_task_list) }
 
-    it { is_expected.to respond_to(:owner)}
+    it { is_expected.to respond_to(:owner_id)}
 
     describe '::tasks' do 
       before(:each) do 
