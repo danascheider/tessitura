@@ -1,12 +1,5 @@
 Feature: View user profile
 
-  Background:
-    Given there are users with the following attributes:
-      | id | email             | username  | password    | admin |
-      | 1  | admin@example.com | abc123    | abcde12345  | true  |
-      | 2  | user2@example.com | bcd234    | bcdef23456  | false |
-      | 3  | user3@example.com | cde345    | cdefg34567  | false |
-
   Scenario: User views their own profile
     When the client submits a GET request to /users/3 with the 3rd user's credentials
     Then the JSON response should include the 3rd user's profile information

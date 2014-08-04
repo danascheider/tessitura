@@ -95,6 +95,8 @@ end
 When(/^the client submits a PUT request to the (first|last) task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |order, id, string|
   @task = order == 'first' ? Task.first : Task.last
   @user = User.find(id)
+  puts "TASK: #{@task.to_hash}"
+  puts "USER: #{@user.to_hash}"
   authorize @user.username, @user.password
   make_request('PUT', "/tasks/#{@task.id}", string)
 end
