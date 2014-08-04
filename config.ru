@@ -1,4 +1,4 @@
-# Run app using
-# rackup -p 4567
+# Run app using rackup -p 4567
+
 require './canto'
-Canto.run
+run Canto.run!
