@@ -10,6 +10,7 @@ describe TaskList do
     it { is_expected.to respond_to(:title) }
     it { is_expected.to respond_to(:user) }
     it { is_expected.to respond_to(:owner) }
+    it { is_expected.to respond_to(:owner_id) }
   end
 
   describe 'instance methods' do 
@@ -23,6 +24,12 @@ describe TaskList do
     describe '#owner' do 
       it 'returns the task list\'s associated user' do
         expect(@task_list.owner).to eql @owner
+      end
+    end
+
+    describe '#owner_id' do 
+      it 'returns its user\'s ID' do 
+        expect(@task_list.owner_id).to eql @owner.id
       end
     end
   end
