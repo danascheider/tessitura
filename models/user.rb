@@ -1,5 +1,3 @@
-require 'securerandom'
-
 class User < ActiveRecord::Base
   has_many :task_lists, dependent: :destroy
   validates :email, presence: true, uniqueness: true, 
@@ -21,6 +19,10 @@ class User < ActiveRecord::Base
 
   def name
     "#{self.first_name} #{self.last_name}"
+  end
+
+  def owner_id
+    self.id 
   end
 
   def to_hash

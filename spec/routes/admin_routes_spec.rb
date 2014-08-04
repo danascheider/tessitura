@@ -32,7 +32,7 @@ describe Canto do
       end
 
       it 'doesn\'t return any data' do 
-        expect(response_body).to eql 'Authorization Required'
+        expect(response_body).to eql "Authorization Required\n"
       end
 
       it 'returns status 401' do 
@@ -46,7 +46,7 @@ describe Canto do
       end
 
       it 'doesn\'t return any data' do 
-        expect(response_body).to eql 'Authorization Required' 
+        expect(response_body).to eql "Authorization Required\n"
       end
 
       it 'returns status 401' do 

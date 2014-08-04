@@ -44,28 +44,12 @@ def find_user(id)
   User.find(id)
 end
 
-def find_user_by_key(key)
-  User.find_by(secret_key: key)
-end
-
-def json_task(id_or_all)
-  id_or_all == :all ? Task.all.to_json : Task.find(id_or_all).to_json
-end
-
-def json_user(id_or_all)
-  id_or_all == :all ? User.all.to_json : User.find(id_or_all).to_json
-end
-
 def response_status
   last_response.status
 end
 
 def response_body
   last_response.body
-end
-
-def neg_task_scope(hash)
-  Task.where.not(hash)
 end
 
 def make_request(method, path, string=nil)

@@ -1,10 +1,19 @@
 class Sinatra::Application
   module ErrorHandling
-    def begin_and_rescue(error, status, &block)
+    def create_resource(klass, attributes)
       begin
-        yield
-      rescue error
-        status
+        klass.create!(attributes)
+        201
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::UnknownAttributeError
+        422
+      end
+    end
+
+    def destroy_resource(object=nil)
+      begin
+        object ? object.destroy! && 204 : 404
+      rescue ActiveRecord::RecordNotDestroyed
+        403
       end
     end
 
@@ -21,6 +30,15 @@ class Sinatra::Application
         JSON.parse object
       rescue JSON::ParserError
         nil
+      end
+    end
+
+
+    def update_resource(attributes, object=nil)
+      begin
+        object ? object.update!(attributes) : 404
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::UnknownAttributeError
+        422
       end
     end
   end

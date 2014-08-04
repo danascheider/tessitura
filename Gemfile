@@ -18,12 +18,11 @@ gem 'rake',                 '~> 10.3.2'
 # with Backbone.js front-end
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 
-# Use sinatra-basic-auth to handle user authorization
-gem 'sinatra-basic-auth', '~> 0.1.0', require: 'sinatra/basic_auth'
-
 # Use Cucumber, RSpec, Webmock for testing
+# Coveralls and SimpleCov monitor test coverage
 group :test do 
-  gem 'codeclimate-test-reporter', '>= 0.4.0', require: nil
+  gem 'simplecov',        '>= 0.8.2'
+  gem 'coveralls',        '>= 0.7.0'
   gem 'json_spec',        '~> 1.1.2'
   gem 'cucumber-sinatra', '~> 0.5.0'
   gem 'cucumber',         '~> 1.3.16'

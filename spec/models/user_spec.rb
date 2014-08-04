@@ -25,7 +25,9 @@ describe User do
 
     it { is_expected.to respond_to(:default_task_list) }
 
-    describe '::tasks' do 
+    it { is_expected.to respond_to(:owner_id)}
+
+    describe '#tasks' do 
       before(:each) do 
         2.times { FactoryGirl.create(:task_list_with_tasks, user_id: @user.id) }
       end
@@ -57,6 +59,13 @@ describe User do
       it 'returns its first task list' do 
         3.times { FactoryGirl.create(:task_list, user_id: @user.id) }
         expect(@user.default_task_list).to eql @user.task_lists.first
+      end
+    end
+
+    describe '#owner_id' do 
+      it 'returns its own ID' do 
+        user = FactoryGirl.create(:user)
+        expect(user.owner_id).to eql user.id
       end
     end
   end

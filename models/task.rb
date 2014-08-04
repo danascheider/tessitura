@@ -46,6 +46,10 @@ class Task < ActiveRecord::Base
     self.status != 'complete'
   end
 
+  def owner_id
+    self.user.id
+  end
+
   def to_hash
     { id: self.id,
       position: self.position,
@@ -63,6 +67,8 @@ class Task < ActiveRecord::Base
   def user
     self.task_list.user
   end
+
+  alias_method :owner, :user
 
   private
 

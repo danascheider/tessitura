@@ -1,21 +1,5 @@
 Transform(/^\d+$/) {|number| number.to_i }
 
-Given(/^there are (\d+|no) tasks$/) do |number|
-  number == 'no' ? Task.count == 0 : number.times { FactoryGirl.create(:task) }
-end
-
-Given(/^the (\d+)(?:[a-z]{2}) task is complete$/) do |id|
-  Task.find(id).update!(status: 'complete')
-end
-
-Then(/^a new task should be created with the following attributes:$/) do |attributes|
-  attributes.hashes.each do |hash|
-    hash.each do |key, value|
-      expect(Task.last.to_hash).to include(key => value)
-    end
-  end
-end
-
 Then(/^the new task should have the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     hash.each do |key, value|
@@ -24,8 +8,9 @@ Then(/^the new task should have the following attributes:$/) do |attributes|
   end
 end
 
-Given(/^the (\d+)st user's (\d+)rd task is complete$/) do |uid, task_id|
-  @user, @task = User.find(uid), @user.tasks[2]
+Given(/^the (\d+)(?:[a-z]{2}) user's (\d+)(?:[a-z]{2}) task is complete$/) do |uid, task_id|
+  @user = User.find(uid)
+  @task = @user.tasks[task_id - 1]
   @task.update!(status: 'complete')
 end
 
@@ -41,11 +26,11 @@ Then(/^the (first|last) task should (not )?be deleted from the database$/) do |o
   end
 end
 
-Then(/^the task's title should (not )?be changed to "(.*)"$/) do |title, negation|
+Then(/^the task's title should (not )?be changed to "(.*)"$/) do |negation, title|
   if negation
-    expect(get_changed_task.title).not_to eql title
+    expect(get_changed_task.title).not_to eql(title) 
   else
-    expect(get_changed_task.title).to eql title
+    expect(get_changed_task.title).to eql(title)
   end
 end
 
