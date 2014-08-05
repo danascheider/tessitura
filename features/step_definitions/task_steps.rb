@@ -8,8 +8,9 @@ Then(/^the new task should have the following attributes:$/) do |attributes|
   end
 end
 
-Given(/^the (\d+)st user's (\d+)rd task is complete$/) do |uid, task_id|
-  @user, @task = User.find(uid), @user.tasks[2]
+Given(/^the (\d+)st user's (\d+)rd task is complete$/) do |uid, task_num|
+  @user = get_resource(User, uid)
+  @task = @user.tasks[2]
   @task.update!(status: 'complete')
 end
 

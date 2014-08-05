@@ -1,12 +1,7 @@
 Feature: Updating user profiles
   
   Background:
-    Given there are users with the following attributes:
-      | id | email             | username | password    | admin |
-      | 1  | admin@example.com | admin1   | adminpasswd | true  |
-      | 2  | user2@example.com | abc123   | abcde12345  | false |
-      | 3  | user3@example.com | bcd234   | bcdef23456  | false |
-    And each user has 3 tasks
+    Given each user has 3 tasks
 
   Scenario Outline:
     When the client submits a PUT request to /users/<id> with the <num1> user's credentials and:

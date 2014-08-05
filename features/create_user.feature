@@ -1,8 +1,5 @@
 Feature: Create a new user
 
-  Background:
-    Given there are 2 users
-
   Scenario: Normal user creation
     When the client submits a POST request to /users with:
       """json
