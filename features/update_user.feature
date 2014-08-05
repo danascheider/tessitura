@@ -1,7 +1,4 @@
 Feature: Updating user profiles
-  
-  Background:
-    Given each user has 3 tasks
 
   Scenario Outline:
     When the client submits a PUT request to /users/<id> with the <num1> user's credentials and:
