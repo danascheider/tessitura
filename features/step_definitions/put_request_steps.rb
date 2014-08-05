@@ -11,12 +11,6 @@ When(/^the client submits a PUT request to \/users\/(\d+) with the (\d+)(?:[a-z]
   make_request('PUT', "/users/#{path_id}", string)
 end
 
-When(/^the client submits a PUT request to \/users\/(.*) with (user|admin) credentials and:$/) do |path, type, string|
-  user = type == 'admin' ? User.first : User.last
-  authorize user.username, user.password
-  make_request('PUT', "/users/#{path}", string)
-end
-
 # Updating Tasks
 # ==============
 When(/^the client submits a PUT request to that task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
