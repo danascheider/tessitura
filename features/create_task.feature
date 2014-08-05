@@ -16,7 +16,7 @@ Feature: Create task
     And the response should indicate the task was saved successfully
 
   Scenario: User attempts to create an invalid task
-    When the client submits a POST request to users/2/tasks with the 2nd user's credentials and:
+    When the client submits a POST request to /users/2/tasks with the 2nd user's credentials and:
       """json
       { "status":"blocking" }
       """
@@ -40,7 +40,7 @@ Feature: Create task
     And the response should indicate the request was unauthorized
 
   Scenario: Admin creates a task for a user
-    When the client submits a POST request to users/3/tasks with admin credentials and:
+    When the client submits a POST request to /users/3/tasks with the 1st user's credentials and:
       """json
       { "title":"Water the plants" }
       """
