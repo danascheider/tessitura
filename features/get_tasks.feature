@@ -1,11 +1,9 @@
+@tasks
 Feature: Get tasks
 
   In order to know what I need to do today
   As an android
   I need to see my tasks in JSON format.
-
-  Background:
-    Given each user has 3 tasks
 
   Scenario: User views all their tasks
     When the client submits a GET request to /users/2/tasks with the 2nd user's credentials

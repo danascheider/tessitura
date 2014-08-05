@@ -1,3 +1,4 @@
+@users
 Feature: Admin users
 
   Scenario Outline: Creating an admin user
