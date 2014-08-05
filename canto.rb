@@ -19,6 +19,14 @@ class Canto < Sinatra::Application
     protect(User)
   end
 
+  before /\/tasks\/(\d+)(\/*)?/ do 
+    protect(Task)
+  end
+
+  before /\/admin\/*/ do 
+    admin_only!
+  end
+
   get '/' do 
     "Welcome to Canto\n"
   end
@@ -54,17 +62,14 @@ class Canto < Sinatra::Application
   end
 
   get '/tasks/:id' do |id|
-    protect(Task)
     return_json(@resource) || 404
   end
 
   put '/tasks/:id' do |id|
-    protect(Task)
     update_resource(@request_body, @resource)
   end
 
   delete '/tasks/:id' do |id|
-    protect(Task)
     destroy_resource(@resource)
   end
 
@@ -72,12 +77,10 @@ class Canto < Sinatra::Application
   # =================
 
   post '/admin/users' do 
-    admin_only!
     create_resource(User, @request_body)
   end
 
   get '/admin/users' do 
-    admin_only!
     return_json(User.all)
   end
 end
