@@ -15,6 +15,10 @@ class Canto < Sinatra::Application
     @id = request.path_info.match(/\d+/).to_s
   end
 
+  before /\/users\/(\d+)(\/*)?/ do 
+    protect(User)
+  end
+
   get '/' do 
     "Welcome to Canto\n"
   end
@@ -29,28 +33,23 @@ class Canto < Sinatra::Application
   end
 
   get '/users/:id' do |id|
-    protect(User)
     return_json(@resource) || 404
   end
 
   put '/users/:id' do |id|
-    protect(User)
     update_resource(@request_body, @resource)
   end
 
   delete '/users/:id' do |id|
-    protect(User)
     destroy_resource(@resource)
   end
 
   post '/users/:id/tasks' do |id|
-    protect(User)
     @request_body[:task_list_id] ||= @resource.default_task_list.id
     create_resource(Task, @request_body)
   end
 
   get '/users/:id/tasks' do |id|
-    protect(User)
     return_json(@resource.tasks)
   end
 
