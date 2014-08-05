@@ -36,6 +36,10 @@ class Canto < Sinatra::Application
     create_resource(User, @request_body)
   end
 
+  get '/users' do 
+    405
+  end
+
   get '/users/:id' do |id|
     return_json(@resource) || 404
   end
