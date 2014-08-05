@@ -1,10 +1,8 @@
+@tasks
 Feature: Update task
 
   In order to keep the most current information about my tasks & schedule
   I need to edit my tasks
-
-  Background:
-    Given each user has 3 tasks
 
   Scenario: User updates one of their tasks
     When the client submits a PUT request to the last task URL with the 3rd user's credentials and:

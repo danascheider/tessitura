@@ -1,10 +1,8 @@
+@tasks
 Feature: Delete task
   As a user,
   in order to keep my task list clean and manageable,
   I need to delete a task.
-
-  Background: 
-    Given each user has 3 tasks
 
   Scenario: User deletes their own task
     When the client submits a DELETE request to the last task URL with the 3rd user's credentials
