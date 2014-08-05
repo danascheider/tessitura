@@ -1,3 +1,4 @@
+@users
 Feature: View user profile
 
   Scenario: User views their own profile

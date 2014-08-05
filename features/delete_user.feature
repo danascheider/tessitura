@@ -1,8 +1,5 @@
+@users
 Feature: Delete user account
-
-  Background:
-    Given each user has 3 tasks
-
   Scenario: User deletes own account
     When the client submits a DELETE request to /users/3 with the 3rd user's credentials
     Then the 3rd user should be deleted
