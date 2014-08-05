@@ -1,8 +1,15 @@
-@users
 Feature: Create task
   In order to stay on top of my tasks
   As a user
   I need to create a new task
+
+  Background:
+    Given there are users with the following attributes:
+      | id | email             | username | password    | admin |
+      | 1  | admin@example.com | admin1   | adminpasswd | true  |
+      | 2  | user2@example.com | abc123   | abcde12345  | false |
+      | 3  | user3@example.com | bcd234   | bcdef23456  | false |
+    And each user has 3 tasks
 
   Scenario: User creates a valid task
     When the client submits a POST request to /users/2/tasks with the 2nd user's credentials and:
