@@ -37,7 +37,6 @@ end
 # ===================
 
 Then(/^(a|no) new user should be created with the following attributes:$/) do |art, attributes|
-  dump_users
   attributes.hashes.each do |hash|
     if art == 'a'
       User.last.to_hash.each do |key, value|
