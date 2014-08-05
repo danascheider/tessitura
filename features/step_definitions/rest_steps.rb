@@ -61,22 +61,6 @@ When(/^the client submits a GET request to \/admin\/users with admin credentials
   make_request('GET', '/admin/users')
 end
 
-When(/^the client submits a (.*) request to users\/(\d+)\/tasks with:$/) do |method, uid, string|
-  # @user_task_count variable is used in task_steps.rb and task_list_steps.rb
-  path = "users/#{uid}/tasks"
-  @user_task_count = User.find(uid).task_lists.first.tasks.count
-  @request_time = Time.now.utc
-  make_request(method, path, string)
-end
-
-When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method, path, string|
-  path = path == nil ? "/users" : "/users#{path}"
-  @user_count = User.count 
-  @user = (id = (/\d+/.match(path)).to_s) > '' ? User.find(id) : nil
-  @request_time = Time.now.utc
-  make_request(method, path, string)
-end
-
 When(/^the client submits a DELETE request to \/users\/(\d+) with no credentials$/) do |id|
   make_request('DELETE', "/users/#{id}")
 end

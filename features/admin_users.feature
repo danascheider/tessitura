@@ -11,7 +11,7 @@ Feature: Admin users
     And the response should return status <status>
 
     Examples:
-    | url          | id             | article | status |
+    | url          | type           | article | status |
     | /users       | the 3rd user's |    no   |  401   |
     | /admin/users | the 1st user's |    a    |  201   | 
     | /admin/users | the 3rd user's |    no   |  401   |

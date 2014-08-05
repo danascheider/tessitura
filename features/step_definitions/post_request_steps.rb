@@ -8,17 +8,34 @@ When(/^the client submits a POST request to \/users\/(\d+)\/tasks with the (\d+)
   make_request('POST', "/users/#{id1}/tasks", string)
 end
 
-When(/^the client submits a POST request to (.*) with (user|admin) credentials and:$/) do |path, type, string|
-  @user = type == 'admin' ? User.admin.first : User.last
-  id = /(\d+)/.match(path).to_s
-  @user_task_count = @user.tasks.count
-  authorize @user.username, @user.password
-  make_request('POST', path, string)
+When(/^the client submits a POST request to \/users\/(\d+)\/tasks with no credentials and:$/) do |id, string|
+  @user = get_resource(User, id)
+  @user_task_count = @user.tasks.count if @user
+  make_request('POST', "/users/#{id}/tasks", string)
 end
 
-When(/^the client submits a POST request to (.*) with no credentials and:$/) do |path, string|
-  id = /(\d+)/.match(path).to_s
-  @user = get_resource(User, id)
-  @user_task_count = @user.tasks.count
-  make_request('POST', path, string)
+# Create User
+# ===========
+When(/^the client submits a POST request to \/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
+  @current = get_resource(User, id)
+  authorize @current.username, @current.password
+  make_request('POST', '/users', string)
+end
+
+
+When(/^the client submits a POST request to \/users with:$/) do |string|
+  @user_count = User.count
+  make_request('POST', '/users', string)
+end
+
+# Create Admin User
+# =================
+When(/^the client submits a POST request to \/admin\/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
+  @current = get_resource(User, id)
+  authorize @current.username, @current.password 
+  make_request('POST', '/admin/users', string)
+end
+
+When(/^the client submits a POST request to \/admin\/users with no credentials and:$/) do |string|
+  make_request('POST', '/admin/users', string)
 end
