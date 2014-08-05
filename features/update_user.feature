@@ -62,7 +62,7 @@ Feature: Updating user profiles
     And the response should indicate the user was updated successfully
 
   Scenario: Admin attempts to update a profile that doesn't exist
-    When the client submits a PUT request to /users/1000000 with the 1st user's credentials and
+    When the client submits a PUT request to /users/1000000 with the 1st user's credentials and:
       """json
       { "city":"Mexico City" }
       """
