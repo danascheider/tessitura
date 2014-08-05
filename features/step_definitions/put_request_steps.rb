@@ -13,26 +13,14 @@ end
 
 # Updating Tasks
 # ==============
-When(/^the client submits a PUT request to that task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
-  @user = get_resource(User, id)
-  authorize @user.username, @user.password
-  make_request('PUT', "/tasks/#{@task.id}", string)
+When(/^the client submits a PUT request to \/tasks\/(\d+) with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |task_id, uid, string|
+  @task = get_resource(Task, task_id)
+  @current = get_resource(User, uid)
+  authorize @current.username, @current.password
+  make_request('PUT', "/tasks/#{task_id}", string)
 end
 
-When(/^the client submits a PUT request to the (first|last) task URL with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |order, id, string|
-  @task = order == 'first' ? Task.first : Task.last
-  @user = get_resource(User, id)
-  authorize @user.username, @user.password
-  make_request('PUT', "/tasks/#{@task.id}", string)
-end
-
-When(/^the client submits a PUT request to \/tasks\/(\d+) with admin credentials and:$/) do |id, string|
-  @admin = User.admin.first
-  authorize @admin.username, @admin.password
+When(/^the client submits a PUT request to \/tasks\/(\d+) with no credentials and:$/) do |id, string|
+  @task = get_resource(Task, id)
   make_request('PUT', "/tasks/#{id}", string)
-end
-
-When(/^the client submits a PUT request to the last task URL with no credentials and:$/) do |string|
-  @task = Task.last
-  make_request('PUT', "/tasks/#{@task.id}", string)
 end

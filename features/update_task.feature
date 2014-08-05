@@ -5,7 +5,7 @@ Feature: Update task
   I need to edit my tasks
 
   Scenario: User updates one of their tasks
-    When the client submits a PUT request to the last task URL with the 3rd user's credentials and:
+    When the client submits a PUT request to /tasks/9 with the 3rd user's credentials and:
       """json
       { "title":"Take Out the Trash" }
       """
@@ -13,7 +13,7 @@ Feature: Update task
     And the response should indicate the task was updated successfully
 
   Scenario: Admin updates user's task
-    When the client submits a PUT request to the last task URL with the 1st user's credentials and:
+    When the client submits a PUT request to /tasks/9 with the 1st user's credentials and:
       """json
       { "title":"Feed the neighbor's cat" }
       """
@@ -21,7 +21,7 @@ Feature: Update task
     And the response should indicate the task was updated successfully
 
   Scenario: User attempts to update someone else's task
-    When the client submits a PUT request to the first task URL with the 3rd user's credentials and:
+    When the client submits a PUT request to /tasks/1 with the 3rd user's credentials and:
       """json
       { "title":"Feed the neighbor's cat" }
       """
@@ -29,7 +29,7 @@ Feature: Update task
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to update a task without authenticating
-    When the client submits a PUT request to the last task URL with no credentials and:
+    When the client submits a PUT request to /tasks/9 with no credentials and:
       """json
       { "title":"Rescue Princess Peach" }
       """
@@ -37,14 +37,14 @@ Feature: Update task
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to update a task that doesn't exist
-    When the client submits a PUT request to /tasks/1000000 with admin credentials and:
+    When the client submits a PUT request to /tasks/1000000 with the 1st user's credentials and:
       """json
       { "status":"complete" }
       """
     Then the response should indicate the task was not found
 
   Scenario: Attempt to update task with invalid attributes
-    When the client submits a PUT request to the first task URL with the 1st user's credentials and:
+    When the client submits a PUT request to /tasks/1 with the 1st user's credentials and:
       """json
       { "title":null }
       """
@@ -53,7 +53,7 @@ Feature: Update task
 
   Scenario: Change task status to complete
     Given the 1st user's 3rd task is complete
-    When the client submits a PUT request to the first task URL with the 1st user's credentials and:
+    When the client submits a PUT request to /tasks/1 with the 1st user's credentials and:
       """json
       { "status":"complete" }
       """
@@ -63,7 +63,7 @@ Feature: Update task
 
   Scenario: Change task status to incomplete
     Given the 1st user's 3rd task is complete
-    When the client submits a PUT request to that task URL with the 1st user's credentials and:
+    When the client submits a PUT request to /tasks/3 with the 1st user's credentials and:
       """json
       { "status":"in_progress" }
       """
