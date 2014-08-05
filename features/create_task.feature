@@ -1,10 +1,8 @@
+@tasks
 Feature: Create task
   In order to stay on top of my tasks
   As a user
   I need to create a new task
-
-  Background:
-    Given each user has 3 tasks
 
   Scenario: User creates a valid task
     When the client submits a POST request to /users/2/tasks with the 2nd user's credentials and:

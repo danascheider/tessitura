@@ -15,7 +15,7 @@ Given(/^the (\d+)st user's (\d+)rd task is complete$/) do |uid, task_num|
 end
 
 Then(/^no task should be created$/) do
-  @user.tasks.count.should == @user_task_count
+  expect(get_changed_user.tasks.count).to eql @user_task_count
 end
 
 Then(/^the (first|last) task should (not )?be deleted from the database$/) do |order, negation|

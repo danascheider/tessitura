@@ -61,20 +61,6 @@ When(/^the client submits a GET request to \/admin\/users with admin credentials
   make_request('GET', '/admin/users')
 end
 
-When(/^the client submits a POST request to (.*) with (user|admin) credentials and:$/) do |path, type, string|
-  @user = type == 'admin' ? User.admin.first : User.last
-  id = /(\d+)/.match(path).to_s
-  @user_task_count = get_resource(User, id) {|user| user.tasks.count }
-  authorize @user.username, @user.password
-  make_request('POST', path, string)
-end
-
-When(/^the client submits a POST request to (.*) with no credentials and:$/) do |path, string|
-  id = /(\d+)/.match(path).to_s
-  @user, @user_task_count = get_resource(User, id), get_resource(User, id) {|user| user.tasks.count}
-  make_request('POST', path, string)
-end
-
 When(/^the client submits a (.*) request to users\/(\d+)\/tasks with:$/) do |method, uid, string|
   # @user_task_count variable is used in task_steps.rb and task_list_steps.rb
   path = "users/#{uid}/tasks"
@@ -89,13 +75,6 @@ When(/^the client submits a (.*) request to \/users(\/\S+)? with:$/) do |method,
   @user = (id = (/\d+/.match(path)).to_s) > '' ? User.find(id) : nil
   @request_time = Time.now.utc
   make_request(method, path, string)
-end
-
-When(/^the client submits a POST request to (.*) with the (\d+)(?:[a-z]{2}) user\'s credentials and:$/) do |path, id, string|
-  @user = User.find(id)
-  @user_task_count = @user.tasks.count
-  authorize @user.username, @user.password
-  make_request('POST', path, string)
 end
 
 When(/^the client submits a DELETE request to \/users\/(\d+) with no credentials$/) do |id|
