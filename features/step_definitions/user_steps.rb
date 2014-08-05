@@ -60,7 +60,7 @@ end
 
 # USER UPDATE STEPS
 # =================
-Then(/^the (\d+)(?:[a-z]{2}) user's (.*) should be changed to '(.*)'$/) do |id, attr, value|
+Then(/^the (\d+)(?:[a-z]{2}) user's (.*) should be changed to (.*)$/) do |id, attr, value|
   @user = User.find(id)
   expect(@user.to_hash[attr.intern]).to eql value
 end

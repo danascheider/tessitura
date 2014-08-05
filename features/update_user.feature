@@ -8,13 +8,18 @@ Feature: Updating user profiles
       | 3  | user3@example.com | bcd234   | bcdef23456  | false |
     And each user has 3 tasks
 
-  Scenario: User updates their own profile with valid attributes
-    When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
+  Scenario Outline:
+    When the client submits a PUT request to /users/<id> with the <num1> user's credentials and:
       """json
-      { "fach":"lyric baritone" }
+      { "<attribute>":"<value>" } 
       """
-    Then the 3rd user's fach should be changed to 'lyric baritone'
+    Then the <num2> user's <attr> should be changed to <new_val>
     And the response should indicate the user was updated successfully
+
+      Examples: 
+        | id | num1 | attribute | value          | num2 | attr | new_val        |
+        | 3  | 3rd  | fach      | lyric baritone | 3rd  | fach | lyric baritone |
+        | 3  | 1st  | fach      | heldentenor    | 3rd  | fach | heldentenor    |  
 
   Scenario: User updates their own profile with invalid attributes
     When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
@@ -23,14 +28,6 @@ Feature: Updating user profiles
       """
     Then the user's username should not be changed
     And the response should indicate the user was not updated successfully
-
-  Scenario: Admin updates user's profile
-    When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
-      """json
-      { "fach":"heldentenor" }
-      """
-    Then the 3rd user's fach should be changed to 'heldentenor'
-    And the response should indicate the user was updated successfully
 
   Scenario: User attempts to update someone else's profile
     When the client submits a PUT request to /users/3 with the 2nd user's credentials and:
@@ -57,7 +54,7 @@ Feature: Updating user profiles
     And the response should indicate the request was unauthorized
 
   Scenario: Admin confers admin status on user
-    When the client submits a PUT request to /users/3 with admin credentials and:
+    When the client submits a PUT request to /users/3 with the 1st user's credentials and:
       """json
       { "admin":true }
       """
