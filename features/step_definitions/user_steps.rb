@@ -45,11 +45,6 @@ Then(/^a new user should be created with the following attributes:$/) do |attrib
   end
 end
 
-Then(/^a user named '(\w+) (\w+)' should be created$/) do |first, last|
-  # @user is called in 'the user should be an admin'
-  (@user = User.find_by(first_name: first, last_name: last)).should_not eql nil
-end
-
 Then(/^no user should be created$/) do 
   User.count.should == @user_count
 end
@@ -57,7 +52,7 @@ end
 # USER UPDATE STEPS
 # =================
 Then(/^the (\d+)(?:[a-z]{2}) user's (.*) should be changed to (.*)$/) do |id, attr, value|
-  @user = User.find(id)
+  @user = get_resource(User, id)
   expect(@user.to_hash[attr.intern]).to eql value
 end
 
@@ -68,11 +63,7 @@ end
 # Delete User
 # ===========
 Then(/^the (\d+)(?:[a-z]{2}) user should( not)? be deleted$/) do |id, neg|
-  if neg == nil
-    expect {User.find(id)}.to raise_error ActiveRecord::RecordNotFound
-  else
-    expect(User.find(id)).to be_a(User)
-  end
+  expect(get_resource(User, id)).to neg ? be_truthy : be_falsey
 end
 
 Then(/^no user should be deleted$/) do
