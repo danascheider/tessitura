@@ -69,8 +69,8 @@ Then(/^the user's (.*) should not be changed$/) do |attr|
   expect(get_changed_user.to_hash[attr.intern]).to eql @user.to_hash[attr.intern]
 end
 
-# USER DELETION STEPS
-# ===================
+# Delete User
+# ===========
 Then(/^the (\d+)(?:[a-z]{2}) user should( not)? be deleted$/) do |id, neg|
   if neg == nil
     expect {User.find(id)}.to raise_error ActiveRecord::RecordNotFound

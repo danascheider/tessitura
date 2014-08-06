@@ -18,7 +18,7 @@ Then(/^no task should be created$/) do
   expect(get_changed_user.tasks.count).to eql @user_task_count
 end
 
-Then(/^the task's title should (not )?be changed to "(.*)"$/) do |neg, title|
+Then(/^the task's title should (not )?be changed to (.*)$/) do |neg, title|
   expect(get_changed_task.title == title).to neg ? be_falsey : be_truthy
 end
 
@@ -26,7 +26,7 @@ Then(/^the task's title should not be changed$/) do
   expect(get_changed_task.title).to eql @task.title
 end
 
-Then(/^the task's status should be '(.*)'$/) do |status|
+Then(/^the task's status should be (.*)$/) do |status|
   expect(get_changed_task.status).to eql status
 end
 
