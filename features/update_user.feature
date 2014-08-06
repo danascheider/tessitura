@@ -34,21 +34,18 @@ Feature: Updating user profiles
       | the 2nd user's | first_name | Jerry | first_name |
       | no             | country    | Togo  | country    |
 
-  Scenario: User attempts to confer admin status on self
-    When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
+  Scenario Outline: Changing a user's admin status
+    When the client submits a PUT request to /users/3 with the <id> user's credentials and:
       """json
       { "admin":true }
       """
-    Then the 3rd user should not be an admin
-    And the response should indicate the request was unauthorized
+    Then the 3rd user should <neg> be an admin
+    And the response should indicate <result>
 
-  Scenario: Admin confers admin status on user
-    When the client submits a PUT request to /users/3 with the 1st user's credentials and:
-      """json
-      { "admin":true }
-      """
-    Then the 3rd user should be an admin
-    And the response should indicate the user was updated successfully
+    Examples:
+      | id  | neg | result                            |
+      | 3rd | not | the request was unauthorized      |
+      | 1st | yes | the user was updated successfully |
 
   Scenario: Admin attempts to update a profile that doesn't exist
     When the client submits a PUT request to /users/1000000 with the 1st user's credentials and:

@@ -30,7 +30,7 @@ Then(/^the user should be an admin$/) do
 end
 
 Then(/^the (\d+)(?:[a-z]{2}) user should (not|yes)?(?: )?be an admin$/) do |id, neg|
-  User.find(id).should be_admin unless neg == 'not'
+  expect(User.find(id).admin?).to (neg == 'not') ? be_falsey : be_truthy
 end
 
 # USER CREATION STEPS
