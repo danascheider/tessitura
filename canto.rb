@@ -36,20 +36,24 @@ class Canto < Sinatra::Application
     create_resource(User, @request_body)
   end
 
+  # FIX: This shouldn't need to be defined - 405 should be returned
+  #      automatically if a route doesn't accept a certain method
   get '/users' do 
     405
   end
 
-  get '/users/:id' do |id|
-    return_json(@resource) || 404
-  end
+  [ '/users/:id', '/tasks/:id' ].each do |route, id|
+    get route do 
+      return_json(@resource) || 404
+    end
 
-  put '/users/:id' do |id|
-    update_resource(@request_body, @resource)
-  end
+    put route do 
+      update_resource(@request_body, @resource)
+    end
 
-  delete '/users/:id' do |id|
-    destroy_resource(@resource)
+    delete route do 
+      destroy_resource(@resource)
+    end
   end
 
   post '/users/:id/tasks' do |id|
@@ -59,18 +63,6 @@ class Canto < Sinatra::Application
 
   get '/users/:id/tasks' do |id|
     return_json(@resource.tasks)
-  end
-
-  get '/tasks/:id' do |id|
-    return_json(@resource) || 404
-  end
-
-  put '/tasks/:id' do |id|
-    update_resource(@request_body, @resource)
-  end
-
-  delete '/tasks/:id' do |id|
-    destroy_resource(@resource)
   end
 
   # Admin-Only Routes
