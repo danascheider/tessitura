@@ -36,14 +36,6 @@ def get_resource(klass, id, &block)
   end
 end
 
-def find_task(id)
-  Task.find(id)
-end
-
-def find_user(id)
-  User.find(id)
-end
-
 def response_status
   last_response.status
 end
