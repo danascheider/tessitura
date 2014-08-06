@@ -40,8 +40,19 @@ describe User do
     end
 
     describe '#to_hash' do 
+      before(:each) do 
+        FactoryGirl.create(:task_list_with_tasks, user_id: @user.id)
+        @hash = { id:         @user.id,
+                  first_name: 'Jacob', 
+                  email:      @user.email,
+                  last_name:  'Smith', 
+                  country:    'USA',
+                  task_lists: @user.task_lists.map {|list| list.id }
+                }
+      end
+
       it 'returns a hash of its attributes' do 
-        expect(@user.to_hash).to eql(id: @user.id, first_name: 'Jacob', email: @user.email, last_name: 'Smith', country: 'USA')
+        expect(@user.to_hash).to eql @hash
       end
     end
 
