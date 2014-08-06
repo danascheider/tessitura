@@ -26,13 +26,9 @@ class Canto < Sinatra::Application
   before /\/admin\/*/ do 
     admin_only!
   end
-
-  get '/' do 
-    "Welcome to Canto\n"
-  end
-
+  
   post '/users' do  
-    halt 401 if @request_body.has_key? "admin"
+    standard_create
     create_resource(User, @request_body)
   end
 

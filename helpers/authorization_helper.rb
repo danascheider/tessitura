@@ -9,6 +9,10 @@ class Sinatra::Application
       access_denied
     end
 
+    def standard_create
+      @request_body.has_key?('admin') ? access_denied : return
+    end
+
     def access_denied
       headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
       halt 401, "Authorization Required\n"
