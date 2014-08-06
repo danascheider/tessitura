@@ -12,7 +12,7 @@ describe Canto do
   describe 'user list' do 
     context 'with valid authorization' do 
       before(:each) do 
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('GET', '/admin/users')
       end
 
@@ -27,7 +27,7 @@ describe Canto do
 
     context 'without valid authorization' do 
       before(:each) do 
-        authorize @user.username, @user.password
+        authorize_with @user
         make_request('GET', '/admin/users')
       end
 
@@ -58,7 +58,7 @@ describe Canto do
   describe 'creating an admin' do 
     context 'with valid authorization' do 
       before(:each) do 
-        authorize @admin.username, @admin.password 
+        authorize_with @admin 
       end
 
       it 'creates a new user' do 
@@ -74,7 +74,7 @@ describe Canto do
 
     context 'with invalid authorization' do 
       before(:each) do 
-        authorize @user.username, @user.password
+        authorize_with @user
       end
 
       it 'doesn\'t create the user' do 

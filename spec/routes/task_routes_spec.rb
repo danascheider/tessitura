@@ -14,7 +14,7 @@ describe Canto do
     describe 'task list route' do 
       context 'with authorization' do 
         before(:each) do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('GET', "/users/#{@user.id}/tasks")
         end
         
@@ -43,7 +43,7 @@ describe Canto do
 
       context 'as admin' do 
         before(:each) do 
-          authorize @admin.username, @admin.password
+          authorize_with @admin
           make_request('GET', "/users/#{@user.id}/tasks")
         end
 
@@ -75,7 +75,7 @@ describe Canto do
     context 'individual task route' do 
       context 'with user authorization' do 
         before(:each) do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('GET', "/tasks/#{@user.tasks.first.id}")
         end
 
@@ -90,7 +90,7 @@ describe Canto do
 
       context 'with admin authorization' do 
         before(:each) do 
-          authorize @admin.username, @admin.password
+          authorize_with @admin
           make_request('GET', "/tasks/#{@user.tasks.first.id}")
         end
 
@@ -105,7 +105,7 @@ describe Canto do
 
       context 'with invalid authorization' do 
         before(:each) do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('GET', "/tasks/#{@admin.tasks.first.id}")
         end
 
@@ -134,7 +134,7 @@ describe Canto do
 
       context 'when the task doesn\'t exist' do 
         it 'returns status 404' do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('GET', '/tasks/1000000')
           expect(response_status).to eql 404
         end
@@ -147,12 +147,12 @@ describe Canto do
       context 'with valid attributes' do 
         it 'creates a new task' do 
           expect(Task).to receive(:create!)
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
         end
 
         it 'returns status 201' do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
           expect(last_response.status).to eql 201
         end
@@ -161,12 +161,12 @@ describe Canto do
       context 'with invalid attributes' do 
         it 'attempts to create a new task' do 
           expect(Task).to receive(:create!)
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('POST', "/users/#{@user.id}/tasks", { }.to_json)
         end
 
         it 'returns status 422' do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('POST', "/users/#{@user.id}/tasks", { }.to_json)
           expect(response_status).to eql 422
         end
@@ -176,18 +176,18 @@ describe Canto do
     context 'with admin authorization' do 
       it 'creates a new task' do 
         expect(Task).to receive(:create!)
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
       end
 
       it 'assigns task ownership to the user, not the admin' do 
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
         expect(Task.last.user.id).to eql @user.id
       end
 
       it 'returns status 201' do 
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('POST', "/users/#{@user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
         expect(response_status).to eql 201
       end
@@ -196,7 +196,7 @@ describe Canto do
     context 'with invalid authorization' do 
       it 'doesn\'t create a new task' do 
         expect(Task).not_to receive(:create)
-        authorize @user.username, @user.password
+        authorize_with @user
         make_request('POST', "/users/#{@admin.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
       end
 
@@ -225,7 +225,7 @@ describe Canto do
         it 'updates the task' do 
           # FIX: Might it be better to use :update instead of :update!?
           expect_any_instance_of(Task).to receive(:update!)
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'title' => 'Take the car for service' }.to_json)
         end
 
@@ -238,7 +238,7 @@ describe Canto do
 
       context 'with invalid attributes' do 
         it 'returns status 422' do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'title' => nil }.to_json)
           expect(response_status).to eql 422
         end
@@ -248,12 +248,12 @@ describe Canto do
     context 'with admin authorization' do 
       it 'updates the task' do 
         expect_any_instance_of(Task).to receive(:update!)
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'status' => 'blocking' }.to_json)
       end
 
       it 'returns status 200' do 
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('PUT', "/tasks/#{@user.tasks.first.id}", { 'status' => 'blocking' }.to_json)
         expect(response_status).to eql 200
       end
@@ -262,12 +262,12 @@ describe Canto do
     context 'with invalid authorization' do 
       it 'doesn\'t update the task' do 
         expect_any_instance_of(Task).not_to receive(:update!)
-        authorize @user.username, @user.password
+        authorize_with @user
         make_request('PUT', "/tasks/#{@admin.tasks.first.id}", { 'status' => 'complete' }.to_json)
       end
 
       it 'returns status 401' do 
-        authorize @user.username, @user.password
+        authorize_with @user
         make_request('PUT', "/tasks/#{@admin.tasks.first.id}", { 'status' => 'complete' }.to_json)
         expect(response_status).to eql 401
       end
@@ -287,7 +287,7 @@ describe Canto do
 
     context 'when the task doesn\'t exist' do 
       it 'returns status 404' do 
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('PUT', '/tasks/1000000', { 'status' => 'blocking' }.to_json)
         expect(response_status).to eql 404
       end
@@ -299,12 +299,12 @@ describe Canto do
       context 'when the task exists' do 
         it 'deletes the task' do 
           expect_any_instance_of(Task).to receive(:destroy!)
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('DELETE', "/tasks/#{@user.tasks.first.id}")
         end
 
         it 'returns status 204' do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('DELETE', "/tasks/#{@user.tasks.first.id}")
           expect(response_status).to eql 204
         end
@@ -313,12 +313,12 @@ describe Canto do
       context 'when the task doesn\'t exist' do 
         it 'doesn\'t delete anything' do 
           expect_any_instance_of(Task).not_to receive(:destroy!)
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('DELETE', "/tasks/1000000")
         end
 
         it 'returns status 404' do 
-          authorize @user.username, @user.password
+          authorize_with @user
           make_request('DELETE', "/tasks/1000000")
           expect(response_status).to eql 404
         end
@@ -328,12 +328,12 @@ describe Canto do
     context 'with admin authorization' do 
       it 'deletes the task' do 
         expect_any_instance_of(Task).to receive(:destroy!)
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('DELETE', "/tasks/#{@user.tasks.first.id}")
       end
 
       it 'returns status 204' do 
-        authorize @admin.username, @admin.password
+        authorize_with @admin
         make_request('DELETE', "/tasks/#{@user.tasks.first.id}")
         expect(response_status).to eql 204
       end
@@ -342,12 +342,12 @@ describe Canto do
     context 'with invalid authorization' do 
       it 'doesn\'t delete the task' do 
         expect_any_instance_of(Task).not_to receive(:destroy!)
-        authorize @user.username, @user.password
+        authorize_with @user
         make_request('DELETE', "/tasks/#{@admin.tasks.first.id}")
       end
 
       it 'returns status 401' do 
-        authorize @user.username, @user.password
+        authorize_with @user
         make_request('DELETE', "/tasks/#{@admin.tasks.first.id}")
       end
     end

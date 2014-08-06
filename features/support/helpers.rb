@@ -1,3 +1,7 @@
+def authorize_with(user)
+  authorize user.username, user.password
+end
+
 # Debugging method for tasks
 def dump_tasks
   puts "TASKS:"
