@@ -31,7 +31,7 @@ Feature: Update task
       | no             | title     | Rescue Princess Peach |
 
   Scenario Outline: Change task status
-    Given the 1st user's 3rd task is complete
+    Given the 3rd task is complete
     When the client submits a PUT request to <url> with the 1st user's credentials and:
       """json
       { "status":"<value>" }
