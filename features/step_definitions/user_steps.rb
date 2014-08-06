@@ -62,8 +62,8 @@ end
 
 # Delete User
 # ===========
-Then(/^the (\d+)(?:[a-z]{2}) user should( not)? be deleted$/) do |id, neg|
-  expect(get_resource(User, id)).to neg ? be_truthy : be_falsey
+Then(/^the (\d+)(?:[a-z]{2}) user should (not|yes)? be deleted$/) do |id, neg|
+  expect(get_resource(User, id)).to (neg == 'not') ? be_truthy : be_falsey 
 end
 
 Then(/^no user should be deleted$/) do
