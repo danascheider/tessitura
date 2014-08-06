@@ -10,11 +10,6 @@ Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) 
   response_body.should === get_resource(Task, id).to_json
 end
 
-Then(/^the JSON response should include the (first|last) task$/) do |order|
-  task = order == 'first' ? Task.first : Task.last
-  expect(response_body).to eql task.to_json
-end
-
 Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile information$/) do |id|
   expect(response_body).to eql User.find(id).to_json
 end
