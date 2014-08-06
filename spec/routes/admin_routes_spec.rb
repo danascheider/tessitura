@@ -3,16 +3,13 @@ require 'spec_helper'
 describe Canto do 
   include Rack::Test::Methods
 
-  before(:each) do 
-    FactoryGirl.create_list(:user_with_task_lists, 2)
-    @admin, @user = User.first, User.last 
-    @admin.update(admin: true)
-  end
+  let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
+  let(:user) { FactoryGirl.create(:user_with_task_lists) }
 
   describe 'user list' do 
     context 'with valid authorization' do 
       before(:each) do 
-        authorize_with @admin
+        authorize_with admin
         make_request('GET', '/admin/users')
       end
 
@@ -27,7 +24,7 @@ describe Canto do
 
     context 'without valid authorization' do 
       before(:each) do 
-        authorize_with @user
+        authorize_with user
         make_request('GET', '/admin/users')
       end
 
@@ -58,7 +55,7 @@ describe Canto do
   describe 'creating an admin' do 
     context 'with valid authorization' do 
       before(:each) do 
-        authorize_with @admin 
+        authorize_with admin 
       end
 
       it 'creates a new user' do 
@@ -74,7 +71,7 @@ describe Canto do
 
     context 'with invalid authorization' do 
       before(:each) do 
-        authorize_with @user
+        authorize_with user
       end
 
       it 'doesn\'t create the user' do 
