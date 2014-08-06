@@ -1,9 +1,5 @@
 # Admin Users
 # ===========
-Then(/^the user should be an admin$/) do
-  @user.should be_admin
-end
-
 Then(/^the (\d+)(?:[a-z]{2}) user should (not|yes)?(?: )?be an admin$/) do |id, neg|
   expect(User.find(id).admin?).to (neg == 'not') ? be_falsey : be_truthy
 end
