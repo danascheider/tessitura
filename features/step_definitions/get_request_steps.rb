@@ -33,8 +33,8 @@ When(/^the client submits a GET request to \/admin\/users with the (\d+)(?:[a-z]
   make_request('GET', '/admin/users')
 end
 
-# Failed
-# ======
+# Unauthorized
+# ============
 When(/^the client submits a GET request to (.*) with no credentials$/) do |path|
   make_request('GET', path)
 end

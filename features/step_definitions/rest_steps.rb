@@ -1,39 +1,3 @@
-# REQUEST STEPS
-# =============
-When(/^the client submits a DELETE request to \/users\/(\d+) with no credentials$/) do |id|
-  make_request('DELETE', "/users/#{id}")
-end
-
-When(/^the client submits a DELETE request to \/users\/(\d+) with the (\d+)(?:[a-z]{2}) user\'s credentials$/) do |path, id|
-  user = User.find(id)
-  authorize user.username, user.password
-  make_request('DELETE', "/users/#{path}")
-end
-
-When(/^the client submits a DELETE request to the (first|last) task URL with the (\d+)(?:[a-z]{2}) user's credentials$/) do |order, id|
-  user = User.find(id)
-  @task = order == 'first' ? Task.first : Task.last
-  @task_id = @task.id
-  authorize user.username, user.password
-  make_request('DELETE', "/tasks/#{@task.id}")
-end
-
-When(/^the client submits a DELETE request to the last task URL with no credentials$/) do 
-  make_request('DELETE', "/tasks/#{Task.last.id}")
-end
-
-When(/^the client submits a DELETE request to \/tasks\/(\d+) with admin credentials$/) do |task_id|
-  @admin = User.admin.first
-  authorize @admin.username, @admin.password
-  make_request('DELETE', "/tasks/#{task_id}")
-end
-
-When(/^the client submits a DELETE request to \/users\/(\d+) with admin credentials$/) do |id|
-  @user, @admin, @user_count = get_resource(User, id), User.admin.first, User.count
-  authorize @admin.username, @admin.password
-  make_request('DELETE', "/users/#{id}")
-end
-
 # RESPONSE STEPS
 # ==============
 
