@@ -36,15 +36,11 @@ end
 # USER CREATION STEPS
 # ===================
 
-Then(/^(a|no) new user should be created with the following attributes:$/) do |art, attributes|
+Then(/^a new user should be created with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
-    if art == 'a'
-      User.last.to_hash.each do |key, value|
-        value = value == true ? 'true' : value
-        expect(value).to eql hash[key.to_s] if hash.has_key? key.to_s
-      end
-    else 
-      expect(User.find_by(username: hash[:username])).to eql nil
+    User.last.to_hash.each do |key, value|
+      value = value == true ? 'true' : value
+      expect(value).to eql hash[key.to_s] if hash.has_key? key.to_s
     end
   end
 end
