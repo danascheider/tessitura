@@ -3,11 +3,8 @@ require 'spec_helper'
 describe Canto do 
   include Rack::Test::Methods
 
-  before(:each) do 
-    FactoryGirl.create_list(:user_with_task_lists, 2)
-    @admin, @user = User.first, User.last
-    @admin.update(admin: true)
-  end
+  let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
+  let(:user) { FactoryGirl.create(:user_with_task_lists) }
 
   describe 'POST' do 
     context 'with valid attributes' do 
@@ -51,7 +48,7 @@ describe Canto do
       context 'without providing admin credentials' do 
         it 'doesn\'t create a user' do 
           expect(User).not_to receive(:create!)
-          authorize_with @user
+          authorize_with user
           make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
         end
 
@@ -65,12 +62,12 @@ describe Canto do
   describe 'GET' do 
     context 'with user\'s credentials' do 
       before(:each) do 
-        authorize_with @user
-        make_request('GET', "/users/#{@user.id}")
+        authorize_with user
+        make_request('GET', "/users/#{user.id}")
       end
 
       it 'returns the user\'s profile' do 
-        expect(response_body).to eql @user.to_json
+        expect(response_body).to eql user.to_json
       end
 
       it 'returns status code 200' do 
@@ -80,12 +77,12 @@ describe Canto do
 
     context 'with admin credentials' do 
       before(:each) do 
-        authorize_with @admin
-        make_request('GET', "/users/#{@user.id}")
+        authorize_with admin
+        make_request('GET', "/users/#{user.id}")
       end
 
       it 'returns the user\'s profile' do 
-        expect(response_body).to eql @user.to_json
+        expect(response_body).to eql user.to_json
       end
 
       it 'returns status code 200' do 
@@ -95,12 +92,12 @@ describe Canto do
 
     context 'with the wrong password' do 
       before(:each) do 
-        authorize @user.username, 'foobar'
-        make_request('GET', "/users/#{@user.id}")
+        authorize user.username, 'foobar'
+        make_request('GET', "/users/#{user.id}")
       end
 
-      it 'doesn\'t return the uses\'s profile' do 
-        expect(response_body).not_to include @admin.to_json
+      it 'doesn\'t return the user\'s profile' do 
+        expect(response_body).not_to include admin.to_json
       end
 
       it 'returns status code 401' do 
@@ -110,12 +107,12 @@ describe Canto do
 
     context 'with invalid credentials' do 
       before(:each) do
-        authorize_with @user
-        make_request('GET', "/users/#{@admin.id}")
+        authorize_with user
+        make_request('GET', "/users/#{admin.id}")
       end
 
       it 'doesn\'t return the user\'s profile' do 
-        expect(response_body).not_to include @admin.to_json
+        expect(response_body).not_to include admin.to_json
       end
 
       it 'returns status code 401' do 
@@ -125,11 +122,11 @@ describe Canto do
 
     context 'with no credentials' do 
       before(:each) do 
-        make_request('GET', "/users/#{@user.id}")
+        make_request('GET', "/users/#{user.id}")
       end
 
       it 'doesn\'t return the user\'s profile' do 
-        expect(response_body).not_to include @user.to_json
+        expect(response_body).not_to include user.to_json
       end
 
       it 'returns status code 401' do 
@@ -139,7 +136,7 @@ describe Canto do
 
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
-        authorize_with @admin
+        authorize_with admin
         make_request('GET', '/users/1000000')
         expect(response_status).to eql 404
       end
@@ -149,23 +146,23 @@ describe Canto do
   describe 'PUT' do 
     context 'with user credentials' do 
       before(:each) do 
-        authorize_with @user
+        authorize_with user
       end
 
       context 'with valid attributes' do 
         it 'updates the profile' do 
           expect_any_instance_of(User).to receive(:update!)
-          make_request('PUT', "/users/#{@user.id}", { 'fach' => 'soprano' }.to_json)
+          make_request('PUT', "/users/#{user.id}", { 'fach' => 'soprano' }.to_json)
         end
 
         it 'returns status 200' do 
-          make_request('PUT', "/users/#{@user.id}", { 'fach' => 'soprano' }.to_json)
+          make_request('PUT', "/users/#{user.id}", { 'fach' => 'soprano' }.to_json)
         end
       end
 
       context 'with invalid attributes' do 
         it 'returns status 422' do 
-          make_request('PUT', "/users/#{@user.id}", { 'email' => nil }.to_json)
+          make_request('PUT', "/users/#{user.id}", { 'email' => nil }.to_json)
           expect(response_status).to eql 422
         end
       end
@@ -173,11 +170,11 @@ describe Canto do
       context 'attempting to set admin status to true' do 
         it 'doesn\'t update the profile' do 
           expect_any_instance_of(User).not_to receive(:update!)
-          make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+          make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
         end
 
         it 'returns status 401' do 
-          make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+          make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
           expect(response_status).to eql 401
         end
       end
@@ -185,32 +182,32 @@ describe Canto do
 
     context 'with admin credentials' do 
       before(:each) do 
-        authorize_with @admin
+        authorize_with admin
       end
 
       it 'updates the profile' do 
         expect_any_instance_of(User).to receive(:update!)
-        make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+        make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
       end
 
       it 'returns status 200' do 
-        make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+        make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
         expect(response_status).to eql 200
       end
     end
 
     context 'with invalid credentials' do 
       before(:each) do 
-        authorize_with @user
+        authorize_with user
       end
 
       it 'doesn\'t update the profile' do 
         expect_any_instance_of(User).not_to receive(:update!)
-        make_request('PUT', "/users/#{@admin.id}", { 'country' => 'Kyrgyzstan' })
+        make_request('PUT', "/users/#{admin.id}", { 'country' => 'Kyrgyzstan' })
       end
 
       it 'returns status 401' do 
-        make_request('PUT', "/users/#{@admin.id}", { 'country' => 'Kyrgyzstan' })
+        make_request('PUT', "/users/#{admin.id}", { 'country' => 'Kyrgyzstan' })
         expect(response_status).to eql 401
       end
     end
@@ -218,18 +215,18 @@ describe Canto do
     context 'with no credentials' do 
       it 'doesn\'t update the profile' do 
         expect_any_instance_of(User).not_to receive(:update!)
-        make_request('PUT', "/users/#{@user.id}", { 'last_name' => 'Seligman' }.to_json)
+        make_request('PUT', "/users/#{user.id}", { 'last_name' => 'Seligman' }.to_json)
       end
 
       it 'returns status 401' do 
-        make_request('PUT', "/users/#{@user.id}", { 'last_name' => 'Seligman' }.to_json)
+        make_request('PUT', "/users/#{user.id}", { 'last_name' => 'Seligman' }.to_json)
         expect(response_status).to eql 401
       end 
     end
 
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
-        authorize_with @admin
+        authorize_with admin
         make_request('PUT', '/users/1000000', { "fach" => "lyric coloratura" }.to_json)
         expect(response_status).to eql 404
       end
@@ -239,48 +236,48 @@ describe Canto do
   describe 'DELETE' do 
     context 'with user credentials' do 
       before(:each) do 
-        authorize_with @user
+        authorize_with user
       end
 
       it 'deletes the profile' do 
         expect_any_instance_of(User).to receive(:destroy!)
-        make_request('DELETE', "/users/#{@user.id}")
+        make_request('DELETE', "/users/#{user.id}")
       end
 
       it 'returns status 204' do 
-        make_request('DELETE', "/users/#{@user.id}")
+        make_request('DELETE', "/users/#{user.id}")
         expect(response_status).to eql 204
       end
     end
 
     context 'with admin credentials' do 
       before(:each) do 
-        authorize_with @admin
+        authorize_with admin
       end
 
       it 'deletes the user' do 
         expect_any_instance_of(User).to receive(:destroy!)
-        make_request('DELETE', "/users/#{@user.id}")
+        make_request('DELETE', "/users/#{user.id}")
       end
 
       it 'returns status 204' do 
-        make_request('DELETE', "/users/#{@user.id}")
+        make_request('DELETE', "/users/#{user.id}")
         expect(response_status).to eql 204
       end
     end
 
     context 'with invalid credentials' do 
       before(:each) do 
-        authorize_with @user
+        authorize_with user
       end
 
       it 'doesn\'t delete the user' do 
         expect_any_instance_of(User).not_to receive(:destroy!)
-        make_request('DELETE', "/users/#{@admin.id}")
+        make_request('DELETE', "/users/#{admin.id}")
       end
 
       it 'returns status 401' do 
-        make_request('DELETE', "/users/#{@admin.id}")
+        make_request('DELETE', "/users/#{admin.id}")
         expect(response_status).to eql 401
       end
     end
@@ -288,18 +285,18 @@ describe Canto do
     context 'with no credentials' do 
       it 'doesn\'t delete the user' do 
         expect_any_instance_of(User).not_to receive(:destroy!)
-        make_request('DELETE', "/users/#{@user.id}")
+        make_request('DELETE', "/users/#{user.id}")
       end
 
       it 'returns status 401' do 
-        make_request('DELETE', "/users/#{@user.id}")
+        make_request('DELETE', "/users/#{user.id}")
         expect(response_status).to eql 401
       end
     end
 
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
-        authorize_with @admin
+        authorize_with admin
         make_request('DELETE', '/users/1000000')
         expect(response_status).to eql 404
       end
