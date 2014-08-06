@@ -28,7 +28,7 @@ class Canto < Sinatra::Application
   end
   
   post '/users' do  
-    standard_create
+    validate_standard_create
     create_resource(User, @request_body)
   end
 
