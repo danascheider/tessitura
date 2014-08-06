@@ -32,6 +32,20 @@ describe TaskList do
         expect(@task_list.owner_id).to eql @owner.id
       end
     end
+
+    describe '#to_a' do 
+      before(:each) do 
+        @tasks = Task.all.map {|task| task.to_hash }
+      end
+
+      it 'returns its tasks' do 
+        expect(@task_list.to_a).to eql @tasks
+      end
+
+      it 'returns an array object' do 
+        expect(@tasks).to be_an(Array)
+      end
+    end
   end
 
   describe 'associations' do 
