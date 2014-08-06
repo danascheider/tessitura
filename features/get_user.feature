@@ -6,7 +6,7 @@ Feature: View user profile
     And the response should return status 200
 
   Scenario: Admin views user's profile
-    When the client submits a GET request to /users/3 with admin credentials
+    When the client submits a GET request to /users/3 with the 1st user's credentials
     Then the JSON response should include the 3rd user's profile information 
     And the response should return status 200
 
@@ -36,11 +36,11 @@ Feature: View user profile
     And the response should return status 401
 
   Scenario: Admin views all users
-    When the client submits a GET request to /admin/users with admin credentials
+    When the client submits a GET request to /admin/users with the 1st user's credentials
     Then the JSON response should include all the users
     And the response should return status 200
 
   Scenario: Admin attempts to view user that doesn't exist
-    When the client submits a GET request to /users/1000000 with admin credentials
+    When the client submits a GET request to /users/1000000 with the 1st user's credentials
     Then the response should not include any data
     And the response should return status 404

@@ -1,66 +1,5 @@
 # REQUEST STEPS
 # =============
-
-When(/^the client submits a GET request to \/users\/(\d+) with no credentials and:$/) do |id, string|
-  make_request('GET', "/users/#{id}", string)
-end
-
-When(/^the client submits a GET request to \/users\/(\d+) with admin credentials$/) do |id|
-  @admin = User.admin.first
-  authorize @admin.username, @admin.password
-  make_request('GET', "/users/#{id}")
-end
-
-When(/^the client submits a GET request to (.*) with the (\d+)(?:[a-z]{2}) user's credentials$/) do |path, id|
-  user = get_resource(User, id)
-  authorize user.username, user.password
-  make_request('GET', path)
-end
-
-When(/^the client submits a GET request to \/users\/(\d+) with no credentials$/) do |id|
-  make_request('GET', "/users/#{id}")
-end
-
-When(/^the client submits a GET request to \/users\/(\d+)\/tasks with admin credentials$/) do |id|
-  @admin, @user = User.admin.first, User.find(id)
-  authorize @admin.username, @admin.password
-  make_request('GET', "/users/#{id}/tasks")
-end
-
-When(/^the client submits a GET request to \/users\/(\d+)\/tasks with no credentials$/) do |id|
-  make_request('GET', "/users/#{id}/tasks")
-end
-
-When(/^the client submits a GET request to \/tasks\/(\d+) with admin credentials$/) do |id|
-  @admin = User.admin.first
-  authorize @admin.username, @admin.password
-  make_request('GET', "/tasks/#{id}")
-end
-
-When(/^the client submits a GET request to the (first|last) task URL with (owner|admin) credentials$/) do |order, user|
-  @task = order == 'first' ? Task.first : Task.last
-  @user = user == 'owner' ? @task.user : User.admin.first
-  authorize @user.username, @user.password
-  make_request('GET', "/tasks/#{@task.id}")
-end
-
-When(/^the client submits a GET request to the (first|last) task URL with (user|no) credentials$/) do |order, type|
-  @task = order == 'first' ? Task.first : Task.last
-  @user = type == 'user' ? User.where(admin: false).first : nil
-  authorize @user.username, @user.password if @user
-  make_request('GET', "/tasks/#{@task.id}")
-end
-
-When(/^the client submits a GET request to \/admin\/users with no credentials$/) do
-  make_request('GET', '/admin/users')
-end
-
-When(/^the client submits a GET request to \/admin\/users with admin credentials$/) do
-  @admin = User.admin.first 
-  authorize @admin.username, @admin.password
-  make_request('GET', '/admin/users')
-end
-
 When(/^the client submits a DELETE request to \/users\/(\d+) with no credentials$/) do |id|
   make_request('DELETE', "/users/#{id}")
 end
@@ -111,12 +50,8 @@ Then(/^the JSON response should include only the (in)?complete task(?:s)$/) do |
   response_body.should eql tasks.to_json
 end
 
-Then(/^the JSON response should (not )?include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |negation, id|
-  if negation
-    response_body.should_not include json_task(id)
-  else 
-    response_body.should === json_task(id)
-  end
+Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |id|
+  response_body.should === get_resource(Task, id).to_json
 end
 
 Then(/^the JSON response should include the (first|last) task$/) do |order|
