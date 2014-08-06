@@ -1,4 +1,5 @@
 Transform(/^\d+$/) {|number| number.to_i }
+Transform(/^(\d+)([a-z]{2})$/) {|num, ordinal| num.to_s.to_i }
 
 Then(/^the new task should have the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
@@ -8,7 +9,7 @@ Then(/^the new task should have the following attributes:$/) do |attributes|
   end
 end
 
-Given(/^the (\d+)st user's (\d+)rd task is complete$/) do |uid, task_num|
+Given(/^the (\d+[a-z]{2}) user's (\d+[a-z]{2}) task is complete$/) do |uid, task_num|
   @user = get_resource(User, uid)
   @task = @user.tasks[2]
   @task.update!(status: 'complete')
@@ -35,7 +36,7 @@ Then(/^the task should be marked complete$/) do
 end
 
 
-Then(/^the (\d+)(?:[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
+Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
   expect(Task.exists?(id: id)).to neg ? be_truthy : be_falsey
 end
 
