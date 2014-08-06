@@ -29,13 +29,14 @@ class User < ActiveRecord::Base
     { 
       id: self.id,
       first_name: self.first_name,
-      last_name: self.last_name,
-      email: self.email,
-      fach: self.fach,
-      birthdate: self.birthdate,
-      city: self.city,
-      country: self.country,
-      admin: self.admin
+      last_name:  self.last_name,
+      email:      self.email,
+      fach:       self.fach,
+      birthdate:  self.birthdate,
+      city:       self.city,
+      country:    self.country,
+      admin:      self.admin,
+      task_lists: self.task_lists.map {|list| list.id }
     }.delete_if {|key, value| value == nil }
   end
 
