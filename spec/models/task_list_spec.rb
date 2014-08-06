@@ -34,16 +34,12 @@ describe TaskList do
     end
 
     describe '#to_a' do 
-      before(:each) do 
-        @tasks = Task.all.map {|task| task.to_hash }
-      end
-
       it 'returns its tasks' do 
-        expect(@task_list.to_a).to eql @tasks
+        expect(@task_list.to_a).to eql @task_list.tasks.all.map {|task| task.to_hash }
       end
 
       it 'returns an array object' do 
-        expect(@tasks).to be_an(Array)
+        expect(@task_list.to_a).to be_an(Array)
       end
     end
   end
