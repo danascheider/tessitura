@@ -18,20 +18,8 @@ Then(/^no task should be created$/) do
   expect(get_changed_user.tasks.count).to eql @user_task_count
 end
 
-Then(/^the (first|last) task should (not )?be deleted from the database$/) do |order, negation|
-  if negation 
-    expect(get_resource(Task, @task_id)).to eql @task
-  else
-    expect(get_resource(Task, @task_id)).to eql nil
-  end
-end
-
-Then(/^the task's title should (not )?be changed to "(.*)"$/) do |negation, title|
-  if negation
-    expect(get_changed_task.title).not_to eql(title) 
-  else
-    expect(get_changed_task.title).to eql(title)
-  end
+Then(/^the task's title should (not )?be changed to "(.*)"$/) do |neg, title|
+  expect(get_changed_task.title == title).to neg ? be_falsey : be_truthy
 end
 
 Then(/^the task's title should not be changed$/) do 
@@ -46,8 +34,9 @@ Then(/^the task should be marked complete$/) do
   expect(get_changed_task.status).to eql 'complete'
 end
 
-Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordinal|
-  expect(Task.exists?(id: id)).to be false
+
+Then(/^the (\d+)(?:[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
+  expect(Task.exists?(id: id)).to neg ? be_truthy : be_falsey
 end
 
 Then(/^the task's position should be changed to (\d+)$/) do |number|
