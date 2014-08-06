@@ -24,7 +24,6 @@ end
 
 
 When(/^the client submits a POST request to \/users with:$/) do |string|
-  @user_count = User.count
   make_request('POST', '/users', string)
 end
 

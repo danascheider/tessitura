@@ -32,7 +32,7 @@ Feature: Admin users
       | no             |   not    | 401    |
 
   Scenario Outline: Deleting an admin account 
-    And there is a user with the following attributes:
+    Given there is a user with the following attributes:
       | id | email              | username | password  |
       | 4  | admin2@example.com | admin2   | admin2pwd |
     When the client submits a DELETE request to /users/4 with the <id> user's credentials

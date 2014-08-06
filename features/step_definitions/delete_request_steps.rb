@@ -2,7 +2,6 @@
 # ===========
 When(/^the client submits a DELETE request to \/users\/(\d+) with the (\d+)(?:[a-z]{2}) user\'s credentials$/) do |path, id|
   @user = get_resource(User, id)
-  @user_count = User.count
   authorize @user.username, @user.password
   make_request('DELETE', "/users/#{path}")
 end
