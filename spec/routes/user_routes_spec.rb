@@ -4,7 +4,6 @@ describe Canto do
   include Rack::Test::Methods
 
   before(:each) do 
-    DatabaseCleaner.clean_with(:truncation)
     FactoryGirl.create_list(:user_with_task_lists, 2)
     @admin, @user = User.first, User.last
     @admin.update(admin: true)
