@@ -10,6 +10,10 @@ class Canto < Sinatra::Application
   set :database_file, 'config/database.yml'
   set :data, ''
 
+  not_found do 
+    [404, '' ]
+  end
+
   before do
     @request_body = parse_json(request.body.read)
     @id = request.path_info.match(/\d+/).to_s
@@ -30,12 +34,6 @@ class Canto < Sinatra::Application
   post '/users' do  
     validate_standard_create
     create_resource(User, @request_body)
-  end
-
-  # FIX: This shouldn't need to be defined - 405 should be returned
-  #      automatically if a route doesn't accept a certain method
-  get '/users' do 
-    405
   end
 
   [ '/users/:id', '/tasks/:id' ].each do |route, id|

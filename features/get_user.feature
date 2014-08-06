@@ -27,7 +27,7 @@ Feature: View user profile
 
     Examples:
       | url          | type           | clause                                     | code |
-      | /users       | the 3rd user's | response should not include any data       | 405  |
+      | /users       | the 3rd user's | response should not include any data       | 404  |
       | /admin/users | the 3rd user's | response should not include any data       | 401  |
       | /admin/users | no             | response should not include any data       | 401  |
       | /admin/users | the 1st user's | JSON response should include all the users | 200  |
