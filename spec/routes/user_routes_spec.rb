@@ -94,6 +94,21 @@ describe Canto do
       end
     end
 
+    context 'with the wrong password' do 
+      before(:each) do 
+        authorize @user.username, 'foobar'
+        make_request('GET', "/users/#{@user.id}")
+      end
+
+      it 'doesn\'t return the uses\'s profile' do 
+        expect(response_body).not_to include @admin.to_json
+      end
+
+      it 'returns status code 401' do 
+        expect(response_status).to eql 401
+      end
+    end
+
     context 'with invalid credentials' do 
       before(:each) do
         authorize @user.username, @user.password
