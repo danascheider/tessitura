@@ -12,7 +12,7 @@ describe Canto do
 
   describe 'GET' do 
     describe 'task list route' do 
-      context 'with authorization' do 
+      context 'with owner authorization' do 
         before(:each) do 
           authorize_with @user
           make_request('GET', "/users/#{@user.id}/tasks")
@@ -27,21 +27,7 @@ describe Canto do
         end
       end
 
-      context 'without authorization' do 
-        before(:each) do 
-          make_request('GET', "/users/#{@user.id}/tasks")
-        end
-
-        it 'doesn\'t return the tasks' do 
-          expect(response_body).not_to include @user.tasks.to_json
-        end
-
-        it 'returns status 401' do 
-          expect(response_status).to eql 401
-        end
-      end
-
-      context 'as admin' do 
+      context 'with admin authorization' do 
         before(:each) do 
           authorize_with @admin
           make_request('GET', "/users/#{@user.id}/tasks")
@@ -56,14 +42,43 @@ describe Canto do
         end
       end
 
-      context 'with invalid authorization' do 
+      context 'with inadequate authorization' do 
         before(:each) do 
-          authorize @user.username, @user.id
+          authorize_with @user
           make_request('GET', "/users/#{@admin.id}/tasks")
         end
 
         it 'doesn\'t return the tasks' do 
           expect(response_body).not_to include @admin.tasks.to_json
+        end
+
+        it 'returns status 401' do 
+          expect(response_status).to eql 401
+        end
+      end
+
+      context 'with invalid credentials' do 
+        before(:each) do 
+          authorize 'foo', 'bar'
+          make_request('GET', "/users/#{@user.id}/tasks")
+        end
+
+        it 'doesn\'t return the tasks' do 
+          expect(response_body).not_to include(@user.tasks.to_json)
+        end
+
+        it 'returns status 401' do 
+          expect(response_status).to eql 401
+        end
+      end
+
+      context 'with no authorization' do 
+        before(:each) do 
+          make_request('GET', "/users/#{@user.id}/tasks")
+        end
+
+        it 'doesn\'t return the tasks' do 
+          expect(response_body).not_to include @user.tasks.to_json
         end
 
         it 'returns status 401' do 
