@@ -6,11 +6,6 @@ Then(/^the JSON response should include all the users$/) do
   expect(response_body).to eql User.all.to_json
 end
 
-Then(/^the JSON response should include only the (in)?complete task(?:s)$/) do |scope|
-  tasks = scope ? Task.incomplete : Task.complete
-  response_body.should eql tasks.to_json
-end
-
 Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |id|
   response_body.should === get_resource(Task, id).to_json
 end
