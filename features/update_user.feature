@@ -21,21 +21,18 @@ Feature: Updating user profiles
     Then the user's username should not be changed
     And the response should indicate the user was not updated successfully
 
-  Scenario: User attempts to update someone else's profile
-    When the client submits a PUT request to /users/3 with the 2nd user's credentials and:
+  Scenario Outline: Unauthorized user tries to update a profile
+    When the client submits a PUT request to /users/3 with <type> credentials and:
       """json
-      { "first_name":"Jerry" }
+      { "<attribute>":"<value>" }
       """
-    Then the user's first_name should not be changed
+    Then the user's <attr> should not be changed
     And the response should indicate the request was unauthorized
 
-  Scenario: User attempts to update profile without authenticating
-    When the client submits a PUT request to /users/3 with no credentials and:
-      """json
-      { "country":"Togo" }
-      """
-    Then the user's country should not be changed
-    And the response should indicate the request was unauthorized
+    Examples:
+      | type           | attribute  | value | attr       |
+      | the 2nd user's | first_name | Jerry | first_name |
+      | no             | country    | Togo  | country    |
 
   Scenario: User attempts to confer admin status on self
     When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
