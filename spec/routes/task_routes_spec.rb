@@ -174,74 +174,74 @@ describe Canto do
     end
   end
 
-  # describe 'DELETE' do 
-  #   context 'with user authorization' do 
-  #     context 'when the task exists' do 
-  #       it 'deletes the task' do 
-  #         expect_any_instance_of(Task).to receive(:destroy!)
-  #         authorize_with user
-  #         make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-  #       end
+  describe 'DELETE' do 
+    context 'with user authorization' do 
+      context 'when the task exists' do 
+        it 'deletes the task' do 
+          expect_any_instance_of(Task).to receive(:destroy!)
+          authorize_with user
+          make_request('DELETE', "/tasks/#{user.tasks.first.id}")
+        end
 
-  #       it 'returns status 204' do 
-  #         authorize_with user
-  #         make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-  #         expect(response_status).to eql 204
-  #       end
-  #     end
+        it 'returns status 204' do 
+          authorize_with user
+          make_request('DELETE', "/tasks/#{user.tasks.first.id}")
+          expect(response_status).to eql 204
+        end
+      end
 
-  #     context 'when the task doesn\'t exist' do 
-  #       it 'doesn\'t delete anything' do 
-  #         expect_any_instance_of(Task).not_to receive(:destroy!)
-  #         authorize_with user
-  #         make_request('DELETE', "/tasks/1000000")
-  #       end
+      context 'when the task doesn\'t exist' do 
+        it 'doesn\'t delete anything' do 
+          expect_any_instance_of(Task).not_to receive(:destroy!)
+          authorize_with user
+          make_request('DELETE', "/tasks/1000000")
+        end
 
-  #       it 'returns status 404' do 
-  #         authorize_with user
-  #         make_request('DELETE', "/tasks/1000000")
-  #         expect(response_status).to eql 404
-  #       end
-  #     end
-  #   end
+        it 'returns status 404' do 
+          authorize_with user
+          make_request('DELETE', "/tasks/1000000")
+          expect(response_status).to eql 404
+        end
+      end
+    end
 
-  #   context 'with admin authorization' do 
-  #     it 'deletes the task' do 
-  #       expect_any_instance_of(Task).to receive(:destroy!)
-  #       authorize_with admin
-  #       make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-  #     end
+    context 'with admin authorization' do 
+      it 'deletes the task' do 
+        expect_any_instance_of(Task).to receive(:destroy!)
+        authorize_with admin
+        make_request('DELETE', "/tasks/#{user.tasks.first.id}")
+      end
 
-  #     it 'returns status 204' do 
-  #       authorize_with admin
-  #       make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-  #       expect(response_status).to eql 204
-  #     end
-  #   end
+      it 'returns status 204' do 
+        authorize_with admin
+        make_request('DELETE', "/tasks/#{user.tasks.first.id}")
+        expect(response_status).to eql 204
+      end
+    end
 
-  #   context 'with invalid authorization' do 
-  #     it 'doesn\'t delete the task' do 
-  #       expect_any_instance_of(Task).not_to receive(:destroy!)
-  #       authorize_with user
-  #       make_request('DELETE', "/tasks/#{admin.tasks.first.id}")
-  #     end
+    context 'with invalid authorization' do 
+      it 'doesn\'t delete the task' do 
+        expect_any_instance_of(Task).not_to receive(:destroy!)
+        authorize_with user
+        make_request('DELETE', "/tasks/#{admin.tasks.first.id}")
+      end
 
-  #     it 'returns status 401' do 
-  #       authorize_with user
-  #       make_request('DELETE', "/tasks/#{admin.tasks.first.id}")
-  #     end
-  #   end
+      it 'returns status 401' do 
+        authorize_with user
+        make_request('DELETE', "/tasks/#{admin.tasks.first.id}")
+      end
+    end
 
-  #   context 'with no authorization' do 
-  #     it 'doesn\'t delete anything' do 
-  #       expect_any_instance_of(Task).not_to receive(:destroy!)
-  #       make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-  #     end
+    context 'with no authorization' do 
+      it 'doesn\'t delete anything' do 
+        expect_any_instance_of(Task).not_to receive(:destroy!)
+        make_request('DELETE', "/tasks/#{user.tasks.first.id}")
+      end
 
-  #     it 'returns status 401' do 
-  #       make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-  #       expect(response_status).to eql 401
-  #     end
-  #   end
-  # end
+      it 'returns status 401' do 
+        make_request('DELETE', "/tasks/#{user.tasks.first.id}")
+        expect(response_status).to eql 401
+      end
+    end
+  end
 end
