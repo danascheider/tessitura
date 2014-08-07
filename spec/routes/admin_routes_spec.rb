@@ -5,10 +5,12 @@ describe Canto do
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
+  let(:path) { '/admin/users' }
 
-  describe 'user list' do 
+  describe 'viewing all users' do 
+
     let(:resource) { User.all.to_json }
-    let(:path) { '/admin/users' }
+
     context 'with valid authorization' do 
       it_behaves_like 'an authorized GET request' do 
         let(:agent) { admin }
@@ -28,48 +30,25 @@ describe Canto do
   end
 
   describe 'creating an admin' do 
+
+    let(:model) { User }
+    let(:valid_attributes) { { "username"=>"abc123", "password"=>"abcde12345", "email"=>"a@example.com", "admin"=>true }.to_json }
+    let(:invalid_attributes) { { "admin"=>true }.to_json }
+
     context 'with valid authorization' do 
-      before(:each) do 
-        authorize_with admin 
-      end
-
-      it 'creates a new user' do 
-        expect(User).to receive(:create!)
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-      end
-
-      it 'returns status 201' do 
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-        expect(response_status).to eql 201
+      it_behaves_like 'an authorized POST request' do 
+        let(:agent) { admin }
       end
     end
 
     context 'with invalid authorization' do 
-      before(:each) do 
-        authorize_with user
-      end
-
-      it 'doesn\'t create the user' do 
-        expect(User).not_to receive(:create!)
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-      end
-
-      it 'returns status 401' do 
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized POST request' do 
+        let(:agent) { user }
       end
     end
 
     context 'with no authorization' do 
-      it 'doesn\'t create the user' do 
-        expect(User).not_to receive(:create!) 
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-      end
-
-      it 'returns status 401' do 
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-        expect(response_status).to eql 401
-      end
+      it_behaves_like 'a POST request without credentials'
     end
   end
 end

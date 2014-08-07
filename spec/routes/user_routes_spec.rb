@@ -5,8 +5,12 @@ describe Canto do
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
+  let(:model) { User }
 
   describe 'POST' do 
+
+    let(:path) { '/users' }
+
     context 'with valid attributes' do 
       it 'calls the User create! method' do 
         expect(User).to receive(:create!)
@@ -33,33 +37,22 @@ describe Canto do
 
     context 'attempting to create an admin' do 
       context 'without providing credentials'
-        it 'doesn\'t create a user' do 
-          expect(User).not_to receive(:create!)
-          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-        end
-
-        it 'returns status 401' do 
-          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-          expect(response_status).to eql 401
-          puts last_response.body
+        it_behaves_like 'a POST request without credentials' do 
+          let(:valid_attributes) { { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json }
         end
       end
 
       context 'without providing admin credentials' do 
-        it 'doesn\'t create a user' do 
-          expect(User).not_to receive(:create!)
-          authorize_with user
-          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-        end
-
-        it 'returns status 401' do 
-          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-          expect(response_status).to eql 401
+        it_behaves_like 'an unauthorized POST request' do 
+          let(:agent) { admin }
+          let(:valid_attributes) { { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json }
+        
       end
     end
   end
 
   describe 'GET' do 
+
     let(:resource) { user.to_json }
     let(:path) { "/users/#{user.id}" }
 

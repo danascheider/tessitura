@@ -97,82 +97,42 @@ describe Canto do
     end
   end
 
-  # describe 'POST' do 
-  #   context 'with user authorization' do 
-  #     context 'with valid attributes' do 
-  #       it 'creates a new task' do 
-  #         expect(Task).to receive(:create!)
-  #         authorize_with user
-  #         make_request('POST', "/users/#{user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
-  #       end
+  describe 'POST' do 
 
-  #       it 'returns status 201' do 
-  #         authorize_with user
-  #         make_request('POST', "/users/#{user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
-  #         expect(last_response.status).to eql 201
-  #       end
-  #     end
+    let(:model) { Task } 
+    let(:path) { "/users/#{user.id}/tasks"}
+    let(:valid_attributes) { { 'title' => 'Water the garden' }.to_json }
+    let(:invalid_attributes) { { 'status' => 'foobar' }.to_json }
 
-  #     context 'with invalid attributes' do 
-  #       it 'attempts to create a new task' do 
-  #         expect(Task).to receive(:create!)
-  #         authorize_with user
-  #         make_request('POST', "/users/#{user.id}/tasks", { }.to_json)
-  #       end
+    context 'with user authorization' do 
+      it_behaves_like 'an authorized POST request' do 
+        let(:agent) { user }
+      end
+    end
 
-  #       it 'returns status 422' do 
-  #         authorize_with user
-  #         make_request('POST', "/users/#{user.id}/tasks", { }.to_json)
-  #         expect(response_status).to eql 422
-  #       end
-  #     end
-  #   end
+    context 'with admin authorization' do 
+      it_behaves_like 'an authorized POST request' do 
+        let(:agent) { admin }
+      end
 
-  #   context 'with admin authorization' do 
-  #     it 'creates a new task' do 
-  #       expect(Task).to receive(:create!)
-  #       authorize_with admin
-  #       make_request('POST', "/users/#{user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
-  #     end
+      it 'assigns task ownership to the user, not the admin' do 
+        authorize_with admin
+        make_request('POST', "/users/#{user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
+        expect(Task.last.owner_id).to eql user.id
+      end
+    end
 
-  #     it 'assigns task ownership to the user, not the admin' do 
-  #       authorize_with admin
-  #       make_request('POST', "/users/#{user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
-  #       expect(Task.last.user.id).to eql user.id
-  #     end
+    context 'with invalid authorization' do 
+      it_behaves_like 'an unauthorized POST request' do 
+        let(:agent) { user }
+        let(:path) { "/users/#{admin.id}/tasks" }
+      end
+    end
 
-  #     it 'returns status 201' do 
-  #       authorize_with admin
-  #       make_request('POST', "/users/#{user.id}/tasks", { 'title' => 'Water the garden' }.to_json)
-  #       expect(response_status).to eql 201
-  #     end
-  #   end
-
-  #   context 'with invalid authorization' do 
-  #     it 'doesn\'t create a new task' do 
-  #       expect(Task).not_to receive(:create)
-  #       authorize_with user
-  #       make_request('POST', "/users/#{admin.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
-  #     end
-
-  #     it 'returns status 401' do 
-  #       make_request('POST', "/users/#{admin.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
-  #       expect(response_status).to eql 401
-  #     end
-  #   end
-
-  #   context 'without authorization' do 
-  #     it 'doesn\'t attempt to create a task' do 
-  #       expect(Task).not_to receive(:create)
-  #       make_request('POST', "/users/#{user.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
-  #     end
-
-  #     it 'returns status 401' do 
-  #       make_request('POST', "/users/#{user.id}/tasks", { 'title' => 'Mow the lawn' }.to_json)
-  #       expect(response_status).to eql 401
-  #     end
-  #   end
-  # end
+    context 'without authorization' do 
+      it_behaves_like 'a POST request without credentials'
+    end
+  end
 
   # describe 'PUT' do 
   #   context 'with user authorization' do
