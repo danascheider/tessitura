@@ -60,77 +60,41 @@ describe Canto do
   end
 
   describe 'GET' do 
+    let(:resource) { user.to_json }
+    let(:path) { "/users/#{user.id}" }
+
     context 'with user\'s credentials' do 
-      before(:each) do 
-        authorize_with user
-        make_request('GET', "/users/#{user.id}")
-      end
-
-      it 'returns the user\'s profile' do 
-        expect(response_body).to eql user.to_json
-      end
-
-      it 'returns status code 200' do 
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized GET request' do 
+        let(:agent) { user }
       end
     end
 
     context 'with admin credentials' do 
-      before(:each) do 
-        authorize_with admin
-        make_request('GET', "/users/#{user.id}")
-      end
-
-      it 'returns the user\'s profile' do 
-        expect(response_body).to eql user.to_json
-      end
-
-      it 'returns status code 200' do 
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized GET request' do 
+        let(:agent) { admin }
       end
     end
 
     context 'with the wrong password' do 
-      before(:each) do 
-        authorize user.username, 'foobar'
-        make_request('GET', "/users/#{user.id}")
-      end
-
-      it 'doesn\'t return the user\'s profile' do 
-        expect(response_body).not_to include admin.to_json
-      end
-
-      it 'returns status code 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized GET request' do 
+        let(:username) { user.username }
+        let(:password) { 'foobar' }
       end
     end
 
     context 'with invalid credentials' do 
-      before(:each) do
-        authorize_with user
-        make_request('GET', "/users/#{admin.id}")
-      end
-
-      it 'doesn\'t return the user\'s profile' do 
-        expect(response_body).not_to include admin.to_json
-      end
-
-      it 'returns status code 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized GET request' do 
+        let(:resource) { admin.to_json }
+        let(:username) { user.username }
+        let(:password) { user.password }
+        let(:path) { "/users/#{admin.id}" }
       end
     end
 
     context 'with no credentials' do 
-      before(:each) do 
-        make_request('GET', "/users/#{user.id}")
-      end
-
-      it 'doesn\'t return the user\'s profile' do 
-        expect(response_body).not_to include user.to_json
-      end
-
-      it 'returns status code 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'a GET request without credentials' do 
+        let(:resource) { user.to_json }
+        let(:path) { "/users/#{user.id}" }
       end
     end
 

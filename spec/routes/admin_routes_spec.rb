@@ -7,48 +7,23 @@ describe Canto do
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
 
   describe 'user list' do 
+    let(:resource) { User.all.to_json }
+    let(:path) { '/admin/users' }
     context 'with valid authorization' do 
-      before(:each) do 
-        authorize_with admin
-        make_request('GET', '/admin/users')
-      end
-
-      it 'returns a list of all the users' do 
-        expect(response_body).to eql User.all.to_json
-      end
-
-      it 'returns status 200' do 
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized GET request' do 
+        let(:agent) { admin }
       end
     end
 
     context 'without valid authorization' do 
-      before(:each) do 
-        authorize_with user
-        make_request('GET', '/admin/users')
-      end
-
-      it 'doesn\'t return any data' do 
-        expect(response_body).to eql "Authorization Required\n"
-      end
-
-      it 'returns status 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized GET request' do 
+        let(:username) { user.username }
+        let(:password) { user.password }
       end
     end
 
     context 'with no authorization' do 
-      before(:each) do 
-        make_request('GET', '/admin/users')
-      end
-
-      it 'doesn\'t return any data' do 
-        expect(response_body).to eql "Authorization Required\n"
-      end
-
-      it 'returns status 401' do 
-        expect(response_status).to eql 401
-      end
+      it_behaves_like 'a GET request without credentials'
     end
   end
 
