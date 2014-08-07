@@ -1,8 +1,3 @@
-def authorize_and_make_request(auth, opts)
-  authorize_with auth if auth
-  make_request(opts[:method], opts[:path], opts[:body])
-end
-
 def authorize_with(user)
   authorize user.username, user.password
 end
