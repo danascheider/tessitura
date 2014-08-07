@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Task do 
+  let(:task) { FactoryGirl.create(:task) }
+
   describe 'attributes' do 
     it { is_expected.to respond_to(:title) }
     it { is_expected.to respond_to(:status) }
@@ -41,11 +43,11 @@ describe Task do
   end
 
   describe 'public methods' do 
+    let(:task_list) { FactoryGirl.create(:task_list_with_tasks, tasks_count: 5) }
+
     before(:each) do 
-      3.times { FactoryGirl.create(:task) }
-      2.times { FactoryGirl.create(:complete_task) }
-      @incomplete_task = Task.incomplete.first
-      @complete_task = Task.complete.order(:position).first
+      task_list.tasks.last(2).each {|task| task.update!(status: 'complete') }
+      @complete_task = task_list.tasks.complete.order(:position).first
     end
 
     describe '::first_complete' do 
@@ -56,51 +58,56 @@ describe Task do
 
     describe '#complete?' do 
       it 'returns true when a task is complete' do 
-        expect(@complete_task.complete?).to be true
+        expect(@complete_task.complete?).to be_truthy
       end
 
       it 'returns false when a task is incomplete' do 
-        expect(@incomplete_task.complete?).not_to be true
+        expect(task.complete?).to be_falsey
       end
     end
 
     describe '#incomplete?' do 
       it 'returns true when a task is incomplete' do 
-        expect(@incomplete_task.incomplete?).to be true
+        expect(task.incomplete?).to be_truthy
       end
 
       it 'returns false when a task is complete' do 
-        expect(@complete_task.incomplete?).not_to be true
+        expect(@complete_task.incomplete?).to be_falsey
       end
     end
 
     describe '#user' do 
       it 'returns the user who owns the task list containing the task' do 
-        expect(Task.first.user).to eql Task.first.task_list.user
+        expect(task.user).to eql task.task_list.user
       end
     end
 
     describe '#owner' do 
       it 'returns a user model' do 
-        expect(Task.first.owner).to be_a(User)
+        expect(task.owner).to be_a(User)
       end
 
       it 'is equivalent to #user' do 
-        expect(Task.first.owner).to eql Task.first.user
+        expect(task.owner).to eql task.user
       end
     end
 
     describe '#owner_id' do
       it 'returns its user\'s ID' do 
-        expect(Task.first.owner_id).to eql Task.first.user.id
+        expect(task.owner_id).to eql task.user.id
       end
     end
   end
 
   describe 'validations' do 
     before(:each) do 
-      @list = FactoryGirl.create(:task_list_with_tasks)
-      @task = Task.new(title: 'Foo', status: 'new', priority: 'high', task_list_id: @list.id)
+      @task = FactoryGirl.build(:task, title: 'Foo', status: 'new', priority: 'high')
+    end
+
+    context 'when valid' do 
+      it 'should be valid' do 
+        expect(@task).to be_valid
+      end
     end
 
     context 'pertaining to title' do 
@@ -133,10 +140,11 @@ describe Task do
   end
 
   describe 'default behavior' do 
+    let(:list) { FactoryGirl.create(:task_list_with_tasks, tasks_count: 5) }
+
     before(:each) do 
-      @list = FactoryGirl.create(:task_list_with_tasks)
-      @list.tasks.create(status: 'complete', position: 4)
-      @task = @list.tasks.create(title: "New task")
+      list.tasks.last(2).each {|task| task.update!(status: 'complete') }
+      @task = list.tasks.create(title: 'New Task')
     end
 
     it 'sets status to \'new\'' do
@@ -150,7 +158,7 @@ describe Task do
     context 'when status is set to complete' do 
       it 'instantiates as the first complete task' do 
         pending 'Figure out list issues'
-        expect(@list.tasks.create(title: 'Foo', status: 'complete').position).to eql 5
+        expect(list.tasks.create(title: 'Foo', status: 'complete').position).to eql 5
       end
     end
 
@@ -162,6 +170,12 @@ describe Task do
   end
 
   describe 'associations' do 
-    it 'is destroyed with its parent list'
+    let(:list) { FactoryGirl.create(:task_list_with_tasks) }
+
+    it 'is destroyed with its parent list' do 
+      @task = list.tasks.first
+      list.destroy!
+      expect(get_resource(Task, @task.id)).to eql nil
+    end
   end
 end
