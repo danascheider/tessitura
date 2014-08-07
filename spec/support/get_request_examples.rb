@@ -15,7 +15,7 @@ end
 
 shared_examples 'an unauthorized GET request' do 
   before(:each) do 
-    authorize username, password if username && password
+    authorize username, password
     make_request('GET', path)
   end
 
