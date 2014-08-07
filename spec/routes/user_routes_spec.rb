@@ -101,27 +101,14 @@ describe Canto do
   end
 
   describe 'PUT' do 
+    let(:model) { User }
+    let(:path) { "/users/#{user.id}" }
+    let(:valid_attributes) { { 'fach' => 'lyric spinto' }.to_json }
+    let(:invalid_attributes) { { 'username' => nil }.to_json }
+
     context 'with user credentials' do 
-      before(:each) do 
-        authorize_with user
-      end
-
-      context 'with valid attributes' do 
-        it 'updates the profile' do 
-          expect_any_instance_of(User).to receive(:update!)
-          make_request('PUT', "/users/#{user.id}", { 'fach' => 'soprano' }.to_json)
-        end
-
-        it 'returns status 200' do 
-          make_request('PUT', "/users/#{user.id}", { 'fach' => 'soprano' }.to_json)
-        end
-      end
-
-      context 'with invalid attributes' do 
-        it 'returns status 422' do 
-          make_request('PUT', "/users/#{user.id}", { 'email' => nil }.to_json)
-          expect(response_status).to eql 422
-        end
+      it_behaves_like 'an authorized PUT request' do 
+        let(:agent) { user }
       end
 
       context 'attempting to set admin status to true' do 
@@ -138,47 +125,20 @@ describe Canto do
     end
 
     context 'with admin credentials' do 
-      before(:each) do 
-        authorize_with admin
-      end
-
-      it 'updates the profile' do 
-        expect_any_instance_of(User).to receive(:update!)
-        make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
-      end
-
-      it 'returns status 200' do 
-        make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized PUT request' do 
+        let(:agent) { admin }
       end
     end
 
     context 'with invalid credentials' do 
-      before(:each) do 
-        authorize_with user
-      end
-
-      it 'doesn\'t update the profile' do 
-        expect_any_instance_of(User).not_to receive(:update!)
-        make_request('PUT', "/users/#{admin.id}", { 'country' => 'Kyrgyzstan' })
-      end
-
-      it 'returns status 401' do 
-        make_request('PUT', "/users/#{admin.id}", { 'country' => 'Kyrgyzstan' })
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized POST request' do 
+        let(:agent) { user }
+        let(:path) { "/users/#{admin.id}" }
       end
     end
 
     context 'with no credentials' do 
-      it 'doesn\'t update the profile' do 
-        expect_any_instance_of(User).not_to receive(:update!)
-        make_request('PUT', "/users/#{user.id}", { 'last_name' => 'Seligman' }.to_json)
-      end
-
-      it 'returns status 401' do 
-        make_request('PUT', "/users/#{user.id}", { 'last_name' => 'Seligman' }.to_json)
-        expect(response_status).to eql 401
-      end 
+      it_behaves_like 'a PUT request without credentials'
     end
 
     context 'when the user doesn\'t exist' do 

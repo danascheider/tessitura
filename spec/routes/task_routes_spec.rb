@@ -134,80 +134,45 @@ describe Canto do
     end
   end
 
-  # describe 'PUT' do 
-  #   context 'with user authorization' do
-  #     context 'with valid attributes' do 
-  #       it 'updates the task' do 
-  #         # FIX: Might it be better to use :update instead of :update!?
-  #         expect_any_instance_of(Task).to receive(:update!)
-  #         authorize_with user
-  #         make_request('PUT', "/tasks/#{user.tasks.first.id}", { 'title' => 'Take the car for service' }.to_json)
-  #       end
+  describe 'PUT' do 
+    let(:model) { Task }
+    let(:task) { user.tasks.first }
+    let(:valid_attributes) { { 'status' => 'blocking' }.to_json }
+    let(:invalid_attributes) { { 'priority' => 'MOST IMPORTANT THING EVER OMG!!!!!' }.to_json }
+    let(:path) { "/tasks/#{task.id}" }
 
-  #       it 'returns status 200' do
-  #         authorize user.username, user.password
-  #         make_request('PUT', "/tasks/#{user.tasks.first.id}", { 'title' => 'Take the car for service' }.to_json)
-  #         expect(response_status).to eql 200
-  #       end
-  #     end
+    context 'with user authorization' do
+      it_behaves_like 'an authorized PUT request' do 
+        let(:agent) { user }
+      end
+    end
 
-  #     context 'with invalid attributes' do 
-  #       it 'returns status 422' do 
-  #         authorize_with user
-  #         make_request('PUT', "/tasks/#{user.tasks.first.id}", { 'title' => nil }.to_json)
-  #         expect(response_status).to eql 422
-  #       end
-  #     end
-  #   end
+    context 'with admin authorization' do 
+      it_behaves_like 'an authorized PUT request' do 
+        let(:agent) { admin }
+      end
+    end
 
-  #   context 'with admin authorization' do 
-  #     it 'updates the task' do 
-  #       expect_any_instance_of(Task).to receive(:update!)
-  #       authorize_with admin
-  #       make_request('PUT', "/tasks/#{user.tasks.first.id}", { 'status' => 'blocking' }.to_json)
-  #     end
+    context 'with invalid authorization' do 
+      it_behaves_like 'an unauthorized PUT request' do 
+        let(:agent) { user }
+        let(:task) { admin.tasks.first }
+        let(:path) { "/tasks/#{task.id}"}
+      end
+    end
 
-  #     it 'returns status 200' do 
-  #       authorize_with admin
-  #       make_request('PUT', "/tasks/#{user.tasks.first.id}", { 'status' => 'blocking' }.to_json)
-  #       expect(response_status).to eql 200
-  #     end
-  #   end
+    context 'without authorization' do 
+      it_behaves_like 'a PUT request without credentials'
+    end
 
-  #   context 'with invalid authorization' do 
-  #     it 'doesn\'t update the task' do 
-  #       expect_any_instance_of(Task).not_to receive(:update!)
-  #       authorize_with user
-  #       make_request('PUT', "/tasks/#{admin.tasks.first.id}", { 'status' => 'complete' }.to_json)
-  #     end
-
-  #     it 'returns status 401' do 
-  #       authorize_with user
-  #       make_request('PUT', "/tasks/#{admin.tasks.first.id}", { 'status' => 'complete' }.to_json)
-  #       expect(response_status).to eql 401
-  #     end
-  #   end
-
-  #   context 'without authorization' do 
-  #     it 'doesn\'t update the task' do 
-  #       expect_any_instance_of(Task).not_to receive(:update!)
-  #       make_request('PUT', "/tasks/#{user.tasks.first.id}", { 'priority' => 'high' }.to_json)
-  #     end
-
-  #     it 'returns status 401' do 
-  #       make_request('PUT', "/tasks/#{user.tasks.first.id}", { 'priority' => 'high' }.to_json)
-  #       expect(response_status).to eql 401
-  #     end
-  #   end
-
-  #   context 'when the task doesn\'t exist' do 
-  #     it 'returns status 404' do 
-  #       authorize_with admin
-  #       make_request('PUT', '/tasks/1000000', { 'status' => 'blocking' }.to_json)
-  #       expect(response_status).to eql 404
-  #     end
-  #   end
-  # end
+    context 'when the task doesn\'t exist' do 
+      it 'returns status 404' do 
+        authorize_with admin
+        make_request('PUT', '/tasks/1000000', { 'status' => 'blocking' }.to_json)
+        expect(response_status).to eql 404
+      end
+    end
+  end
 
   # describe 'DELETE' do 
   #   context 'with user authorization' do 
