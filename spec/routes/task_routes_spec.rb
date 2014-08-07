@@ -9,19 +9,18 @@ describe Canto do
 
   describe 'GET' do 
     describe 'task list route' do 
+      let(:path) { "/users/#{user.id}/tasks" }
+      let(:resource) { user.tasks.to_json }
+
       context 'with owner authorization' do 
         it_behaves_like 'an authorized GET request' do 
-          let(:resource) { user.tasks.to_json }
           let(:agent) { user }
-          let(:path) { "/users/#{user.id}/tasks" }
         end
       end
 
       context 'with admin authorization' do 
         it_behaves_like 'an authorized GET request' do 
-          let(:resource) { user.tasks.to_json } 
           let(:agent) { admin }
-          let(:path) { "/users/#{user.id}/tasks" }
         end
       end
 
