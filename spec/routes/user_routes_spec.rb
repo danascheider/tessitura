@@ -101,7 +101,6 @@ describe Canto do
   end
 
   describe 'PUT' do 
-    let(:model) { User }
     let(:path) { "/users/#{user.id}" }
     let(:valid_attributes) { { 'fach' => 'lyric spinto' }.to_json }
     let(:invalid_attributes) { { 'username' => nil }.to_json }
@@ -151,72 +150,31 @@ describe Canto do
   end
 
   describe 'DELETE' do 
+    let(:path) { "/users/#{user.id}" }
+
     context 'with user credentials' do 
-      before(:each) do 
-        authorize_with user
-      end
-
-      it 'deletes the profile' do 
-        expect_any_instance_of(User).to receive(:destroy!)
-        make_request('DELETE', "/users/#{user.id}")
-      end
-
-      it 'returns status 204' do 
-        make_request('DELETE', "/users/#{user.id}")
-        expect(response_status).to eql 204
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { user }
+        let(:nonexistent_resource_path) { "/users/1000000"}
       end
     end
 
     context 'with admin credentials' do 
-      before(:each) do 
-        authorize_with admin
-      end
-
-      it 'deletes the user' do 
-        expect_any_instance_of(User).to receive(:destroy!)
-        make_request('DELETE', "/users/#{user.id}")
-      end
-
-      it 'returns status 204' do 
-        make_request('DELETE', "/users/#{user.id}")
-        expect(response_status).to eql 204
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { admin }
+        let(:nonexistent_resource_path) { "/users/1000000"}
       end
     end
 
     context 'with invalid credentials' do 
-      before(:each) do 
-        authorize_with user
-      end
-
-      it 'doesn\'t delete the user' do 
-        expect_any_instance_of(User).not_to receive(:destroy!)
-        make_request('DELETE', "/users/#{admin.id}")
-      end
-
-      it 'returns status 401' do 
-        make_request('DELETE', "/users/#{admin.id}")
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized DELETE request' do 
+        let(:path) { "/users/#{admin.id}" }
+        let(:agent) { user }
       end
     end
 
     context 'with no credentials' do 
-      it 'doesn\'t delete the user' do 
-        expect_any_instance_of(User).not_to receive(:destroy!)
-        make_request('DELETE', "/users/#{user.id}")
-      end
-
-      it 'returns status 401' do 
-        make_request('DELETE', "/users/#{user.id}")
-        expect(response_status).to eql 401
-      end
-    end
-
-    context 'when the user doesn\'t exist' do 
-      it 'returns status 404' do 
-        authorize_with admin
-        make_request('DELETE', '/users/1000000')
-        expect(response_status).to eql 404
-      end
+      it_behaves_like 'a DELETE request without credentials' 
     end
   end
 end

@@ -5,10 +5,7 @@ describe Canto do
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
-
-  # before(:each) do 
-  #   user.tasks.first.update!(status: 'complete')
-  # end
+  let(:model) { Task }
 
   describe 'GET' do 
     describe 'task list route' do 
@@ -99,7 +96,6 @@ describe Canto do
 
   describe 'POST' do 
 
-    let(:model) { Task } 
     let(:path) { "/users/#{user.id}/tasks"}
     let(:valid_attributes) { { 'title' => 'Water the garden' }.to_json }
     let(:invalid_attributes) { { 'status' => 'foobar' }.to_json }
@@ -135,7 +131,6 @@ describe Canto do
   end
 
   describe 'PUT' do 
-    let(:model) { Task }
     let(:task) { user.tasks.first }
     let(:valid_attributes) { { 'status' => 'blocking' }.to_json }
     let(:invalid_attributes) { { 'priority' => 'MOST IMPORTANT THING EVER OMG!!!!!' }.to_json }
@@ -175,73 +170,34 @@ describe Canto do
   end
 
   describe 'DELETE' do 
+
+    let(:task) { user.tasks.first }
+    let(:path) { "/tasks/#{task.id}" }
+
     context 'with user authorization' do 
-      context 'when the task exists' do 
-        it 'deletes the task' do 
-          expect_any_instance_of(Task).to receive(:destroy!)
-          authorize_with user
-          make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-        end
-
-        it 'returns status 204' do 
-          authorize_with user
-          make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-          expect(response_status).to eql 204
-        end
-      end
-
-      context 'when the task doesn\'t exist' do 
-        it 'doesn\'t delete anything' do 
-          expect_any_instance_of(Task).not_to receive(:destroy!)
-          authorize_with user
-          make_request('DELETE', "/tasks/1000000")
-        end
-
-        it 'returns status 404' do 
-          authorize_with user
-          make_request('DELETE', "/tasks/1000000")
-          expect(response_status).to eql 404
-        end
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { user }
+        let(:nonexistent_resource_path) { '/tasks/1000000' }
       end
     end
 
     context 'with admin authorization' do 
-      it 'deletes the task' do 
-        expect_any_instance_of(Task).to receive(:destroy!)
-        authorize_with admin
-        make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-      end
-
-      it 'returns status 204' do 
-        authorize_with admin
-        make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-        expect(response_status).to eql 204
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { admin }
+        let(:nonexistent_resource_path) { "/tasks/1000000"}
       end
     end
 
     context 'with invalid authorization' do 
-      it 'doesn\'t delete the task' do 
-        expect_any_instance_of(Task).not_to receive(:destroy!)
-        authorize_with user
-        make_request('DELETE', "/tasks/#{admin.tasks.first.id}")
-      end
-
-      it 'returns status 401' do 
-        authorize_with user
-        make_request('DELETE', "/tasks/#{admin.tasks.first.id}")
+      it_behaves_like 'an unauthorized DELETE request' do 
+        let(:task) { admin.tasks.first }
+        let(:path) { "/tasks/#{task.id}" }
+        let(:agent) { user }
       end
     end
 
     context 'with no authorization' do 
-      it 'doesn\'t delete anything' do 
-        expect_any_instance_of(Task).not_to receive(:destroy!)
-        make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-      end
-
-      it 'returns status 401' do 
-        make_request('DELETE', "/tasks/#{user.tasks.first.id}")
-        expect(response_status).to eql 401
-      end
+      it_behaves_like 'a DELETE request without credentials'
     end
   end
 end
