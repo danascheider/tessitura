@@ -18,11 +18,8 @@ class Sinatra::Application
     end
 
     def get_resource(klass, id, &block)
-      begin
-        if block_given? then yield klass.find(id); else klass.find(id); end
-      rescue ActiveRecord::RecordNotFound
-        nil
-      end
+      return nil unless klass.exists?(id)
+      if block_given? then yield klass.find(id); else klass.find(id); end
     end
 
     def parse_json(object)
