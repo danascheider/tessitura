@@ -175,24 +175,23 @@ describe Canto::AuthorizationHelper do
   end
 
   describe '::setting_admin' do 
-    context 'when the user is attempting to set admin' do 
+    context 'when the response body has "admin" key' do 
       it 'returns true' do 
-        make_request('POST', '/test/setting_admin', { 'admin' => true }.to_json)
-        expect(response_body).to eql([true].to_json)
+        @request_body = { 'admin' => true }
+        expect(setting_admin?).to be_truthy
       end
     end
 
-    context 'when the user is not attempting to set admin' do 
+    context 'when the request body does not have "admin" key' do 
       it 'returns false' do 
-        make_request('POST', '/test/setting_admin', { 'fach' => 'dramatic coloratura' }.to_json)
-        expect(response_body).to eql([false].to_json)
+        @request_body = { 'fach' => 'dramatic coloratura' }
+        expect(setting_admin?).to be_falsey
       end
     end
 
     context 'when there is no request body' do 
       it 'returns false' do 
-        make_request('POST', '/test/setting_admin')
-        expect(response_body).to eql([nil].to_json)
+        expect(setting_admin?).to be_falsey
       end
     end
   end
