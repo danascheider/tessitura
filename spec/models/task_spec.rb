@@ -12,7 +12,7 @@ describe Task do
     it { is_expected.to respond_to(:priority) }
   end
 
-  describe 'general methods' do 
+  describe 'public instance methods' do 
     it { is_expected.to respond_to(:complete?) }
     it { is_expected.to respond_to(:incomplete?) }
     it { is_expected.to respond_to(:to_hash) } # to integrate with Sinatra-Backbone
@@ -141,18 +141,14 @@ describe Task do
 
   describe 'default behavior' do 
     let(:list) { FactoryGirl.create(:task_list_with_tasks, tasks_count: 5) }
-
-    before(:each) do 
-      list.tasks.last(2).each {|task| task.update!(status: 'complete') }
-      @task = list.tasks.create(title: 'New Task')
-    end
+    let(:new_task) { list.tasks.create(title: 'New Task') }
 
     it 'sets status to \'new\'' do
-      expect(@task.status).to eql 'new'
+      expect(new_task.status).to eql 'new'
     end
 
     it 'sets priority to \'normal\'' do 
-      expect(@task.priority).to eql 'normal'
+      expect(new_task.priority).to eql 'normal'
     end
 
     context 'when status is set to complete' do 
@@ -164,7 +160,7 @@ describe Task do
 
     context 'when status is not set to complete' do 
       it 'instantiates at position 1' do 
-        expect(@task.position).to eql 1
+        expect(new_task.position).to eql 1
       end
     end
   end
