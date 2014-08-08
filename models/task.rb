@@ -27,12 +27,6 @@ class Task < ActiveRecord::Base
     self.last.set_list_position(position) if position
   end
 
-  def self.create(opts)
-    position = get_position_on_create_complete if opts[:status] == 'complete'
-    super(opts)
-    self.last.set_list_position(position) if position
-  end
-
   def self.first_complete
     self.complete.order(:position).first || Task.count
   end
