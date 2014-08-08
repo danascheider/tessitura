@@ -1,12 +1,30 @@
 == Canto {<img src="https://travis-ci.org/danascheider/canto.svg?branch=pure-sinatra" alt="Build Status" />}[https://travis-ci.org/danascheider/canto] {<img src="https://codeclimate.com/github/danascheider/canto.png" />}[https://codeclimate.com/github/danascheider/canto] {<img src="https://coveralls.io/repos/danascheider/canto/badge.png?branch=master" />}[https://coveralls.io/r/danascheider/canto] {<img src="https://gemnasium.com/danascheider/canto.svg" alt="Dependency Status" />}[https://gemnasium.com/danascheider/canto] 
 
-Canto is a web-based to-do list and task management app for opera singers. Eventually, this app will provide a variety of functionality tailored to the specific needs of opera singers. I am developing this app primarily for myself, and so will be focusing on the functionality that will be most immediately useful to me personally. At this point in development, that functionality is the to-do list.
+Canto is a web-based to-do list and task management app for opera singers. Eventually, this app will provide a variety of functionality tailored to the specific needs of opera singers. This repo contains the code for the Sinatra API. The API uses ActiveRecord and SQLite3, which I will most likely trade for MySQL in production. The current plan is to implement a front end in Backbone.js, which will live in another repo. 
 
-Current development is taking place on the pure-sinatra and not_passing branches and is focused exclusively on back-end functionality. As the name suggests, the back end is being developed in Sinatra, with ActiveRecord and SQLite3 handling database functionality. The front end will be added later. The current plan has the front end developed using Backbone.js and Twitter Bootstrap.
+=== Models
+For the most up-to-date information about models and their attributes, see `/db/schema.rb`. 
 
-=== To-Do List
+==== Users
 
-Users create tasks and are able to view them as a list or individually. Currently there is no user model, so the app is designed for a single user. Tasks have the following attributes (i.e., columns in the Task table):
+Users can be regular users or admins. They are assumed to be opera singers and have the following attributes:
+- Username
+- Password
+- E-mail address
+- First name
+- Last name
+- Birthdate
+- Fach
+- City 
+- Country
+- Created At
+- Updated At
+
+Ultimately, user attributes will be used to provide the users with relevant information and recommendations.
+
+==== Tasks
+
+`Task`s belong to `TaskList`s, a less important model that is, in turn, owned by a `User`. Users can have multiple lists. `Task`s currently have these attributes:
 - Title
 - Status:
   - 'new'
@@ -28,9 +46,22 @@ Tasks are ordered by the position column, which is configured with the acts_like
 
 === Development Approach
 
-This app is being developed using a rigorous test- and behavior-driven approach, meaning test-first, agile work-flows. I aim for 100% test coverage and Code Climate rating >= 3.5. Non-passing code will not be merged to master. The full test suite is run each time not_passing is merged.
+This app is being developed using a rigorous behavior-driven approach, meaning test-first, agile work-flows. I aim for 100% test coverage and Code Climate rating >= 3.8 for classes and modules other than Canto itself\*. Refactoring both app code and tests is a major part of the workflow on this project. Everything should stay as DRY as possible.
 
-Refactoring both app code and tests is a major part of the workflow on this project. Everything should stay as DRY as possible.
+At this point, development is happening on the following git branches:
+==== not_passing
+This is the branch where new tests are written. The code stays here until either all the tests pass or something gets ugly. If tests pass, the code is merged to master and refactoring begins. If something gets ugly, the code is merged to messy.
+==== messy
+This is where code goes when it becomes clear that implementation of a certain feature will be non-trivial. One sign that this may be the case is if, on the not_passing branch, implementing one feature causes another test to break, or something like that.
+==== refactoring
+This is the branch where passing code gets refactored. Non-passing code should not be committed to refactoring. After each iteration, both the app and the tests should be refactored.
+==== master
+When code passes, it gets merged to master. Non-passing code should not be merged.
+
+=== Contributing
+While contributions are welcome and appreciated, I ask contributors to keep in mind that this app will most likely be taken closed-source in the not-so-distant future. As the app grows, I will spin off helper modules into gems as I am able, which will then be made open-source and available on https://rubygems.org. Since these will continue to be available to the community, they are where I recommend you focus if you would like to contribute.
+
+\* CodeClimate support has informed me that CodeClimate does not recognize DSLs. Consequently, the rating of the Canto class is not great and will get worse as I add more routes.
 
 === Versioning
 
