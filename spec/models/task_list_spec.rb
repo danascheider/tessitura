@@ -15,7 +15,7 @@ describe TaskList do
     describe '#to_hashes' do 
       it 'returns an array of its tasks as hashes' do 
         list = task_list.tasks.map {|task| task.to_hash }
-        expect(task_list.to_a).to eql list
+        expect(task_list.to_hashes).to eql list
       end
     end
 
