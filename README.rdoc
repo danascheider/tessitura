@@ -8,39 +8,39 @@ For the most up-to-date information about models and their attributes, see +/db/
 ==== Users
 
 Users can be regular users or admins. They are assumed to be opera singers and have the following attributes:
-- Username
-- Password
-- E-mail address
-- First name
-- Last name
-- Birthdate
-- Fach
-- City 
-- Country
-- Created At
-- Updated At
+* Username
+* Password
+* E-mail address
+* First name
+* Last name
+* Birthdate
+* Fach
+* City 
+* Country
+* Created At
+* Updated At
 
 Ultimately, user attributes will be used to provide the users with relevant information and recommendations.
 
 ==== Tasks
 
 Tasks belong to TaskLists, a less important model that is, in turn, owned by a User. Users can have multiple lists. Tasks currently have these attributes:
-- Title
-- Status:
-  - 'new'
-  - 'in_progress'
-  - 'blocking'
-  - 'complete'
-- Priority:
-  - 'urgent'
-  - 'high'
-  - 'normal'
-  - 'low'
-  - 'not_important'
-- Description
-- Deadline
-- Created At 
-- Updated At
+* Title
+* Status:
+  * 'new'
+  * 'in_progress'
+  * 'blocking'
+  * 'complete'
+* Priority:
+  * 'urgent'
+  * 'high'
+  * 'normal'
+  * 'low'
+  * 'not_important'
+* Description
+* Deadline
+* Created At 
+* Updated At
 
 Tasks are ordered by the +position+ column, which is configured with the +acts_like_list+ gem to re-order the list when a given task changes position.
 
