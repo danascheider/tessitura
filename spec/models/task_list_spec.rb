@@ -54,20 +54,18 @@ describe TaskList do
 
   describe 'creation' do 
     describe 'validations' do 
-      before(:each) do 
-        @new_list = FactoryGirl.build(:task_list, user_id: nil)
-      end
+      let(:new_list) { FactoryGirl.build(:task_list, user_id: nil) }
 
       context 'without a user' do 
         it 'is invalid' do 
-          expect(@new_list).not_to be_valid
+          expect(new_list).not_to be_valid
         end
       end
 
       context 'with a user' do 
         it 'is valid' do 
-          @new_list.user_id = task_list.user.id 
-          expect(@new_list).to be_valid
+          new_list.user_id = owner.id 
+          expect(new_list).to be_valid
         end
       end
     end
