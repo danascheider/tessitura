@@ -3,7 +3,7 @@
 Canto is a web-based to-do list and task management app for opera singers. Eventually, this app will provide a variety of functionality tailored to the specific needs of opera singers. This repo contains the code for the Sinatra API. The API uses ActiveRecord and SQLite3, which I will most likely trade for MySQL in production. The current plan is to implement a front end in Backbone.js, which will live in another repo. 
 
 === Models
-For the most up-to-date information about models and their attributes, see `/db/schema.rb`. 
+For the most up-to-date information about models and their attributes, see +/db/schema.rb+. 
 
 ==== Users
 
@@ -24,7 +24,7 @@ Ultimately, user attributes will be used to provide the users with relevant info
 
 ==== Tasks
 
-`Task`s belong to `TaskList`s, a less important model that is, in turn, owned by a `User`. Users can have multiple lists. `Task`s currently have these attributes:
+Tasks belong to TaskLists, a less important model that is, in turn, owned by a User. Users can have multiple lists. Tasks currently have these attributes:
 - Title
 - Status:
   - 'new'
@@ -42,7 +42,7 @@ Ultimately, user attributes will be used to provide the users with relevant info
 - Created At 
 - Updated At
 
-Tasks are ordered by the position column, which is configured with the acts_like_list gem to re-order the list when a given task changes position.
+Tasks are ordered by the +position+ column, which is configured with the +acts_like_list+ gem to re-order the list when a given task changes position.
 
 === Development Approach
 
