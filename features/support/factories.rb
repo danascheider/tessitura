@@ -14,6 +14,18 @@ FactoryGirl.define do
         create_list(:task, evaluator.tasks_count, task_list: list)
       end
     end
+
+    factory :task_list_with_complete_and_incomplete_tasks do 
+      ignore do 
+        complete_tasks_count 2
+        incomplete_tasks_count 3
+      end
+
+      after(:create) do |list, evaluator|
+        create_list(:task, evaluator.incomplete_tasks_count, task_list: list)
+        create_list(:complete_task, evaluator.complete_tasks_count, task_list: list)
+      end
+    end
   end
 
   factory :task do 

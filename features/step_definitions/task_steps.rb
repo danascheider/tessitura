@@ -1,4 +1,5 @@
 Transform(/^\d+$/) {|number| number.to_i }
+Transform(/^(\d+)([a-z]{2})$/) {|num, ordinal| num.to_s.to_i }
 
 Then(/^the new task should have the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
@@ -8,46 +9,29 @@ Then(/^the new task should have the following attributes:$/) do |attributes|
   end
 end
 
-Given(/^the (\d+)(?:[a-z]{2}) user's (\d+)(?:[a-z]{2}) task is complete$/) do |uid, task_id|
-  @user = User.find(uid)
-  @task = @user.tasks[task_id - 1]
+Given(/^the (\d+[a-z]{2}) task is complete$/) do |task_id|
+  @task = get_resource(Task, task_id)
   @task.update!(status: 'complete')
 end
 
 Then(/^no task should be created$/) do
-  @user.tasks.count.should == @user_task_count
+  expect(get_changed_user.tasks.count).to eql @user_task_count
 end
 
-Then(/^the (first|last) task should (not )?be deleted from the database$/) do |order, negation|
-  if negation 
-    expect(get_resource(Task, @task_id)).to eql @task
-  else
-    expect(get_resource(Task, @task_id)).to eql nil
-  end
-end
-
-Then(/^the task's title should (not )?be changed to "(.*)"$/) do |negation, title|
-  if negation
-    expect(get_changed_task.title).not_to eql(title) 
-  else
-    expect(get_changed_task.title).to eql(title)
-  end
+Then(/^the task's title should (not )?be changed to (.*)$/) do |neg, title|
+  expect(get_changed_task.title == title).to neg ? be_falsey : be_truthy
 end
 
 Then(/^the task's title should not be changed$/) do 
   expect(get_changed_task.title).to eql @task.title
 end
 
-Then(/^the task's status should be '(.*)'$/) do |status|
+Then(/^the task's status should be (.*)$/) do |status|
   expect(get_changed_task.status).to eql status
 end
 
-Then(/^the task should be marked complete$/) do 
-  expect(get_changed_task.status).to eql 'complete'
-end
-
-Then(/^the (\d+)(.{2}) task should be deleted from the database$/) do |id, ordinal|
-  expect(Task.exists?(id: id)).to be false
+Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
+  expect(Task.exists?(id: id)).to neg ? be_truthy : be_falsey
 end
 
 Then(/^the task's position should be changed to (\d+)$/) do |number|

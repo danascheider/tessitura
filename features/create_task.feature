@@ -1,51 +1,35 @@
-@users
+@tasks
 Feature: Create task
   In order to stay on top of my tasks
   As a user
   I need to create a new task
 
-  Scenario: User creates a valid task
-    When the client submits a POST request to /users/2/tasks with the 2nd user's credentials and:
+  Scenario Outline: Authorized user creates a valid task
+    When the client submits a POST request to /users/2/tasks with the <id> user's credentials and:
       """json
       { "title":"Water the plants" }
       """
-    Then a new task should be created on the 2nd user's task list 
+    Then a new task should be created on the 2nd user's task list
     And the new task should have the following attributes:
       | title            | status | priority |
       | Water the plants | new    | normal   |
     And the response should indicate the task was saved successfully
 
-  Scenario: User attempts to create an invalid task
-    When the client submits a POST request to users/2/tasks with the 2nd user's credentials and:
+    Examples:
+      | id  |
+      | 2nd | 
+      | 1st |
+
+  Scenario Outline: Unauthorized user attempts to create a task
+    When the client submits a POST request to /users/2/tasks with <type> credentials and:
       """json
-      { "status":"blocking" }
+      { "<attribute>":"<value>" }
       """
     Then no task should be created
-    And the response should indicate the task was not saved successfully
+    And the response should indicate <outcome>
 
-  Scenario: User attempts to create a task for someone else
-    When the client submits a POST request to /users/2/tasks with the 3rd user's credentials and:
-      """json
-      { "title":"Water the plants" }
-      """
-    Then no task should be created
-    And the response should indicate the request was unauthorized
-
-  Scenario: User attempts to create a task without authenticating
-    When the client submits a POST request to /users/2/tasks with no credentials and:
-      """json
-      { "title":"Water the plants" }
-      """
-    Then no task should be created
-    And the response should indicate the request was unauthorized
-
-  Scenario: Admin creates a task for a user
-    When the client submits a POST request to users/3/tasks with admin credentials and:
-      """json
-      { "title":"Water the plants" }
-      """
-    Then a new task should be created on the 3rd user's task list
-    And the new task should have the following attributes:
-      | title            | status | priority |
-      | Water the plants | new    | normal   |
-    And the response should indicate the task was saved successfully
+    Examples: 
+      | type           | attribute | value            | outcome                             |
+      | the 3rd user's | title     | Water the plants | the request was unauthorized        |
+      | no             | title     | Water the plants | the request was unauthorized        |
+      | the 2nd user's | status    | blocking         | the task was not saved successfully |

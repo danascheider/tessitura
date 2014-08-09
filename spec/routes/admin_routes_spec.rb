@@ -3,101 +3,52 @@ require 'spec_helper'
 describe Canto do 
   include Rack::Test::Methods
 
-  before(:each) do 
-    FactoryGirl.create_list(:user_with_task_lists, 2)
-    @admin, @user = User.first, User.last 
-    @admin.update(admin: true)
-  end
+  let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
+  let(:user) { FactoryGirl.create(:user_with_task_lists) }
+  let(:path) { '/admin/users' }
 
-  describe 'user list' do 
+  describe 'viewing all users' do 
+
+    let(:resource) { User.all.to_json }
+
     context 'with valid authorization' do 
-      before(:each) do 
-        authorize @admin.username, @admin.password
-        make_request('GET', '/admin/users')
-      end
-
-      it 'returns a list of all the users' do 
-        expect(response_body).to eql User.all.to_json
-      end
-
-      it 'returns status 200' do 
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized GET request' do 
+        let(:agent) { admin }
       end
     end
 
     context 'without valid authorization' do 
-      before(:each) do 
-        authorize @user.username, @user.password
-        make_request('GET', '/admin/users')
-      end
-
-      it 'doesn\'t return any data' do 
-        expect(response_body).to eql "Authorization Required\n"
-      end
-
-      it 'returns status 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized GET request' do 
+        let(:username) { user.username }
+        let(:password) { user.password }
       end
     end
 
     context 'with no authorization' do 
-      before(:each) do 
-        make_request('GET', '/admin/users')
-      end
-
-      it 'doesn\'t return any data' do 
-        expect(response_body).to eql "Authorization Required\n"
-      end
-
-      it 'returns status 401' do 
-        expect(response_status).to eql 401
-      end
+      it_behaves_like 'a GET request without credentials'
     end
   end
 
   describe 'creating an admin' do 
+
+    let(:model) { User }
+    let(:valid_attributes) { { "username"=>"abc123", "password"=>"abcde12345", "email"=>"a@example.com", "admin"=>true }.to_json }
+    let(:invalid_attributes) { { "admin"=>true }.to_json }
+
     context 'with valid authorization' do 
-      before(:each) do 
-        authorize @admin.username, @admin.password 
-      end
-
-      it 'creates a new user' do 
-        expect(User).to receive(:create!)
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-      end
-
-      it 'returns status 201' do 
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-        expect(response_status).to eql 201
+      it_behaves_like 'an authorized POST request' do 
+        let(:agent) { admin }
       end
     end
 
     context 'with invalid authorization' do 
-      before(:each) do 
-        authorize @user.username, @user.password
-      end
-
-      it 'doesn\'t create the user' do 
-        expect(User).not_to receive(:create!)
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-      end
-
-      it 'returns status 401' do 
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized POST request' do 
+        let(:agent) { user }
       end
     end
 
     context 'with no authorization' do 
-      it 'doesn\'t create the user' do 
-        expect(User).not_to receive(:create!) 
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-      end
-
-      it 'returns status 401' do 
-        make_request('POST', '/admin/users', { 'username' => 'abc123', 'password' => '12345abcde', 'email' => 'janedoe@example.com', 'admin' => true }.to_json)
-        expect(response_status).to eql 401
-      end
+      it_behaves_like 'a POST request without credentials'
     end
   end
 end

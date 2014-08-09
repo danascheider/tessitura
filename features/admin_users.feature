@@ -1,4 +1,3 @@
-@users
 Feature: Admin users
 
   Scenario Outline: Creating an admin user
@@ -12,11 +11,11 @@ Feature: Admin users
     And the response should return status <status>
 
     Examples:
-    | url          | type   | article | status |
-    | /users       | user   |    no   |  401   |
-    | /admin/users | admin  |    a    |  201   | 
-    | /admin/users | user   |    no   |  401   |
-    | /admin/users | no     |    no   |  401   |
+    | url          | type           | article | status |
+    | /users       | the 3rd user's |    no   |  401   |
+    | /admin/users | the 1st user's |    a    |  201   | 
+    | /admin/users | the 3rd user's |    no   |  401   |
+    | /admin/users | no             |    no   |  401   |
 
   Scenario Outline: Making a user an admin
     When the client submits a PUT request to /users/3 with <type> credentials and:
@@ -27,13 +26,13 @@ Feature: Admin users
     And the response should return status <status>
 
     Examples:
-      | type  | negation | status |
-      | admin |   yes    | 200    |
-      | user  |   not    | 401    |
-      | no    |   not    | 401    |
+      | type           | negation | status |
+      | the 1st user's |   yes    | 200    |
+      | the 3rd user's |   not    | 401    |
+      | no             |   not    | 401    |
 
   Scenario Outline: Deleting an admin account 
-    And there is a user with the following attributes:
+    Given there is a user with the following attributes:
       | id | email              | username | password  |
       | 4  | admin2@example.com | admin2   | admin2pwd |
     When the client submits a DELETE request to /users/4 with the <id> user's credentials

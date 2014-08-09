@@ -5,19 +5,16 @@ describe Canto::ErrorHandling do
 
   describe '::get_resource' do 
     context 'when the resource exists' do 
-      before(:each) do 
-        @user = FactoryGirl.create(:user)
-      end
-
+      let(:user) { FactoryGirl.create(:user) }
       context 'no block given' do 
         it 'returns the resource' do 
-          expect(get_resource(User, @user.id)).to eql @user
+          expect(get_resource(User, user.id)).to eql user
         end
       end
 
       context 'block given' do 
         it 'returns the output of the block' do 
-          expect(get_resource(User, @user.id) {|user| user.username.upcase! }).to eql @user.username.upcase!
+          expect(get_resource(User, user.id) {|user| user.username.upcase! }).to eql user.username.upcase!
         end
       end
     end
@@ -52,10 +49,8 @@ describe Canto::ErrorHandling do
   end
   
   describe '::create_resource' do 
-    before(:each) do 
-      FactoryGirl.create_list(:user_with_task_lists, 2)
-      @list_id = User.last.default_task_list.id
-    end
+    let(:users) { FactoryGirl.create_list(:user_with_task_lists, 2) }
+    let(:list_id) { users.last.default_task_list.id }
 
     context 'with valid attributes' do 
       context 'users' do 
@@ -72,11 +67,11 @@ describe Canto::ErrorHandling do
       context 'tasks' do 
         it 'creates a new task' do 
           expect(Task).to receive(:create!)
-          create_resource(Task, title: 'Water the lawn', task_list_id: @list_id)
+          create_resource(Task, title: 'Water the lawn', task_list_id: list_id)
         end
 
         it 'returns status 201' do 
-          expect(create_resource(Task, title: 'Water the lawn', task_list_id: @list_id)).to eql 201
+          expect(create_resource(Task, title: 'Water the lawn', task_list_id: list_id)).to eql 201
         end
       end
     end
@@ -117,31 +112,29 @@ describe Canto::ErrorHandling do
   end
 
   describe '::destroy_resource' do 
-    before(:each) do 
-      @user = FactoryGirl.create(:user_with_task_lists)
-      @task = @user.tasks.first
-    end
+    let(:user) { FactoryGirl.create(:user_with_task_lists) }
+    let(:task) { user.tasks.first }
 
     context 'when the resource exists' do 
       context 'users' do 
         it 'deletes the user' do 
           expect_any_instance_of(User).to receive(:destroy!)
-          destroy_resource(@user)
+          destroy_resource(user)
         end
 
         it 'returns 204' do 
-          expect(destroy_resource(@user)).to eql 204
+          expect(destroy_resource(user)).to eql 204
         end
       end
 
       context 'tasks' do 
         it 'deletes the task' do 
           expect_any_instance_of(Task).to receive(:destroy!)
-          destroy_resource(@task)
+          destroy_resource(task)
         end
 
         it 'returns 204' do 
-          expect(destroy_resource(@task)).to eql 204
+          expect(destroy_resource(task)).to eql 204
         end
       end
     end
@@ -154,30 +147,28 @@ describe Canto::ErrorHandling do
 
     context 'when the resource can\'t be destroyed' do 
       it 'returns status 403' do
-        @user.update!(admin: true) # Last admin can't be deleted
-        expect(destroy_resource(@user)).to eql 403
+        user.update!(admin: true) # Last admin can't be deleted
+        expect(destroy_resource(user)).to eql 403
       end
     end
   end
 
   describe '::update_resource' do 
-    before(:each) do 
-      @user = FactoryGirl.create(:user_with_task_lists)
-      @task = User.first.tasks.first
-    end
+    let(:user) { FactoryGirl.create(:user_with_task_lists) }
+    let(:task) { user.tasks.first }
 
     context 'with valid attributes' do 
       context 'users' do 
         it 'updates the user' do 
           expect_any_instance_of(User).to receive(:update!)
-          update_resource({ city: 'Honolulu' }, @user)
+          update_resource({ city: 'Honolulu' }, user)
         end
       end
 
       context 'tasks' do 
         it 'updates the task' do 
           expect_any_instance_of(Task).to receive(:update!)
-          update_resource({ priority: 'high' }, @task)
+          update_resource({ priority: 'high' }, task)
         end
       end
     end
@@ -185,13 +176,13 @@ describe Canto::ErrorHandling do
     context 'with invalid attributes' do 
       context 'users' do 
         it 'returns 422' do 
-          expect(update_resource({ username: nil }, @user)).to eql 422
+          expect(update_resource({ username: nil }, user)).to eql 422
         end
       end
 
       context 'tasks' do 
         it 'returns 422' do 
-          expect(update_resource({ task_list_id: nil }, @task)).to eql 422
+          expect(update_resource({ task_list_id: nil }, task)).to eql 422
         end
       end
     end
@@ -199,13 +190,13 @@ describe Canto::ErrorHandling do
     context 'with unknown attributes' do 
       context 'users' do 
         it 'returns 422' do 
-          expect(update_resource({ foo: 'bar' }, @user)).to eql 422
+          expect(update_resource({ foo: 'bar' }, user)).to eql 422
         end
       end
 
       context 'tasks' do 
         it 'returns 422' do 
-          expect(update_resource({ foo: 'bar' }, @task)).to eql 422
+          expect(update_resource({ foo: 'bar' }, task)).to eql 422
         end
       end
     end

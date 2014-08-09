@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe User do 
-  before(:each) do 
-    @admin = FactoryGirl.create(:admin, email: 'admin@example.com')
-  end
+  let(:admin) { FactoryGirl.create(:admin, email: 'admin@example.com') }
 
   describe 'attributes' do 
     it { is_expected.to respond_to(:first_name) }
@@ -40,8 +38,19 @@ describe User do
     end
 
     describe '#to_hash' do 
+      before(:each) do 
+        FactoryGirl.create(:task_list_with_tasks, user_id: @user.id)
+        @hash = { id:         @user.id,
+                  first_name: 'Jacob', 
+                  email:      @user.email,
+                  last_name:  'Smith', 
+                  country:    'USA',
+                  task_lists: @user.task_lists.map {|list| list.id }
+                }
+      end
+
       it 'returns a hash of its attributes' do 
-        expect(@user.to_hash).to eql(id: @user.id, first_name: 'Jacob', email: @user.email, last_name: 'Smith', country: 'USA')
+        expect(@user.to_hash).to eql @hash
       end
     end
 
@@ -72,37 +81,35 @@ describe User do
 
   describe 'creating users' do 
     context 'validations' do 
-      before(:each) do 
-        @user = FactoryGirl.build(:user, email: nil)
-      end
+      let(:user) { FactoryGirl.build(:user, email: nil) }
 
       it 'is invalid without an e-mail address' do 
-        expect(@user).not_to be_valid
+        expect(user).not_to be_valid
       end
 
       it 'is invalid with a duplicate e-mail address' do 
-        @user.email = 'admin@example.com'
-        expect(@user).not_to be_valid
+        @admin = admin
+        user.email = 'admin@example.com'
+        expect(user).not_to be_valid
       end
 
       it 'is invalid with an improper e-mail format' do 
-        @user.email = 'hello_world.com'
-        expect(@user).not_to be_valid
+        user.email = 'hello_world.com'
+        expect(user).not_to be_valid
       end
     end
 
     context 'when a regular user account is created' do 
       it 'is not an admin' do 
-        @user = FactoryGirl.create(:user, email: 'joeblow@example.com')
-        expect(@user).not_to be_admin
+        expect(FactoryGirl.create(:user)).not_to be_admin
       end
     end
   end
 
-  describe 'admin issues' do 
+  describe 'admin scope' do 
     before(:each) do 
       FactoryGirl.create_list(:user, 3)
-      @admins = [FactoryGirl.create_list(:admin, 2), @admin].flatten!
+      @admins = [FactoryGirl.create_list(:admin, 2), admin].flatten!
     end
 
     it 'includes all the admins' do 
@@ -113,12 +120,13 @@ describe User do
   describe 'admin deletion' do 
     context 'last admin' do 
       it 'doesn\'t destroy the last admin' do 
-        expect{ @admin.destroy! }.to raise_error(ActiveRecord::RecordNotDestroyed)
+        expect{ admin.destroy! }.to raise_error(ActiveRecord::RecordNotDestroyed)
       end
     end
 
     context 'not last admin' do 
       before(:each) do 
+        @admin_1 = admin
         @admin_2 = FactoryGirl.create(:admin)
       end
 

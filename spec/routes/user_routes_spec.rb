@@ -3,14 +3,14 @@ require 'spec_helper'
 describe Canto do 
   include Rack::Test::Methods
 
-  before(:each) do 
-    DatabaseCleaner.clean_with(:truncation)
-    FactoryGirl.create_list(:user_with_task_lists, 2)
-    @admin, @user = User.first, User.last
-    @admin.update(admin: true)
-  end
+  let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
+  let(:user) { FactoryGirl.create(:user_with_task_lists) }
+  let(:model) { User }
 
   describe 'POST' do 
+
+    let(:path) { '/users' }
+
     context 'with valid attributes' do 
       it 'calls the User create! method' do 
         expect(User).to receive(:create!)
@@ -37,95 +37,63 @@ describe Canto do
 
     context 'attempting to create an admin' do 
       context 'without providing credentials'
-        it 'doesn\'t create a user' do 
-          expect(User).not_to receive(:create!)
-          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-        end
-
-        it 'returns status 401' do 
-          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-          expect(response_status).to eql 401
-          puts last_response.body
+        it_behaves_like 'a POST request without credentials' do 
+          let(:valid_attributes) { { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json }
         end
       end
 
       context 'without providing admin credentials' do 
-        it 'doesn\'t create a user' do 
-          expect(User).not_to receive(:create!)
-          authorize @user.username, @user.password
-          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-        end
-
-        it 'returns status 401' do 
-          make_request('POST', '/users', { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json)
-          expect(response_status).to eql 401
+        it_behaves_like 'an unauthorized POST request' do 
+          let(:agent) { admin }
+          let(:valid_attributes) { { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json }
+        
       end
     end
   end
 
   describe 'GET' do 
+
+    let(:resource) { user.to_json }
+    let(:path) { "/users/#{user.id}" }
+
     context 'with user\'s credentials' do 
-      before(:each) do 
-        authorize @user.username, @user.password
-        make_request('GET', "/users/#{@user.id}")
-      end
-
-      it 'returns the user\'s profile' do 
-        expect(response_body).to eql @user.to_json
-      end
-
-      it 'returns status code 200' do 
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized GET request' do 
+        let(:agent) { user }
       end
     end
 
     context 'with admin credentials' do 
-      before(:each) do 
-        authorize @admin.username, @admin.password
-        make_request('GET', "/users/#{@user.id}")
+      it_behaves_like 'an authorized GET request' do 
+        let(:agent) { admin }
       end
+    end
 
-      it 'returns the user\'s profile' do 
-        expect(response_body).to eql @user.to_json
-      end
-
-      it 'returns status code 200' do 
-        expect(response_status).to eql 200
+    context 'with the wrong password' do 
+      it_behaves_like 'an unauthorized GET request' do 
+        let(:username) { user.username }
+        let(:password) { 'foobar' }
       end
     end
 
     context 'with invalid credentials' do 
-      before(:each) do
-        authorize @user.username, @user.password
-        make_request('GET', "/users/#{@admin.id}")
-      end
-
-      it 'doesn\'t return the user\'s profile' do 
-        expect(response_body).not_to include @admin.to_json
-      end
-
-      it 'returns status code 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized GET request' do 
+        let(:resource) { admin.to_json }
+        let(:username) { user.username }
+        let(:password) { user.password }
+        let(:path) { "/users/#{admin.id}" }
       end
     end
 
     context 'with no credentials' do 
-      before(:each) do 
-        make_request('GET', "/users/#{@user.id}")
-      end
-
-      it 'doesn\'t return the user\'s profile' do 
-        expect(response_body).not_to include @user.to_json
-      end
-
-      it 'returns status code 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'a GET request without credentials' do 
+        let(:resource) { user.to_json }
+        let(:path) { "/users/#{user.id}" }
       end
     end
 
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
-        authorize @admin.username, @admin.password
+        authorize_with admin
         make_request('GET', '/users/1000000')
         expect(response_status).to eql 404
       end
@@ -133,89 +101,48 @@ describe Canto do
   end
 
   describe 'PUT' do 
+    let(:path) { "/users/#{user.id}" }
+    let(:valid_attributes) { { 'fach' => 'lyric spinto' }.to_json }
+    let(:invalid_attributes) { { 'username' => nil }.to_json }
+
     context 'with user credentials' do 
-      before(:each) do 
-        authorize @user.username, @user.password
-      end
-
-      context 'with valid attributes' do 
-        it 'updates the profile' do 
-          expect_any_instance_of(User).to receive(:update!)
-          make_request('PUT', "/users/#{@user.id}", { 'fach' => 'soprano' }.to_json)
-        end
-
-        it 'returns status 200' do 
-          make_request('PUT', "/users/#{@user.id}", { 'fach' => 'soprano' }.to_json)
-        end
-      end
-
-      context 'with invalid attributes' do 
-        it 'returns status 422' do 
-          make_request('PUT', "/users/#{@user.id}", { 'email' => nil }.to_json)
-          expect(response_status).to eql 422
-        end
+      it_behaves_like 'an authorized PUT request' do 
+        let(:agent) { user }
       end
 
       context 'attempting to set admin status to true' do 
         it 'doesn\'t update the profile' do 
           expect_any_instance_of(User).not_to receive(:update!)
-          make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+          make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
         end
 
         it 'returns status 401' do 
-          make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
+          make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
           expect(response_status).to eql 401
         end
       end
     end
 
     context 'with admin credentials' do 
-      before(:each) do 
-        authorize @admin.username, @admin.password
-      end
-
-      it 'updates the profile' do 
-        expect_any_instance_of(User).to receive(:update!)
-        make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
-      end
-
-      it 'returns status 200' do 
-        make_request('PUT', "/users/#{@user.id}", { 'admin' => true }.to_json)
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized PUT request' do 
+        let(:agent) { admin }
       end
     end
 
     context 'with invalid credentials' do 
-      before(:each) do 
-        authorize @user.username, @user.password
-      end
-
-      it 'doesn\'t update the profile' do 
-        expect_any_instance_of(User).not_to receive(:update!)
-        make_request('PUT', "/users/#{@admin.id}", { 'country' => 'Kyrgyzstan' })
-      end
-
-      it 'returns status 401' do 
-        make_request('PUT', "/users/#{@admin.id}", { 'country' => 'Kyrgyzstan' })
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized POST request' do 
+        let(:agent) { user }
+        let(:path) { "/users/#{admin.id}" }
       end
     end
 
     context 'with no credentials' do 
-      it 'doesn\'t update the profile' do 
-        expect_any_instance_of(User).not_to receive(:update!)
-        make_request('PUT', "/users/#{@user.id}", { 'last_name' => 'Seligman' }.to_json)
-      end
-
-      it 'returns status 401' do 
-        make_request('PUT', "/users/#{@user.id}", { 'last_name' => 'Seligman' }.to_json)
-        expect(response_status).to eql 401
-      end 
+      it_behaves_like 'a PUT request without credentials'
     end
 
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
-        authorize @admin.username, @admin.password
+        authorize_with admin
         make_request('PUT', '/users/1000000', { "fach" => "lyric coloratura" }.to_json)
         expect(response_status).to eql 404
       end
@@ -223,72 +150,31 @@ describe Canto do
   end
 
   describe 'DELETE' do 
+    let(:path) { "/users/#{user.id}" }
+
     context 'with user credentials' do 
-      before(:each) do 
-        authorize @user.username, @user.password
-      end
-
-      it 'deletes the profile' do 
-        expect_any_instance_of(User).to receive(:destroy!)
-        make_request('DELETE', "/users/#{@user.id}")
-      end
-
-      it 'returns status 204' do 
-        make_request('DELETE', "/users/#{@user.id}")
-        expect(response_status).to eql 204
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { user }
+        let(:nonexistent_resource_path) { "/users/1000000"}
       end
     end
 
     context 'with admin credentials' do 
-      before(:each) do 
-        authorize @admin.username, @admin.password
-      end
-
-      it 'deletes the user' do 
-        expect_any_instance_of(User).to receive(:destroy!)
-        make_request('DELETE', "/users/#{@user.id}")
-      end
-
-      it 'returns status 204' do 
-        make_request('DELETE', "/users/#{@user.id}")
-        expect(response_status).to eql 204
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { admin }
+        let(:nonexistent_resource_path) { "/users/1000000"}
       end
     end
 
     context 'with invalid credentials' do 
-      before(:each) do 
-        authorize @user.username, @user.password
-      end
-
-      it 'doesn\'t delete the user' do 
-        expect_any_instance_of(User).not_to receive(:destroy!)
-        make_request('DELETE', "/users/#{@admin.id}")
-      end
-
-      it 'returns status 401' do 
-        make_request('DELETE', "/users/#{@admin.id}")
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized DELETE request' do 
+        let(:path) { "/users/#{admin.id}" }
+        let(:agent) { user }
       end
     end
 
     context 'with no credentials' do 
-      it 'doesn\'t delete the user' do 
-        expect_any_instance_of(User).not_to receive(:destroy!)
-        make_request('DELETE', "/users/#{@user.id}")
-      end
-
-      it 'returns status 401' do 
-        make_request('DELETE', "/users/#{@user.id}")
-        expect(response_status).to eql 401
-      end
-    end
-
-    context 'when the user doesn\'t exist' do 
-      it 'returns status 404' do 
-        authorize @admin.username, @admin.password
-        make_request('DELETE', '/users/1000000')
-        expect(response_status).to eql 404
-      end
+      it_behaves_like 'a DELETE request without credentials' 
     end
   end
 end

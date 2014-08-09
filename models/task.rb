@@ -22,8 +22,9 @@ class Task < ActiveRecord::Base
   # Public Class Methods
   # ====================
   def self.create!(opts)
-    position ||= opts[:status] == 'complete' ? self.get_position_on_create_complete : 1
-    super.insert_at(position)
+    position = get_position_on_create_complete if opts[:status] == 'complete'
+    super(opts)
+    self.last.set_list_position(position) if position
   end
 
   def self.first_complete
@@ -72,15 +73,11 @@ class Task < ActiveRecord::Base
 
   private
 
-    # Private Class Methods
-    # =====================
-
-    def self.get_position_on_create_complete
-      Task.complete.count ? Task.count - Task.complete.count + 1 : Task.count + 1
-    end
-
     # Private Instance Methods
     # ========================
+    def get_position_on_create_complete
+      Task.first_complete.position || Task.count + 1
+    end
 
     def get_position_on_update(opts)
       newly_complete?(opts) ? Task.count : (newly_incomplete?(opts) ? 1 : self.position)

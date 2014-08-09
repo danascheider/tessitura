@@ -44,6 +44,10 @@ class Sinatra::Application
         false
       end
     end
+
+    def validate_standard_create
+      @request_body.has_key?('admin') ? access_denied : return
+    end
   end
 
   helpers AuthorizationHelper

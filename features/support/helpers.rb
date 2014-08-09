@@ -1,3 +1,7 @@
+def authorize_with(user)
+  authorize user.username, user.password
+end
+
 # Debugging method for tasks
 def dump_tasks
   puts "TASKS:"
@@ -34,14 +38,6 @@ def get_resource(klass, id, &block)
   rescue
     nil
   end
-end
-
-def find_task(id)
-  Task.find(id)
-end
-
-def find_user(id)
-  User.find(id)
 end
 
 def response_status

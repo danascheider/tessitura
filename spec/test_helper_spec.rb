@@ -152,24 +152,4 @@ describe 'test helper methods' do
       end
     end
   end
-
-  describe '::find_task' do 
-    before(:each) do 
-      @task = FactoryGirl.create(:task)
-    end
-
-    it 'returns the task' do 
-      expect(find_task(@task.id)).to eql Task.find(@task.id)
-    end
-  end
-
-  describe '::find_user' do 
-    before(:each) do 
-      @user = FactoryGirl.create(:user)
-    end
-
-    it 'returns the user' do 
-      expect(find_user(@user.id)).to eql User.find(@user.id)
-    end
-  end
 end

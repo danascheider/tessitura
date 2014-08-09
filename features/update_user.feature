@@ -1,12 +1,17 @@
-@users
 Feature: Updating user profiles
-  Scenario: User updates their own profile with valid attributes
-    When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
+
+  Scenario Outline:
+    When the client submits a PUT request to /users/<id> with the <num1> user's credentials and:
       """json
-      { "fach":"lyric baritone" }
+      { "<attribute>":"<value>" } 
       """
-    Then the 3rd user's fach should be changed to 'lyric baritone'
+    Then the <num2> user's <attribute> should be changed to <value>
     And the response should indicate the user was updated successfully
+
+      Examples: 
+        | id | num1 | attribute | value          | num2 |
+        | 3  | 3rd  | fach      | lyric baritone | 3rd  |
+        | 3  | 1st  | fach      | heldentenor    | 3rd  | 
 
   Scenario: User updates their own profile with invalid attributes
     When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
@@ -16,48 +21,34 @@ Feature: Updating user profiles
     Then the user's username should not be changed
     And the response should indicate the user was not updated successfully
 
-  Scenario: Admin updates user's profile
-    When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
+  Scenario Outline: Unauthorized user tries to update a profile
+    When the client submits a PUT request to /users/3 with <type> credentials and:
       """json
-      { "fach":"heldentenor" }
+      { "<attribute>":"<value>" }
       """
-    Then the 3rd user's fach should be changed to 'heldentenor'
-    And the response should indicate the user was updated successfully
-
-  Scenario: User attempts to update someone else's profile
-    When the client submits a PUT request to /users/3 with the 2nd user's credentials and:
-      """json
-      { "first_name":"Jerry" }
-      """
-    Then the user's first_name should not be changed
+    Then the user's <attribute> should not be changed
     And the response should indicate the request was unauthorized
 
-  Scenario: User attempts to update profile without authenticating
-    When the client submits a PUT request to /users/3 with no credentials and:
-      """json
-      { "country":"Togo" }
-      """
-    Then the user's country should not be changed
-    And the response should indicate the request was unauthorized
+    Examples:
+      | type           | attribute  | value |
+      | the 2nd user's | first_name | Jerry |
+      | no             | country    | Togo  |
 
-  Scenario: User attempts to confer admin status on self
-    When the client submits a PUT request to /users/3 with the 3rd user's credentials and:
+  Scenario Outline: Changing a user's admin status
+    When the client submits a PUT request to /users/3 with the <id> user's credentials and:
       """json
       { "admin":true }
       """
-    Then the 3rd user should not be an admin
-    And the response should indicate the request was unauthorized
+    Then the 3rd user should <neg> be an admin
+    And the response should indicate <result>
 
-  Scenario: Admin confers admin status on user
-    When the client submits a PUT request to /users/3 with admin credentials and:
-      """json
-      { "admin":true }
-      """
-    Then the 3rd user should be an admin
-    And the response should indicate the user was updated successfully
+    Examples:
+      | id  | neg | result                            |
+      | 3rd | not | the request was unauthorized      |
+      | 1st | yes | the user was updated successfully |
 
   Scenario: Admin attempts to update a profile that doesn't exist
-    When the client submits a PUT request to /users/1000000 with admin credentials and
+    When the client submits a PUT request to /users/1000000 with the 1st user's credentials and:
       """json
       { "city":"Mexico City" }
       """

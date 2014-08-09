@@ -14,4 +14,6 @@ class TaskList < ActiveRecord::Base
   def to_a
     self.tasks.map {|task| task.to_hash }
   end
+
+  alias_method :to_hashes, :to_a
 end
