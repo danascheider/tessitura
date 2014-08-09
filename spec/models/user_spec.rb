@@ -106,7 +106,7 @@ describe User do
     end
   end
 
-  describe 'admin issues' do 
+  describe 'admin scope' do 
     before(:each) do 
       FactoryGirl.create_list(:user, 3)
       @admins = [FactoryGirl.create_list(:admin, 2), admin].flatten!

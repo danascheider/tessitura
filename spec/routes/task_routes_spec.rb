@@ -85,7 +85,7 @@ describe Canto do
 
       context 'when the task doesn\'t exist' do 
         it 'returns status 404' do 
-          authorize_with user
+          allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
           make_request('GET', '/tasks/1000000')
           expect(response_status).to eql 404
         end
@@ -161,7 +161,7 @@ describe Canto do
 
     context 'when the task doesn\'t exist' do 
       it 'returns status 404' do 
-        authorize_with admin
+        allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
         make_request('PUT', '/tasks/1000000', { 'status' => 'blocking' }.to_json)
         expect(response_status).to eql 404
       end
