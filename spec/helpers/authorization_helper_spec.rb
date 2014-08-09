@@ -170,7 +170,7 @@ describe Canto::AuthorizationHelper do
     end
 
     context 'when the user is authorized' do 
-      it 'allows access to the route'
+      pending 'getting over my utter aggravation with this module'
     end
   end
 
