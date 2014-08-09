@@ -5,7 +5,6 @@ class Canto < Sinatra::Application
   end
 
   get '/test/users/id' do 
-    @id = id
     protect(User)
     { 'message' => 'Hello world' }.to_json
   end
