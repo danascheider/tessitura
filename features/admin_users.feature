@@ -11,11 +11,11 @@ Feature: Admin users
     And the response should return status <status>
 
     Examples:
-    | url          | type           | article | status |
-    | /users       | the 3rd user's |    no   |  401   |
-    | /admin/users | the 1st user's |    a    |  201   | 
-    | /admin/users | the 3rd user's |    no   |  401   |
-    | /admin/users | no             |    no   |  401   |
+      | url          | type           | article | status |
+      | /users       | the 3rd user's |    no   |  401   |
+      | /admin/users | the 1st user's |    a    |  201   | 
+      | /admin/users | the 3rd user's |    no   |  401   |
+      | /admin/users | no             |    no   |  401   |
 
   Scenario Outline: Making a user an admin
     When the client submits a PUT request to /users/3 with <type> credentials and:
