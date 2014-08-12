@@ -30,6 +30,7 @@ group :test do
   gem 'rack-test',        '~> 0.6.2', require: 'rack/test'
   gem 'factory_girl',     '~> 4.4.0'
   gem 'database_cleaner', '~> 1.3.0'
+  gem 'serverspec',       '~> 2.0.0.beta4'
 end
 
 # Use require_all to clean up requires
