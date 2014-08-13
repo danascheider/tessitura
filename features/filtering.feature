@@ -22,3 +22,11 @@ Feature: Filtering resources
       """
     Then the JSON response should include tasks 10 and 11
     And the response should return status 200
+
+  Scenario: User filters their tasks for an intersection of multiple criteria
+    When the client submits a POST request to /filters with:
+      """json
+      {"user":2, "resource":"tasks", "filters":{"priority":"high", "status":"blocking"}}
+      """
+    When the JSON response should only include the 10th task
+    And the response should return status 200
