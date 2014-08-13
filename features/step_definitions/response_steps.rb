@@ -11,7 +11,7 @@ Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) 
 end
 
 Then(/^the JSON response should include tasks (\d+) and (\d+)$/) do |id1, id2|
-  arr = [get_resource(Task, id1), get_resource(Task, id2)]
+  arr = [get_resource(Task, id1).to_hash, get_resource(Task, id2).to_hash]
   response_body.should === arr.to_json
 end
 
