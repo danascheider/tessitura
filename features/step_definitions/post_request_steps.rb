@@ -14,6 +14,10 @@ When(/^the client submits a POST request to \/users\/(\d+)\/tasks with no creden
   make_request('POST', "/users/#{id}/tasks", string)
 end
 
+When(/^the client submits a POST request to \/filters with:$/) do |string|
+  make_request('POST', '/filters', string)
+end
+
 # Create User
 # ===========
 When(/^the client submits a POST request to \/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|

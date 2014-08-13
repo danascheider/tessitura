@@ -16,9 +16,9 @@ Feature: Filtering resources
     And the 2nd user is logged in
 
   Scenario: User filters their tasks for one criterion
-    When the client submits a POST request to /users/2/filters with:
+    When the client submits a POST request to /filters with:
       """json
-      {"resource":"tasks", "filters":{"priority":"high"}} 
+      {"user":2, "resource":"tasks", "filters":{"priority":"high"}} 
       """
     Then the response should include tasks 10 and 11
     And the response should return status 200
