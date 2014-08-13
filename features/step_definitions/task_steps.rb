@@ -4,6 +4,7 @@ Transform(/^(\d+)([a-z]{2})$/) {|num, ordinal| num.to_s.to_i }
 Then(/^the new task should have the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     hash.each do |key, value|
+      value = value.to_i if (/^\d+$/).match(value)
       expect(Task.last.to_hash).to include(key.intern => value)
     end
   end

@@ -63,7 +63,7 @@ class Canto < Sinatra::Application
   # =======
 
   post '/filters' do 
-    200
+    filter_resources(@request_body)
   end
 
   # Admin-Only Routes

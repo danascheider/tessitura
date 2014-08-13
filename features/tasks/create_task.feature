@@ -11,8 +11,8 @@ Feature: Create task
       """
     Then a new task should be created on the 2nd user's task list
     And the new task should have the following attributes:
-      | title            | status | priority |
-      | Water the plants | new    | normal   |
+      | title            | status | priority | owner_id |
+      | Water the plants | new    | normal   | 2        |
     And the response should indicate the task was saved successfully
 
     Examples:

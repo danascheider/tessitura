@@ -19,6 +19,8 @@ class Task < ActiveRecord::Base
             inclusion: { in: PRIORITY_OPTIONS,
                         message: "Invalid priority level: Priority must be one of #{PRIORITY_OPTIONS}" }
 
+  before_create :set_owner_id
+
   # Public Class Methods
   # ====================
   def self.create!(opts)
@@ -89,5 +91,9 @@ class Task < ActiveRecord::Base
 
     def newly_incomplete?(opts)
       self.status == 'complete' && opts[:status] != 'complete'
+    end
+
+    def set_owner_id
+      self.owner_id = TaskList.find(self.task_list_id).user.id
     end
 end
