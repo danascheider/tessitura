@@ -13,8 +13,7 @@ describe Canto::FilterHelper do
     end
 
     it 'returns the correct tasks' do 
-      array = [@task]
-      expect(get_filtered(@hash)).to eq array
+      expect(get_filtered(@hash)).to eq [@task]
     end
   end
 end
