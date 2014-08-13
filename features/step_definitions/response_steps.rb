@@ -10,6 +10,11 @@ Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) 
   response_body.should === get_resource(Task, id).to_json
 end
 
+Then(/^the JSON response should include tasks (\d+) and (\d+)$/) do |id1, id2|
+  arr = [get_resource(Task, id1), get_resource(Task, id2)]
+  response_body.should === arr.to_json
+end
+
 Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile information$/) do |id|
   expect(response_body).to eql User.find(id).to_json
 end
