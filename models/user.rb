@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
 
   def tasks
     user_tasks = []
-    self.task_lists.all.each {|list| user_tasks << list.tasks }
+    self.task_lists.find_each {|list| user_tasks << list.tasks }
     user_tasks.flatten!
   end
 
