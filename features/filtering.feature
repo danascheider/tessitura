@@ -28,5 +28,5 @@ Feature: Filtering resources
       """json
       {"user":2, "resource":"tasks", "filters":{"priority":"high", "status":"blocking"}}
       """
-    When the JSON response should only include the 10th task
+    When the JSON response should include task 10
     And the response should return status 200

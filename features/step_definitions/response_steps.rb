@@ -6,6 +6,10 @@ Then(/^the JSON response should include all the users$/) do
   expect(response_body).to eql User.all.to_json
 end
 
+Then(/^the JSON response should include task (\d+)$/) do |id|
+  response_body.should === [get_resource(Task, id).to_hash].to_json
+end
+
 Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |id|
   response_body.should === get_resource(Task, id).to_json
 end
