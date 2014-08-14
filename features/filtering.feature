@@ -28,5 +28,13 @@ Feature: Filtering resources
       """json
       {"user":2, "resource":"tasks", "filters":{"priority":"high", "status":"blocking"}}
       """
-    When the JSON response should include task 10
+    Then the JSON response should include task 10
+    And the response should return status 200
+
+  Scenario: User filters tasks for a union of multiple criteria
+    When the client submits a POST request to /filters with:
+      """json
+      {"user":2, "resource":"tasks", "filters":{"priority":["high","low"]}}
+      """
+    Then the JSON response should include the 2nd user's last 3 tasks
     And the response should return status 200

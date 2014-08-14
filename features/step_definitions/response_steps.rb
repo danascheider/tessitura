@@ -19,6 +19,11 @@ Then(/^the JSON response should include tasks (\d+) and (\d+)$/) do |id1, id2|
   response_body.should === arr.to_json
 end
 
+Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's last (\d+) tasks$/) do |id, qty|
+  arr = Task.where(owner_id: id).last(qty).to_a.map! {|task| task.to_hash }
+  response_body.should === arr.to_json
+end
+
 Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile information$/) do |id|
   expect(response_body).to eql User.find(id).to_json
 end
