@@ -8,13 +8,7 @@ describe Canto::FilterHelper do
   before(:each) do 
     @list, @task = user.task_lists.first, user.task_lists.first.tasks.first
     @task.update!(priority: 'high')
-    @hash = {'user' => @list.owner.id, 'resource' => 'tasks', 'filters' => {'priority' => 'high'}}
-  end
-
-  describe '::get_filtered' do 
-    it 'returns the correct tasks' do 
-      expect(get_filtered(@hash)).to eq [@task]
-    end
+    @hash = {user: @list.owner.id, resource: 'tasks', filters: {'priority' => 'high'}}
   end
 
   describe '::filter_resources' do 
@@ -22,5 +16,9 @@ describe Canto::FilterHelper do
       expected = [ @task.to_hash ].to_json
       expect(filter_resources(@hash)).to eql expected
     end
+  end
+
+  describe Canto::FilterHelper::TaskFilter do 
+    
   end
 end
