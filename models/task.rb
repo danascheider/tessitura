@@ -59,6 +59,7 @@ class Task < ActiveRecord::Base
       title: self.title, 
       priority: self.priority,
       status: self.status, 
+      deadline: self.deadline,
       description: self.description,
       owner_id: self.user.id,
       task_list_id: self.task_list.id,
