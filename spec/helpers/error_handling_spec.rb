@@ -37,7 +37,7 @@ describe Canto::ErrorHandling do
   describe '::parse_json' do 
     context 'when a valid JSON object is given' do 
       it 'returns a hash' do 
-        expect(parse_json({"foo"=>"bar"}.to_json)).to eql({ 'foo' => 'bar' })
+        expect(parse_json({"foo"=>"bar"}.to_json)).to eql({ :foo => 'bar' })
       end
     end
 
