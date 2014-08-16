@@ -102,8 +102,8 @@ describe Canto do
 
   describe 'PUT' do 
     let(:path) { "/users/#{user.id}" }
-    let(:valid_attributes) { { 'fach' => 'lyric spinto' }.to_json }
-    let(:invalid_attributes) { { 'username' => nil }.to_json }
+    let(:valid_attributes) { { fach: 'lyric spinto' }.to_json }
+    let(:invalid_attributes) { { username: nil }.to_json }
 
     context 'with user credentials' do 
       it_behaves_like 'an authorized PUT request' do 
