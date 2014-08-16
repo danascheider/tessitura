@@ -12,9 +12,19 @@ describe Canto::FilterHelper do
   end
 
   describe '::filter_resources' do 
+    before(:each) do 
+      allow(Canto::FilterHelper::TaskFilter).to receive(:new).and_return(filter = double('task_filter').as_null_object)
+      allow(filter).to receive(:to_a).and_return(arr = double('array'))
+      allow(arr).to receive(:map).and_return [@task.to_hash]
+    end
+
+    it 'creates a TaskFilter' do 
+      filter_resources(@hash)
+      expect(Canto::FilterHelper::TaskFilter).to have_received(:new)
+    end
+
     it 'returns relevant resources as JSON' do 
-      expected = [ @task.to_hash ].to_json
-      expect(filter_resources(@hash)).to eql expected
+      expect(filter_resources(@hash)).to eql [@task.to_hash].to_json
     end
   end
 
