@@ -6,6 +6,7 @@ describe Canto::ErrorHandling do
   describe '::get_resource' do 
     context 'when the resource exists' do 
       let(:user) { FactoryGirl.create(:user) }
+      
       context 'no block given' do 
         it 'returns the resource' do 
           expect(get_resource(User, user.id)).to eql user

@@ -7,7 +7,7 @@ describe Canto::FilterHelper do
 
   before(:each) do 
     @list, @task = user.task_lists.first, user.task_lists.first.tasks.first
-    @task.update!(priority: 'high', deadline: Date.new(2014,8,27))
+    @task.update!(priority: 'high', deadline: Time.utc(2014,8,27))
     @hash = {user: @list.owner.id, resource: 'tasks', filters: {'priority' => 'high'}}
   end
 
@@ -30,10 +30,9 @@ describe Canto::FilterHelper do
 
   describe Canto::FilterHelper::TaskFilter do 
     describe '#filter' do 
-      let(:filter) { Canto::FilterHelper::TaskFilter.new(conditions, @list.owner_id) }
-
       context 'with simple categorical conditions' do 
         let(:conditions) { { priority: 'high' } }
+        let(:filter) { Canto::FilterHelper::TaskFilter.new(conditions, @list.owner_id) }
 
         it 'returns high-priority task' do 
           expect(filter.filter.to_a).to eql [@task]
@@ -45,7 +44,8 @@ describe Canto::FilterHelper do
       end
 
       context 'with simple time conditions' do 
-        let(:conditions) { { deadline: Date.new(2014,8,27) } }
+        let(:conditions) { { deadline: { on: { year: 2014, month: 8, day: 27 } } } }
+        let(:filter) { Canto::FilterHelper::TaskFilter.new(conditions, @list.owner_id) }
 
         it 'returns the task with the given deadline' do 
           expect(filter.filter.to_a).to eql [@task]
@@ -53,6 +53,16 @@ describe Canto::FilterHelper do
 
         it 'returns an ActiveRecord relation' do 
           expect(filter.filter).to be_an(ActiveRecord::Relation)
+        end
+      end
+
+      context 'with one-sided time range conditions' do 
+        let(:tasks) { (1..3).each {|i| FactoryGirl.create(:task, deadline: Date.new(2014,9,i)) } }
+        let(:conditions) { { deadline: { before: { year: 2014, month: 8, day: 27 } } } }
+        let(:filter) { Canto::FilterHelper::TaskFilter.new(conditions, @list.owner_id) }
+
+        it 'excludes the tasks with later deadlines' do 
+          expect(filter.filter.to_a).not_to include(Task.where(deadline: Date.new(2014,9,2)..Date.new(2014,9,3)))
         end
       end
     end

@@ -2,37 +2,50 @@ class Sinatra::Application
   module FilterHelper
     require 'date' 
 
-    TASK_ATTRIBUTES = [ :title, :status, :priority, :created_at, :updated_at, :task_list_id, :position, :deadline, :description ]
+    TASK_ATTRIBUTES = [ :created_at, :deadline, :description, :position, :priority, :status, :task_list_id, :title, :updated_at ]
+    RANGE_OPTIONS   = [ :after, :before, :on ]
+    TIME_FIELDS     = [ :created_at, :deadline, :updated_at ]
 
     class TaskFilter
       attr_accessor :conditions
 
       def initialize(conditions, owner_id)
-        @conditions = conditions.delete_if {|key, val| !TASK_ATTRIBUTES.include?(key) }
+        @conditions = conditions.reject {|key, val| !TASK_ATTRIBUTES.include?(key) }
         @conditions[:owner_id] = owner_id
       end
 
       def filter
-        parse_conditions!
-        Task.where(@conditions)
+        Task.where(parse_conditions!)
       end
 
       protected
         def parse_conditions!
           @conditions.each do |key, value|
-            @conditions[key] = parse_time(value) if value.is_a?(Hash) && value.has_key?(:day)
+            if TIME_FIELDS.include?(key)
+              if value.length == 1
+                if value.has_key? :on
+                  @conditions[key] = parse_datetime(value[:on])
+                elsif value.has_key? :after
+                  @conditions[key] = ["#{key} > ?", parse_datetime(value[:after])]
+                else
+                  @conditions[key] = ["#{key} < ?", parse_datetime(value[:before])]
+                end
+              else
+                @conditions[key] = (parse_datetime(value[:after])..parse_datetime(value[:before]))
+              end
+            end
           end
-          @conditions
         end
 
-        def parse_time(time)
-          Date.new(time[:year], time[:month], time[:day])
+        def parse_datetime(date)
+          year, month, day = date[:year], date[:month], date[:day]
+          Time.utc(year, month, day)
         end
     end
 
     def filter_resources(hash)
-      @filter = TaskFilter.new(hash[:filters], hash[:user])
-      (@filter.filter.to_a.map {|task| task.to_hash }).to_json
+      tasks = TaskFilter.new(hash[:filters], hash[:user]).filter.to_a.map {|task| task.to_hash } 
+      tasks.to_json
     end
   end
 

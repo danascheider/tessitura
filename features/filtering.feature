@@ -39,10 +39,10 @@ Feature: Filtering resources
     Then the JSON response should include the 2nd user's last 3 tasks
     And the response should return status 200
 
-  Scenario: User filters for date range
+  Scenario: User filters for date
     When the client submits a POST request to /filters with:
       """json
-      {"user":2,"resource":"tasks", "filters":{"deadline":"2014-01-01"}}
+      {"user":2,"resource":"tasks", "filters":{"deadline":{"on":{"year":2014, "month":8, "day":27}}}}
       """
     Then the JSON response should include task 10
     And the response should return status 200
