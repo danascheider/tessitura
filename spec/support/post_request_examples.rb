@@ -3,10 +3,9 @@ shared_examples 'an authorized POST request' do
     authorize_with agent
   end
 
-  context 'with valid attributes' do 
-
+  context 'with valid attributes' do
     it 'creates a resource' do 
-      expect(model).to receive(:create!)
+      expect(model).to receive(:create!).with(parse_json(valid_attributes))
       make_request('POST', path, valid_attributes)
     end
 

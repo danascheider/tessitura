@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe Canto do 
   include Rack::Test::Methods
+  include Canto::ErrorHandling
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
   let(:model) { User }
 
   describe 'POST' do 
-
     let(:path) { '/users' }
 
     context 'with valid attributes' do 
@@ -38,15 +38,14 @@ describe Canto do
     context 'attempting to create an admin' do 
       context 'without providing credentials'
         it_behaves_like 'a POST request without credentials' do 
-          let(:valid_attributes) { { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json }
+          let(:valid_attributes) { { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json }
         end
       end
 
       context 'without providing admin credentials' do 
         it_behaves_like 'an unauthorized POST request' do 
           let(:agent) { admin }
-          let(:valid_attributes) { { 'username' => 'someuser', 'password' => 'someuserpasswd', 'email' => 'peterpiper@example.com', 'admin' => true }.to_json }
-        
+          let(:valid_attributes) { { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json }
       end
     end
   end

@@ -95,14 +95,13 @@ describe Canto do
   end
 
   describe 'POST' do 
-
     let(:path) { "/users/#{user.id}/tasks"}
-    let(:valid_attributes) { { title: 'Water the garden' }.to_json }
+    let(:valid_attributes) { { title: 'Water the garden', task_list_id: user.default_task_list.id }.to_json }
     let(:invalid_attributes) { { status: 'foobar' }.to_json }
 
     context 'with user authorization' do 
       it_behaves_like 'an authorized POST request' do 
-        let(:agent) { user }
+        let(:agent) { user } 
       end
     end
 
@@ -170,7 +169,6 @@ describe Canto do
   end
 
   describe 'DELETE' do 
-
     let(:task) { user.tasks.first }
     let(:path) { "/tasks/#{task.id}" }
 
