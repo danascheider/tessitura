@@ -1,7 +1,8 @@
 class Task < ActiveRecord::Base
+  include RankedModel
 
   belongs_to :task_list, foreign_key: :task_list_id
-  acts_as_list scope: :task_list, add_new_at: :top
+  ranks :position, with_same: :task_list_id
 
   STATUS_OPTIONS = ['new', 'in_progress', 'blocking', 'complete']
   PRIORITY_OPTIONS = ['urgent', 'high', 'normal', 'low', 'not_important']
@@ -20,24 +21,23 @@ class Task < ActiveRecord::Base
                         message: "Invalid priority level: Priority must be one of #{PRIORITY_OPTIONS}" }
 
   before_create :set_owner_id
+  before_save   :set_position
 
   # Public Class Methods
   # ====================
   def self.create!(opts)
-    position = get_position_on_create_complete if opts[:status] == 'complete'
     super(opts)
-    self.last.set_list_position(position) if position
   end
 
   def self.first_complete
-    self.complete.order(:position).first || Task.count
+    self.complete.rank(:position).first || self.count - 1
   end
 
   # Public Instance Methods
   # =======================
 
   def update!(opts)
-    opts[:position] ||= get_position_on_update(opts)
+    opts[:position] ||= get_position_on_update(opts) if status_changed?(opts)
     super
   end
 
@@ -51,6 +51,10 @@ class Task < ActiveRecord::Base
 
   def owner_id
     self.user.id
+  end
+
+  def siblings
+    Task.where(task_list_id: self.owner.task_lists.pluck(:id))
   end
 
   def to_hash
@@ -78,23 +82,19 @@ class Task < ActiveRecord::Base
 
     # Private Instance Methods
     # ========================
-    def get_position_on_create_complete
-      Task.first_complete.position || Task.count + 1
+    def set_position
+      self.position = self.complete? ? self.siblings.first_complete : 0
     end
 
     def get_position_on_update(opts)
-      newly_complete?(opts) ? Task.count : (newly_incomplete?(opts) ? 1 : self.position)
-    end
-
-    def newly_complete?(opts)
-      opts[:status] == 'complete' && self.status != 'complete'
-    end
-
-    def newly_incomplete?(opts)
-      self.status == 'complete' && opts[:status] != 'complete'
+      opts[:status] == 'complete' ? self.owner.tasks.count : 0
     end
 
     def set_owner_id
       self.owner_id = TaskList.find(self.task_list_id).user.id
+    end
+
+    def status_changed?(opts)
+      opts[:status] && opts[:status] != self.status
     end
 end

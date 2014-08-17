@@ -21,27 +21,6 @@ describe Task do
     it { is_expected.to respond_to(:owner) }
   end
 
-  describe 'acts_as_list methods' do 
-    it { is_expected.to respond_to(:insert_at) }
-    it { is_expected.to respond_to(:move_lower) }
-    it { is_expected.to respond_to(:move_higher) }
-    it { is_expected.to respond_to(:move_to_bottom) }
-    it { is_expected.to respond_to(:move_to_top) }
-    it { is_expected.to respond_to(:remove_from_list) }
-    it { is_expected.to respond_to(:increment_position) }
-    it { is_expected.to respond_to(:decrement_position) }
-    it { is_expected.to respond_to(:set_list_position) }
-    it { is_expected.to respond_to(:first?) }
-    it { is_expected.to respond_to(:last?) }
-    it { is_expected.to respond_to(:in_list?) }
-    it { is_expected.to respond_to(:not_in_list?) }
-    it { is_expected.to respond_to(:default_position?) }
-    it { is_expected.to respond_to(:higher_item) }
-    it { is_expected.to respond_to(:lower_item) }
-    it { is_expected.to respond_to(:higher_items) }
-    it { is_expected.to respond_to(:lower_items) }
-  end
-
   describe 'public methods' do 
     let(:task_list) { FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks) }
     let(:complete_task) { task_list.tasks.complete.first }
@@ -151,14 +130,13 @@ describe Task do
 
     context 'when status is set to complete' do 
       it 'instantiates as the first complete task' do 
-        pending 'Figure out list issues'
-        expect(list.tasks.create(title: 'Foo', status: 'complete').position).to eql 5
+        expect(list.tasks.create(title: 'Foo', status: 'complete').position).to eql 4
       end
     end
 
     context 'when status is not set to complete' do 
-      it 'instantiates at position 1' do 
-        expect(new_task.position).to eql 1
+      it 'instantiates at position 0' do 
+        expect(new_task.position).to eql 0
       end
     end
   end

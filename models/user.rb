@@ -17,6 +17,14 @@ class User < ActiveRecord::Base
     self.task_lists.first || TaskList.create(title: 'Default List', user_id: self.id)
   end
 
+  def first_complete_task
+    begin
+      self.tasks.complete.order(:position).first 
+    rescue NoMethodError
+      nil
+    end
+  end
+
   def name
     "#{self.first_name} #{self.last_name}"
   end
@@ -41,9 +49,8 @@ class User < ActiveRecord::Base
   end
 
   def tasks
-    user_tasks = []
-    self.task_lists.find_each {|list| user_tasks << list.tasks }
-    user_tasks.flatten!
+    lists = self.task_lists.map {|list| list.id }
+    Task.where(task_list_id: lists)
   end
 
   private 

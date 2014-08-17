@@ -1,6 +1,6 @@
 require 'sinatra'
 require 'sinatra/activerecord'
-require 'acts_as_list'
+require 'ranked-model'
 require 'json'
 require 'require_all'
 require_all 'models'

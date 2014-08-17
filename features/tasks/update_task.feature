@@ -42,8 +42,8 @@ Feature: Update task
 
     Examples:
       | url      | value       | pos |
-      | /tasks/1 | complete    | 3   |
-      | /tasks/3 | in_progress | 1   |
+      | /tasks/1 | complete    | 2   |
+      | /tasks/3 | in_progress | 0   |
 
   Scenario: User attempts to update a task that doesn't exist
     When the client submits a PUT request to /tasks/1000000 with the 1st user's credentials and:
