@@ -19,6 +19,8 @@ class Task < ActiveRecord::Base
             inclusion: { in: PRIORITY_OPTIONS,
                         message: "Invalid priority level: Priority must be one of #{PRIORITY_OPTIONS}" }
 
+  before_create :set_owner_id
+
   # Public Class Methods
   # ====================
   def self.create!(opts)
@@ -57,12 +59,13 @@ class Task < ActiveRecord::Base
       title: self.title, 
       priority: self.priority,
       status: self.status, 
+      deadline: self.deadline,
       description: self.description,
       owner_id: self.user.id,
       task_list_id: self.task_list.id,
       created_at: self.created_at,
       updated_at: self.updated_at
-    }
+    }.delete_if {|key, value| value.nil? }
   end
 
   def user
@@ -89,5 +92,9 @@ class Task < ActiveRecord::Base
 
     def newly_incomplete?(opts)
       self.status == 'complete' && opts[:status] != 'complete'
+    end
+
+    def set_owner_id
+      self.owner_id = TaskList.find(self.task_list_id).user.id
     end
 end

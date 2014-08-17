@@ -24,7 +24,7 @@ class Sinatra::Application
 
     def parse_json(object)
       begin
-        JSON.parse object
+        JSON.parse object, symbolize_names: true
       rescue JSON::ParserError
         nil
       end

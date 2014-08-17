@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe Canto do 
   include Rack::Test::Methods
+  include Canto::ErrorHandling
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
   let(:path) { '/admin/users' }
 
   describe 'viewing all users' do 
-
     let(:resource) { User.all.to_json }
 
     context 'with valid authorization' do 
@@ -30,7 +30,6 @@ describe Canto do
   end
 
   describe 'creating an admin' do 
-
     let(:model) { User }
     let(:valid_attributes) { { "username"=>"abc123", "password"=>"abcde12345", "email"=>"a@example.com", "admin"=>true }.to_json }
     let(:invalid_attributes) { { "admin"=>true }.to_json }

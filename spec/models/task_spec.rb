@@ -10,6 +10,7 @@ describe Task do
     it { is_expected.to respond_to(:deadline) }
     it { is_expected.to respond_to(:description) }
     it { is_expected.to respond_to(:priority) }
+    it { is_expected.to respond_to(:owner_id) }
   end
 
   describe 'public instance methods' do 
@@ -17,7 +18,6 @@ describe Task do
     it { is_expected.to respond_to(:incomplete?) }
     it { is_expected.to respond_to(:to_hash) } # to integrate with Sinatra-Backbone
     it { is_expected.to respond_to(:user) }
-    it { is_expected.to respond_to(:owner_id) }
     it { is_expected.to respond_to(:owner) }
   end
 
@@ -91,12 +91,6 @@ describe Task do
         expect(task.owner).to eql task.user
       end
     end
-
-    describe '#owner_id' do
-      it 'returns its user\'s ID' do 
-        expect(task.owner_id).to eql task.user.id
-      end
-    end
   end
 
   describe 'validations' do 
@@ -149,6 +143,10 @@ describe Task do
 
     it 'sets priority to \'normal\'' do 
       expect(new_task.priority).to eql 'normal'
+    end
+
+    it 'assigns an owner id' do 
+      expect(new_task.owner_id).to eql list.user.id
     end
 
     context 'when status is set to complete' do 

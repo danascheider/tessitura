@@ -34,7 +34,7 @@ class Sinatra::Application
     end
 
     def setting_admin?
-      @request_body && @request_body.has_key?('admin')
+      @request_body && @request_body.has_key?(:admin)
     end
 
     def valid_credentials?
@@ -46,7 +46,7 @@ class Sinatra::Application
     end
 
     def validate_standard_create
-      @request_body.has_key?('admin') ? access_denied : return
+      @request_body.has_key?(:admin) ? access_denied : return
     end
   end
 

@@ -6,6 +6,7 @@ describe Canto::ErrorHandling do
   describe '::get_resource' do 
     context 'when the resource exists' do 
       let(:user) { FactoryGirl.create(:user) }
+      
       context 'no block given' do 
         it 'returns the resource' do 
           expect(get_resource(User, user.id)).to eql user
@@ -37,7 +38,7 @@ describe Canto::ErrorHandling do
   describe '::parse_json' do 
     context 'when a valid JSON object is given' do 
       it 'returns a hash' do 
-        expect(parse_json({"foo"=>"bar"}.to_json)).to eql({ 'foo' => 'bar' })
+        expect(parse_json({"foo"=>"bar"}.to_json)).to eql({ :foo => 'bar' })
       end
     end
 

@@ -59,6 +59,13 @@ class Canto < Sinatra::Application
     return_json(@resource.tasks)
   end
 
+  # Filters
+  # =======
+
+  post '/filters' do 
+    filter_resources(@request_body)
+  end
+
   # Admin-Only Routes
   # =================
 
