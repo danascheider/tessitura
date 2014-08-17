@@ -177,7 +177,7 @@ describe Canto::AuthorizationHelper do
   describe '::setting_admin' do 
     context 'when the response body has "admin" key' do 
       it 'returns true' do 
-        @request_body = { 'admin' => true }
+        @request_body = { admin: true }
         expect(setting_admin?).to be_truthy
       end
     end
