@@ -9,10 +9,10 @@ Feature: Filtering resources
 
   Background:
     Given the 2nd user has the following tasks:
-      | id | title     | status   | priority |
-      | 10 | My Task 4 | blocking | high     |
-      | 11 | My Task 5 | new      | high     |
-      | 12 | My Task 6 | complete | low      |
+      | id | title     | status   | priority | deadline   |
+      | 10 | My Task 4 | blocking | high     | 2014-08-27 |
+      | 11 | My Task 5 | new      | high     | 2014-08-19 |
+      | 12 | My Task 6 | complete | low      | 2014-11-17 |
     And the 2nd user is logged in
 
   Scenario: User filters their tasks for one criterion
@@ -31,10 +31,18 @@ Feature: Filtering resources
     Then the JSON response should include task 10
     And the response should return status 200
 
-  Scenario: User filters tasks for a union of multiple criteria
+  Scenario: User filters tasks for a subset
     When the client submits a POST request to /filters with:
       """json
       {"user":2, "resource":"tasks", "filters":{"priority":["high","low"]}}
       """
     Then the JSON response should include the 2nd user's last 3 tasks
+    And the response should return status 200
+
+  Scenario: User filters for date range
+    When the client submits a POST request to /filters with:
+      """json
+      {"user":2,"resource":"tasks", "filters":{"deadline":"2014-01-01"}}
+      """
+    Then the JSON response should include task 10
     And the response should return status 200

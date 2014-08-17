@@ -7,7 +7,7 @@ describe Canto::FilterHelper do
 
   before(:each) do 
     @list, @task = user.task_lists.first, user.task_lists.first.tasks.first
-    @task.update!(priority: 'high')
+    @task.update!(priority: 'high', deadline: Date.new(2014,8,27))
     @hash = {user: @list.owner.id, resource: 'tasks', filters: {'priority' => 'high'}}
   end
 
@@ -29,6 +29,32 @@ describe Canto::FilterHelper do
   end
 
   describe Canto::FilterHelper::TaskFilter do 
-    
+    describe '#filter' do 
+      let(:filter) { Canto::FilterHelper::TaskFilter.new(conditions, @list.owner_id) }
+
+      context 'with simple categorical conditions' do 
+        let(:conditions) { { priority: 'high' } }
+
+        it 'returns high-priority task' do 
+          expect(filter.filter.to_a).to eql [@task]
+        end
+
+        it 'returns an ActiveRecord relation' do 
+          expect(filter.filter).to be_an(ActiveRecord::Relation)
+        end
+      end
+
+      context 'with simple time conditions' do 
+        let(:conditions) { { deadline: Date.new(2014,8,27) } }
+
+        it 'returns the task with the given deadline' do 
+          expect(filter.filter.to_a).to eql [@task]
+        end
+
+        it 'returns an ActiveRecord relation' do 
+          expect(filter.filter).to be_an(ActiveRecord::Relation)
+        end
+      end
+    end
   end
 end
