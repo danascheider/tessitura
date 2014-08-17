@@ -15,9 +15,7 @@ describe User do
   end
 
   describe 'instance methods' do
-    before(:each) do 
-      @user = FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith')
-    end
+    let(:user) { FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith') }
 
     it { is_expected.to respond_to(:admin?) }
 
@@ -27,47 +25,46 @@ describe User do
 
     describe '#tasks' do 
       before(:each) do 
-        2.times { FactoryGirl.create(:task_list_with_tasks, user_id: @user.id) }
+        2.times { FactoryGirl.create(:task_list_with_tasks, user_id: user.id) }
       end
 
       it 'returns all its tasks' do 
-        tasks = []
-        @user.task_lists.each {|list| tasks << list.tasks }
-        expect(@user.tasks).to eql tasks.flatten
+        tasks = user.task_lists.map {|list| list.tasks }
+        expect(user.tasks).to eql tasks.flatten
       end
     end
 
     describe '#to_hash' do 
       before(:each) do 
-        FactoryGirl.create(:task_list_with_tasks, user_id: @user.id)
-        @hash = { id:         @user.id,
+        FactoryGirl.create(:task_list_with_tasks, user_id: user.id)
+        @hash = { id:         user.id,
                   first_name: 'Jacob', 
-                  email:      @user.email,
+                  email:      user.email,
                   last_name:  'Smith', 
                   country:    'USA',
-                  task_lists: @user.task_lists.map {|list| list.id }
+                  task_lists: user.task_lists.map {|list| list.id }
                 }
       end
 
       it 'returns a hash of its attributes' do 
-        expect(@user.to_hash).to eql @hash
+        expect(user.to_hash).to eql @hash
       end
     end
 
     describe '#name' do 
       it 'concatenates first and last name' do 
-        expect(@user.name).to eql 'Jacob Smith'
+        expect(user.name).to eql 'Jacob Smith'
       end
     end
 
     describe '#default_task_list' do 
       it 'creates a task list if there isn\'t one' do 
-        expect { @user.default_task_list }.to change { @user.task_lists.count }.by(1)
+        expect { user.default_task_list }.to change { user.task_lists.count }.by(1)
       end
 
       it 'returns its first task list' do 
-        3.times { FactoryGirl.create(:task_list, user_id: @user.id) }
-        expect(@user.default_task_list).to eql @user.task_lists.first
+        3.times { FactoryGirl.create(:task_list, user_id: user.id) }
+        expect(user.default_task_list).to eql user.task_lists.first
       end
     end
 
