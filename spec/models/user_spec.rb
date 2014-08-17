@@ -28,9 +28,13 @@ describe User do
         2.times { FactoryGirl.create(:task_list_with_tasks, user_id: user.id) }
       end
 
+      it 'returns an ActiveRecord::Relation' do 
+        expect(user.tasks).to be_an(ActiveRecord::Relation)
+      end
+
       it 'returns all its tasks' do 
         tasks = user.task_lists.map {|list| list.tasks }
-        expect(user.tasks).to eql tasks.flatten
+        expect(user.tasks.to_a).to eql tasks.flatten
       end
     end
 
