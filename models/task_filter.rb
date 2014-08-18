@@ -26,7 +26,7 @@ class TaskFilter
             if value.has_key? :on
               conditions[key] = parse_datetime(value[:on])
             else
-              one_sided_time_range(conditions)
+              return one_sided_time_range(conditions)
             end
           else
             conditions[key] = (parse_datetime(value[:after])..parse_datetime(value[:before]))
@@ -38,9 +38,10 @@ class TaskFilter
     end
 
     def one_sided_time_range(hash)
-      # Example: { :deadline => { :after => { :year => 2014, :month => 8, :day => 27 }}}
       attribute = hash[attr_name = hash.keys.first]
       if attribute.has_key? :before
+        puts "BEFORE: #{attribute[:before]}"
+        puts "PARSED: #{parse_datetime(attribute[:before])}"
         ["#{attr_name.to_s} < ?", parse_datetime(attribute[:before])]
       else
         ["#{attr_name.to_s} > ?", parse_datetime(attribute[:after])]
