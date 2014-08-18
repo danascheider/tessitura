@@ -30,19 +30,6 @@ describe Canto::FilterHelper do
 
   describe Canto::FilterHelper::TaskFilter do 
     describe '#filter' do 
-      context 'with simple categorical conditions' do 
-        let(:conditions) { { priority: 'high' } }
-        let(:filter) { Canto::FilterHelper::TaskFilter.new(conditions, @list.owner_id) }
-
-        it 'returns high-priority task' do 
-          expect(filter.filter.to_a).to eql [@task]
-        end
-
-        it 'returns an ActiveRecord relation' do 
-          expect(filter.filter).to be_an(ActiveRecord::Relation)
-        end
-      end
-
       context 'with simple time conditions' do 
         let(:conditions) { { deadline: { on: { year: 2014, month: 8, day: 27 } } } }
         let(:filter) { Canto::FilterHelper::TaskFilter.new(conditions, @list.owner_id) }
