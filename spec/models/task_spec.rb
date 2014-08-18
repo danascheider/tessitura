@@ -19,6 +19,7 @@ describe Task do
     it { is_expected.to respond_to(:to_hash) } # to integrate with Sinatra-Backbone
     it { is_expected.to respond_to(:user) }
     it { is_expected.to respond_to(:owner) }
+    it { is_expected.to respond_to(:siblings) }
   end
 
   describe 'public methods' do 
@@ -52,6 +53,24 @@ describe Task do
 
       it 'returns false when a task is complete' do 
         expect(complete_task.incomplete?).to be_falsey
+      end
+    end
+
+    describe '#siblings' do 
+      before(:each) do 
+        @task = @task_list.tasks.first
+      end
+
+      it 'returns an ActiveRecord::Relation' do 
+        expect(@task.siblings).to be_an(ActiveRecord::Relation)
+      end
+
+      it 'doesn\'t include the task calling the method' do 
+        expect(@task.siblings.to_a).not_to include(@task)
+      end
+
+      it 'includes the task\'s siblings' do 
+        expect(@task.siblings.to_a).to eql(@task_list.tasks.to_a - [@task])
       end
     end
 

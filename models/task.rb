@@ -54,7 +54,7 @@ class Task < ActiveRecord::Base
   end
 
   def siblings
-    Task.where(task_list_id: self.owner.task_lists.pluck(:id))
+    Task.where(task_list_id: self.owner.task_lists.pluck(:id)).where.not(id: self.id)
   end
 
   def to_hash
