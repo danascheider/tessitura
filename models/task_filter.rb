@@ -20,20 +20,16 @@ class TaskFilter
 
   protected
     def parse_conditions!(conditions)
-      begin
-        conditions.each do |key, value|
-          if value.length == 1
-            if value.has_key? :on
-              conditions[key] = parse_datetime(value[:on])
-            else
-              return one_sided_time_range(conditions)
-            end
+      conditions.each do |key, value|
+        if value.length == 1
+          if value.has_key? :on
+            conditions[key] = parse_datetime(value[:on])
           else
-            conditions[key] = (parse_datetime(value[:after])..parse_datetime(value[:before]))
+            return one_sided_time_range(conditions)
           end
+        else
+          conditions[key] = (parse_datetime(value[:after])..parse_datetime(value[:before]))
         end
-      rescue NoMethodError
-        nil
       end
     end
 
