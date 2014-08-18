@@ -19,17 +19,14 @@ class TaskFilter
   end
 
   protected
-
     def parse_conditions!(conditions)
       begin
         conditions.each do |key, value|
           if value.length == 1
             if value.has_key? :on
               conditions[key] = parse_datetime(value[:on])
-            elsif value.has_key? :after
-              return ["#{key.to_s} > ?", parse_datetime(value[:after])]
             else
-              return ["#{key.to_s} < ?", parse_datetime(value[:before])]
+              one_sided_time_range(conditions)
             end
           else
             conditions[key] = (parse_datetime(value[:after])..parse_datetime(value[:before]))
@@ -37,6 +34,16 @@ class TaskFilter
         end
       rescue NoMethodError
         nil
+      end
+    end
+
+    def one_sided_time_range(hash)
+      # Example: { :deadline => { :after => { :year => 2014, :month => 8, :day => 27 }}}
+      attribute = hash[attr_name = hash.keys.first]
+      if attribute.has_key? :before
+        ["#{attr_name.to_s} < ?", parse_datetime(attribute[:before])]
+      else
+        ["#{attr_name.to_s} > ?", parse_datetime(attribute[:after])]
       end
     end
 
