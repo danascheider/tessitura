@@ -26,7 +26,7 @@ class TaskFilter
 
     def parse_conditions!(conditions)
       conditions.each do |key, value|
-        if value.length == 2 || value.has_key?(:on)
+        if use_range?(value)
           conditions[key] = time_range(value)
         else
           return string_condition(value.keys.first,key.to_s,value.values.first)
@@ -61,5 +61,9 @@ class TaskFilter
 
     def time_range(hash)
       hash.has_key?(:on) ? parse_datetime(hash[:on]) : (parse_datetime(hash[:after])..parse_datetime(hash[:before]))
+    end
+
+    def use_range?(hash)
+      hash.length == 2 || hash.has_key?(:on)
     end
 end
