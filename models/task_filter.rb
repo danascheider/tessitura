@@ -24,17 +24,12 @@ class TaskFilter
     # filters designating a date or time, for example:
     # => { deadline: { before: { year: 2014, month: 8, day: 22 } } }
 
-    def one_sided_time_range(hash)
-      attribute = hash[attr_name = hash.keys.first]
-      string_condition(attribute.keys.first,attr_name,attribute.values.first)
-    end
-
     def parse_conditions!(conditions)
       conditions.each do |key, value|
         if value.length == 2 || value.has_key?(:on)
-          conditions[key] = two_sided_time_range(key => value)
+          conditions[key] = time_range(value)
         else
-          return one_sided_time_range(key => value)
+          return string_condition(value.keys.first,key.to_s,value.values.first)
         end
       end
     end
@@ -57,19 +52,14 @@ class TaskFilter
       condition == :before ? ["#{attr_name.to_s} < ?", parse_datetime(date_hash)] : ["#{attr_name.to_s} > ?", parse_datetime(date_hash)]
     end
 
-    # Like the #one_sided_time_range method, #two_sided_time_range takes a hash including the
+    # Like the #one_sided_time_range method, #time_range takes a hash including the
     # name of the attribute in question:
-    # => { created_at: { before: { year: 2014, month: 8, day: 31 }, after: { year: 2014, month: 8, day: 1} } }
+    # => { before: { year: 2014, month: 8, day: 31 }, after: { year: 2014, month: 8, day: 1} }
 
     # This method also handles time conditions with the :on key:
     # => { created_at: { on: { year: 2014, month: 8, day: 12 } } } 
 
-    def two_sided_time_range(hash)
-      attribute = hash[attr_name = hash.keys.first]
-      if attribute.has_key? :on
-        hash[attr_name] = parse_datetime(attribute[:on])
-      else
-        hash[attr_name] = (parse_datetime(attribute[:after])..parse_datetime(attribute[:before]))
-      end
+    def time_range(hash)
+      hash.has_key?(:on) ? parse_datetime(hash[:on]) : (parse_datetime(hash[:after])..parse_datetime(hash[:before]))
     end
 end
