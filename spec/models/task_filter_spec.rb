@@ -60,5 +60,24 @@ describe TaskFilter do
         expect(filtered_tasks.to_a).not_to include(Task.find_by(title: 'Make dentist appointment'))
       end
     end
+
+    context 'with one-sided :after interval' do 
+      let(:conditions) { { deadline: { after: { year: 2014, month: 9, day: 2 } } } }
+      let(:filter) { TaskFilter.new(conditions, @list.owner_id) }
+      let(:filtered_tasks) { filter.filter }
+
+      it 'returns an ActiveRecord::Relation' do 
+        expect(filtered_tasks).to be_an(ActiveRecord::Relation)
+      end
+
+      it 'returns the tasks with later deadlines' do 
+        expect(filtered_tasks.to_a).to eql Task.where('deadline > ?', Time.utc(2014,9,2)).to_a
+      end
+
+      it 'excludes tasks with equal or earlier deadlines' do 
+        excluded = Task.where('deadline < ?', Time.utc(2014,9,3)).to_a
+        expect(filtered_tasks.to_a & excluded).to eql []
+      end
+    end
   end
 end

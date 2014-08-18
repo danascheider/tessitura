@@ -35,7 +35,7 @@ class TaskFilter
             if value.has_key? :on
               conditions[key] = parse_datetime(value[:on])
             elsif value.has_key? :after
-              conditions[key] = [" > ?", parse_datetime(value[:after])]
+              return ["#{key.to_s} > ?", parse_datetime(value[:after])]
             else
               return ["#{key.to_s} < ?", parse_datetime(value[:before])]
             end
