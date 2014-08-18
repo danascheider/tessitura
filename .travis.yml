@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - "2.1"
+  - "2.1.2"
 env: DB=sqlite3 COVERAGE=true
 install: 'bundle install'
 script: 'rake'
