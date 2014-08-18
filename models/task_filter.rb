@@ -19,14 +19,6 @@ class TaskFilter
   end
 
   protected
-    def date_conditions
-      return nil if (@time_opts = @conditions.keys && TIME_FIELDS) == []
-      @time_opts.each do |key|
-        if @time_opts.length == 1
-          FilterUtils::time_filter(@conditions[key][:on])
-        end
-      end
-    end
 
     def parse_conditions!(conditions)
       begin
