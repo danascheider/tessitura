@@ -46,3 +46,16 @@ Feature: Filtering resources
       """
     Then the JSON response should include task 10
     And the response should return status 200
+
+  Scenario Outline: User filters for date range
+    When the client submits a POST request to /filters with:
+      """json
+      {"user":2, "resource":"tasks", "filters":{"deadline":{"<adv>":{"year":2014, "month":8, "day":27}}}}
+      """
+    Then the JSON response should include task <id>
+    And the response should not include any tasks without a deadline
+
+    Examples:
+      | adv    | id |
+      | before | 11 |
+      | after  | 12 | 
