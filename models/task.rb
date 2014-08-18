@@ -30,7 +30,11 @@ class Task < ActiveRecord::Base
   end
 
   def self.first_complete
-    self.complete.rank(:position).first || self.count - 1
+    self.complete.rank(:position).first
+  end
+
+  def self.first_complete_position
+    self.first_complete ? self.first_complete.position : self.count
   end
 
   # Public Instance Methods
@@ -83,7 +87,7 @@ class Task < ActiveRecord::Base
     # Private Instance Methods
     # ========================
     def set_position
-      self.position = self.complete? ? self.siblings.first_complete : 0
+      self.position = self.complete? ? self.siblings.first_complete_position : 0
     end
 
     def get_position_on_update(opts)

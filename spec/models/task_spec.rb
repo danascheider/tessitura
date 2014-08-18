@@ -149,7 +149,7 @@ describe Task do
 
     context 'when status is set to complete' do 
       it 'instantiates as the first complete task' do 
-        expect(list.tasks.create(title: 'Foo', status: 'complete').position).to eql 4
+        expect(list.tasks.create(title: 'Foo', status: 'complete').position).to eql 5
       end
     end
 
