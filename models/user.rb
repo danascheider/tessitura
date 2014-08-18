@@ -17,14 +17,6 @@ class User < ActiveRecord::Base
     self.task_lists.first || TaskList.create(title: 'Default List', user_id: self.id)
   end
 
-  def first_complete_task
-    begin
-      self.tasks.complete.order(:position).first 
-    rescue NoMethodError
-      nil
-    end
-  end
-
   def name
     "#{self.first_name} #{self.last_name}"
   end
