@@ -28,6 +28,11 @@ Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile inf
   expect(response_body).to eql User.find(id).to_json
 end
 
+Then(/^the response should not include any tasks without a(?:n?) (.*)$/) do |attribute|
+  excluded = Set.new(Task.where(attribute.to_sym => nil))
+  expect(Set.new(parse_json(response_body)).intersect?(excluded)).to be_falsey
+end
+
 Then(/^the response should not include any data$/) do 
   ok_values = [nil, '', 'null', false, "Authorization Required\n"]
   expect(ok_values).to include response_body
