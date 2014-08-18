@@ -40,18 +40,19 @@ class TaskFilter
     # The hash that is passed into the #one_sided_time_range method is the hash within
     # filters designating a date or time, for example:
     # => { deadline: { before: { year: 2014, month: 8, day: 22 } } }
+
     def one_sided_time_range(hash)
       attribute = hash[attr_name = hash.keys.first]
-      if attribute.has_key? :before
-        ["#{attr_name.to_s} < ?", parse_datetime(attribute[:before])]
-      else
-        ["#{attr_name.to_s} > ?", parse_datetime(attribute[:after])]
-      end
+      string_condition(attribute.keys.first,attr_name,attribute.values.first)
     end
 
     def parse_datetime(date)
       year, month, day = date[:year], date[:month], date[:day]
       Time.utc(year, month, day)
+    end
+
+    def string_condition(condition,attr_name,date_hash)
+      condition == :before ? ["#{attr_name.to_s} < ?", parse_datetime(date_hash)] : ["#{attr_name.to_s} > ?", parse_datetime(date_hash)]
     end
 
     def sanitize!(conditions)
