@@ -51,6 +51,11 @@ class TaskFilter
       Time.utc(year, month, day)
     end
 
+    # #string_condition takes the following arguments:
+    # * condition - :before or :after
+    # * attr_name - the name of the attribute being filtered, e.g. :updated_at
+    # * date_hash - the hash containing the date parameters, e.g. { year: 2014, month: 9, day: 17 }
+
     def string_condition(condition,attr_name,date_hash)
       condition == :before ? ["#{attr_name.to_s} < ?", parse_datetime(date_hash)] : ["#{attr_name.to_s} > ?", parse_datetime(date_hash)]
     end
