@@ -56,13 +56,17 @@ describe Canto::FilterHelper do
         end
       end
 
-      context 'with one-sided time range conditions' do 
+      context 'with "before" time range conditions' do 
         let(:tasks) { (1..3).each {|i| FactoryGirl.create(:task, deadline: Date.new(2014,9,i)) } }
-        let(:conditions) { { deadline: { before: { year: 2014, month: 8, day: 27 } } } }
+        let(:conditions) { { deadline: { before: { year: 2014, month: 9, day: 2 } } } }
         let(:filter) { Canto::FilterHelper::TaskFilter.new(conditions, @list.owner_id) }
 
-        it 'excludes the tasks with later deadlines' do 
-          expect(filter.filter.to_a).not_to include(Task.where(deadline: Date.new(2014,9,2)..Date.new(2014,9,3)))
+        it 'includes the tasks with earlier deadlines' do 
+          expect(filter.filter.to_a).to include(tasks.to_a[0])
+        end
+
+        it 'excludes the tasks with equal or later deadlines' do 
+          expect(filter.filter.to_a).not_to include(tasks.to_a[1..2])
         end
       end
     end
