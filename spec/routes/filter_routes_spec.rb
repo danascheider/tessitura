@@ -7,83 +7,42 @@ describe Canto do
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
 
   describe 'filtering tasks' do 
+    let(:expected) { Task.where(status: 'complete').to_a.map! {|task| task.to_hash } }
+    
     before(:each) do 
       @list = FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks, user_id: user.id)
     end
 
     context 'with user credentials' do 
-      before(:each) do 
-        authorize_with user
-        make_request('POST', '/filters', { 'user' => @list.user.id, 'resource' => 'tasks', 'filters' => { 'status' => 'complete' }}.to_json)
-      end
-
-      it 'returns the tasks in JSON format' do 
-        expected = Task.where(status: 'complete').to_a.map! {|task| task.to_hash }
-        expect(response_body).to eql expected.to_json
-      end
-
-      it 'returns status 200' do 
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized POST request to /filters' do 
+        let(:agent) { @list.user }
       end
     end
 
     context 'with admin credentials' do 
-      before(:each) do 
-        authorize_with admin
-        make_request('POST', '/filters', { 'user' => @list.user.id, 'resource' => 'tasks', 'filters' => { 'status' => 'complete' }}.to_json)
-      end
-
-      it 'returns the tasks in JSON format' do 
-        expected = Task.where(status: 'complete').to_a.map! {|task| task.to_hash }
-        expect(response_body).to eql expected.to_json
-      end
-
-      it 'returns status 200' do 
-        expect(response_status).to eql 200
+      it_behaves_like 'an authorized POST request to /filters' do 
+        let(:agent) { admin }
       end
     end
 
     context 'with unauthorized credentials' do 
-      before(:each) do 
-        authorize_with user
-        make_request('POST', '/filters', { 'user' => admin.id, 'resource' => 'tasks', 'filters' => { 'status' => 'complete' }}.to_json)
-      end
-
-      it 'doesn\'t return the tasks' do 
-        expect(response_body).to eql "Authorization Required\n"
-      end
-
-      it 'returns status 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized POST request to /filters' do 
+        let(:authenticate) { authorize_with user }
+        let(:user_id) { admin.id }
       end
     end
 
     context 'with invalid credentials' do 
-      before(:each) do 
-        authorize 'foo', 'bar'
-        make_request('POST', '/filters', { 'user' => @list.user.id, 'resource' => 'tasks', 'filters' => { 'status' => 'complete' }}.to_json)
-      end
-
-      it 'doesn\'t return the tasks' do 
-        expect(response_body).to eql "Authorization Required\n"
-      end
-
-      it 'returns status 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized POST request to /filters' do 
+        let(:authenticate) { authorize 'foo', 'bar' }
+        let(:user_id) { @list.user.id }
       end
     end
 
     context 'with no credentials' do 
-      before(:each) do 
-        make_request('POST', '/filters', { 'user' => @list.user.id, 'resource' => 'tasks', 'filters' => { 'status' => 'complete' }}.to_json)
-      end
-
-      it 'doesn\'t return the tasks' do 
-        expect(response_body).to eql "Authorization Required\n"
-      end
-
-      it 'returns status 401' do 
-        expect(response_status).to eql 401
+      it_behaves_like 'an unauthorized POST request to /filters' do 
+        let(:authenticate) { nil }
+        let(:user_id) { @list.user.id }
       end
     end
   end
