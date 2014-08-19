@@ -30,10 +30,7 @@ class TaskFilter
         if value.has_key?(:on)
           @time_conditions[key] = parse_datetime(value[:on])
         else
-          @time_conditions[key][:before] ||= {year: 3000, month: 1, day: 1}
-          @time_conditions[key][:after] ||= {year: 1000, month: 1, day: 1}
-          before_date, after_date = parse_datetime(@time_conditions[key][:before]), parse_datetime(@time_conditions[key][:after])
-          @time_conditions[key] = ((after_date + 1.day)..(before_date - 1.day))
+          set_range!(key)
         end
       end
     end
@@ -49,5 +46,12 @@ class TaskFilter
 
     def sanitize!(conditions)
       conditions.reject {|key, value| !TASK_ATTRIBUTES.include?(key) }
+    end
+
+    def set_range!(key)
+      @time_conditions[key][:before] ||= { year: 3000, month: 1, day: 1}
+      @time_conditions[key][:after] ||= { year: 1000, month: 1, day: 1}
+      before_date, after_date = @time_conditions[key][:before], @time_conditions[key][:after]
+      @time_conditions[key] = (parse_datetime(after_date) + 1.day)..(parse_datetime(before_date) - 1.day)
     end
 end
