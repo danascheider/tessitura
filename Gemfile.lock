@@ -99,7 +99,7 @@ GEM
       sinatra (~> 1.0)
     sinatra-backbone (0.1.1)
       sinatra
-    specinfra (2.0.0.beta34)
+    specinfra (2.0.0.beta35)
       net-scp
       net-ssh
     sqlite3 (1.3.9)
