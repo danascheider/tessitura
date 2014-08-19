@@ -27,8 +27,7 @@ class TaskFilter
     end
 
     def parse_datetime(date)
-      return date unless date.is_a?(Hash)
-      Time.utc(date[:year], date[:month], date[:day])
+      return date.is_a?(Hash) ? Time.utc(date[:year], date[:month], date[:day]) : date
     end
 
     # The #sanitize! method makes sure conditions passed in are valid task attributes
