@@ -29,7 +29,7 @@ class TaskFilter
       @time_conditions.dup.each do |key, value|
         if value.has_key?(:on)
           @time_conditions[key] = value
-          continue
+          next
         else
           @time_conditions[key][:before] ||= {year: 3000, month: 1, day: 1}
           @time_conditions[key][:after] ||= {year: 1000, month: 1, day: 1}
