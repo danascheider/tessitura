@@ -44,47 +44,11 @@ class TaskFilter
       Time.utc(date[:year], date[:month], date[:day])
     end
 
-    # #sanitize! ensures that requested filters only consist of valid attributes
+    # The #sanitize! method makes sure conditions passed in are valid task attributes
+    # by deleting any key-value pairs where the key is not a member of the
+    # TASK_ATTRIBUTES array
 
     def sanitize!(conditions)
-      conditions = conditions.reject {|key, value| !TASK_ATTRIBUTES.include?(key) }
-    end
-
-    # #string_condition takes the following arguments:
-    # * condition - :before or :after
-    # * attr_name - the name of the attribute being filtered, e.g. :updated_at
-    # * date_hash - the hash containing the date parameters, e.g. { year: 2014, month: 9, day: 17 }
-
-    def string_condition(condition,attr_name,date_hash)
-      condition == :before ? ["#{attr_name.to_s} < ?", parse_datetime(date_hash)] : ["#{attr_name.to_s} > ?", parse_datetime(date_hash)]
-    end
-
-    # Like the #one_sided_time_range method, #time_range takes a hash including the
-    # name of the attribute in question:
-    # => { before: { year: 2014, month: 8, day: 31 }, after: { year: 2014, month: 8, day: 1} }
-
-    # This method also handles time conditions with the :on key:
-    # => { created_at: { on: { year: 2014, month: 8, day: 12 } } } 
-
-    def time_range(hash)
-      hash.has_key?(:on) ? parse_datetime(hash[:on]) : nil
-    end
-
-    # The hash argument to the #triage and #use_range? methods is the value assigned to the attribute
-    # being filtered for, e.g.:
-    # => { on: { year: 2014, month: 9, day: 21 } }
-
-    # Currently, tests are failing. The reason is that triage needs to 
-
-    def triage(key, value)
-      if use_range?(value)
-        @time_conditions[key] = time_range(value)
-      else
-        string_condition(value.keys.first, key, value.values.first)
-      end
-    end
-
-    def use_range?(hash)
-      hash.length == 2 || hash.has_key?(:on)
+      conditions.reject {|key, value| !TASK_ATTRIBUTES.include?(key) }
     end
 end
