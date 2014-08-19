@@ -14,8 +14,9 @@ class TaskFilter
   end
 
   def filter
-    tasks = @scope.where(@categorical_conditions) if @categorical_conditions
-    tasks.where(parse_time_conditions!)
+    @scope = @scope.where(@categorical_conditions) if @categorical_conditions
+    parse_time_conditions! if @time_conditions
+    @scope.where(@time_conditions) if @time_conditions
   end
 
   protected
@@ -25,12 +26,21 @@ class TaskFilter
     # => { deadline: { before: { year: 2014, month: 8, day: 22 } } }
 
     def parse_time_conditions!
-      @time_conditions.each do |key, value|
-        @time_conditions[key] = triage(key, value)
+      @time_conditions.dup.each do |key, value|
+        if value.has_key?(:on)
+          @time_conditions[key] = value
+          continue
+        else
+          @time_conditions[key][:before] ||= {year: 3000, month: 1, day: 1}
+          @time_conditions[key][:after] ||= {year: 1000, month: 1, day: 1}
+          before_date, after_date = parse_datetime(@time_conditions[key][:before]), parse_datetime(@time_conditions[key][:after])
+          @time_conditions[key] = ((after_date + 1.day)..(before_date - 1.day))
+        end
       end
     end
 
     def parse_datetime(date)
+      return if date.is_a?(Time)
       Time.utc(date[:year], date[:month], date[:day])
     end
 
@@ -64,14 +74,13 @@ class TaskFilter
     # being filtered for, e.g.:
     # => { on: { year: 2014, month: 9, day: 21 } }
 
+    # Currently, tests are failing. The reason is that triage needs to 
+
     def triage(key, value)
-      if value.length == 1 && !value.has_key?(:on)
-        if value.respond_to?(:use_range?) && use_range?(value)
-          @time_conditions[key] = time_range(key => value)
-        else
-          condition, kee, date_hash = value.values.first.keys.first, key.to_s, value.values.first
-          string_condition(condition, kee, date_hash)
-        end
+      if use_range?(value)
+        @time_conditions[key] = time_range(value)
+      else
+        string_condition(value.keys.first, key, value.values.first)
       end
     end
 
