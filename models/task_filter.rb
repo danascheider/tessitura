@@ -8,35 +8,30 @@ class TaskFilter
   TIME_FIELDS     = [ :created_at, :deadline, :updated_at ]
 
   def initialize(conditions, owner_id)
-    @categorical_conditions = sanitize!(conditions).reject {|key, val| TIME_FIELDS.include?(key) }
-    @time_conditions = conditions.reject {|key, value| @categorical_conditions.include?(key) }
+    @conditions = sanitize!(conditions)
     @scope = Task.where(owner_id: User.find(owner_id))
   end
 
   def filter
-    @scope = @scope.where(@categorical_conditions) if @categorical_conditions
-    parse_time_conditions! if @time_conditions
-    @scope.where(@time_conditions) if @time_conditions
+    @scope.where(parse_conditions!)
   end
 
   protected
 
-    # The hash that is passed into the #one_sided_time_range method is the hash within
-    # filters designating a date or time, for example:
-    # => { deadline: { before: { year: 2014, month: 8, day: 22 } } }
+    def time_value?(key)
+      TIME_FIELDS.include?(key)
+    end
 
-    def parse_time_conditions!
-      @time_conditions.dup.each do |key, value|
-        if value.has_key?(:on)
-          @time_conditions[key] = parse_datetime(value[:on])
-        else
-          set_range!(key)
-        end
+    def parse_conditions!
+      @conditions.dup.each do |key, value|
+        next unless time_value?(key)
+        @conditions[key] = time_value(key)
       end
+      @conditions
     end
 
     def parse_datetime(date)
-      return if date.is_a?(Time)
+      return date unless date.is_a?(Hash)
       Time.utc(date[:year], date[:month], date[:day])
     end
 
@@ -48,10 +43,13 @@ class TaskFilter
       conditions.reject {|key, value| !TASK_ATTRIBUTES.include?(key) }
     end
 
-    def set_range!(key)
-      @time_conditions[key][:before] ||= { year: 3000, month: 1, day: 1}
-      @time_conditions[key][:after] ||= { year: 1000, month: 1, day: 1}
-      before_date, after_date = @time_conditions[key][:before], @time_conditions[key][:after]
-      @time_conditions[key] = (parse_datetime(after_date) + 1.day)..(parse_datetime(before_date) - 1.day)
+    def get_range(key)
+      before = parse_datetime(@conditions[key][:before]) || Time.utc(3000,1,1)
+      after = parse_datetime(@conditions[key][:after]) || Time.utc(1000,1,1)
+      ((after + 1.day)..(before - 1.day))
+    end
+
+    def time_value(key)
+      @conditions[key].has_key?(:on) ? parse_datetime(@conditions[key][:on]) : get_range(key)
     end
 end
