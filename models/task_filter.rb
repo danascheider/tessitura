@@ -4,7 +4,6 @@ class TaskFilter
   attr_accessor :conditions
 
   TASK_ATTRIBUTES = [ :created_at, :deadline, :description, :position, :priority, :status, :task_list_id, :title, :updated_at ]
-  RANGE_OPTIONS   = [ :after, :before, :on ]
   TIME_FIELDS     = [ :created_at, :deadline, :updated_at ]
 
   def initialize(conditions, owner_id)
