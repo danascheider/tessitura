@@ -13,14 +13,10 @@ describe TaskFilter do
   describe '#filter' do 
     context 'with simple categorical conditions' do 
       let(:conditions) { { priority: 'high' } }
-      let(:filter) { TaskFilter.new(conditions, @list.owner_id) }
 
-      it 'returns an ActiveRecord::Relation' do 
-        expect(filter.filter).to be_an(ActiveRecord::Relation)
-      end
-
-      it 'returns the high-priority task' do 
-        expect(filter.filter.to_a).to eql [@task]
+      it_behaves_like 'a filter' do 
+        let(:included_tasks) { Task.where(priority: 'high') }
+        let(:excluded_tasks) { [Task.where.not(priority: 'high')] }
       end
     end
 
