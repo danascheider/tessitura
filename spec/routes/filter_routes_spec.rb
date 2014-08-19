@@ -5,11 +5,10 @@ describe Canto do
 
   let(:admin) { FactoryGirl.create(:admin) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
-  let(:list) { FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks, user_id: user.id) }
 
   describe 'filtering tasks' do 
     before(:each) do 
-      @list = list 
+      @list = FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks, user_id: user.id)
       make_request('POST', '/filters', { 'user' => @list.user.id, 'resource' => 'tasks', 'filters' => { 'status' => 'complete' }}.to_json)
     end
 
