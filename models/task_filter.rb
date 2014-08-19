@@ -15,7 +15,7 @@ class TaskFilter
 
   def filter
     tasks = @scope.where(@categorical_conditions) if @categorical_conditions
-    tasks = tasks.where(parse_conditions!(@time_conditions)) if @time_conditions
+    tasks.where(parse_time_conditions!)
   end
 
   protected
@@ -24,20 +24,17 @@ class TaskFilter
     # filters designating a date or time, for example:
     # => { deadline: { before: { year: 2014, month: 8, day: 22 } } }
 
-    def parse_conditions!(conditions)
-      conditions.each do |key, value|
-        if use_range?(value)
-          conditions[key] = time_range(value)
-        else
-          return string_condition(value.keys.first,key.to_s,value.values.first)
-        end
+    def parse_time_conditions!
+      @time_conditions.each do |key, value|
+        @time_conditions[key] = triage(key, value)
       end
     end
 
     def parse_datetime(date)
-      year, month, day = date[:year], date[:month], date[:day]
-      Time.utc(year, month, day)
+      Time.utc(date[:year], date[:month], date[:day])
     end
+
+    # #sanitize! ensures that requested filters only consist of valid attributes
 
     def sanitize!(conditions)
       conditions = conditions.reject {|key, value| !TASK_ATTRIBUTES.include?(key) }
@@ -60,7 +57,22 @@ class TaskFilter
     # => { created_at: { on: { year: 2014, month: 8, day: 12 } } } 
 
     def time_range(hash)
-      hash.has_key?(:on) ? parse_datetime(hash[:on]) : (parse_datetime(hash[:after])..parse_datetime(hash[:before]))
+      hash.has_key?(:on) ? parse_datetime(hash[:on]) : nil
+    end
+
+    # The hash argument to the #triage and #use_range? methods is the value assigned to the attribute
+    # being filtered for, e.g.:
+    # => { on: { year: 2014, month: 9, day: 21 } }
+
+    def triage(key, value)
+      if value.length == 1 && !value.has_key?(:on)
+        if value.respond_to?(:use_range?) && use_range?(value)
+          @time_conditions[key] = time_range(key => value)
+        else
+          condition, kee, date_hash = value.values.first.keys.first, key.to_s, value.values.first
+          string_condition(condition, kee, date_hash)
+        end
+      end
     end
 
     def use_range?(hash)
