@@ -8,12 +8,11 @@ class TaskFilter
   TIME_FIELDS     = [ :created_at, :deadline, :updated_at ]
 
   def initialize(conditions, owner_id)
-    @conditions = sanitize!(conditions)
-    @scope = Task.where(owner_id: User.find(owner_id))
+    @conditions, @owner_id = sanitize!(conditions), owner_id
   end
 
   def filter
-    @scope.where(parse_conditions!)
+    Task.where(owner_id: @owner_id).where(parse_conditions!)
   end
 
   protected
