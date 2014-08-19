@@ -33,6 +33,11 @@ class Sinatra::Application
       access_denied
     end
 
+    def protect_filter!
+      return if authorized? && authorized_for_resource?(@request_body[:user]) 
+      access_denied
+    end
+
     def setting_admin?
       @request_body && @request_body.has_key?(:admin)
     end

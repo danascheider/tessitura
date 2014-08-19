@@ -63,6 +63,7 @@ class Canto < Sinatra::Application
   # =======
 
   post '/filters' do 
+    protect_filter!
     filter_resources(@request_body)
   end
 
