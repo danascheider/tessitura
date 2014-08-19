@@ -23,10 +23,7 @@ class TaskFilter
     end
 
     def parse_conditions!
-      @conditions.dup.each do |key, value|
-        next unless time_value?(key)
-        @conditions[key] = time_value(key)
-      end
+      @conditions.dup.each {|key, value| @conditions[key] = time_value?(key) ? time_value(key) : value }
       @conditions
     end
 
