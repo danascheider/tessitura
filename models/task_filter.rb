@@ -28,7 +28,7 @@ class TaskFilter
     def parse_time_conditions!
       @time_conditions.dup.each do |key, value|
         if value.has_key?(:on)
-          @time_conditions[key] = value
+          @time_conditions[key] = parse_datetime(value[:on])
           next
         else
           @time_conditions[key][:before] ||= {year: 3000, month: 1, day: 1}
