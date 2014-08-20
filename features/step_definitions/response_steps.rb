@@ -38,6 +38,11 @@ Then(/^the response should not include any data$/) do
   expect(ok_values).to include response_body
 end
 
+Then(/^the response should not include tasks (\d+) or (\d+)$/) do |id1, id2|
+  tasks = Task.find(id1, id2).to_a
+  tasks.each {|task| expect(response_body).not_to include(task.to_json) }
+end
+
 Then(/^the response should indicate the (?:.*) was (not )?saved successfully$/) do |negation|
   expect(response_status).to eql negation ? 422 : 201
 end

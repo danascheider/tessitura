@@ -21,24 +21,34 @@ Feature: Filtering resources
       {"user":2, "resource":"tasks", "filters":{<filters>}}
       """
     Then the JSON response should include <resources>
-    And the response should return status <status>
+    And the response should return status 200
 
     Examples:
-      | filters                                | resources                   | status |
-      | "priority":"high"                      | tasks 10 and 11             | 200    |
-      | "priority":"high", "status":"blocking" | task 10                     | 200    |
-      | "priority":["high","low"]              | the 2nd user's last 3 tasks | 200    |
-      | "deadline":{"on":{"year":2014, "month":8, "day": 27 }} | task 10     | 200    |
+      | filters                                | resources                   |
+      | "priority":"high"                      | tasks 10 and 11             |
+      | "priority":"high", "status":"blocking" | task 10                     |
+      | "priority":["high","low"]              | the 2nd user's last 3 tasks |
+      | "deadline":{"on":{"year":2014, "month":8, "day": 27 }} | task 10     |
 
-  Scenario Outline: User filters for date range
+  Scenario Outline: User filters for one-sided date range
     When the client submits a POST request to /filters with:
       """json
       {"user":2, "resource":"tasks", "filters":{"deadline":{"<adv>":{"year":2014, "month":8, "day":27}}}}
       """
     Then the JSON response should include task <id>
     And the response should not include any tasks without a deadline
+    And the response should return status 200
 
     Examples:
       | adv    | id |
       | before | 11 |
       | after  | 12 | 
+
+  Scenario: User filteres for two-sided date range
+    When the client submits a POST request to /filters with:
+      """json
+      {"user":2, "resource":"tasks", "filters":{"deadline":{"before":{"year":2014, "month":11, "day": 17}, "after":{"year":"2014","month":8,"day":19}}}}
+      """
+    Then the JSON response should include task 10
+    And the response should not include tasks 11 or 12
+    And the response should return status 200
