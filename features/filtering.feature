@@ -15,37 +15,20 @@ Feature: Filtering resources
       | 12 | My Task 6 | complete | low      | 2014-11-17 |
     And the 2nd user is logged in
 
-  Scenario: User filters their tasks for one criterion
+  Scenario Outline: Simple filters
     When the client submits a POST request to /filters with:
       """json
-      {"user":2, "resource":"tasks", "filters":{"priority":"high"}} 
+      {"user":2, "resource":"tasks", "filters":{<filters>}}
       """
-    Then the JSON response should include tasks 10 and 11
-    And the response should return status 200
+    Then the JSON response should include <resources>
+    And the response should return status <status>
 
-  Scenario: User filters their tasks for an intersection of multiple criteria
-    When the client submits a POST request to /filters with:
-      """json
-      {"user":2, "resource":"tasks", "filters":{"priority":"high", "status":"blocking"}}
-      """
-    Then the JSON response should include task 10
-    And the response should return status 200
-
-  Scenario: User filters tasks for a subset
-    When the client submits a POST request to /filters with:
-      """json
-      {"user":2, "resource":"tasks", "filters":{"priority":["high","low"]}}
-      """
-    Then the JSON response should include the 2nd user's last 3 tasks
-    And the response should return status 200
-
-  Scenario: User filters for date
-    When the client submits a POST request to /filters with:
-      """json
-      {"user":2,"resource":"tasks", "filters":{"deadline":{"on":{"year":2014, "month":8, "day":27}}}}
-      """
-    Then the JSON response should include task 10
-    And the response should return status 200
+    Examples:
+      | filters                                | resources                   | status |
+      | "priority":"high"                      | tasks 10 and 11             | 200    |
+      | "priority":"high", "status":"blocking" | task 10                     | 200    |
+      | "priority":["high","low"]              | the 2nd user's last 3 tasks | 200    |
+      | "deadline":{"on":{"year":2014, "month":8, "day": 27 }} | task 10     | 200    |
 
   Scenario Outline: User filters for date range
     When the client submits a POST request to /filters with:
