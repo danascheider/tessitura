@@ -18,7 +18,7 @@ Feature: Filtering resources
   Scenario Outline: Simple filters
     When the client submits a POST request to /filters with:
       """json
-      {"user":2, "resource":"tasks", "filters":{<filters>}}
+      {"user":2, "filters":{<filters>}}
       """
     Then the JSON response should include <resources>
     And the response should return status 200
@@ -33,7 +33,7 @@ Feature: Filtering resources
   Scenario Outline: User filters for one-sided date range
     When the client submits a POST request to /filters with:
       """json
-      {"user":2, "resource":"tasks", "filters":{"deadline":{"<adv>":{"year":2014, "month":8, "day":27}}}}
+      {"user":2, "filters":{"deadline":{"<adv>":{"year":2014, "month":8, "day":27}}}}
       """
     Then the JSON response should include task <id>
     And the response should not include any tasks without a deadline
@@ -44,10 +44,19 @@ Feature: Filtering resources
       | before | 11 |
       | after  | 12 | 
 
-  Scenario: User filteres for two-sided date range
+  Scenario: User filters for two-sided date range
     When the client submits a POST request to /filters with:
       """json
-      {"user":2, "resource":"tasks", "filters":{"deadline":{"before":{"year":2014, "month":11, "day": 17}, "after":{"year":"2014","month":8,"day":19}}}}
+      {"user":2, "filters":{"deadline":{"before":{"year":2014, "month":11, "day": 17}, "after":{"year":"2014","month":8,"day":19}}}}
+      """
+    Then the JSON response should include task 10
+    And the response should not include tasks 11 or 12
+    And the response should return status 200
+
+  Scenario: There are both time conditions and categorical conditions
+    When the client submits a POST request to /filters with:
+      """json
+      {"user":2, "filters":{"deadline":{"after":{"year":2014, "month":8, "day":20}},"priority":"high"}}
       """
     Then the JSON response should include task 10
     And the response should not include tasks 11 or 12
