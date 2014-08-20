@@ -6,7 +6,7 @@ describe TaskFilter do
   before(:each) do 
     @list, i = task_list, 1
     @list.tasks.each {|task, n| task.update!(deadline: Time.utc(2014, 9, i)); i+= 1 }
-    @task = Task.where(deadline: Time.utc(2014,9,3)).first
+    @task = Task.find_by(deadline: Time.utc(2014,9,3))
     @task.update!(priority: 'high')
   end
 
@@ -16,7 +16,21 @@ describe TaskFilter do
 
       it_behaves_like 'a filter' do 
         let(:included_tasks) { Task.where(priority: 'high') }
-        let(:excluded_tasks) { [Task.where.not(priority: 'high')] }
+        let(:excluded_tasks) { Task.where.not(priority: 'high') }
+      end
+    end
+
+    context 'with simple OR conditions' do 
+      let(:conditions) { { priority: ['high','urgent'] } }
+
+      before(:each) do 
+        @urgent_task = Task.first
+        @urgent_task.update!(priority: 'urgent')
+      end
+
+      it_behaves_like 'a filter' do 
+        let(:included_tasks) { Task.where(id: [@task.id, @urgent_task.id]) }
+        let(:excluded_tasks) { Task.where.not(id: [@task.id, @urgent_task.id]) }
       end
     end
 
