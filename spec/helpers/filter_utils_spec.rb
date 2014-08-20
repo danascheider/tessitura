@@ -8,7 +8,7 @@ describe Canto::FilterUtils do
   before(:each) do 
     @list, @task = user.task_lists.first, user.task_lists.first.tasks.first
     @task.update!(priority: 'high', deadline: Time.utc(2014,8,27))
-    @hash = {user: @list.owner.id, resource: 'tasks', filters: {'priority' => 'high'}}
+    @hash = {user: @list.owner.id, filters: {'priority' => 'high'}}
   end
 
   describe '::filter_resources' do 

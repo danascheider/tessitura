@@ -1,7 +1,7 @@
 shared_examples 'an authorized POST request to /filters' do 
   before(:each) do 
     authorize_with agent
-    make_request('POST', '/filters', { 'user' => @list.user.id, 'resource' => 'tasks', 'filters' => { 'status' => 'complete' }}.to_json)
+    make_request('POST', '/filters', { 'user' => @list.user.id, 'filters' => { 'status' => 'complete' }}.to_json)
   end
 
   it 'returns the requested tasks in JSON format' do 
@@ -16,7 +16,7 @@ end
 shared_examples 'an unauthorized POST request to /filters' do 
   before(:each) do 
     authenticate
-    make_request('POST', '/filters', { 'user' => user_id, 'resource' => 'tasks', 'filters' => {'status' => 'complete'}}.to_json)
+    make_request('POST', '/filters', { 'user' => user_id, 'filters' => {'status' => 'complete'}}.to_json)
   end
 
   it 'doesn\'t return the requested tasks' do 

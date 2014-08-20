@@ -1,9 +1,3 @@
-# There are a couple things that need to be sorted out before this scenario can be
-# finished.
-
-# The biggest issue is how to handle more complex filters: How to differentiate 
-# between AND and OR, etc. For now, this simple one is good 
-
 @tasks
 Feature: Filtering resources
 
