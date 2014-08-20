@@ -46,5 +46,14 @@ describe TaskFilter do
         let(:excluded_tasks) { Task.where.not(['deadline > ?', Time.utc(2014,9,2)]) }
       end
     end
+
+    context 'with two-sided time interval' do 
+      let(:conditions) { { deadline: { after: { year: 2014, month: 9, day: 2 }, before: { year: 2014, month: 9, day: 5 } } } }
+
+      it_behaves_like 'a filter' do 
+        let(:included_tasks) { Task.where(deadline: [Time.utc(2014,9,3), Time.utc(2014,9,4)]) }
+        let(:excluded_tasks) { Task.where.not(deadline: [Time.utc(2014,9,3), Time.utc(2014,9,4)]) }
+      end
+    end
   end
 end
