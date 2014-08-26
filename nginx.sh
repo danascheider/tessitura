@@ -24,7 +24,7 @@ nginx
 
 # Install RVM stable version, RubyGems, and Bundler
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
-apt-get install -y RubyGems
+apt-get install -y rubygems
 
 mkdir /var/www && cd /var/www
 apt-get install -y git
