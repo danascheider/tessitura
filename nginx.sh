@@ -29,4 +29,6 @@ apt-get install -y rubygems
 mkdir /var/www && cd /var/www
 apt-get install -y git
 git clone https://github.com/danascheider/canto && cd canto
+
+exit # Don't run bundle install with root privileges
 bundle install
