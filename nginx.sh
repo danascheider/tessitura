@@ -20,5 +20,13 @@ make install
 # Symbolic link for the nginx binary goes in /usr/bin so 
 # nginx command can be used
 ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx
-
 nginx
+
+# Install RVM stable version, RubyGems, and Bundler
+\curl -sSL https://get.rvm.io | bash -s stable --ruby
+apt-get install -y RubyGems
+
+mkdir /var/www && cd /var/www
+apt-get install -y git
+git clone https://github.com/danascheider/canto && cd canto
+bundle install
