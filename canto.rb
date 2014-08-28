@@ -6,7 +6,6 @@ require 'require_all'
 require File.expand_path('../config/settings', __FILE__)
 
 require_all 'models'
-require_all 'helpers'
 
 class Canto < Sinatra::Base
   not_found do 
