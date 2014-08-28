@@ -5,7 +5,7 @@ gem 'sinatra', '~> 1.4.5'
 gem 'json',    '~> 1.8.1'
 
 # Use Thin web server
-gem 'unicorn', '~> 4.8.3'
+gem 'thin', '~> 1.6.2'
 
 # Use ActiveRecord and SQLite 3 to manage DB records
 gem 'sinatra-activerecord', '~> 2.0.2'
