@@ -1,4 +1,4 @@
-require 'sinatra'
+require 'sinatra/base'
 require 'sinatra/activerecord'
 require 'ranked-model'
 require 'json'
@@ -6,7 +6,8 @@ require 'require_all'
 require_all 'models'
 require_all 'helpers'
 
-class Canto < Sinatra::Application
+class Canto < Sinatra::Base
+  set :root, File.dirname(__FILE__)
   set :database_file, 'config/database.yml'
   set :data, ''
 
@@ -33,13 +34,13 @@ class Canto < Sinatra::Application
 
   # The following paths are included for debugging purposes only:
 
-  # get '/' do 
-  #   "Hello Canto!\n"
-  # end
+  get '/' do 
+    "Hello Canto!\n"
+  end
 
-  # post '/' do 
-  #   "Hello Canto!\nYou posted #{@request_body}!\n"
-  # end
+  post '/' do 
+    "Hello Canto!\nYou posted #{@request_body}!\n"
+  end
   
   post '/users' do  
     validate_standard_create

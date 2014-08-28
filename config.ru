@@ -3,4 +3,4 @@
 require './canto'
 
 use Rack::Reloader
-run Canto.new
+run Canto
