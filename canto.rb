@@ -31,13 +31,13 @@ class Canto < Sinatra::Base
 
   # The following paths are included for debugging purposes only:
 
-  get '/' do 
-    "Hello Canto!\n"
-  end
+  # get '/' do 
+  #   "Hello Canto!\n"
+  # end
 
-  post '/' do 
-    "Hello Canto!\nYou posted #{@request_body}!\n"
-  end
+  # post '/' do 
+  #   "Hello Canto!\nYou posted #{@request_body}!\n"
+  # end
   
   post '/users' do  
     validate_standard_create
