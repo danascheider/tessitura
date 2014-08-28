@@ -1,4 +1,4 @@
-class Sinatra::Application
+module Sinatra
   module AuthorizationHelper
     def admin_access?
       current_user.admin?

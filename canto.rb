@@ -3,13 +3,20 @@ require 'sinatra/activerecord'
 require 'ranked-model'
 require 'json'
 require 'require_all'
+
 require_all 'models'
 require_all 'helpers'
 
 class Canto < Sinatra::Base
   set :root, File.dirname(__FILE__)
+  set :app_file, __FILE__
   set :database_file, 'config/database.yml'
   set :data, ''
+
+  helpers Sinatra::AuthorizationHelper 
+  helpers Sinatra::ErrorHandling
+  helpers Sinatra::FilterUtils
+  helpers Sinatra::GeneralHelperMethods
 
   not_found do 
     [404, '' ]

@@ -1,4 +1,4 @@
-class Sinatra::Application
+module Sinatra
   module GeneralHelperMethods
     def to_bool(string)
       string == 'false' || string == 'nil' ? false : true

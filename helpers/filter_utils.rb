@@ -1,4 +1,4 @@
-class Sinatra::Application
+module Sinatra
   module FilterUtils
 
     def filter_resources(hash)

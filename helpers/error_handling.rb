@@ -1,4 +1,4 @@
-class Sinatra::Application
+module Sinatra
   module ErrorHandling
     def create_resource(klass, attributes)
       begin

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Canto do 
+  include Sinatra::ErrorHandling
   include Rack::Test::Methods
-  include Canto::ErrorHandling
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
