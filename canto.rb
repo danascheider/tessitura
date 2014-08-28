@@ -31,9 +31,15 @@ class Canto < Sinatra::Application
     admin_only!
   end
 
-  get '/' do 
-    "Hello Canto!\n"
-  end
+  # The following paths are included for debugging purposes only:
+
+  # get '/' do 
+  #   "Hello Canto!\n"
+  # end
+
+  # post '/' do 
+  #   "Hello Canto!\nYou posted #{@request_body}!\n"
+  # end
   
   post '/users' do  
     validate_standard_create
