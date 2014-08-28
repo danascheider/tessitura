@@ -30,6 +30,10 @@ class Canto < Sinatra::Application
   before /\/admin\/*/ do 
     admin_only!
   end
+
+  get '/' do 
+    "Hello Canto!\n"
+  end
   
   post '/users' do  
     validate_standard_create
