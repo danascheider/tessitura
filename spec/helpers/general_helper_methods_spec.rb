@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Canto::GeneralHelperMethods do 
-  include Canto::GeneralHelperMethods
+describe Sinatra::GeneralHelperMethods do 
+  include Sinatra::GeneralHelperMethods
 
   describe '::to_bool' do 
     context 'when false' do 

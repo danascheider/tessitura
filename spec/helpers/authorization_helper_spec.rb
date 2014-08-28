@@ -6,10 +6,10 @@ require 'spec_helper'
 
 # More information: https://github.com/danascheider/canto/issues/46
 
-describe Canto::AuthorizationHelper do 
+describe Sinatra::AuthorizationHelper do 
   include Rack::Test::Methods
   include Sinatra::Helpers
-  include Canto::AuthorizationHelper
+  include Sinatra::AuthorizationHelper
 
   let(:admin) { FactoryGirl.create(:admin) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }

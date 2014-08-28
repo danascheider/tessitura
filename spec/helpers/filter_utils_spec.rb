@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Canto::FilterUtils do 
-  include Canto::FilterUtils
+describe Sinatra::FilterUtils do 
+  include Sinatra::FilterUtils
 
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
 

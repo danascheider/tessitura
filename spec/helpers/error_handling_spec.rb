@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Canto::ErrorHandling do 
-  include Canto::ErrorHandling
+describe Sinatra::ErrorHandling do 
+  include Sinatra::ErrorHandling
 
   describe '::get_resource' do 
     context 'when the resource exists' do 
