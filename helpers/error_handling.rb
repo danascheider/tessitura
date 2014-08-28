@@ -11,7 +11,7 @@ class Sinatra::Application
 
     def destroy_resource(object=nil)
       begin
-        object ? object.destroy! && 204 : 404
+        object.try(:destroy!) ? 204 : 404
       rescue ActiveRecord::RecordNotDestroyed
         403
       end
