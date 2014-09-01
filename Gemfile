@@ -7,12 +7,10 @@ gem 'json',    '~> 1.8.1'
 # Use Thin web server
 gem 'thin', '~> 1.6.2'
 
-# Use ActiveRecord and SQLite 3 to manage DB records
-gem 'sinatra-activerecord', '~> 2.0.2'
-gem 'activerecord',         '>= 4.1.3'
-gem 'ranked-model',         '~> 0.4.0'
-gem 'sqlite3',              '~> 1.3.9', :platform => :ruby
-gem 'rake',                 '~> 10.3.2'
+# Use Sequel ORM tool
+gem 'sequel',  '~> 4.13.0'
+gem 'sqlite3', '~> 1.3.9', :platform => :ruby
+gem 'rake',    '~> 10.3.2'
 
 # Use Sinatra-Backbone for the RestAPI module to prepare for integration
 # with Backbone.js front-end
