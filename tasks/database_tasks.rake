@@ -33,9 +33,8 @@ namespace :db do
   task :create_migration, [:NAME, :PATH] do |t, args|
     path = args[:path] || File.expand_path('../../db/migrate', __FILE__)
     Dir.mkdir(path) unless Dir.exists?(path)
-    filename = "#{path}/#{Time.now.getutc.to_s.gsub(/\D/, '')}_#{args[:NAME]}.rb"
 
-    File.open(filename, 'w+') do |file|
+    File.open("#{path}/#{Time.now.getutc.to_s.gsub(/\D/, '')}_#{args[:NAME]}.rb", 'w+') do |file|
       file.write <<-EOF
 Sequel.migration do 
   up do
