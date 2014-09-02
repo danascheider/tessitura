@@ -1,6 +1,5 @@
 require 'sinatra/base'
-require 'sinatra/activerecord'
-require 'ranked-model'
+require 'sequel'
 require 'json'
 require 'require_all'
 require File.expand_path('../config/settings', __FILE__)
