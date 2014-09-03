@@ -22,15 +22,12 @@ require_relative support_path + '/helpers'
 
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
 
-# Disable SQL logging unless environment variable log is set to true
-
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
   config.include Rack::Test::Methods
 
   config.before(:suite) do 
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
   end
 
   config.around(:each) do |example|
