@@ -27,7 +27,7 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
 
   config.before(:suite) do 
-    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.around(:each) do |example|
