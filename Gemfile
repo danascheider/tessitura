@@ -16,7 +16,7 @@ gem 'rake',    '~> 10.3.2'
 # with Backbone.js front-end
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 
-# Use Cucumber, RSpec, Webmock for testing
+# Use Cucumber and RSpec for testing
 # Coveralls and SimpleCov monitor test coverage
 group :test do 
   gem 'simplecov',        '>= 0.8.2'
@@ -29,6 +29,7 @@ group :test do
   gem 'factory_girl',     '~> 4.4.0'
   gem 'database_cleaner', '~> 1.3.0'
   gem 'serverspec',       '~> 2.0.0.beta4'
+  gem 'colorize',         '~> 0.7.3' # for Rake output
 end
 
 # Use require_all to clean up requires
