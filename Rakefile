@@ -1,5 +1,6 @@
 require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
+require 'colorize'
 require './canto'
 
 Dir.glob('tasks/*.rake').each {|file| load file }
