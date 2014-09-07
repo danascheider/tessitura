@@ -9,6 +9,8 @@ class Canto < Sinatra::Base
   set :database, "/db/#{ENVIRONMENT}.sqlite3"
   set :data, ''
 
+  Sequel::Model.db = database
+
   helpers Sinatra::AuthorizationHelper 
   helpers Sinatra::ErrorHandling
   helpers Sinatra::FilterUtils
