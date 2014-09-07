@@ -22,16 +22,21 @@ require_relative support_path + '/helpers'
 
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
 
+
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
   config.include Rack::Test::Methods
+
+  db_path = File.expand_path("../..#{Canto::database}", __FILE__)
+  connection = Sequel.connect("sqlite:/#{db_path}")
+  cleaner = DatabaseCleaner[:sequel, {connection: connection}]
 
   config.before(:suite) do 
     DatabaseCleaner.strategy = :truncation
   end
 
   config.around(:each) do |example|
-    DatabaseCleaner.start
+    DatabaseCleaner.start 
     example.run
     DatabaseCleaner.clean
   end

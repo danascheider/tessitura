@@ -10,6 +10,7 @@ class Canto < Sinatra::Base
   set :data, ''
 
   Sequel::Model.db = database
+  DB = Sequel.sqlite("sqlite:/#{database}")
 
   helpers Sinatra::AuthorizationHelper 
   helpers Sinatra::ErrorHandling
