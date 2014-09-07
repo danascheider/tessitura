@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'sinatra/sequel'
 require 'sequel'
 require 'json'
 require 'require_all'

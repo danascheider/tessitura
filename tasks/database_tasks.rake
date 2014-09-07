@@ -55,7 +55,7 @@ namespace :db do
 
     File.open("#{path}/#{Time.now.getutc.to_s.gsub(/\D/, '')}_#{args[:NAME]}.rb", 'w+') do |file|
       file.write <<-EOF
-Sequel.migration do 
+migration "#{args[:NAME]}" do 
   up do
   end
 

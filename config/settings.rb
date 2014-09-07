@@ -1,9 +1,12 @@
 require_all File.expand_path('../../helpers',__FILE__)
 
 class Canto < Sinatra::Base
+  ENVIRONMENT = ENV['RACK_ENV'] || 'development'
+
   set :root, File.dirname(__FILE__)
   set :app_file, __FILE__
   set :database_file, 'config/database.yml'
+  set :database, "/db/#{ENVIRONMENT}.sqlite3"
   set :data, ''
 
   helpers Sinatra::AuthorizationHelper 
