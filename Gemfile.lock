@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/danascheider/sinatra-sequel_extension
+  revision: 06faba02dfe4b2d244bc945f7f7d63b83c849b98
+  specs:
+    sinatra-sequel_extension (0.9.0)
+      sequel (>= 3.2)
+      sinatra (>= 0.9.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -130,5 +138,6 @@ DEPENDENCIES
   simplecov (>= 0.8.2)
   sinatra (~> 1.4.5)
   sinatra-backbone (~> 0.1.1)
+  sinatra-sequel_extension (~> 0.9.0)!
   sqlite3 (~> 1.3.9)
   thin (~> 1.6.2)
