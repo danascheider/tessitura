@@ -1,13 +1,13 @@
+require 'require_all'
 require 'sinatra/base'
 require 'sinatra/sequel'
 require 'sequel'
 require 'json'
-require 'require_all'
 require File.expand_path('../config/settings', __FILE__)
-
 require_all 'models'
 
 class Canto < Sinatra::Base
+
   not_found do 
     [404, '' ]
   end
