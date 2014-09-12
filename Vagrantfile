@@ -12,6 +12,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "puppetlabs/debian-7.5-64-nocm"
   config.vm.provision :shell, path: "nginx.sh"
+  config.vm.provision :shell, path: 'install-rvm.sh', args: 'stable'
+  config.vm.provision :shell, path: 'install-ruby.sh', args: '2.1.2 mysql2'
   config.vm.network :forwarded_port, host: 4567, guest: 80
 
   # Disable automatic box update checking. If you disable this, then

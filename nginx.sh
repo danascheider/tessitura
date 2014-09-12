@@ -1,14 +1,21 @@
 #! /usr/bin/env bash
 
 sudo -i
+
+# Install packages Vim, MySQL Server, and packages needed for nginx 
+# I'm not sure if this would work if I ran `vagrant destroy`, because 
+# installing the mysql-server package involves setting a root password.
+# Will have to investigate how to do this.
+
 apt-get update
-apt-get install -y libcurl4-openssl-dev vim libpcre3-dev zlib1g-dev
-apt-get install -y vim # you're welcome
+apt-get install -y libcurl4-openssl-dev vim libpcre3-dev zlib1g-dev vim rubygems
+apt-get install -y mysql-server libmysql-ruby libmysqlclient-dev
 
 if [ ! -d "~/src" ]; then 
   mkdir src
 fi 
 
+# Install NGINX
 cd src
 wget http://nginx.org/download/nginx-1.7.4.tar.gz
 tar -zxf nginx-1.7.4.tar.gz
@@ -21,10 +28,6 @@ make install
 # nginx command can be used
 ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx
 nginx
-
-# Install RVM stable version, RubyGems, and Bundler
-\curl -sSL https://get.rvm.io | bash -s stable --ruby
-apt-get install -y rubygems
 
 mkdir /var/www && cd /var/www
 apt-get install -y git
