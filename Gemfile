@@ -9,7 +9,7 @@ gem 'thin', '~> 1.6.2'
 
 # Use Sequel ORM tool
 gem 'sequel',  '~> 4.13.0'
-gem 'sqlite3', '~> 1.3.9', :platform => :ruby
+gem 'mysql2', '0.3.16'
 gem 'sinatra-sequel_extension', '~> 0.9.0', git: 'https://github.com/danascheider/sinatra-sequel_extension'
 gem 'rake',    '~> 10.3.2'
 
