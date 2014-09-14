@@ -12,6 +12,7 @@ class Canto < Sinatra::Base
   DB = Sequel.connect(database)
 
   Sequel::Model.plugin :timestamps
+  Sequel::Model.plugin :validation_helpers
 
   helpers Sinatra::AuthorizationHelper 
   helpers Sinatra::ErrorHandling
