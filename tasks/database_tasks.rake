@@ -1,8 +1,23 @@
-require 'sqlite3'
+require 'mysql2'
 require 'sequel'
+require 'yaml'
 
-DB_PATH = File.expand_path('../../db', __FILE__)
 Sequel.extension :migration
+
+yaml_data = File.open(File.expand_path('../../config/database.yml', __FILE__), 'r+') {|file| YAML.load(file) }
+[yaml_data['development'], yaml_data['test'], yaml_data['production']].each do |hash|
+  hash.keys.each do |key|
+    hash[(key.to_sym rescue key) || key] = hash.delete(key)
+  end
+end
+
+DEV, TEST, PRODUCTION = yaml_data['development'], yaml_data['test'], yaml_data['production']
+
+MIGRATION_PATH = File.expand_path('../../db/migrate', __FILE__)
+
+def connection(hash, env)
+  "#{hash[:adapter]}://#{hash[:username]}:#{hash[:password]}@#{hash[:host]}:#{hash[:port]}/#{env}"
+end
 
 namespace :db do 
   desc 'Create all databases except those that currently exist'
@@ -10,16 +25,33 @@ namespace :db do
     Rake::Task['db:development:create'].invoke
     Rake::Task['db:production:create'].invoke
     Rake::Task['db:test:create'].invoke
+    puts "Done!".green
+  end
+
+  desc 'Migrate all databases'
+  task :migrate do |t|
+    Rake::Task['db:development:migrate'].invoke 
+    Rake::Task['db:test:migrate'].invoke
+    Rake::Task['db:production:migrate'].invoke
+    puts "Success!".green
   end
 
   namespace :development do 
+    client = Mysql2::Client.new(DEV)
+
     desc 'Create development database'
     task :create do 
-      if File.exists?(filename = "#{DB_PATH}/development.sqlite3")
-        puts "Development database exists".yellow
-      else
-        dev_db = SQLite3::Database.new filename unless File.exists?(filename)
-        puts "Development database created at #{filename}".green
+      begin
+        client.query('CREATE DATABASE development')
+      rescue Mysql2::Error
+        puts "Development database exists...".blue
+      end
+    end
+
+    desc 'Migrate development database'
+    task :migrate => ['db:development:create'] do 
+      Sequel.connect(connection(DEV, 'development')) do |db|
+        Sequel::Migrator.run(db, MIGRATION_PATH)
       end
     end
   end
@@ -27,11 +59,18 @@ namespace :db do
   namespace :test do 
     desc 'Create test database'
     task :create do 
-      if File.exists?(filename = "#{DB_PATH}/test.sqlite3")
-        puts "Test database exists".yellow
-      else
-        test_db = SQLite3::Database.new filename
-        puts "Test database created at #{filename}".green
+      client = Mysql2::Client.new(TEST)
+      begin
+        client.query('CREATE DATABASE test')
+      rescue Mysql2::Error
+        puts "Test database exists...".blue
+      end
+    end
+
+    desc 'Migrate test database'
+    task :migrate => ['db:test:create'] do 
+      Sequel.connect(connection(TEST, 'test')) do |db|
+        Sequel::Migrator.run(db, MIGRATION_PATH)
       end
     end
   end
@@ -39,11 +78,18 @@ namespace :db do
   namespace :production do 
     desc 'Create production database'
     task :create do 
-      if File.exists?(filename = "#{DB_PATH}/production.sqlite3")
-        puts "Production database exists".yellow
-      else
-        production_db = SQLite3::Database.new "#{DB_PATH}/production.sqlite3"
-        puts "Production database created at #{DB_PATH}/production.sqlite3".green
+      client = Mysql2::Client.new(PRODUCTION)
+      begin
+        client.query('CREATE DATABASE production')
+      rescue Mysql2::Error
+        puts "Production database exists...".blue
+      end
+    end
+
+    desc 'Migrate production database'
+    task :migrate => ['db:production:create'] do 
+      Sequel.connect(connection(PRODUCTION, 'production')) do |db|
+        Sequel::Migrator.run(db, MIGRATION_PATH)
       end
     end
   end
@@ -53,7 +99,7 @@ namespace :db do
     path = args[:path] || File.expand_path('../../db/migrate', __FILE__)
     Dir.mkdir(path) unless Dir.exists?(path)
 
-    File.open("#{path}/#{Time.now.getutc.to_s.gsub(/\D/, '')}_#{args[:NAME]}.rb", 'w+') do |file|
+    File.open((name="#{path}/#{Time.now.getutc.to_s.gsub(/\D/, '')}_#{args[:NAME]}.rb"), 'w+') do |file|
       file.write <<-EOF
 Sequel.migration do 
   up do
@@ -64,18 +110,6 @@ Sequel.migration do
 end
 EOF
     end
-  end
-
-  desc 'Migrate all databases'
-  task :migrate => ['db:create'] do |t|
-
-    db_path = File.expand_path('../../db',__FILE__)
-    migration_path = "#{db_path}/migrate"
-
-    Dir.glob("#{db_path}/*.sqlite3").each do |file|
-      Sequel.sqlite(file) do |db|
-        Sequel::Migrator.run(db, migration_path)
-      end
-    end
+    puts "Migration created at #{MIGRATION_PATH}/#{name}".green
   end
 end
