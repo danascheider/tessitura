@@ -1,4 +1,6 @@
 class User < Sequel::Model
+  self.subset(:admin) { admin == true }
+
   def admin?
     self.admin ? true : false
   end
@@ -29,6 +31,10 @@ class User < Sequel::Model
 
   def validate
     super
-    errors.add(:email, 'cannot be empty') if !email || email.empty?
+    validates_presence [:username, :password, :email]
+    validates_unique [:username, :email]
+    validates_format /@/, :email, message: 'is not a valid e-mail address'
+    validates_min_length 8, :username
+    validates_min_length 8, :password
   end
 end
