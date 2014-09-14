@@ -3,6 +3,10 @@ class User < Sequel::Model
     self.admin ? true : false
   end
 
+  def name
+    "#{self.first_name} #{self.last_name}"
+  end
+
   def owner_id
     self.id 
   end
@@ -18,8 +22,13 @@ class User < Sequel::Model
       country: self.country,
       fach: self.fach,
       admin: self.admin,
-      created_at: self.created_at
+      created_at: self.created_at,
       updated_at: self.updated_at
     }
+  end
+
+  def validate
+    super
+    errors.add(:email, 'cannot be empty') if !email || email.empty?
   end
 end
