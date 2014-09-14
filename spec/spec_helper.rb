@@ -8,6 +8,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 SimpleCov.start if ENV["COVERAGE"]
 
 ENV['RACK_ENV'] = 'test'
+DB_PASSWD = 'vagrant'
 
 support_path = File.expand_path('../../features/support', __FILE__)
 app_path = File.expand_path('../..', __FILE__)
@@ -27,8 +28,7 @@ RSpec.configure do |config|
   config.include JsonSpec::Helpers
   config.include Rack::Test::Methods
 
-  db_path = File.expand_path("../..#{Canto::database}", __FILE__)
-  connection = Sequel.connect("sqlite:/#{db_path}")
+  connection = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
   cleaner = DatabaseCleaner[:sequel, {connection: connection}]
 
   config.before(:suite) do 
