@@ -1,6 +1,8 @@
 require 'factory_girl'
 
 FactoryGirl.define do 
+  to_create {|i| i.save }
+  
   factory :task_list do 
     association :user
     sequence(:title) {|n| "Task List #{n}"}
