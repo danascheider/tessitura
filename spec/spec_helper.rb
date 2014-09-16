@@ -17,6 +17,7 @@ require          'factory_girl'
 require          'json_spec/helpers'
 require          'rack/test'
 require          'rspec/core/rake_task'
+require          'colorize'
 require_relative '../canto'
 require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
@@ -31,9 +32,9 @@ RSpec.configure do |config|
 
   DB = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
 
-  # config.before(:each) do 
-  #   Rake::Task['db:test:prepare'].invoke
-  # end
+  config.before(:each) do 
+    Rake::Task['db:test:prepare'].invoke
+  end
 
 end
 
