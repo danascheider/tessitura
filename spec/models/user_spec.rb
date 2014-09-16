@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe User do 
-  let(:admin) { FactoryGirl.create(:admin, email: 'admin@example.com') }
-
   describe 'attributes' do 
     it { is_expected.to respond_to(:first_name) }
     it { is_expected.to respond_to(:last_name) }
@@ -82,21 +80,23 @@ describe User do
 
   describe 'creating users' do 
     context 'validations' do 
-      let(:user) { FactoryGirl.build(:user, email: nil) }
-
+      before(:each) do 
+        @admin = FactoryGirl.create(:admin, email: 'admin@example.com')
+        @user = FactoryGirl.build(:user, email: nil)
+      end
+      
       it 'is invalid without an e-mail address' do 
-        expect(user).not_to be_valid
+        expect(@user).not_to be_valid
       end
 
       it 'is invalid with a duplicate e-mail address' do 
-        @admin = admin
-        user.email = 'admin@example.com'
-        expect(user).not_to be_valid
+        @user.email = 'admin@example.com'
+        expect(@user).not_to be_valid
       end
 
       it 'is invalid with an improper e-mail format' do 
-        user.email = 'hello_world.com'
-        expect(user).not_to be_valid
+        @user.email = 'hello_world.com'
+        expect(@user).not_to be_valid
       end
     end
 
@@ -110,29 +110,32 @@ describe User do
   describe 'admin scope' do 
     before(:each) do 
       FactoryGirl.create_list(:user, 3)
-      @admins = [FactoryGirl.create_list(:admin, 2), admin].flatten!
+      @admins = [FactoryGirl.create_list(:admin, 2)].flatten!
     end
 
     it 'includes all the admins' do 
-      expect(User.admin.to_a.sort).to eql @admins.sort
+      expect(User.admin.to_a).to eql @admins
     end
   end
 
   describe 'admin deletion' do 
+    before(:each) do 
+      @admin_1 = FactoryGirl.create(:admin)
+    end
+
     context 'last admin' do 
       it 'doesn\'t destroy the last admin' do 
-        expect{ admin.destroy! }.to raise_error(ArgumentError)
+        expect{ @admin_1.destroy }.to raise_error(Sequel::HookFailed)
       end
     end
 
     context 'not last admin' do 
       before(:each) do 
-        @admin_1 = admin
         @admin_2 = FactoryGirl.create(:admin)
       end
 
       it 'destroys user' do 
-        expect{ @admin_2.destroy! }.not_to raise_error
+        expect{ @admin_2.destroy }.not_to raise_error
       end
     end
   end

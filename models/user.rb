@@ -2,11 +2,19 @@ class User < Sequel::Model
   one_to_many :task_lists
 
   def self.admin 
-    User.filter(admin: true)
+    User.where(admin: true)
   end
 
   def admin?
     self.admin ? true : false
+  end
+
+  def before_destroy
+    false if self.admin? && User.admin.count == 1
+  end
+
+  def default_task_list
+    self.task_lists.first || TaskList.create(title: 'Default List', user_id: self.id)
   end
 
   def name
@@ -36,7 +44,7 @@ class User < Sequel::Model
   def validate
     super
     validates_presence [:username, :password, :email]
-    validates_unique [:username, :email]
+    validates_unique(:username, :email)
     validates_format /@/, :email, message: 'is not a valid e-mail address'
     validates_min_length 8, :username
     validates_min_length 8, :password

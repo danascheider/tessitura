@@ -32,8 +32,8 @@ RSpec.configure do |config|
 
   DB = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
 
-  config.before(:each) do 
-    Rake::Task['db:test:prepare'].invoke
+  config.after(:each) do
+    [:task_lists, :users].each {|x| Sequel::Model.db.from(x).delete }
   end
 
 end
