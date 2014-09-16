@@ -13,7 +13,7 @@ describe User do
   end
 
   describe 'instance methods' do
-    let(:user) { FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith') }
+    let(:user) { FactoryGirl.build(:user, first_name: 'Jacob', last_name: 'Smith') }
 
     it { is_expected.to respond_to(:admin?) }
 
