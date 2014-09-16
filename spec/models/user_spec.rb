@@ -121,7 +121,7 @@ describe User do
   describe 'admin deletion' do 
     context 'last admin' do 
       it 'doesn\'t destroy the last admin' do 
-        expect{ admin.destroy! }.to raise_error(ActiveRecord::RecordNotDestroyed)
+        expect{ admin.destroy! }.to raise_error(ArgumentError)
       end
     end
 

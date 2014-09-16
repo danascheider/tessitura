@@ -1,5 +1,9 @@
 class User < Sequel::Model
-  self.subset(:admin) { admin == true }
+  one_to_many :task_lists
+
+  def self.admin 
+    User.filter(admin: true)
+  end
 
   def admin?
     self.admin ? true : false

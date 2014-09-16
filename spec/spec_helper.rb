@@ -16,30 +16,24 @@ app_path = File.expand_path('../..', __FILE__)
 require          'factory_girl'
 require          'json_spec/helpers'
 require          'rack/test'
-require          'database_cleaner'
+require          'rspec/core/rake_task'
 require_relative '../canto'
 require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
 
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
+Dir.glob('tasks/database_tasks.rake').each {|file| load file }
 
 
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
   config.include Rack::Test::Methods
 
-  connection = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
-  cleaner = DatabaseCleaner[:sequel, {connection: connection}]
+  DB = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
 
-  config.before(:suite) do 
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.around(:each) do |example|
-    DatabaseCleaner.start 
-    example.run
-    DatabaseCleaner.clean
-  end
+  # config.before(:each) do 
+  #   Rake::Task['db:test:prepare'].invoke
+  # end
 
 end
 

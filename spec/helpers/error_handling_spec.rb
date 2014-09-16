@@ -56,18 +56,18 @@ describe Sinatra::ErrorHandling do
     context 'with valid attributes' do 
       context 'users' do 
         it 'creates a new user' do 
-          expect(User).to receive(:create!)
+          expect(User).to receive(:create)
           create_resource(User, username: 'frankjones', password: 'frankjonespwd', email: 'fj@a.com')
         end
 
         it 'returns status 201' do 
-          expect(create_resource(User, username: 'frankjones', password: 'frankjonespwd', email: 'fj@a.com')).to eql 201
+          expect(create_resource(User, { username: 'frankjones', password: 'frankjonespwd', email: 'fj@a.com' })).to eql 201
         end
       end
 
       context 'tasks' do 
         it 'creates a new task' do 
-          expect(Task).to receive(:create!)
+          expect(Task).to receive(:create)
           create_resource(Task, title: 'Water the lawn', task_list_id: list_id)
         end
 

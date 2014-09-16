@@ -1,25 +1,29 @@
+class Object
+  # This super useful method comes from ActiveSupport. Since I'm trying
+  # to get Rails fully out of this project, I am re-implementing any 
+  # ActiveSupport methods I need... it's just not even worth it.
+  def try(method, *args)
+    begin
+      self.send(method, *args)
+    rescue NoMethodError
+      nil
+    end
+  end
+end
+
 module Sinatra
   module ErrorHandling
     def create_resource(klass, attributes)
-      begin
-        klass.create!(attributes)
-        201
-      rescue ActiveRecord::RecordInvalid, ActiveRecord::UnknownAttributeError
-        422
-      end
+      klass.try(:create, attributes) ? 201 : 422
     end
 
     def destroy_resource(object=nil)
-      begin
-        object.try(:destroy!) ? 204 : 404
-      rescue ActiveRecord::RecordNotDestroyed
-        403
-      end
+      object.try(:destroy!) ? 204 : 404
     end
 
     def get_resource(klass, id, &block)
-      return nil unless klass.exists?(id)
-      if block_given? then yield klass.find(id); else klass.find(id); end
+      return nil unless klass[id]
+      if block_given? then yield klass[id]; else klass[id]; end
     end
 
     def parse_json(object)
@@ -34,7 +38,7 @@ module Sinatra
     def update_resource(attributes, object=nil)
       begin
         object.try(:update!, attributes) ? 200 : 404
-      rescue ActiveRecord::RecordInvalid, ActiveRecord::UnknownAttributeError
+      rescue Sequel::ValidationFailed, Sequel::ConstraintViolation, Sequel::DatabaseError
         422
       end
     end
@@ -42,3 +46,5 @@ module Sinatra
 
   helpers ErrorHandling
 end
+
+# Failures 3, 6, and 7 will be most fruitful to pursue right now
