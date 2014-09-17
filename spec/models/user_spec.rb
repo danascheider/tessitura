@@ -13,7 +13,9 @@ describe User do
   end
 
   describe 'instance methods' do
-    let(:user) { FactoryGirl.build(:user, first_name: 'Jacob', last_name: 'Smith') }
+    before(:each) do 
+      @user = FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith')
+    end
 
     it { is_expected.to respond_to(:admin?) }
 
@@ -23,11 +25,11 @@ describe User do
 
     describe '#tasks' do 
       before(:each) do 
-        2.times { FactoryGirl.create(:task_list_with_tasks, user_id: user.id) }
+        2.times { FactoryGirl.create(:task_list_with_tasks, user_id: @user.id) }
       end
 
       it 'returns an ActiveRecord::Relation' do 
-        expect(user.tasks).to be_an(ActiveRecord::Relation)
+        expect(@user.tasks).to be_an(ActiveRecord::Relation)
       end
 
       it 'returns all its tasks' do 

@@ -33,6 +33,8 @@ FactoryGirl.define do
   factory :task do 
     association :task_list
     sequence(:title) {|n| "My Task #{n}"}
+    status 'new'
+    priority 'normal'
 
     factory :task_with_deadline do 
       sequence(:deadline) { Time.now }

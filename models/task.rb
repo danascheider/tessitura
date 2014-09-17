@@ -8,6 +8,10 @@ class Task < Sequel::Model
     self.priority ||= 'normal'
   end
 
+  def self.complete
+    Task.where(status: 'complete')
+  end
+
   def complete?
     self.status == 'complete'
   end

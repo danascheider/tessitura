@@ -23,11 +23,9 @@ describe Task do
   end
 
   describe 'public methods' do 
-    let(:task_list) { FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks) }
-    let(:complete_task) { task_list.tasks.complete.first }
-
     before(:each) do 
-      @task_list = task_list 
+      @task_list     = FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks)
+      @complete_task = Task.where(task_list_id: @task_list.id, status: 'complete').first
     end
 
     describe '::first_complete' do 

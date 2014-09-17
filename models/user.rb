@@ -25,6 +25,10 @@ class User < Sequel::Model
     self.id 
   end
 
+  def tasks
+    self.task_lists.map {|list| list.tasks }
+  end
+
   def to_hash
     {
       id: self.id,
