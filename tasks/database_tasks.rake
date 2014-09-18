@@ -4,6 +4,12 @@ require 'yaml'
 
 Sequel.extension :migration
 
+module DatabaseTaskHelper
+  def self.connection(hash, env)
+    "#{hash[:adapter]}://#{hash[:username]}:#{hash[:password]}@#{hash[:host]}:#{hash[:port]}/#{env}"
+  end
+end
+
 yaml_data = File.open(File.expand_path('../../config/database.yml', __FILE__), 'r+') {|file| YAML.load(file) }
 [yaml_data['development'], yaml_data['test'], yaml_data['production']].each do |hash|
   hash.keys.each do |key|
@@ -11,16 +17,14 @@ yaml_data = File.open(File.expand_path('../../config/database.yml', __FILE__), '
   end
 end
 
-DEV, TEST, PRODUCTION = yaml_data['development'], yaml_data['test'], yaml_data['production']
+YAML_DATA = yaml_data
+
+DEV = Sequel.connect(DatabaseTaskHelper.connection(YAML_DATA['development'], 'development'))
+TEST = Sequel.connect(DatabaseTaskHelper.connection(YAML_DATA['test'], 'test'))
+PRODUCTION = Sequel.connect(DatabaseTaskHelper.connection(YAML_DATA['production'], 'production'))
 
 MIGRATION_PATH = File.expand_path('../../db/migrate', __FILE__)
 SCHEMA_PATH = File.expand_path('../../db/schema_migrations', __FILE__)
-
-module DatabaseTaskHelper
-  def self.connection(hash, env)
-    "#{hash[:adapter]}://#{hash[:username]}:#{hash[:password]}@#{hash[:host]}:#{hash[:port]}/#{env}"
-  end
-end
 
 namespace :db do 
   desc 'Create all databases except those that currently exist'
@@ -75,11 +79,8 @@ EOF
   namespace :schema do
     desc 'Load schema into database'
     task :load, :PATH do |t, args|
-      dev        = Sequel.connect(DatabaseTaskHelper.connection(DEV, 'development'))
-      test       = Sequel.connect(DatabaseTaskHelper.connection(TEST, 'test'))
-      production = Sequel.connect(DatabaseTaskHelper.connection(PRODUCTION, 'production'))
 
-      [dev, test, production].each {|db| db.extension :schema_caching }
+      [DEV, TEST, PRODUCTION].each {|db| db.extension :schema_caching }
 
       path = args[:path] || SCHEMA_PATH
 
@@ -93,10 +94,9 @@ EOF
     task :dump, [:PATH] => ['db:development:create'] do |t, args|
       timestamp = Time.now.getutc.to_s.gsub(/\D/, '')
       path      = args[:path] || SCHEMA_PATH
-      db        = Sequel.connect(DatabaseTaskHelper.connection(DEV, 'development'))
 
-      db.extension :schema_dumper
-      schema = db.dump_schema_migration
+      DEV.extension :schema_dumper
+      schema = DEV.dump_schema_migration
       bad    = /\s*create_table\(:schema(.*) do\s+\w+(.*)\s+(primary_key(.*))?\s+end/
       schema.gsub!(bad, '')
 
@@ -105,7 +105,7 @@ EOF
   end
 
   namespace :development do 
-    client = Mysql2::Client.new(DEV)
+    client = Mysql2::Client.new(YAML_DATA['development'])
 
     desc 'Create development database'
     task :create do 
@@ -119,9 +119,7 @@ EOF
     desc 'Migrate development database'
     task :migrate, [:PATH] => ['db:development:create'] do |t, args|
       path = args[:PATH] || MIGRATION_PATH
-      Sequel.connect(DatabaseTaskHelper::connection(DEV, 'development')) do |db|
-        Sequel::Migrator.run(db, path)
-      end
+      Sequel::Migrator.run(DEV, path)
       puts "Development database migrated successfully...".green
     end
 
@@ -137,7 +135,7 @@ EOF
   end
 
   namespace :test do 
-    client = Mysql2::Client.new(TEST)
+    client = Mysql2::Client.new(YAML_DATA['test'])
 
     desc 'Create test database'
     task :create do 
@@ -151,9 +149,7 @@ EOF
     desc 'Migrate test database'
     task :migrate, [:PATH] => ['db:test:create'] do |t, args|
       path = args[:path] || MIGRATION_PATH
-      Sequel.connect(DatabaseTaskHelper.connection(TEST, 'test')) do |db|
-        Sequel::Migrator.run(db, path)
-      end
+      Sequel::Migrator.run(TEST, path)
       puts "Test database migrated successfully...".green
     end
 
@@ -167,17 +163,24 @@ EOF
       end
     end
 
-    desc 'Clean test database and update schema'
-    task :prepare do 
-      client.query('DROP DATABASE test')
-      Rake::Task['db:test:create'].invoke
+    desc 'Re-create database and update schema'
+    task :prepare, :PATH do |t, args|
+      path = args[:path] || SCHEMA_PATH
+      TEST.run('DROP DATABASE test')
       Rake::Task['db:test:migrate'].invoke(SCHEMA_PATH)
       puts "Success!".green
+    end
+
+    task :clean, :PATH do |t, args|
+      path = args[:path] || SCHEMA_PATH
+      TEST.run('SET FOREIGN_KEY_CHECKS = 0')
+      TEST.run("SELECT concat('DROP TABLE IF EXISTS', table_name, ';') FROM information_schema.tables WHERE table_schema = 'test'")
+      Rake::Task['db:test:migrate'].invoke(path)
     end
   end
 
   namespace :production do 
-    client = Mysql2::Client.new(PRODUCTION)
+    client = Mysql2::Client.new(YAML_DATA['production'])
 
     desc 'Create production database'
     task :create do 
@@ -191,17 +194,14 @@ EOF
     desc 'Migrate production database'
     task :migrate, [:PATH] => ['db:production:create'] do |t, args|
       path = args[:path] || MIGRATION_PATH
-      Sequel.connect(DatabaseTaskHelper.connection(PRODUCTION, 'production')) do |db|
-        Sequel::Migrator.run(db, path)
-      end
+      Sequel::Migrator.run(PRODUCTION, path)
       puts "Production database migrated successfully...".green
     end
 
     desc 'Drop production database'
     task :drop do  
       puts "Dropping the production database can cause irretrievable data loss. Proceed? (Anything but 'yes' will cancel request)"
-      answer = STDIN.gets
-      if answer.chomp == 'yes'
+      if STDIN.gets.chomp == 'yes'
         begin
           client.query('DROP DATABASE production')
           puts 'Production database was deleted successfully.'.green

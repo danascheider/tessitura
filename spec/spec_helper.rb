@@ -16,6 +16,7 @@ app_path = File.expand_path('../..', __FILE__)
 require          'factory_girl'
 require          'json_spec/helpers'
 require          'rack/test'
+require          'mysql2'
 require          'rspec/core/rake_task'
 require          'colorize'
 require_relative '../canto'
@@ -31,11 +32,13 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
 
   DB = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
+  CLIENT = Mysql2::Client.new(host: '127.0.0.1', username: 'root', password: 'vagrant', port: 3306, database: ENV['RACK_ENV'])
 
-  config.after(:each) do
-    [:task_lists, :users].each {|x| Sequel::Model.db.from(x).delete }
+  config.around(:each) do |example|
+    Rake::Task['db:test:drop'].invoke
+    Rake::Task['db:test:migrate'].invoke(File.expand_path('../../db/schema_migrations', __FILE__))
+    example.run
   end
-
 end
 
 def app

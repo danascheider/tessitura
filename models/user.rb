@@ -14,7 +14,7 @@ class User < Sequel::Model
   end
 
   def default_task_list
-    self.task_lists.first || TaskList.create(title: 'Default List', user_id: self.id)
+    self.task_lists.length > 0 ? self.task_lists.first : TaskList.create(title: "Default Task List", user: self)
   end
 
   def name
@@ -40,9 +40,10 @@ class User < Sequel::Model
       country: self.country,
       fach: self.fach,
       admin: self.admin,
+      task_lists: self.task_lists.map {|list| list.id },
       created_at: self.created_at,
       updated_at: self.updated_at
-    }
+    }.reject! {|k,v| [nil, false, [], {}, ''].include? v }
   end
 
   def validate

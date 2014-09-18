@@ -1,3 +1,4 @@
+require 'logger'
 require_all File.expand_path('../../helpers',__FILE__)
 
 class Canto < Sinatra::Base
@@ -9,7 +10,7 @@ class Canto < Sinatra::Base
   set :database, "mysql2://root:#{ROOT_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
   set :data, ''
 
-  DB = Sequel.connect(database)
+  DB = Sequel.connect(database, logger: Logger.new(File.expand_path('../../log/db.log', __FILE__)))
 
   Sequel::Model.plugin :timestamps
   Sequel::Model.plugin :validation_helpers
