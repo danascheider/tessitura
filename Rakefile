@@ -8,10 +8,16 @@ Dir.glob('tasks/*.rake').each {|file| load file }
 Cucumber::Rake::Task.new
 RSpec::Core::RakeTask.new
 
+task 'suite:run' do 
+  Rake::Task['db:test:clean'].invoke
+  Rake::Task[:spec].invoke
+  Rake::Task['db:test:clean'].invoke
+  Rake::Task[:cucumber].invoke
+end
+
 task :default => [:all]
 
 desc "Run all tests."
 task :all => [
-  :cucumber,
-  :spec,
+  'suite:run'
 ]

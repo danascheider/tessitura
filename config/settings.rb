@@ -16,7 +16,8 @@ class Canto < Sinatra::Base
   file.sync = true
   use Rack::CommonLogger, file
 
-  db_loggers = [Logger.new(File.expand_path('../../log/db.log', __FILE__)), Logger.new(STDOUT)]
+  db_loggers = [Logger.new(File.expand_path('../../log/db.log', __FILE__))]
+  db_loggers << Logger.new(STDOUT) if ENV['LOG'] == true
   DB = Sequel.connect(database, loggers: db_loggers)
 
   Sequel::Model.plugin :timestamps

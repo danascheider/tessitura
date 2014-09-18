@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe User do 
+
   describe 'attributes' do 
     it { is_expected.to respond_to(:first_name) }
     it { is_expected.to respond_to(:last_name) }
@@ -13,9 +14,7 @@ describe User do
   end
 
   describe 'instance methods' do
-    before(:each) do 
-      @user = FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith')
-    end
+    let(:user) { FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith') }
 
     it { is_expected.to respond_to(:admin?) }
 
@@ -25,58 +24,57 @@ describe User do
 
     describe '#tasks' do 
       before(:each) do 
-        2.times { FactoryGirl.create(:task_list_with_tasks, user_id: @user.id) }
+        2.times { FactoryGirl.create(:task_list_with_tasks, user_id: user.id) }
       end
 
       it 'returns an array' do 
-        expect(@user.tasks).to be_an(Array)
+        expect(user.tasks).to be_an(Array)
       end
 
       it 'returns all its tasks' do 
-        tasks = @user.task_lists.map {|list| list.tasks }
-        expect(@user.tasks.to_a).to eql tasks
+        tasks = user.task_lists.map {|list| list.tasks }
+        expect(user.tasks.to_a).to eql tasks
       end
     end
 
     describe '#to_hash' do 
       before(:each) do 
-        FactoryGirl.create(:task_list_with_tasks, user_id: @user.id)
-        @hash = { id:         @user.id,
-                  username:   @user.username,
-                  email:      @user.email,
+        FactoryGirl.create(:task_list_with_tasks, user_id: user.id)
+        @hash = { id:         user.id,
+                  username:   user.username,
+                  email:      user.email,
                   first_name: 'Jacob', 
                   last_name:  'Smith', 
                   country:    'USA',
-                  task_lists: @user.task_lists.map {|list| list.id },
-                  created_at: @user.created_at
+                  task_lists: user.task_lists.map {|list| list.id },
+                  created_at: user.created_at
                 }
       end
 
       it 'returns a hash of its attributes' do 
-        expect(@user.to_hash).to eql @hash
+        expect(user.to_hash).to eql @hash
       end
     end
 
     describe '#name' do 
       it 'concatenates first and last name' do 
-        expect(@user.name).to eql 'Jacob Smith'
+        expect(user.name).to eql 'Jacob Smith'
       end
     end
 
     describe '#default_task_list' do 
       it 'creates a task list if there isn\'t one' do 
-        expect { @user.default_task_list }.to change { @user.task_lists.count }.from(0).to(1)
+        expect { user.default_task_list }.to change { user.task_lists.count }.from(0).to(1)
       end
 
       it 'returns its first task list' do 
-        3.times { FactoryGirl.create(:task_list, user_id: @user.id) }
-        expect(@user.default_task_list).to eql @user.task_lists.first
+        3.times { FactoryGirl.create(:task_list, user_id: user.id) }
+        expect(user.default_task_list).to eql user.task_lists.first
       end
     end
 
     describe '#owner_id' do 
       it 'returns its own ID' do 
-        user = FactoryGirl.create(:user)
         expect(user.owner_id).to eql user.id
       end
     end
@@ -84,24 +82,21 @@ describe User do
 
   describe 'creating users' do 
     context 'validations' do 
-      before(:each) do 
-        @admin = FactoryGirl.create(:admin, email: 'admin@example.com')
-        @user = FactoryGirl.build(:user, email: nil)
-      end
+      let(:admin) { FactoryGirl.create(:admin, email: 'admin@example.com') }
+      let(:user) { FactoryGirl.build(:user, email: nil) }
       
       it 'is invalid without an e-mail address' do 
-        expect(@user).not_to be_valid
+        expect(user).not_to be_valid
       end
 
       it 'is invalid with a duplicate e-mail address' do 
-        @user.email = @admin.email
-        expect(@user).not_to be_valid
+        user.email = admin.email
+        expect(user).not_to be_valid
       end
 
       it 'is invalid with an improper e-mail format' do 
-        dump_users
-        @user.email = 'hello_world.com'
-        expect(@user).not_to be_valid
+        user.email = 'hello_world.com'
+        expect(user).not_to be_valid
       end
     end
 
@@ -113,14 +108,13 @@ describe User do
   end
 
   describe 'admin scope' do 
-    before(:each) do 
-      FactoryGirl.create_list(:user, 3)
-      @admins = [FactoryGirl.create_list(:admin, 2)]
+    around(:each) do |example|
+      @admins = FactoryGirl.create_list(:admin, 2).flatten
+      example.run 
+      User.all.each {|u| u.delete }
     end
 
     it 'includes all the admins' do 
-      puts "@ADMINS:"
-      puts "#{@admins}"
       expect(User.admin.to_a).to eql @admins
     end
   end
@@ -128,6 +122,7 @@ describe User do
   describe 'admin deletion' do 
     before(:each) do 
       @admin_1 = FactoryGirl.create(:admin)
+      puts "THERE ARE #{User.admin.count} ADMIN USERS".red
     end
 
     context 'last admin' do 

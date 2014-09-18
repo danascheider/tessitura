@@ -26,18 +26,19 @@ require_relative support_path + '/helpers'
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
 Dir.glob('tasks/database_tasks.rake').each {|file| load file }
 
-
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
   config.include Rack::Test::Methods
+  config.include FactoryGirl::Syntax::Methods
+
+  config.order = 'random'
 
   DB = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
   CLIENT = Mysql2::Client.new(host: '127.0.0.1', username: 'root', password: 'vagrant', port: 3306, database: ENV['RACK_ENV'])
 
-  config.around(:each) do |example|
+  config.before(:each) do
     Rake::Task['db:test:drop'].invoke
     Rake::Task['db:test:migrate'].invoke(File.expand_path('../../db/schema_migrations', __FILE__))
-    example.run
   end
 end
 
