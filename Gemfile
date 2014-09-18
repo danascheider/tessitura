@@ -27,6 +27,7 @@ group :test do
   gem 'cucumber',         '~> 1.3.16'
   gem 'rspec',            '~> 3.0.0'
   gem 'rack-test',        '~> 0.6.2', require: 'rack/test'
+  gem 'fabrication',      '~> 2.11.3'
   gem 'factory_girl',     '~> 4.4.0'
   gem 'database_cleaner', '~> 1.3.0'
   gem 'serverspec',       '~> 2.0.0.beta4'
