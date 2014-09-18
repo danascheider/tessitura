@@ -10,7 +10,14 @@ class Canto < Sinatra::Base
   set :database, "mysql2://root:#{ROOT_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
   set :data, ''
 
-  DB = Sequel.connect(database, logger: Logger.new(File.expand_path('../../log/db.log', __FILE__)))
+  enable :logging
+
+  file = File.new(File.expand_path("../../log/canto.log", __FILE__), 'a+')
+  file.sync = true
+  use Rack::CommonLogger, file
+
+  db_loggers = [Logger.new(File.expand_path('../../log/db.log', __FILE__)), Logger.new(STDOUT)]
+  DB = Sequel.connect(database, loggers: db_loggers)
 
   Sequel::Model.plugin :timestamps
   Sequel::Model.plugin :validation_helpers
