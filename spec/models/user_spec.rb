@@ -10,6 +10,7 @@ describe User do
     it { is_expected.to respond_to(:country) }
     it { is_expected.to respond_to(:fach) }
     it { is_expected.to respond_to(:admin) }
+    it { is_expected.to respond_to(:to_json) }
   end
 
   describe 'instance methods' do
@@ -52,6 +53,12 @@ describe User do
 
       it 'returns a hash of its attributes' do 
         expect(user.to_hash).to eql @hash
+      end
+    end
+
+    describe '#to_json' do 
+      it 'converts itself to hash form first' do 
+        expect(user.to_json).to eql user.to_hash.to_json
       end
     end
 

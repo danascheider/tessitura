@@ -47,6 +47,10 @@ class User < Sequel::Model
     }.reject! {|k,v| [nil, false, [], {}, ''].include? v }
   end
 
+  def to_json
+    self.to_hash.to_json
+  end
+
   def validate
     super
     validates_presence [:username, :password, :email]
