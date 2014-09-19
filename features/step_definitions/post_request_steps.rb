@@ -1,28 +1,24 @@
 # Create Task
 # ===========
 When(/^the client submits a POST request to \/users\/(\d+)\/tasks with the (\d+)(?:[a-z]{2}) user\'s credentials and:$/) do |id1, id2, string|
-  @user = get_resource(User, id1)
-  @current = get_resource(User, id2)
+  @user = User[id1]
+  @current = User[id2]
   @user_task_count = @user.tasks.count
-  authorize @current.username, @current.password
+  authorize_with @current
   make_request('POST', "/users/#{id1}/tasks", string)
 end
 
 When(/^the client submits a POST request to \/users\/(\d+)\/tasks with no credentials and:$/) do |id, string|
-  @user = get_resource(User, id)
+  @user = User[id]
   @user_task_count = @user.tasks.count if @user
   make_request('POST', "/users/#{id}/tasks", string)
-end
-
-When(/^the client submits a POST request to \/filters with:$/) do |string|
-  make_request('POST', '/filters', string)
 end
 
 # Create User
 # ===========
 When(/^the client submits a POST request to \/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
-  @current = get_resource(User, id)
-  authorize @current.username, @current.password
+  @current = User[id]
+  authorize_with @current
   make_request('POST', '/users', string)
 end
 
