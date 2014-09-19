@@ -5,7 +5,7 @@ shared_examples 'an authorized GET request' do
   end
 
   it 'returns the requested resource' do 
-    expect(response_body).to eql resource
+    expect(response_body).to eql resource.to_json
   end
 
   it 'returns status 200' do 
@@ -20,7 +20,7 @@ shared_examples 'an unauthorized GET request' do
   end
 
   it 'doesn\'t return the requested resource' do 
-    expect(response_body).not_to include resource
+    expect(response_body).not_to include resource.to_json
   end
 
   it 'returns status 401' do 

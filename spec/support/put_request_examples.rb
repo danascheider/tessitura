@@ -5,7 +5,7 @@ shared_examples 'an authorized PUT request' do
 
   context 'with valid attributes' do 
     it 'updates the resource' do 
-      expect_any_instance_of(model).to receive(:update!).with(parse_json(valid_attributes))
+      expect_any_instance_of(model).to receive(:update).with(parse_json(valid_attributes))
       make_request('PUT', path, valid_attributes )
     end
 
@@ -40,7 +40,7 @@ end
 
 shared_examples 'a PUT request without credentials' do 
   it 'doesn\'t update the resource' do 
-    expect_any_instance_of(model).not_to receive(:update!).with(parse_json(valid_attributes))
+    expect_any_instance_of(model).not_to receive(:update).with(parse_json(valid_attributes))
     make_request('PUT', path, valid_attributes)
   end
 

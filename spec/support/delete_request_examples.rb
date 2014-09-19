@@ -5,7 +5,7 @@ shared_examples 'an authorized DELETE request' do
 
   context 'when the resource exists' do 
     it 'deletes the resource' do 
-      expect_any_instance_of(model).to receive(:destroy!)
+      expect_any_instance_of(model).to receive(:destroy)
       make_request('DELETE', path)
     end
 
@@ -17,7 +17,7 @@ shared_examples 'an authorized DELETE request' do
 
   context 'when the resource doesn\'t exist' do 
     it 'doesn\'t delete anything' do 
-      expect_any_instance_of(model).not_to receive(:destroy!)
+      expect_any_instance_of(model).not_to receive(:destroy)
       make_request('DELETE', nonexistent_resource_path)
     end
 
@@ -34,7 +34,7 @@ shared_examples 'an unauthorized DELETE request' do
   end
 
   it 'doesn\'t delete the resource' do 
-    expect_any_instance_of(model).not_to receive(:destroy!)
+    expect_any_instance_of(model).not_to receive(:destroy)
     make_request('DELETE', path)
   end
 
@@ -46,7 +46,7 @@ end
 
 shared_examples 'a DELETE request without credentials' do 
   it 'doesn\'t delete the resource' do 
-    expect_any_instance_of(model).not_to receive(:destroy!)
+    expect_any_instance_of(model).not_to receive(:destroy)
     make_request('DELETE', path)
   end
 

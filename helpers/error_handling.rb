@@ -35,7 +35,6 @@ module Sinatra
       end
     end
 
-
     def update_resource(attributes, object=nil)
       return 404 unless object
       object.try(:update, attributes) ? 200 : 422
@@ -44,5 +43,3 @@ module Sinatra
 
   helpers ErrorHandling
 end
-
-# Failures 3, 6, and 7 will be most fruitful to pursue right now

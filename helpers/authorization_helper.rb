@@ -24,17 +24,12 @@ module Sinatra
     end
 
     def current_user
-      User.find_by(username: @auth.credentials.first)
+      User.find(username: @auth.credentials.first)
     end
 
     def protect(klass)
-      return 404 unless klass.exists?(@id) && (@resource = klass.find(@id))
+      return 404 unless (@resource = klass[@id])
       return if authorized? && authorized_for_resource?(@resource.owner_id)
-      access_denied
-    end
-
-    def protect_filter!
-      return if authorized? && authorized_for_resource?(@request_body[:user]) 
       access_denied
     end
 
@@ -44,7 +39,7 @@ module Sinatra
 
     def valid_credentials?
       begin
-        @auth.credentials.last == User.find_by(username: @auth.credentials.first).password
+        @auth.credentials.last == User.find(username: @auth.credentials.first).password
       rescue
         false
       end

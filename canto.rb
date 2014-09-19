@@ -46,7 +46,7 @@ class Canto < Sinatra::Base
 
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
     get route do 
-      return_json(@resource) || 404
+      return_json(@resource.try(:to_hash)) || 404
     end
 
     put route do 
@@ -65,14 +65,6 @@ class Canto < Sinatra::Base
 
   get '/users/:id/tasks' do |id|
     return_json(@resource.tasks)
-  end
-
-  # Filters
-  # =======
-
-  post '/filters' do 
-    protect_filter!
-    filter_resources(@request_body)
   end
 
   # Admin-Only Routes

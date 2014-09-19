@@ -12,20 +12,20 @@ describe Canto do
     let(:path) { '/users' }
 
     context 'with valid attributes' do 
-      it 'calls the User create! method' do 
-        expect(User).to receive(:create!)
-        make_request('POST', '/users', { 'email' => 'user@example.com', 'username' => 'justine', 'password' => 'validpassword666', 'country' => 'USA' }.to_json)
+      it 'calls the User create method' do 
+        expect(User).to receive(:create)
+        make_request('POST', '/users', { 'email' => 'user@example.com', 'username' => 'justine7', 'password' => 'validpassword666', 'country' => 'USA' }.to_json)
       end
 
       it 'returns status 201' do 
-        make_request('POST', '/users', { 'email' => 'user@example.com', 'username' => 'justine', 'password' => 'validpassword666', 'country' => 'USA' }.to_json)
+        make_request('POST', '/users', { 'email' => 'user@example.com', 'username' => 'justine7', 'password' => 'validpassword666', 'country' => 'USA' }.to_json)
         expect(response_status).to eql 201
       end
     end
 
     context 'with invalid attributes' do 
       it 'attempts to create a user' do 
-        expect(User).to receive(:create!)
+        expect(User).to receive(:create)
         make_request('POST', '/users', { 'first_name' => 'Frank' }.to_json)
       end
 
@@ -51,9 +51,8 @@ describe Canto do
   end
 
   describe 'GET' do 
-
-    let(:resource) { user.to_json }
-    let(:path) { "/users/#{user.id}" }
+    let(:resource) { user }
+    let(:path) { "/users/#{resource.id}" }
 
     context 'with user\'s credentials' do 
       it_behaves_like 'an authorized GET request' do 
@@ -129,7 +128,7 @@ describe Canto do
     end
 
     context 'with invalid credentials' do 
-      it_behaves_like 'an unauthorized POST request' do 
+      it_behaves_like 'an unauthorized PUT request' do 
         let(:agent) { user }
         let(:path) { "/users/#{admin.id}" }
       end

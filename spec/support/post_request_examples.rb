@@ -5,7 +5,7 @@ shared_examples 'an authorized POST request' do
 
   context 'with valid attributes' do
     it 'creates a resource' do 
-      expect(model).to receive(:create!).with(parse_json(valid_attributes))
+      expect(model).to receive(:create).with(parse_json(valid_attributes))
       make_request('POST', path, valid_attributes)
     end
 
@@ -29,7 +29,7 @@ shared_examples 'an unauthorized POST request' do
   end
 
   it 'doesn\'t create a resource' do 
-    expect(model).not_to receive(:create!)
+    expect(model).not_to receive(:create)
     make_request('POST', path, valid_attributes)
   end
 
@@ -41,7 +41,7 @@ end
 
 shared_examples 'a POST request without credentials' do 
   it 'doesn\'t create a resource' do 
-    expect(model).not_to receive(:create!)
+    expect(model).not_to receive(:create)
     make_request('POST', path, valid_attributes)
   end
 
