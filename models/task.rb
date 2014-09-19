@@ -9,7 +9,11 @@ class Task < Sequel::Model
   end
 
   def self.complete
-    Task.where(status: 'complete')
+    DB[:tasks].where(status: 'complete')
+  end
+
+  def self.first_complete
+    Task.complete.order(:position).first
   end
 
   def complete?
@@ -21,7 +25,7 @@ class Task < Sequel::Model
   end
 
   def siblings
-    self.task_list.tasks 
+    self.task_list.tasks - [self]
   end
 
   def user

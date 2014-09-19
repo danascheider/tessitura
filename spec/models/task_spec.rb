@@ -16,7 +16,7 @@ describe Task do
   describe 'public instance methods' do 
     it { is_expected.to respond_to(:complete?) }
     it { is_expected.to respond_to(:incomplete?) }
-    it { is_expected.to respond_to(:to_hash) } # to integrate with Sinatra-Backbone
+    it { is_expected.to respond_to(:to_hash) }
     it { is_expected.to respond_to(:user) }
     it { is_expected.to respond_to(:owner) }
     it { is_expected.to respond_to(:siblings) }
@@ -30,13 +30,13 @@ describe Task do
 
     describe '::first_complete' do 
       it 'returns the  first complete task' do 
-        expect(Task.first_complete).to eql complete_task
+        expect(Task.first_complete).to eql @complete_task.to_hash
       end
     end
 
     describe '#complete?' do 
       it 'returns true when a task is complete' do 
-        expect(complete_task.complete?).to be_truthy
+        expect(@complete_task.complete?).to be_truthy
       end
 
       it 'returns false when a task is incomplete' do 
@@ -50,7 +50,7 @@ describe Task do
       end
 
       it 'returns false when a task is complete' do 
-        expect(complete_task.incomplete?).to be_falsey
+        expect(@complete_task.incomplete?).to be_falsey
       end
     end
 
@@ -59,16 +59,16 @@ describe Task do
         @task = @task_list.tasks.first
       end
 
-      it 'returns an ActiveRecord::Relation' do 
-        expect(@task.siblings).to be_an(ActiveRecord::Relation)
+      it 'returns an array' do 
+        expect(@task.siblings).to be_an(Array)
       end
 
       it 'doesn\'t include the task calling the method' do 
-        expect(@task.siblings.to_a).not_to include(@task)
+        expect(@task.siblings).not_to include(@task)
       end
 
       it 'includes the task\'s siblings' do 
-        expect(@task.siblings.to_a).to eql(@task_list.tasks.to_a - [@task])
+        expect(@task.siblings).to eql(@task_list.tasks.to_a - [@task])
       end
     end
 
@@ -131,7 +131,7 @@ describe Task do
 
   describe 'default behavior' do 
     let(:list) { FactoryGirl.create(:task_list_with_tasks, tasks_count: 5) }
-    let(:new_task) { list.tasks.create(title: 'New Task') }
+    let(:new_task) { FactoryGirl.create(:task, task_list_id: list.id, title: 'New Task') }
 
     it 'sets status to \'new\'' do
       expect(new_task.status).to eql 'new'
@@ -147,7 +147,7 @@ describe Task do
 
     context 'when status is set to complete' do 
       it 'instantiates as the first complete task' do 
-        expect(list.tasks.create(title: 'Foo', status: 'complete').position).to eql 5
+        expect(FactoryGirl.create(:task, title: 'Foo', status: 'complete', task_list_id: list.id).position).to eql 5
       end
     end
 
@@ -163,7 +163,7 @@ describe Task do
 
     it 'is destroyed with its parent list' do 
       @task = list.tasks.first
-      list.destroy!
+      list.destroy
       expect(get_resource(Task, @task.id)).to eql nil
     end
   end
