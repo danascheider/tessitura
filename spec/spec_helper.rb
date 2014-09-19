@@ -14,7 +14,6 @@ support_path = File.expand_path('../../features/support', __FILE__)
 app_path = File.expand_path('../..', __FILE__)
 
 require          'factory_girl'
-require          'fabrication'
 require          'json_spec/helpers'
 require          'rack/test'
 require          'mysql2'
@@ -25,10 +24,6 @@ require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
 
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
-
-Fabrication.configure do |config|
-  config.fabricator_path = File.expand_path('../fabrictors/support', __FILE__)
-end
 
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
@@ -42,7 +37,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     system 'rake db:test:prepare > /dev/null 2>&1'
-    #Rake::Task['db:test:migrate'].invoke(File.expand_path('../../db/schema_migrations', __FILE__))
   end
 end
 
