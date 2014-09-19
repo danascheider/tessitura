@@ -5,7 +5,7 @@ class Object
   def try(method, *args)
     begin
       self.send(method, *args)
-    rescue NoMethodError
+    rescue NoMethodError, Sequel::ValidationFailed, Sequel::HookFailed, Sequel::Error
       nil
     end
   end
@@ -17,8 +17,9 @@ module Sinatra
       klass.try(:create, attributes) ? 201 : 422
     end
 
-    def destroy_resource(object=nil)
-      object.try(:destroy!) ? 204 : 404
+    def destroy_resource(object)
+      return 404 unless object
+      object.try(:destroy) ? 204 : 403
     end
 
     def get_resource(klass, id, &block)
@@ -36,11 +37,8 @@ module Sinatra
 
 
     def update_resource(attributes, object=nil)
-      begin
-        object.try(:update!, attributes) ? 200 : 404
-      rescue Sequel::ValidationFailed, Sequel::ConstraintViolation, Sequel::DatabaseError
-        422
-      end
+      return 404 unless object
+      object.try(:update, attributes) ? 200 : 422
     end
   end
 

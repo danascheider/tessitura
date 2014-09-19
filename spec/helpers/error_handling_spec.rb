@@ -51,7 +51,7 @@ describe Sinatra::ErrorHandling do
   
   describe '::create_resource' do 
     let(:users) { FactoryGirl.create_list(:user_with_task_lists, 2) }
-    let(:list_id) { users.last.default_task_list.id }
+    let(:list) { users.last.default_task_list }
 
     context 'with valid attributes' do 
       context 'users' do 
@@ -61,6 +61,7 @@ describe Sinatra::ErrorHandling do
         end
 
         it 'returns status 201' do 
+          allow(User).to receive(:create).and_return(true)
           expect(create_resource(User, { username: 'frankjones', password: 'frankjonespwd', email: 'fj@a.com' })).to eql 201
         end
       end
@@ -68,11 +69,12 @@ describe Sinatra::ErrorHandling do
       context 'tasks' do 
         it 'creates a new task' do 
           expect(Task).to receive(:create)
-          create_resource(Task, title: 'Water the lawn', task_list_id: list_id)
+          create_resource(Task, title: 'Water the lawn', task_list_id: list.id)
         end
 
         it 'returns status 201' do 
-          expect(create_resource(Task, title: 'Water the lawn', task_list_id: list_id)).to eql 201
+          allow(Task).to receive(:create).and_return(true)
+          expect(create_resource(Task, title: 'Water the lawn', task_list_id: list.id)).to eql 201
         end
       end
     end
@@ -114,12 +116,12 @@ describe Sinatra::ErrorHandling do
 
   describe '::destroy_resource' do 
     let(:user) { FactoryGirl.create(:user_with_task_lists) }
-    let(:task) { user.tasks.first }
+    let(:task) { user.task_lists.first.tasks.first }
 
     context 'when the resource exists' do 
       context 'users' do 
         it 'deletes the user' do 
-          expect_any_instance_of(User).to receive(:destroy!)
+          expect_any_instance_of(User).to receive(:destroy)
           destroy_resource(user)
         end
 
@@ -130,7 +132,7 @@ describe Sinatra::ErrorHandling do
 
       context 'tasks' do 
         it 'deletes the task' do 
-          expect_any_instance_of(Task).to receive(:destroy!)
+          expect_any_instance_of(Task).to receive(:destroy)
           destroy_resource(task)
         end
 
@@ -148,7 +150,7 @@ describe Sinatra::ErrorHandling do
 
     context 'when the resource can\'t be destroyed' do 
       it 'returns status 403' do
-        user.update!(admin: true) # Last admin can't be deleted
+        user.update(admin: true) # Last admin can't be deleted
         expect(destroy_resource(user)).to eql 403
       end
     end
@@ -156,19 +158,19 @@ describe Sinatra::ErrorHandling do
 
   describe '::update_resource' do 
     let(:user) { FactoryGirl.create(:user_with_task_lists) }
-    let(:task) { user.tasks.first }
+    let(:task) { user.task_lists.first.tasks.first }
 
     context 'with valid attributes' do 
       context 'users' do 
         it 'updates the user' do 
-          expect_any_instance_of(User).to receive(:update!)
+          expect_any_instance_of(User).to receive(:update)
           update_resource({ city: 'Honolulu' }, user)
         end
       end
 
       context 'tasks' do 
         it 'updates the task' do 
-          expect_any_instance_of(Task).to receive(:update!)
+          expect_any_instance_of(Task).to receive(:update)
           update_resource({ priority: 'high' }, task)
         end
       end
