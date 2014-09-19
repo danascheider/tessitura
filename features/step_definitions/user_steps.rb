@@ -1,7 +1,7 @@
 # Admin Users
 # ===========
 Then(/^the (\d+)(?:[a-z]{2}) user should (not|yes)?(?: )?be an admin$/) do |id, neg|
-  expect(User.find(id).admin?).to (neg == 'not') ? be_falsey : be_truthy
+  expect(User[id].admin?).to (neg == 'not') ? be_falsey : be_truthy
 end
 
 # Create User
@@ -26,7 +26,7 @@ end
 # Update User
 # ===========
 Then(/^the (\d+)(?:[a-z]{2}) user's (.*) should be changed to (.*)$/) do |id, attr, value|
-  @user = get_resource(User, id)
+  @user = User[id]
   expect(@user.to_hash[attr.intern]).to eql value
 end
 
