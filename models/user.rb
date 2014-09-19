@@ -27,7 +27,8 @@ class User < Sequel::Model
   end
 
   def tasks
-    self.task_lists.map {|list| list.tasks }
+    arr = self.task_lists.map {|list| list.tasks.flatten }
+    arr.flatten!
   end
 
   def to_hash
@@ -47,7 +48,7 @@ class User < Sequel::Model
     }.reject! {|k,v| [nil, false, [], {}, ''].include? v }
   end
 
-  def to_json
+  def to_json(options={})
     self.to_hash.to_json
   end
 

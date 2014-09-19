@@ -1,4 +1,5 @@
 class Task < Sequel::Model
+  include JSON
   many_to_one :task_list
 
   def before_create
@@ -9,7 +10,7 @@ class Task < Sequel::Model
   end
 
   def self.complete
-    DB[:tasks].where(status: 'complete')
+    Task.where(status: 'complete')
   end
 
   def self.first_complete
@@ -26,6 +27,24 @@ class Task < Sequel::Model
 
   def siblings
     self.task_list.tasks - [self]
+  end
+
+  def to_hash
+    {
+      id: self.id,
+      task_list_id: self.task_list_id,
+      owner_id: self.owner_id,
+      title: self.title,
+      deadline: self.deadline,
+      priority: self.priority,
+      status: self.status,
+      description: self.description,
+      created_at: self.created_at,
+    }.reject {|k,v| [nil, false, [], {}, ''].include? v }
+  end
+
+  def to_json(options={})
+    self.to_hash.to_json
   end
 
   def user

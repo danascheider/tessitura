@@ -46,7 +46,7 @@ class Canto < Sinatra::Base
 
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
     get route do 
-      return_json(@resource.try(:to_hash)) || 404
+      @resource && @resource.to_json || 404
     end
 
     put route do 

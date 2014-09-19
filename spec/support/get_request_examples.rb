@@ -34,7 +34,7 @@ shared_examples 'a GET request without credentials' do
   end
 
   it 'doesn\'t return the requested resource' do 
-    expect(response_body).not_to include resource 
+    expect(response_body).not_to include resource.to_json
   end
 
   it 'returns status 401' do 

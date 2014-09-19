@@ -11,7 +11,7 @@ describe Canto do
   describe 'GET' do 
     describe 'task list route' do 
       let(:path) { "/users/#{user.id}/tasks" }
-      let(:resource) { user.tasks.to_json }
+      let(:resource) { user.tasks.map {|t| t.to_hash } }
 
       context 'with owner authorization' do 
         it_behaves_like 'an authorized GET request' do 
@@ -27,7 +27,7 @@ describe Canto do
 
       context 'with inadequate authorization' do 
         it_behaves_like 'an unauthorized GET request' do 
-          let(:resource) { admin.tasks.to_json }
+          let(:resource) { admin.tasks.map {|t| t.to_hash } }
           let(:username) { user.username }
           let(:password) { user.password }
           let(:path) { "/users/#{admin.id}" }
@@ -36,7 +36,7 @@ describe Canto do
 
       context 'with invalid credentials' do 
         it_behaves_like 'an unauthorized GET request' do 
-          let(:resource) { user.tasks.to_json }
+          let(:resource) { user.tasks.map {|t| t.to_hash } }
           let(:username) { 'foo' }
           let(:password) { 'bar' }
           let(:path) { "/users/#{user.id}/tasks" }
@@ -45,7 +45,7 @@ describe Canto do
 
       context 'with no authorization' do 
         it_behaves_like 'a GET request without credentials' do 
-          let(:resource) { user.tasks.to_json }
+          let(:resource) { user.tasks.map {|t| t.to_hash } }
           let(:path) { "/users/#{user.id}/tasks" }
         end
       end
@@ -53,11 +53,12 @@ describe Canto do
 
     context 'individual task route' do 
       let(:task) { user.tasks.first } 
-      let(:resource) { task.to_json }
+      let(:resource) { task }
 
       context 'with user authorization' do 
         it_behaves_like 'an authorized GET request' do 
           let(:agent) { user }
+          let(:task) { user.tasks.first }
           let(:path) { "/tasks/#{task.id}" }
         end
       end
@@ -71,7 +72,7 @@ describe Canto do
 
       context 'with invalid authorization' do 
         it_behaves_like 'an unauthorized GET request' do
-          let(:resource) { admin.tasks.first.to_json }
+          let(:resource) { admin.tasks.first }
           let(:username) { user.username }
           let(:password) { user.password }
           let(:path) { "/tasks/#{admin.tasks.first.id}" } 
@@ -86,7 +87,7 @@ describe Canto do
 
       context 'when the task doesn\'t exist' do 
         it 'returns status 404' do 
-          allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
+          # allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
           make_request('GET', '/tasks/1000000')
           expect(response_status).to eql 404
         end
@@ -96,7 +97,7 @@ describe Canto do
 
   describe 'POST' do 
     let(:path) { "/users/#{user.id}/tasks"}
-    let(:valid_attributes) { { title: 'Water the garden', task_list_id: user.default_task_list.id }.to_json }
+    let(:valid_attributes) { { title: 'Water the garden', status: 'new', priority: 'normal' }.to_json }
     let(:invalid_attributes) { { status: 'foobar' }.to_json }
 
     context 'with user authorization' do 
@@ -108,6 +109,7 @@ describe Canto do
     context 'with admin authorization' do 
       it_behaves_like 'an authorized POST request' do 
         let(:agent) { admin }
+        let(:valid_attributes) { { title: 'Water the garden', status: 'new', priority: 'normal' }.to_json }
       end
 
       it 'assigns task ownership to the user, not the admin' do 
@@ -150,7 +152,7 @@ describe Canto do
     context 'with invalid authorization' do 
       it_behaves_like 'an unauthorized PUT request' do 
         let(:agent) { user }
-        let(:task) { admin.tasks.first }
+        let(:task) { FactoryGirl.create(:task, task_list_id: admin.task_lists.first.id) }
         let(:path) { "/tasks/#{task.id}"}
       end
     end

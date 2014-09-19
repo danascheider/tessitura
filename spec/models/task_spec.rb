@@ -11,6 +11,7 @@ describe Task do
     it { is_expected.to respond_to(:description) }
     it { is_expected.to respond_to(:priority) }
     it { is_expected.to respond_to(:owner_id) }
+    it { is_expected.to respond_to(:to_json) }
   end
 
   describe 'public instance methods' do 
@@ -29,8 +30,12 @@ describe Task do
     end
 
     describe '::first_complete' do 
+      it 'returns a Task object' do 
+        expect(Task.first_complete).to be_a(Task)
+      end
+
       it 'returns the  first complete task' do 
-        expect(Task.first_complete).to eql @complete_task.to_hash
+        expect(Task.first_complete).to eql @complete_task
       end
     end
 
@@ -69,6 +74,13 @@ describe Task do
 
       it 'includes the task\'s siblings' do 
         expect(@task.siblings).to eql(@task_list.tasks.to_a - [@task])
+      end
+    end
+
+    describe '#to_json' do 
+      it 'converts itself to hash form first' do 
+        task = FactoryGirl.create(:task)
+        expect(task.to_json).to eql task.to_hash.to_json
       end
     end
 
@@ -164,7 +176,7 @@ describe Task do
     it 'is destroyed with its parent list' do 
       @task = list.tasks.first
       list.destroy
-      expect(get_resource(Task, @task.id)).to eql nil
+      expect(Task[@task.id]).to eql nil
     end
   end
 end
