@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe User do 
-
   describe 'attributes' do 
     it { is_expected.to respond_to(:first_name) }
     it { is_expected.to respond_to(:last_name) }
@@ -24,7 +23,7 @@ describe User do
 
     describe '#tasks' do 
       before(:each) do 
-        2.times { FactoryGirl.create(:task_list_with_tasks, user_id: user.id) }
+        FactoryGirl.create_list(:task_list_with_tasks, 2, user_id: user.id)
       end
 
       it 'returns an array' do 
@@ -108,10 +107,8 @@ describe User do
   end
 
   describe 'admin scope' do 
-    around(:each) do |example|
+    before(:each) do
       @admins = FactoryGirl.create_list(:admin, 2).flatten
-      example.run 
-      User.all.each {|u| u.delete }
     end
 
     it 'includes all the admins' do 
@@ -122,7 +119,6 @@ describe User do
   describe 'admin deletion' do 
     before(:each) do 
       @admin_1 = FactoryGirl.create(:admin)
-      puts "THERE ARE #{User.admin.count} ADMIN USERS".red
     end
 
     context 'last admin' do 

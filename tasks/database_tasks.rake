@@ -166,16 +166,9 @@ EOF
     desc 'Re-create database and update schema'
     task :prepare, :PATH do |t, args|
       path = args[:path] || SCHEMA_PATH
-      TEST.run('DROP DATABASE test')
+      client.query('DROP DATABASE test')
       Rake::Task['db:test:migrate'].invoke(SCHEMA_PATH)
       puts "Success!".green
-    end
-
-    task :clean, :PATH do |t, args|
-      path = args[:path] || SCHEMA_PATH
-      TEST.run('SET FOREIGN_KEY_CHECKS = 0')
-      TEST.run("SELECT concat('DROP TABLE IF EXISTS', table_name, ';') FROM information_schema.tables WHERE table_schema = 'test'")
-      Rake::Task['db:test:migrate'].invoke(path)
     end
   end
 
