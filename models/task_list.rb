@@ -8,6 +8,12 @@ class TaskList < Sequel::Model
     self.user.id 
   end
 
+  def to_hashes
+    self.tasks.map {|task| task.to_hash }
+  end
+
+  alias_method :to_a, :to_hashes
+
   def validate
     super
     validates_presence :user_id

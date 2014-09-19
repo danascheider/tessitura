@@ -33,7 +33,7 @@ describe TaskList do
 
     describe '#to_a' do 
       it 'returns its tasks' do 
-        expect(task_list.to_a).to eql task_list.tasks.all.map {|task| task.to_hash }
+        expect(task_list.to_a).to eql task_list.tasks.map {|task| task.to_hash }
       end
 
       it 'returns an array object' do 
