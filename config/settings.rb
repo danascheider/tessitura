@@ -25,6 +25,5 @@ class Canto < Sinatra::Base
 
   helpers Sinatra::AuthorizationHelper 
   helpers Sinatra::ErrorHandling
-  helpers Sinatra::FilterUtils
   helpers Sinatra::GeneralHelperMethods
 end
