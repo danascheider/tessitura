@@ -1,8 +1,7 @@
 # Create Task
 # ===========
 When(/^the client submits a POST request to \/users\/(\d+)\/tasks with the (\d+)(?:[a-z]{2}) user\'s credentials and:$/) do |id1, id2, string|
-  @user = User[id1]
-  @current = User[id2]
+  @user, @current = User[id1], User[id2]
   @user_task_count = @user.tasks.count
   authorize_with @current
   make_request('POST', "/users/#{id1}/tasks", string)
@@ -30,7 +29,7 @@ end
 # Create Admin User
 # =================
 When(/^the client submits a POST request to \/admin\/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
-  @current = get_resource(User, id)
+  @current = User[id]
   authorize @current.username, @current.password 
   make_request('POST', '/admin/users', string)
 end

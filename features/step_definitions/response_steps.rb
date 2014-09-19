@@ -1,5 +1,5 @@
 Then(/^the JSON response should include all the (\d+)nd user's tasks$/) do |id|
-  expect(response_body).to eql User.find(id).tasks.to_json
+  expect(response_body).to eql User[id].tasks.to_json
 end
 
 Then(/^the JSON response should include all the users$/) do 
@@ -7,15 +7,15 @@ Then(/^the JSON response should include all the users$/) do
 end
 
 Then(/^the JSON response should include task (\d+)$/) do |id|
-  response_body.should === [get_resource(Task, id).to_hash].to_json
+  response_body.should === [Task[id].to_hash].to_json
 end
 
 Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |id|
-  response_body.should === get_resource(Task, id).to_json
+  response_body.should === Task[id].to_json
 end
 
 Then(/^the JSON response should include tasks (\d+) and (\d+)$/) do |id1, id2|
-  arr = [get_resource(Task, id1).to_hash, get_resource(Task, id2).to_hash]
+  arr = [Task[id1].to_hash, Task[id2].to_hash]
   response_body.should === arr.to_json
 end
 
@@ -25,7 +25,7 @@ Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's last (\d+) 
 end
 
 Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile information$/) do |id|
-  expect(response_body).to eql User.find(id).to_json
+  expect(response_body).to eql User[id].to_json
 end
 
 Then(/^the response should not include any tasks without a(?:n?) (.*)$/) do |attribute|

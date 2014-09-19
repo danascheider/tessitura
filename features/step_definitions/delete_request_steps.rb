@@ -1,17 +1,16 @@
 # Delete User
 # ===========
 When(/^the client submits a DELETE request to \/users\/(\d+) with the (\d+)(?:[a-z]{2}) user\'s credentials$/) do |path, id|
-  @user = get_resource(User, id)
-  authorize @user.username, @user.password
+  @user = User[id]
+  authorize_with @user
   make_request('DELETE', "/users/#{path}")
 end
 
 # Delete Task
 # ===========
 When(/^the client submits a DELETE request to \/tasks\/(\d+) with the (\d+)(?:[a-z]{2}) user's credentials$/) do |task_id, user_id|
-  @task = get_resource(Task, task_id)
-  @current = get_resource(User, user_id)
-  authorize @current.username, @current.password
+  @task, @current = Task[task_id], User[user_id]
+  authorize_with @current
   make_request('DELETE', "/tasks/#{task_id}")
 end
 
