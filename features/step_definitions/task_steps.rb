@@ -16,19 +16,19 @@ Given(/^the (\d+[a-z]{2}) task is complete$/) do |task_id|
 end
 
 Then(/^no task should be created$/) do
-  expect(get_changed_user.tasks.count).to eql @user_task_count
+  expect(User[@user.id].tasks.count).to eql @user_task_count
 end
 
 Then(/^the task's title should (not )?be changed to (.*)$/) do |neg, title|
-  expect(get_changed_task.title == title).to neg ? be_falsey : be_truthy
+  expect(Task[@task.id].title == title).to neg ? be_falsey : be_truthy
 end
 
 Then(/^the task's title should not be changed$/) do 
-  expect(get_changed_task.title).to eql @task.title
+  expect(Task[@task.id].title).to eql @task.title
 end
 
 Then(/^the task's status should be (.*)$/) do |status|
-  expect(get_changed_task.status).to eql status
+  expect(Task[@task.id].status).to eql status
 end
 
 Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
@@ -36,5 +36,5 @@ Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |
 end
 
 Then(/^the task's position should be changed to (\d+)$/) do |number|
-  expect(get_changed_task.position).to eql number
+  expect(Task[@task.id].position).to eql number
 end

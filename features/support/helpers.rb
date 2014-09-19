@@ -24,22 +24,6 @@ def dump_user_tasks(id)
   User[id].tasks.flatten.each {|task| puts "#{task.to_hash}\n"}
 end
 
-def get_changed_task
-  Task.find(@task.id)
-end
-
-def get_changed_user
-  User.find(@user.id)
-end
-
-def get_resource(klass, id, &block) 
-  begin 
-    if block_given? then yield klass.find(id); else klass.find(id); end
-  rescue
-    nil
-  end
-end
-
 def response_status
   last_response.status
 end
