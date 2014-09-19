@@ -21,7 +21,7 @@ end
 
 def dump_user_tasks(id)
   puts "USER #{id}'S TASKS:"
-  User.find(id).tasks.each {|task| puts "#{task.to_hash}\n"}
+  User[id].tasks.flatten.each {|task| puts "#{task.to_hash}\n"}
 end
 
 def get_changed_task

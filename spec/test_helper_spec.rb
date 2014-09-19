@@ -35,7 +35,7 @@ describe 'test helper methods' do
     before(:each) do 
       @user = FactoryGirl.create(:user_with_task_lists)
       @output = "USER #{@user.id}'S TASKS:\n"
-      @user.tasks.each {|task| @output << "#{task.to_hash}\n"}
+      @user.tasks.flatten.each {|task| @output << "#{task.to_hash}\n" }
     end
 
     it 'lists data about the user\'s tasks' do 
