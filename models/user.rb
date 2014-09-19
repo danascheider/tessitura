@@ -1,5 +1,6 @@
 class User < Sequel::Model
   one_to_many :task_lists
+  self.plugin :association_dependencies, task_lists: :destroy
 
   def self.admin 
     User.where(admin: true)
@@ -11,6 +12,7 @@ class User < Sequel::Model
 
   def before_destroy
     false if self.admin? && User.admin.count == 1
+    self.task_lists.each {|list| list.destroy }
   end
 
   def default_task_list

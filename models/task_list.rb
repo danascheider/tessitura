@@ -4,6 +4,10 @@ class TaskList < Sequel::Model
 
   alias_method :owner, :user
 
+  def before_destroy
+    self.tasks.each {|task| task.destroy }
+  end
+
   def owner_id
     self.user.id 
   end

@@ -47,7 +47,7 @@ describe TaskList do
       it 'is destroyed' do 
         list = FactoryGirl.create(:task_list)
         list.user.destroy 
-        expect { TaskList.find(list.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(TaskList[list.id]).to eql nil
       end
     end
   end
