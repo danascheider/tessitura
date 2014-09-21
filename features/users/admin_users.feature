@@ -3,11 +3,11 @@ Feature: Admin users
   Scenario Outline: Creating an admin user
     When the client submits a POST request to <url> with <type> credentials and:
       """json
-      { "username":"def456", "password":"defgh45678", "email":"user4@example.com", "admin":"true" }
+      { "username":"defg4567", "password":"defgh45678", "email":"user4@example.com", "admin":"true" }
       """
     Then <article> new user should be created with the following attributes:
-      | username | password   | email             | admin |
-      | def456   | defgh45678 | user4@example.com | true  |
+      | username   | password   | email             | admin |
+      | defg4567   | defgh45678 | user4@example.com | true  |
     And the response should return status <status>
 
     Examples:
@@ -33,8 +33,8 @@ Feature: Admin users
 
   Scenario Outline: Deleting an admin account 
     Given there is a user with the following attributes:
-      | id | email              | username | password  |
-      | 4  | admin2@example.com | admin2   | admin2pwd |
+      | id | email              | username      | password  |
+      | 4  | admin2@example.com | admin2uname   | admin2pwd |
     When the client submits a DELETE request to /users/4 with the <id> user's credentials
     Then the 4th user should be deleted
     And the response should return status 204
