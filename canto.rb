@@ -59,8 +59,8 @@ class Canto < Sinatra::Base
   end
 
   post '/users/:id/tasks' do |id|
-    @request_body[:task_list_id] ||= @resource.default_task_list.id
-    create_resource(Task, @request_body)
+    @request_body[:task_list_id] ||= User[id].default_task_list.id
+    Task.create(@request_body)
   end
 
   get '/users/:id/tasks' do |id|
