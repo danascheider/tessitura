@@ -11,8 +11,8 @@ Then(/^the new task should have the following attributes:$/) do |attributes|
 end
 
 Given(/^the (\d+[a-z]{2}) task is complete$/) do |task_id|
-  @task = get_resource(Task, task_id)
-  @task.update!(status: 'complete')
+  @task = Task[task_id]
+  @task.update(status: 'complete')
 end
 
 Then(/^no task should be created$/) do
