@@ -62,7 +62,7 @@ class Canto < Sinatra::Base
     # FIX: I'm beginning to think the route should assign the user_id,
     #      and the LIST should be assigned by the hook within the model.
     @request_body[:task_list_id] ||= User[id].default_task_list.id
-    Task.create(@request_body)
+    create_resource(Task, @request_body)
   end
 
   get '/users/:id/tasks' do |id|
