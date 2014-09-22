@@ -6,9 +6,10 @@ shared_examples 'an authorized POST request' do
   context 'with valid attributes' do
     it 'creates a resource' do 
       # I really want to specify that model should be created with the
-      # valid_attributes hash as an argument. But the before_create callback
-      # in the model inserts new values, for example, a task_list_id and owner_id
-      # for a task. 
+      # valid_attributes hash as an argument. But the task_list_id has to 
+      # be added in the route, since the model will not know the user 
+      # otherwise.
+
       expect(model).to receive(:create)
       make_request('POST', path, valid_attributes)
     end
@@ -16,6 +17,10 @@ shared_examples 'an authorized POST request' do
     it 'returns status 201' do 
       make_request('POST', path, valid_attributes)
       expect(response_status).to eql 201
+    end
+
+    it 'changes the task count by 1' do 
+      #
     end
   end
 

@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe User do 
+  include Sinatra::ErrorHandling
+
   describe 'attributes' do 
     it { is_expected.to respond_to(:first_name) }
     it { is_expected.to respond_to(:last_name) }
@@ -11,16 +13,55 @@ describe User do
     it { is_expected.to respond_to(:fach) }
     it { is_expected.to respond_to(:admin) }
     it { is_expected.to respond_to(:to_json) }
+    it { is_expected.to respond_to(:update) }
+    it { is_expected.to respond_to(:destroy) }
+  end
+
+  describe 'class methods' do 
+    describe '#create' do 
+      context 'with valid attributes' do 
+        let(:attributes) { { username: 'usernumber1', password: 'usernumber1', email: 'u1@a.com' } }
+
+        it 'creates the user' do 
+          expect{ User.create(attributes) }.to change(User, :count).by(1)
+        end
+      end
+
+      context 'with invalid attributes' do 
+        let(:attributes) { { username: 'foo' } }
+
+        it 'doesn\'t create a user' do 
+          expect{ create_resource(User, attributes) }.not_to change(User, :count)
+        end
+
+        it 'raises Sequel::ValidationFailed' do 
+          expect{ User.create(attributes) }.to raise_error(Sequel::ValidationFailed)
+        end
+      end
+    end
   end
 
   describe 'instance methods' do
     let(:user) { FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith') }
 
     it { is_expected.to respond_to(:admin?) }
-
     it { is_expected.to respond_to(:default_task_list) }
-
     it { is_expected.to respond_to(:owner_id)}
+
+    describe '#destroy' do 
+      before(:each) do 
+        @user = FactoryGirl.create(:user_with_task_lists)
+      end
+
+      it 'deletes the user from the database' do 
+        expect{ @user.destroy }.to change(User, :count).by(-1)
+      end
+
+      it 'destroys the user\'s task lists' do 
+        count = @user.task_lists.count
+        expect{ @user.destroy }.to change(TaskList, :count).by(-1 * count)
+      end
+    end
 
     describe '#tasks' do 
       before(:each) do 
@@ -33,7 +74,7 @@ describe User do
 
       it 'returns all its tasks' do 
         tasks = user.task_lists.map {|list| list.tasks }
-        expect(user.tasks.to_a).to eql tasks
+        expect(user.tasks.to_a).to eql tasks.flatten
       end
     end
 
@@ -82,6 +123,29 @@ describe User do
     describe '#owner_id' do 
       it 'returns its own ID' do 
         expect(user.owner_id).to eql user.id
+      end
+    end
+
+    describe '#update' do 
+      context 'with valid attributes' do 
+        let(:attributes) { { first_name: 'Gigi', last_name: 'Eastman' } }
+
+        it 'updates the user' do 
+          user.update(attributes)
+          expect([user.first_name, user.last_name]).to eql ['Gigi', 'Eastman']
+        end
+      end
+
+      context 'with invalid attributes' do 
+        let(:attributes) { { password: nil } }
+
+        it 'doesn\'t update the user' do 
+          expect{ update_resource(attributes, user) }.not_to change(User[user.id], :password)
+        end
+
+        it 'raises an error' do 
+          expect{ user.update(attributes) }.to raise_error(Sequel::ValidationFailed)
+        end
       end
     end
   end

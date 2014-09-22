@@ -35,6 +35,9 @@ module Sinatra
       end
     end
 
+    # FIX: In Task spec, this method appears to have bypassed Sequel validation
+    #      and updated the task despite validation failure. However, this is not
+    #      corroborated in IRB, where it works as expected.
     def update_resource(attributes, object=nil)
       return 404 unless object
       object.try(:update, attributes) ? 200 : 422

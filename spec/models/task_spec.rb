@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Task do 
+  include Sinatra::ErrorHandling
+
   let(:task) { FactoryGirl.create(:task) }
 
   describe 'attributes' do 
@@ -15,12 +17,75 @@ describe Task do
   end
 
   describe 'public instance methods' do 
+    it { is_expected.to respond_to(:update) }
+    it { is_expected.to respond_to(:destroy) }
     it { is_expected.to respond_to(:complete?) }
     it { is_expected.to respond_to(:incomplete?) }
     it { is_expected.to respond_to(:to_hash) }
     it { is_expected.to respond_to(:user) }
     it { is_expected.to respond_to(:owner) }
     it { is_expected.to respond_to(:siblings) }
+  end
+
+  describe 'class methods' do 
+    let(:user) { FactoryGirl.create(:user) }
+    let(:list) { FactoryGirl.create(:task_list, user_id: user.id) }
+
+    describe('#create') do 
+      context 'with minimum valid attributes' do 
+        let(:attributes) { { title: 'My Task', task_list_id: list.id } }
+
+        it 'creates a task' do 
+          expect { Task.create(attributes) }.to change(Task, :count).by(1)
+        end
+
+        it 'sets the status to \'new\'' do 
+          task = Task.create(attributes)
+          expect(Task.last.status).to eql 'new'
+        end
+
+        it 'sets the priority to \'normal\'' do 
+          task = Task.create(attributes) 
+          expect(Task.last.priority).to eql 'normal'
+        end
+
+        it 'sets the proper owner ID' do 
+          task = Task.create(attributes) 
+          expect(Task.last.owner_id).to eql user.id
+        end
+      end
+
+      context 'with required attributes set explicitly' do 
+        let(:attributes) { 
+                           { title: 'My Task', 
+                             task_list_id: list.id,
+                             status: 'blocking', 
+                             priority: 'not_important' 
+                           } 
+                         }
+
+        it 'creates the task' do 
+          expect { Task.create(attributes) }.to change(Task, :count).by(1)
+        end
+
+        it 'uses the given status and priority' do 
+          task = Task.create(attributes)
+          expect([ task.status, task.priority ]).to eql [ attributes[:status], attributes[:priority]]
+        end
+      end
+
+      context 'without valid attributes' do 
+        let(:attributes) { { deadline: Time.now.utc } }
+
+        it 'doesn\'t create the task' do 
+          expect{ create_resource(Task, attributes) }.not_to change(Task, :count)
+        end
+
+        it 'raises a validation error' do 
+          expect{ Task.create(attributes) }.to raise_error(Sequel::ValidationFailed)
+        end
+      end
+    end
   end
 
   describe 'public methods' do 
@@ -46,6 +111,12 @@ describe Task do
 
       it 'returns false when a task is incomplete' do 
         expect(task.complete?).to be_falsey
+      end
+    end
+
+    describe '#destroy' do 
+      it 'removes the task from the database' do 
+        expect{ @complete_task.destroy }.to change(Task, :count).by(-1)
       end
     end
 
@@ -81,6 +152,38 @@ describe Task do
       it 'converts itself to hash form first' do 
         task = FactoryGirl.create(:task)
         expect(task.to_json).to eql task.to_hash.to_json
+      end
+    end
+
+    describe '#update' do 
+      context 'with valid attributes' do 
+        let(:attributes) { { deadline: (@time = Time.now.utc) } }
+
+        it 'updates the task' do 
+          @complete_task.update(attributes)
+          expect(@complete_task.deadline).to eql @time
+        end
+
+        it 'doesn\'t change other attributes' do 
+          expect(@complete_task.status).to eql 'complete'
+        end
+      end
+
+      context 'without valid attributes' do 
+
+        # IMPORTANT: The syntax of the following example is necessary for it to
+        #            work. Using the :change matcher does not work. Likewise, in
+        #            a bizarre turn of events, @complete_task IS updated, while
+        #            the task persisted in the database with that ID is not.
+
+        it 'doesn\'t change the attribute' do
+          update_resource({task_list_id: nil}, @complete_task)
+          expect(Task[@complete_task.id].task_list_id).not_to be nil
+        end
+
+        it 'raises Sequel::ValidationFailed' do 
+          expect{ @complete_task.update(task_list_id: nil) }.to raise_error(Sequel::ValidationFailed)
+        end
       end
     end
 

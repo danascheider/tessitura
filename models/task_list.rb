@@ -21,5 +21,6 @@ class TaskList < Sequel::Model
   def validate
     super
     validates_presence :user_id
+    validates_numeric  :user_id
   end
 end

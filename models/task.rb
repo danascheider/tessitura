@@ -2,9 +2,9 @@ class Task < Sequel::Model
   include JSON
   many_to_one :task_list
 
-  def before_create
+  def before_validation
     super
-    self.owner_id = self.task_list.user_id
+    self.owner_id ||= self.task_list.try(:user_id)
     self.status ||= 'new'
     self.priority ||= 'normal'
   end

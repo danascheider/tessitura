@@ -59,6 +59,8 @@ class Canto < Sinatra::Base
   end
 
   post '/users/:id/tasks' do |id|
+    # FIX: I'm beginning to think the route should assign the user_id,
+    #      and the LIST should be assigned by the hook within the model.
     @request_body[:task_list_id] ||= User[id].default_task_list.id
     Task.create(@request_body)
   end
