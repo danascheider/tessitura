@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'base64'
 
 # There is a scoping issue causing problems with testing this module. Specifically,
 # when authentication fails via the ::protect and ::admin_only! methods, the call to 
