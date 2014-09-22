@@ -32,7 +32,7 @@ Then(/^the task's status should be (.*)$/) do |status|
 end
 
 Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
-  expect(Task.exists?(id: id)).to neg ? be_truthy : be_falsey
+  expect(Task[id]).to neg ? be_truthy : be_falsey
 end
 
 Then(/^the task's position should be changed to (\d+)$/) do |number|
