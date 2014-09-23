@@ -94,7 +94,7 @@ describe User do
   end
 
   describe 'instance methods' do
-    let(:user) { FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith') }
+    let(:user) { FactoryGirl.create(:user_with_task_lists, first_name: 'Jacob', last_name: 'Smith') }
 
     describe '#admin' do 
       context 'when the user is not an admin' do 
@@ -113,18 +113,18 @@ describe User do
 
     describe '#default_task_list' do 
       it 'creates a task list if there isn\'t one' do 
+        user.task_lists.each {|l| l.destroy }; user.reload
         expect { user.default_task_list }.to change { user.task_lists.count }.from(0).to(1)
       end
 
       it 'returns its first task list' do 
-        2.times { FactoryGirl.create(:task_list, user_id: user.id) }
         expect(user.default_task_list).to eql user.task_lists.first
       end
     end
 
     describe '#destroy' do 
       before(:each) do 
-        @user = FactoryGirl.create(:user_with_task_lists)
+        @user = user
       end
 
       it 'deletes the user from the database' do 
@@ -138,16 +138,16 @@ describe User do
 
       context 'when user is an admin' do 
         before(:each) do 
-          @admin_1 = FactoryGirl.create(:admin)
+          @admin = FactoryGirl.create(:admin)
         end
 
         context 'last admin' do 
           it 'raises Sequel::HookFailed' do 
-            expect{ @admin_1.destroy }.to raise_error(Sequel::HookFailed)
+            expect{ @admin.destroy }.to raise_error(Sequel::HookFailed)
           end
 
           it 'doesn\'t destroy the last admin' do 
-            id = @admin_1.id; @admin_1.destroy rescue Sequel::HookFailed
+            id = @admin.id; @admin.destroy rescue Sequel::HookFailed
             expect(User[id]).to be_truthy
           end
         end
@@ -155,15 +155,13 @@ describe User do
         context 'not last admin' do 
           it 'destroys user' do 
             admin_2 = FactoryGirl.create(:admin)
-            expect{ admin_2.destroy }.to change(User, :count).by(-1)
+            expect{ @admin.destroy }.to change(User, :count).by(-1)
           end
         end
       end
     end
 
     describe '#remove_all_task_lists' do 
-      let(:user) { FactoryGirl.create(:user_with_task_lists) }
-
       it 'destroys all the task lists' do 
         user.remove_all_task_lists
         expect(user.task_lists.count).to eql 0
@@ -171,8 +169,6 @@ describe User do
     end
 
     describe '#remove_task_list' do 
-      let(:user) { FactoryGirl.create(:user_with_task_lists) }
-
       it 'deletes the list' do 
         list = user.task_lists.first
         expect{ user.remove_task_list(list) }.to change(TaskList, :count).by(-1)
@@ -180,31 +176,22 @@ describe User do
     end
 
     describe '#task_lists_dataset' do 
-      let(:user) { FactoryGirl.create(:user_with_task_lists) }
-
       it 'returns a Sequel::Dataset object' do 
         expect(user.task_lists_dataset).to be_a(Sequel::Dataset)
       end
     end
 
     describe '#tasks' do 
-      before(:each) do 
-        FactoryGirl.create_list(:task_list_with_tasks, 2, user_id: user.id)
-      end
-
       it 'returns an array' do 
         expect(user.tasks).to be_an(Array)
       end
 
       it 'returns all its tasks' do 
-        tasks = user.task_lists.map {|list| list.tasks }
-        expect(user.tasks).to eql tasks.flatten
+        expect(user.tasks).to eql (user.task_lists.map {|list| list.tasks }).flatten
       end
     end
 
     describe '#tasks_dataset' do 
-      let(:user) { FactoryGirl.create(:user_with_task_lists) }
-
       it 'returns all the tasks' do 
         expect(user.tasks_dataset).to eql DB[:tasks].filter(owner_id: user.id)
       end
@@ -216,7 +203,6 @@ describe User do
 
     describe '#to_hash' do 
       before(:each) do 
-        FactoryGirl.create(:task_list_with_tasks, user_id: user.id)
         @hash = { id:         user.id,
                   username:   user.username,
                   email:      user.email,
@@ -277,9 +263,17 @@ describe User do
   end
 
   describe 'admin scope' do 
+    before(:each) do 
+      @admins = FactoryGirl.create_list(:admin, 2).flatten
+    end
+
     it 'includes all the admins' do 
-      admins = FactoryGirl.create_list(:admin, 2).flatten
-      expect(User.admin.to_a).to eql admins
+      expect(User.admin.to_a).to eql @admins
+    end
+
+    it 'doesn\'t include non-admins' do 
+      users = FactoryGirl.create_list(:user, 2).flatten
+      users.each {|u| expect(User.admin.to_a).not_to include(u) }
     end
   end
 end

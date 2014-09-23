@@ -11,7 +11,7 @@ class User < Sequel::Model
 
   def before_destroy
     return false if self.admin? && User.admin.count == 1
-    self.task_lists.each {|list| list.destroy }
+    self.remove_all_task_lists
   end
 
   def default_task_list
