@@ -1,12 +1,15 @@
 class User < Sequel::Model
   one_to_many :task_lists
 
+  alias_method :owner_id, :id
+  alias_method :admin?, :admin
+
   def self.admin 
     User.where(admin: true)
   end
 
-  def admin?
-    self.admin ? true : false
+  def add_task_list(list)
+    raise NoMethodError, '#add_task_list has been overridden in the User model (see documentation)'
   end
 
   def before_destroy
@@ -15,16 +18,15 @@ class User < Sequel::Model
   end
 
   def default_task_list
-    self.task_lists.length > 0 ? self.task_lists.first : TaskList.create(title: "Default Task List", user: self)
+    self.task_lists.length > 0 ? self.task_lists.first : TaskList.create(user: self)
   end
 
   def name
     "#{self.first_name} #{self.last_name}"
   end
 
-  def owner_id
-    self.id 
-  end
+  # This method is added automatically by sequel and has been overridden
+  # here so as not to interfere with the foreign key constraint on the table
 
   def remove_all_task_lists
     self.task_lists.each {|list| list.destroy }
@@ -40,8 +42,7 @@ class User < Sequel::Model
   end
 
   def tasks
-    arr = self.task_lists.map {|list| list.tasks.flatten }
-    arr.flatten!
+    (self.task_lists.map {|list| list.tasks.flatten }).flatten
   end
 
   def tasks_dataset
@@ -64,6 +65,8 @@ class User < Sequel::Model
       updated_at: self.updated_at
     }.reject! {|k,v| [nil, false, [], {}, ''].include? v }
   end
+
+  alias_method :to_h, :to_hash
 
   def to_json(options={})
     self.to_hash.to_json
