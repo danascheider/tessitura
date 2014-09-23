@@ -26,9 +26,26 @@ class User < Sequel::Model
     self.id 
   end
 
+  def remove_all_task_lists
+    self.task_lists.each {|list| list.destroy }
+    self.reload # to prevent lists from being cached
+  end
+
+  # This method is added automatically by Sequel and has been overridden
+  # here so as not to interfere with the foreign key constraint on the table
+
+  def remove_task_list(list)
+    list.destroy
+    self.reload # to prevent list from being cached
+  end
+
   def tasks
     arr = self.task_lists.map {|list| list.tasks.flatten }
     arr.flatten!
+  end
+
+  def tasks_dataset
+    DB[:tasks].filter(owner_id: self.id)
   end
 
   def to_hash
