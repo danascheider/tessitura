@@ -1,5 +1,5 @@
 class Object
-  # This super useful method comes from ActiveSupport. Since I'm trying
+  # These super useful methods come from ActiveSupport. Since I'm trying
   # to get Rails fully out of this project, I am re-implementing any 
   # ActiveSupport methods I need... it's just not even worth it.
   def try(method, *args)
@@ -8,6 +8,10 @@ class Object
     rescue NoMethodError, Sequel::ValidationFailed, Sequel::HookFailed, Sequel::Error
       nil
     end
+  end
+
+  def exists?
+    !self.nil?
   end
 end
 

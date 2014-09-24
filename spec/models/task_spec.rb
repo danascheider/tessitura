@@ -20,45 +20,11 @@ describe Task do
     let(:list) { FactoryGirl.create(:task_list, user_id: user.id) }
 
     describe '::create' do 
-      context 'with minimum valid attributes' do 
+      context 'with valid attributes' do 
         let(:attributes) { { title: 'My Task', task_list_id: list.id } }
 
         it 'creates a task' do 
           expect { Task.create(attributes) }.to change(Task, :count).by(1)
-        end
-
-        it 'sets the status to \'new\'' do 
-          task = Task.create(attributes)
-          expect(Task.last.status).to eql 'new'
-        end
-
-        it 'sets the priority to \'normal\'' do 
-          task = Task.create(attributes) 
-          expect(Task.last.priority).to eql 'normal'
-        end
-
-        it 'sets the proper owner ID' do 
-          task = Task.create(attributes) 
-          expect(Task.last.owner_id).to eql user.id
-        end
-      end
-
-      context 'with required attributes set explicitly' do 
-        let(:attributes) { 
-                           { title: 'My Task', 
-                             task_list_id: list.id,
-                             status: 'blocking', 
-                             priority: 'not_important' 
-                           } 
-                         }
-
-        it 'creates the task' do 
-          expect { Task.create(attributes) }.to change(Task, :count).by(1)
-        end
-
-        it 'uses the given status and priority' do 
-          task = Task.create(attributes)
-          expect([ task.status, task.priority ]).to eql [ attributes[:status], attributes[:priority]]
         end
       end
 
@@ -66,7 +32,9 @@ describe Task do
         let(:attributes) { { deadline: Time.now.utc } }
 
         it 'doesn\'t create the task' do 
-          expect{ create_resource(Task, attributes) }.not_to change(Task, :count)
+          expect { 
+            Task.create(attributes) rescue Sequel::ValidationFailed 
+          }.not_to change(Task, :count)
         end
 
         it 'raises a validation error' do 
@@ -183,10 +151,6 @@ describe Task do
     end
 
     describe '#owner' do 
-      it 'returns a user model' do 
-        expect(task.owner).to be_a(User)
-      end
-
       it 'is equivalent to #user' do 
         expect(task.owner).to eql task.user
       end
@@ -236,7 +200,7 @@ describe Task do
         #            the task persisted in the database with that ID is not.
 
         it 'doesn\'t change the attribute' do
-          update_resource({task_list_id: nil}, complete_task)
+          complete_task.update(task_list_id: nil) rescue Sequel::ValidationFailed
           expect(Task[complete_task.id].task_list_id).not_to be nil
         end
 
@@ -247,6 +211,10 @@ describe Task do
     end
 
     describe '#user' do 
+      it 'returns a User object' do 
+        expect(task.user).to be_a(User)
+      end
+
       it 'returns the user who owns the task list containing the task' do 
         expect(task.user).to eql task.task_list.user
       end
@@ -257,9 +225,8 @@ describe Task do
     let(:list) { FactoryGirl.create(:task_list_with_tasks) }
 
     it 'is destroyed with its parent list' do 
-      @task = list.tasks.first
-      list.destroy
-      expect(Task[@task.id]).to eql nil
+      task = list.tasks.first; list.destroy
+      expect(Task[task.id]).not_to exist
     end
   end
 end
