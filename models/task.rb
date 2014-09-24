@@ -2,11 +2,14 @@ class Task < Sequel::Model
   include JSON
   many_to_one :task_list
 
+  STATUS_OPTIONS   = [ 'new', 'in_progress', 'blocking', 'complete' ]
+  PRIORITY_OPTIONS = [ 'urgent', 'high', 'normal', 'low', 'not_important' ]
+
   def before_validation
     super
     self.owner_id ||= self.task_list.try(:user_id)
-    self.status ||= 'new'
-    self.priority ||= 'normal'
+    self.status = 'new' unless STATUS_OPTIONS.include? self.status
+    self.priority = 'normal' unless PRIORITY_OPTIONS.include? self.priority
   end
 
   def self.complete
@@ -22,7 +25,7 @@ class Task < Sequel::Model
   end
 
   def incomplete?
-    self.status != 'complete'
+    !self.complete?
   end
 
   def siblings
@@ -55,8 +58,8 @@ class Task < Sequel::Model
   def validate
     super
     validates_presence [:title, :task_list_id]
-    validates_includes ['new', 'in_progress', 'blocking', 'complete'], :status
-    validates_includes ['urgent', 'high', 'normal', 'low', 'not_important'], :priority
+    validates_includes STATUS_OPTIONS, :status
+    validates_includes PRIORITY_OPTIONS, :priority
     validates_unique   :position
   end
 end
