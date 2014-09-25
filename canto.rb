@@ -1,6 +1,7 @@
 require 'require_all'
 require 'sinatra/base'
 require 'sinatra/sequel'
+require 'reactive_support'
 require 'sequel'
 require 'json'
 require File.expand_path('../config/settings', __FILE__)
@@ -13,6 +14,7 @@ class Canto < Sinatra::Base
   end
 
   before do
+    request.body.rewind # best practices
     @request_body = parse_json(request.body.read)
     @id = request.path_info.match(/\d+/).to_s
   end
@@ -59,8 +61,6 @@ class Canto < Sinatra::Base
   end
 
   post '/users/:id/tasks' do |id|
-    # FIX: I'm beginning to think the route should assign the user_id,
-    #      and the LIST should be assigned by the hook within the model.
     @request_body[:task_list_id] ||= User[id].default_task_list.id
     create_resource(Task, @request_body)
   end
