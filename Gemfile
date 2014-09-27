@@ -18,7 +18,7 @@ gem 'rake',    '~> 10.3.2'
 gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
 
 # Use ReactiveSupport to provide utility methods
-gem 'reactive_support', '~> 0.1.0', git: 'https://github.com/danascheider/reactive_support'
+gem 'reactive_support', '~> 0.1.3.beta'
 
 # Use Cucumber and RSpec for testing
 # Coveralls and SimpleCov monitor test coverage
