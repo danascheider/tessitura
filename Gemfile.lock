@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/danascheider/reactive_support
-  revision: c29531b8b92960a987b06095f7954f36011fee9a
+  revision: 3469df6cf47fa0ae16408d43a83c747cf2b7b029
   specs:
-    reactive_support (0.1.0)
+    reactive_support (0.1.1.beta)
 
 GIT
   remote: https://github.com/danascheider/sinatra-sequel_extension
@@ -54,7 +54,7 @@ GEM
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
     mime-types (2.3)
-    minitest (5.4.1)
+    minitest (5.4.2)
     multi_json (1.10.1)
     multi_test (0.1.1)
     mysql2 (0.3.16)
