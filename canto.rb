@@ -57,7 +57,7 @@ class Canto < Sinatra::Base
     end
 
     put route do 
-      update_resource(@request_body, @resource)
+      @resource.update(@request_body) && 200 rescue 422
     end
 
     delete route do 
