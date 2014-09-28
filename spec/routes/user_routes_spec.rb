@@ -10,16 +10,16 @@ describe Canto do
 
   describe 'POST' do 
     let(:path) { '/users' }
-    let(:valid_attributes) { '{ "email":"user@example.com", "username":"justine7", "password":"validpassword666"}' }
+    let(:valid_attributes) { { email: "user@example.com", username: "justine7", password: "validpassword666"}.to_json }
 
     context 'with valid attributes' do 
       it 'calls the User create method' do 
         expect(User).to receive(:create)
-        make_request('POST', 'path', valid_attributes)
+        make_request('POST', path, valid_attributes)
       end
 
       it 'returns status 201' do 
-        make_request('POST', 'path', valid_attributes)
+        make_request('POST', path, valid_attributes)
         expect(response_status).to eql 201
       end
     end
