@@ -1,3 +1,4 @@
+@users
 Feature: Create a new user
 
   Scenario: Normal user creation

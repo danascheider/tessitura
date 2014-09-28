@@ -1,3 +1,4 @@
+@users
 Feature: View user profile
 
   Scenario Outline: Authorized user views profile
