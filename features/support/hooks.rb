@@ -3,6 +3,7 @@ Before('@users') do
   FactoryGirl.create(:admin, id: 1, email: 'admin@example.com', username: 'abcd1234', password: 'abcde12345')
   FactoryGirl.create(:user, id: 2, email: 'user2@example.com', username: 'bcde2345', password: 'bcdef23456')
   FactoryGirl.create(:user, id: 3, email: 'user3@example.com', username: 'cdef3456', password: 'cdefg34567')
+  @user_count = User.count
 end
 
 # # This seems like a smell, but the fact is that sometimes I just need
