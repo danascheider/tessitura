@@ -1,11 +1,16 @@
 require 'require_all'
 require 'sinatra/base'
 require 'sinatra/sequel'
-require 'reactive_support'
 require 'sequel'
+require 'reactive_support'
+require 'reactive_support/core_ext/object/blank'
+require 'reactive_support/core_ext/object/inclusion'
+require 'reactive_support/extensions/reactive_extensions'
 require 'json'
 require File.expand_path('../config/settings', __FILE__)
-require_all 'models'
+
+Dir['./models/**/*'].each {|f| require f }
+Dir['../helpers/**/*'].each {|f| require f }
 
 class Canto < Sinatra::Base
 
@@ -43,7 +48,7 @@ class Canto < Sinatra::Base
   
   post '/users' do  
     validate_standard_create
-    create_resource(User, @request_body)
+    User.create(@request_body) && 201 rescue 422
   end
 
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
