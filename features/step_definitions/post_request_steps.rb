@@ -19,6 +19,11 @@ When(/^the client submits a POST request to \/users with:$/) do |string|
   make_request('POST', '/users', string)
 end
 
+When(/^the client submits a POST request to \/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
+  authorize_with (@current = User[id])
+  make_request('POST', '/users', string)
+end
+
 # Create Admin User
 # =================
 When(/^the client submits a POST request to \/admin\/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
