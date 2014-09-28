@@ -7,9 +7,9 @@ class Task < Sequel::Model
 
   def before_validation
     super
-    self.owner_id ||= self.task_list.try(:user_id)
-    self.status = 'new' unless STATUS_OPTIONS.include? self.status
-    self.priority = 'normal' unless PRIORITY_OPTIONS.include? self.priority
+    self.owner_id ||= self.task_list.user_id
+    self.status   = 'new' unless self.status.in? STATUS_OPTIONS
+    self.priority = 'normal' unless self.priority.in? PRIORITY_OPTIONS
   end
 
   def self.complete
@@ -43,7 +43,7 @@ class Task < Sequel::Model
       status: self.status,
       description: self.description,
       created_at: self.created_at,
-    }.reject {|k,v| [nil, false, [], {}, ''].include? v }
+    }.reject! {|k,v| v.blank? }
   end
 
   def to_json(options={})
@@ -57,7 +57,7 @@ class Task < Sequel::Model
 
   def validate
     super
-    validates_presence [:title, :task_list_id]
+    validates_presence [:title, :task_list_id, :owner_id]
     validates_includes STATUS_OPTIONS, :status
     validates_includes PRIORITY_OPTIONS, :priority
     validates_unique   :position

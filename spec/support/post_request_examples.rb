@@ -18,10 +18,6 @@ shared_examples 'an authorized POST request' do
       make_request('POST', path, valid_attributes)
       expect(response_status).to eql 201
     end
-
-    it 'changes the task count by 1' do 
-      #
-    end
   end
 
   context 'with invalid attributes' do 

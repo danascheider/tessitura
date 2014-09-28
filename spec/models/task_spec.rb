@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Task do 
   include Sinatra::ErrorHandling
-
+  
   let(:task) { FactoryGirl.create(:task) }
 
   describe 'attributes' do 
@@ -76,7 +76,7 @@ describe Task do
 
         it 'sets owner and owner ID' do 
           task.save
-          expect([task.owner, task.owner_id]).to eql [task.task_list.user, task.task_list.user.id]
+          expect([task.owner, task.owner_id]).to eql [task.task_list.user, task.task_list.user_id]
         end
 
         context 'when status is set to complete' do 

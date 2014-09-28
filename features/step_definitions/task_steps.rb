@@ -36,5 +36,6 @@ Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |
 end
 
 Then(/^the task's position should be changed to (\d+)$/) do |number|
+  pending('Position functionality not yet implemented')
   expect(Task[@task.id].position).to eql number
 end

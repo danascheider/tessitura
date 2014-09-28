@@ -1,12 +1,13 @@
 module Sinatra
   module ErrorHandling
+
     def create_resource(klass, attributes)
-      klass.try(:create, attributes) ? 201 : 422
+      klass.try_rescue(:create, attributes) ? 201 : 422
     end
 
     def destroy_resource(object)
       return 404 unless object
-      object.try(:destroy) ? 204 : 403
+      object.try_rescue(:destroy) ? 204 : 403
     end
 
     def get_resource(klass, id, &block)
@@ -27,7 +28,7 @@ module Sinatra
     #      corroborated in IRB, where it works as expected.
     def update_resource(attributes, object=nil)
       return 404 unless object
-      object.try(:update, attributes) ? 200 : 422
+      object.try_rescue(:update, attributes) ? 200 : 422
     end
   end
 

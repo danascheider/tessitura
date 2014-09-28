@@ -34,6 +34,7 @@ RSpec.configure do |config|
 
   DB = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
   CLIENT = Mysql2::Client.new(host: '127.0.0.1', username: 'root', password: 'vagrant', port: 3306, database: ENV['RACK_ENV'])
+  Sequel::Model.db = DB
 
   config.before(:each) do
     system 'rake db:test:prepare > /dev/null 2>&1'

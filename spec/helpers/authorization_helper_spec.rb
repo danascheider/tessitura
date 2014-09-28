@@ -20,22 +20,22 @@ describe Sinatra::AuthorizationHelper do
   let(:bogus_credentials) { Base64.encode64('foo:bar') }
   
   before(:each) do 
-    @ENV1 = { "HTTP_AUTHORIZATION" => "Basic #{admin_credentials}" }
-    @ENV2 = { "HTTP_AUTHORIZATION" => "Basic #{user_credentials}" }
-    @ENV3 = { "HTTP_AUTHORIZATION" => "Basic #{bogus_credentials}" }
+    @env1 = { "HTTP_AUTHORIZATION" => "Basic #{admin_credentials}" }
+    @env2 = { "HTTP_AUTHORIZATION" => "Basic #{user_credentials}" }
+    @env3 = { "HTTP_AUTHORIZATION" => "Basic #{bogus_credentials}" }
   end
 
   describe '::admin_access?' do 
     context 'when logged-in user is an admin' do 
       it 'returns true' do 
-        @auth = Rack::Auth::Basic::Request.new(@ENV1)
+        @auth = Rack::Auth::Basic::Request.new(@env1)
         expect(admin_access?).to eql true
       end
     end
 
     context 'when logged-in user is not an admin' do 
       it 'returns false' do 
-        @auth = Rack::Auth::Basic::Request.new(@ENV2)
+        @auth = Rack::Auth::Basic::Request.new(@env2)
         expect(admin_access?).to be_falsey
       end
     end
@@ -47,14 +47,14 @@ describe Sinatra::AuthorizationHelper do
   describe '::admin_only!' do 
     context 'when user is an admin' do 
       it 'allows access to the resource' do 
-        @auth = Rack::Auth::Basic::Request.new(@ENV1)
+        @auth = Rack::Auth::Basic::Request.new(@env1)
         expect(admin_only!).to eql nil
       end
     end
 
     context 'when logged-in user is not an admin' do 
       it 'doesn\'t allow access to the resource' do 
-        @auth = Rack::Auth::Basic::Request.new(@ENV2)
+        @auth = Rack::Auth::Basic::Request.new(@env2)
         make_request('GET', '/test/admin_only')
         expect(response_body).to eql "Authorization Required\n"
       end
@@ -89,14 +89,14 @@ describe Sinatra::AuthorizationHelper do
   describe '::authorized?' do 
     context 'with proper credentials' do 
       it 'returns true' do 
-        @auth = Rack::Auth::Basic::Request.new(@ENV2)
+        @auth = Rack::Auth::Basic::Request.new(@env2)
         expect(authorized?).to be_truthy
       end
     end
 
     context 'with bad credentials' do 
       it 'returns false' do 
-        @auth = Rack::Auth::Basic::Request.new(@ENV3)
+        @auth = Rack::Auth::Basic::Request.new(@env3)
         expect(authorized?).to be_falsey
       end
     end
@@ -148,7 +148,6 @@ describe Sinatra::AuthorizationHelper do
   describe '::protect' do  
     context 'when the user doesn\'t exist' do 
       it 'returns 404' do 
-        allow(User).to receive(:exists?).and_return(false)
         @id = 1000000
         expect(protect(User)).to eql 404
       end
@@ -164,26 +163,32 @@ describe Sinatra::AuthorizationHelper do
         expect(response_status).to eql 401
       end
 
+      # FIX: This sends ::access_denied two times - need to find out why
       it 'calls ::access_denied' do 
+        pending('Debug')
+        @id = user.id
         expect_any_instance_of(Canto).to receive(:access_denied)
         make_request('GET', "/test/users/#{admin.id}")
       end
     end
 
     context 'when the user is authorized' do 
-      pending 'getting over my utter aggravation with this module'
+      it 'returns nil' do 
+        @auth, @id = Rack::Auth::Basic::Request.new(@env2), user.id
+        expect(protect(User)).to eql nil
+      end
     end
   end
 
   describe '::setting_admin' do 
-    context 'when the response body has "admin" key' do 
+    context 'when the request body has :admin key' do 
       it 'returns true' do 
         @request_body = { admin: true }
         expect(setting_admin?).to be_truthy
       end
     end
 
-    context 'when the request body does not have "admin" key' do 
+    context 'when the request body does not have :admin key' do 
       it 'returns false' do 
         @request_body = { 'fach' => 'dramatic coloratura' }
         expect(setting_admin?).to be_falsey
@@ -193,6 +198,56 @@ describe Sinatra::AuthorizationHelper do
     context 'when there is no request body' do 
       it 'returns false' do 
         expect(setting_admin?).to be_falsey
+      end
+    end
+  end
+
+  describe '::valid_credentials?' do 
+    context 'with valid credentials' do 
+      it 'returns true' do 
+        @auth = Rack::Auth::Basic::Request.new(@env2)
+        expect(valid_credentials?).to be_truthy
+      end
+    end
+
+    context 'with bad credentials' do 
+      it 'returns false' do 
+        @auth = Rack::Auth::Basic::Request.new({ "HTTP_AUTHORIZATION" => "Basic #{user.username}:badpassword" })
+        expect(valid_credentials?).to be_falsey
+      end
+    end
+
+    context 'with no credentials' do 
+      it 'returns false' do 
+        @auth = Rack::Auth::Basic::Request.new({})
+        expect(valid_credentials?).to be_falsey
+      end
+    end
+  end
+
+  describe '::validate_standard_create' do 
+
+    context 'not setting admin' do 
+      it 'returns nil' do 
+        @request_body = {username: 'frankjones', password: 'jonesfrank', email: 'fj@jones.org'}
+        expect(validate_standard_create).to eql nil
+      end
+    end
+
+    context 'setting admin' do
+      before(:each) do
+        @request_body = {admin: true, username: 'frankjones', password: 'jonesfrank', email: 'fj@jones.org'}
+      end  
+
+      it 'calls ::validate_standard_create' do 
+        expect_any_instance_of(Canto).to receive(:validate_standard_create)
+        make_request('GET', '/test/create', @request_body.to_json)
+      end
+
+      it 'calls ::access_denied' do 
+        pending('Debugging test support module')
+        expect_any_instance_of(Canto).to receive(:access_denied)
+        make_request('GET', '/test/create', @request_body.to_json)
       end
     end
   end

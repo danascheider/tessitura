@@ -35,7 +35,7 @@ end
 def make_request(method, path, string=nil)
   case method
   when 'POST'
-    post path, string, 'CONTENT-TYPE' => 'application/json'
+    post path, string, 'CONTENT-TYPE' => 'application/x-www-form-urlencoded'
   when 'PUT'
     put path, string, 'CONTENT-TYPE' => 'application/json'
   when 'GET'
