@@ -94,7 +94,7 @@ describe User do
   end
 
   describe 'instance methods' do
-    let(:user) { FactoryGirl.create(:user_with_task_lists, first_name: 'Jacob', last_name: 'Smith') }
+    let(:user) { FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith') }
 
     describe '#admin' do 
       context 'when the user is not an admin' do 
@@ -170,7 +170,7 @@ describe User do
 
     describe '#remove_task_list' do 
       it 'deletes the list' do 
-        list = user.task_lists.first
+        list = FactoryGirl.create(:task_list, user_id: user.id)
         expect{ user.remove_task_list(list) }.to change(TaskList, :count).by(-1)
       end
     end
@@ -209,7 +209,6 @@ describe User do
                   first_name: 'Jacob', 
                   last_name:  'Smith', 
                   country:    'USA',
-                  task_lists: user.task_lists.map {|list| list.id },
                   created_at: user.created_at
                 }
       end

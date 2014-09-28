@@ -2,7 +2,6 @@ class User < Sequel::Model
   one_to_many :task_lists
 
   alias_method :owner_id, :id
-  alias_method :admin?, :admin
 
   def self.admin 
     User.where(admin: true)
@@ -10,6 +9,10 @@ class User < Sequel::Model
 
   def add_task_list(list)
     raise NoMethodError, '#add_task_list has been overridden in the User model (see documentation)'
+  end
+
+  def admin?
+    self.admin
   end
 
   def before_destroy
@@ -25,7 +28,7 @@ class User < Sequel::Model
     "#{self.first_name} #{self.last_name}"
   end
 
-  # This method is added automatically by sequel and has been overridden
+  # This method is added automatically by Sequel and has been overridden
   # here so as not to interfere with the foreign key constraint on the table
 
   def remove_all_task_lists
@@ -63,7 +66,7 @@ class User < Sequel::Model
       task_lists: self.task_lists.map {|list| list.id },
       created_at: self.created_at,
       updated_at: self.updated_at
-    }.reject! {|k,v| [nil, false, [], {}, ''].include? v }
+    }.reject! {|k,v| v.blank? }
   end
 
   alias_method :to_h, :to_hash
