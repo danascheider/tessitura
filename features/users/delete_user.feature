@@ -1,3 +1,4 @@
+@users
 Feature: Delete user account
 
   Scenario Outline: Authorized user deletes account
