@@ -23,8 +23,7 @@ end
 # Update User
 # ===========
 Then(/^the (\d+)(?:[a-z]{2}) user's (.*) should be changed to (.*)$/) do |id, attr, value|
-  @user = User[id]
-  expect(@user.to_hash[attr.intern]).to eql value
+  expect(User[id].send(attr.intern)).to eql value
 end
 
 Then(/^the user's (.*) should not be changed$/) do |attr|
