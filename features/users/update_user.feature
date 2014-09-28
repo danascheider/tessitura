@@ -1,3 +1,4 @@
+@users
 Feature: Updating user profiles
 
   Scenario Outline:
