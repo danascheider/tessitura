@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/danascheider/reactive_support.git
+  revision: 6cf9c541bb0171441ec36cdd5d3f318ce5c1756e
+  branch: development
+  specs:
+    reactive_support (0.1.3.beta2)
+
+GIT
   remote: https://github.com/danascheider/sinatra-sequel_extension
   revision: ac0a499157de099e2afa94a685d42c07195749ab
   specs:
@@ -62,7 +69,6 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     rake (10.3.2)
-    reactive_support (0.1.3.beta)
     require_all (1.3.2)
     rest-client (1.7.2)
       mime-types (>= 1.16, < 3.0)
@@ -133,7 +139,7 @@ DEPENDENCIES
   mysql2 (= 0.3.16)
   rack-test (~> 0.6.2)
   rake (~> 10.3.2)
-  reactive_support (~> 0.1.3.beta)
+  reactive_support (~> 0.1.3.beta2)!
   require_all (~> 1.3.2)
   rspec (~> 3.0.0)
   sequel (~> 4.13.0)
