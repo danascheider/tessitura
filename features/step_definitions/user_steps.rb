@@ -7,15 +7,12 @@ end
 # Create User
 # ===========
 Then(/^(a|no) new user should be created with the following attributes:$/) do |art, attributes|
-  attributes.hashes.each do |hash|
-    if art == 'no' 
-      expect(User.count).to eql @user_count
-    else
-      User.last.to_hash.each do |key, value|
-        value = value == true ? 'true' : value
-        expect(value).to eql hash[key.to_s] if hash.has_key? key.to_s
-      end
+  if art == 'a'
+    attributes.hashes.first do |key, value|
+      expect(User.last.to_hash[key.to_s]).to eql value
     end
+  else
+    expect(User.count).to eql @user_count
   end
 end
 
