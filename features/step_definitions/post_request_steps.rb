@@ -14,14 +14,8 @@ end
 
 # Create User
 # ===========
-When(/^the client submits a POST request to \/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
-  @current = User[id]
-  authorize_with @current
-  make_request('POST', '/users', string)
-end
-
-
 When(/^the client submits a POST request to \/users with:$/) do |string|
+  @user_count = User.count
   make_request('POST', '/users', string)
 end
 
