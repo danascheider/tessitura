@@ -7,7 +7,7 @@ Feature: Create a new user
       """
     Then a new user should be created with the following attributes:
       | username  | password      | email            | admin |
-      | johndoe3  | johnspassword | jdoe@example.com | nil   |
+      | johndoe3  | johnspassword | jdoe@example.com | false |
     And the response should indicate the user was saved successfully
 
   Scenario: Unauthorized attempt to create an admin
