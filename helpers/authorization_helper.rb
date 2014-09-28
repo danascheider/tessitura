@@ -10,7 +10,7 @@ module Sinatra
     end
 
     def access_denied
-      headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+      headers('WWW-Authenticate' => 'Basic realm="Restricted Area"')
       halt 401, "Authorization Required\n"
     end
 
@@ -30,11 +30,11 @@ module Sinatra
     def protect(klass)
       return 404 unless (@resource = klass[@id])
       return if authorized? && authorized_for_resource?(@resource.owner_id)
-      access_denied
+      self.access_denied
     end
 
     def setting_admin?
-      @request_body.try(:has_key?, :admin)
+      @request_body.try_rescue(:has_key?, :admin)
     end
 
     def valid_credentials?
@@ -46,7 +46,7 @@ module Sinatra
     end
 
     def validate_standard_create
-      @request_body.try(:has_key?, :admin) ? access_denied : return
+      @request_body.try_rescue(:has_key?, :admin) ? self.access_denied : return
     end
   end
 
