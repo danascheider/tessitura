@@ -5,6 +5,7 @@ require 'sequel'
 require 'reactive_support'
 require 'reactive_support/core_ext/object/blank'
 require 'reactive_support/core_ext/object/inclusion'
+require 'reactive_support/core_ext/object/try'
 require 'reactive_support/extensions/reactive_extensions'
 require 'json'
 require File.expand_path('../config/settings', __FILE__)
@@ -57,6 +58,7 @@ class Canto < Sinatra::Base
     end
 
     put route do 
+      return 404 unless @resource
       @resource.update(@request_body) && 200 rescue 422
     end
 
