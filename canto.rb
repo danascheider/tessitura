@@ -20,12 +20,12 @@ class Canto < Sinatra::Base
   end
 
   before do
-    request.body.rewind # best practices
-    @request_body = parse_json(request.body.read)
     @id = request.path_info.match(/\d+/).to_s
   end
 
   before /\/users\/(\d+)(\/*)?/ do 
+    request.body.rewind
+    @request_body = parse_json(request.body.read)
     protect(User)
   end
 
@@ -48,6 +48,7 @@ class Canto < Sinatra::Base
   # end
   
   post '/users' do  
+    request.body.rewind; @request_body = parse_json(request.body.read)
     validate_standard_create
     User.create(@request_body) && 201 rescue 422
   end
@@ -58,6 +59,7 @@ class Canto < Sinatra::Base
     end
 
     put route do 
+      request.body.rewind; @request_body = parse_json(request.body.read)
       return 404 unless @resource
       @resource.update(@request_body) && 200 rescue 422
     end
@@ -80,7 +82,8 @@ class Canto < Sinatra::Base
   # =================
 
   post '/admin/users' do 
-    create_resource(User, @request_body)
+    request.body.rewind; @request_body = parse_json(request.body.read)
+    User.create(@request_body) && 201 || 422
   end
 
   get '/admin/users' do 

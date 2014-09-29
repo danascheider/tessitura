@@ -46,7 +46,7 @@ module Sinatra
     end
 
     def validate_standard_create
-      @request_body.try(:has_key?, :admin) ? access_denied : return
+      access_denied if setting_admin?
     end
   end
 

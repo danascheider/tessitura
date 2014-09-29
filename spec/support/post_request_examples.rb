@@ -47,11 +47,11 @@ end
 shared_examples 'a POST request without credentials' do 
   it 'doesn\'t create a resource' do 
     expect(model).not_to receive(:create)
-    make_request('POST', path, valid_attributes)
+    make_request('POST', path, invalid_attributes)
   end
 
   it 'returns status 401' do 
-    make_request('POST', path, valid_attributes)
+    make_request('POST', path, invalid_attributes)
     expect(response_status).to eql 401
   end
 end

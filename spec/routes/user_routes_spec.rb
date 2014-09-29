@@ -4,22 +4,28 @@ describe Canto do
   include Sinatra::ErrorHandling
   include Rack::Test::Methods
 
-  let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
-  let(:user) { FactoryGirl.create(:user_with_task_lists) }
+  let(:admin) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryGirl.create(:user) }
   let(:model) { User }
 
   describe 'POST' do 
     let(:path) { '/users' }
-    let(:valid_attributes) { { email: "user@example.com", username: "justine7", password: "validpassword666"}.to_json }
+    let(:valid_attributes) { { email: "user@example.com", username: "justine7", password: "validpassword666"} }
+    let(:invalid_attributes) { { first_name: 'Frank' } }
 
     context 'with valid attributes' do 
+      it 'calls the #validate_standard_create method' do 
+        expect_any_instance_of(Canto).to receive(:validate_standard_create).and_return(nil)
+        make_request('POST', path, valid_attributes.to_json)
+      end
+
       it 'calls the User create method' do 
-        expect(User).to receive(:create)
-        make_request('POST', path, valid_attributes)
+        expect(User).to receive(:create).with(valid_attributes)
+        post path, valid_attributes.to_json
       end
 
       it 'returns status 201' do 
-        make_request('POST', path, valid_attributes)
+        post path, valid_attributes.to_json 
         expect(response_status).to eql 201
       end
     end
@@ -27,26 +33,49 @@ describe Canto do
     context 'with invalid attributes' do 
       it 'attempts to create a user' do 
         expect(User).to receive(:create)
-        make_request('POST', '/users', { 'first_name' => 'Frank' }.to_json)
+        make_request('POST', '/users', invalid_attributes.to_json)
       end
 
       it 'returns status 422' do 
-        make_request('POST', '/users', { 'first_name' => 'Frank' }.to_json)
+        make_request('POST', '/users', invalid_attributes.to_json)
         expect(response_status).to eql 422
       end
     end
 
-    context 'attempting to create an admin' do 
-      context 'without providing credentials'
-        it_behaves_like 'a POST request without credentials' do 
-          let(:valid_attributes) { { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json }
+    context 'attempting to create an admin' do
+      let(:admin_attributes) { { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json }
+
+      context 'to the main /users path' do 
+        it 'calls the #validate_standard_create method' do 
+          expect_any_instance_of(Canto).to receive(:validate_standard_create)
+          make_request('POST', '/users', { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json)
+        end
+
+        it 'doesn\'t create the user' do 
+          expect(User).not_to receive(:create)
+          make_request('POST', '/users', { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json)
+        end
+
+        it 'returns status 401' do 
+          make_request('POST', '/users', { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json)
+          expect(response_status).to eql 401
         end
       end
 
       context 'without providing admin credentials' do 
         it_behaves_like 'an unauthorized POST request' do 
+          let(:path) { '/admin/users' }
+          let(:agent) { user }
+          let(:valid_attributes) { admin_attributes }
+        end
+      end
+
+      context 'with proper admin credentials' do 
+        it_behaves_like 'an authorized POST request' do 
+          let(:path) { '/admin/users' }
           let(:agent) { admin }
-          let(:valid_attributes) { { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json }
+          let(:valid_attributes) { admin_attributes }
+        end
       end
     end
   end
