@@ -1,4 +1,4 @@
-Before('@users') do
+Before do
   User.dataset = User.dataset
   FactoryGirl.create(:admin, id: 1, email: 'admin@example.com', username: 'abcd1234', password: 'abcde12345')
   FactoryGirl.create(:user, id: 2, email: 'user2@example.com', username: 'bcde2345', password: 'bcdef23456')
