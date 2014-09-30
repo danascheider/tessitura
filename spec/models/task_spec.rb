@@ -226,7 +226,7 @@ describe Task do
 
     it 'is destroyed with its parent list' do 
       task = list.tasks.first; list.destroy
-      expect(Task[task.id]).not_to exist
+      expect(Task[task.id]).to be nil
     end
   end
 end

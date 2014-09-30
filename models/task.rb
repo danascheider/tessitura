@@ -7,7 +7,7 @@ class Task < Sequel::Model
 
   def before_validation
     super
-    self.owner_id ||= self.task_list.user_id
+    self.owner_id ||= self.task_list.user_id rescue false
     self.status   = 'new' unless self.status.in? STATUS_OPTIONS
     self.priority = 'normal' unless self.priority.in? PRIORITY_OPTIONS
   end
