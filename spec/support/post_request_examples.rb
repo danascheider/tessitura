@@ -6,7 +6,8 @@ shared_examples 'an authorized POST request' do
   context 'with valid attributes' do
     it 'creates a resource' do 
       # I really want to specify that model should be created with the
-      # valid_attributes hash as an argument. But the task_list_id has to 
+      # valid_attributes hash as an argument. But when the model is 
+      # Task, sthe task_list_id has to 
       # be added in the route, since the model will not know the user 
       # otherwise.
 

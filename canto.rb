@@ -83,7 +83,7 @@ class Canto < Sinatra::Base
 
   post '/admin/users' do 
     request.body.rewind; @request_body = parse_json(request.body.read)
-    User.create(@request_body) && 201 || 422
+    User.create(@request_body) && 201 rescue 422
   end
 
   get '/admin/users' do 

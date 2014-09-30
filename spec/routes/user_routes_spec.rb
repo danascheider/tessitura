@@ -70,7 +70,7 @@ describe Canto do
         end
       end
 
-      context 'with proper admin credentials' do 
+      context 'with proper admin credentials' do
         it_behaves_like 'an authorized POST request' do 
           let(:path) { '/admin/users' }
           let(:agent) { admin }
