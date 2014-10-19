@@ -3,6 +3,6 @@ rvm:
   - "2.1.2"
 env: DB=sqlite3 COVERAGE=true
 install: 'bundle install'
-before_install: 'sudo apt-get install -y libmysqlclient-dev'
+before_install: 'sudo apt-get install -y libmysqlclient-dev; mkdir log; touch log/canto.log'
 notifications:
   email: false
