@@ -17,3 +17,5 @@
 
 # Ignore .vagrant directory
 /.vagrant
+/.vagrant/*
+/.vagrant/**/*
