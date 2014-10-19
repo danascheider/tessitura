@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.1.3'
 
 # Require Sinatra and JSON for back-end
 gem 'sinatra', '~> 1.4.5'

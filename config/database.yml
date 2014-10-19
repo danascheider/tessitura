@@ -3,7 +3,7 @@ development:
   host: 127.0.0.1
   port: 3306
   username: root
-  password: vagrant
+  password: hunter2
   pool: 5
   timeout: 5000
 
@@ -12,7 +12,7 @@ test: &test
   host: 127.0.0.1
   port: 3306
   username: root
-  password: vagrant
+  password: hunter2
   pool: 5
   timeout: 5000
 
@@ -21,7 +21,7 @@ production:
   host: 127.0.0.1
   port: 3306
   username: root
-  password: vagrant
+  password: hunter2
   pool: 5
   timeout: 5000
 
