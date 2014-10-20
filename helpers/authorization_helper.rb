@@ -27,6 +27,11 @@ module Sinatra
       User.find(username: @auth.credentials.first)
     end
 
+    def login
+      return {id: current_user.id}.to_json if authorized?
+      access_denied
+    end
+
     def protect(klass)
       return 404 unless (@resource = klass[@id])
       return if authorized? && authorized_for_resource?(@resource.owner_id)

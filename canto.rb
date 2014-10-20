@@ -79,6 +79,10 @@ class Canto < Sinatra::Base
     return_json(@resource.tasks)
   end
 
+  post '/login' do
+    login
+  end
+
   # Admin-Only Routes
   # =================
 
