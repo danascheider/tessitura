@@ -14,7 +14,7 @@ describe Canto do
       end
 
       it 'returns the user\'s ID' do 
-        expect(response_body).to include user.id.to_s
+        expect(response_body).to include user.to_json
       end
 
       it 'returns a JSON object' do 

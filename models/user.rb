@@ -1,4 +1,4 @@
-class User < Sequel::Model
+class User < Sequel::Model(:users)
   one_to_many :task_lists
 
   alias_method :owner_id, :id

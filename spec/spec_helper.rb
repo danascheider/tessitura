@@ -8,7 +8,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 SimpleCov.start if ENV["COVERAGE"]
 
 ENV['RACK_ENV'] = 'test'
-DB_PASSWD = 'vagrant'
+DB_PASSWD = 'hunter2'
 
 support_path = File.expand_path('../../features/support', __FILE__)
 app_path = File.expand_path('../..', __FILE__)
@@ -32,10 +32,10 @@ RSpec.configure do |config|
 
   config.order = 'random'
 
-  DB = Sequel.connect("mysql2://root:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
-  CLIENT = Mysql2::Client.new(host: '127.0.0.1', username: 'root', password: 'vagrant', port: 3306, database: ENV['RACK_ENV'])
+  DB = Sequel.connect("mysql2://canto:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
+  CLIENT = Mysql2::Client.new(host: '127.0.0.1', username: 'canto', password: DB_PASSWD, port: 3306, database: ENV['RACK_ENV'])
 
-  config.before(:each) do
+  config.before(:each) do 
     system 'rake db:test:prepare > /dev/null 2>&1'
   end
 end

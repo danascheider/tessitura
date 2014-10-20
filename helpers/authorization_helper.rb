@@ -28,7 +28,7 @@ module Sinatra
     end
 
     def login
-      return {id: current_user.id}.to_json if authorized?
+      return {user: current_user}.to_json if authorized?
       access_denied
     end
 

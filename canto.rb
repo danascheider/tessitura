@@ -10,7 +10,7 @@ require 'reactive_support/extensions/reactive_extensions'
 require 'json'
 require File.expand_path('../config/settings', __FILE__)
 
-Dir['./models/**/*'].each {|f| require f }
+Dir['./models/**'].each {|f| require f }
 Dir['../helpers/**/*'].each {|f| require f }
 
 class Canto < Sinatra::Base

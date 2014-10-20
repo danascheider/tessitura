@@ -3,11 +3,11 @@ require_all File.expand_path('../../helpers',__FILE__)
 
 class Canto < Sinatra::Base
   ENVIRONMENT = ENV['RACK_ENV'] || 'development'
-  ROOT_PASSWORD = 'vagrant'
+  DB_PASSWORD = 'hunter2'
 
   set :root, File.dirname(__FILE__)
   set :app_file, __FILE__
-  set :database, "mysql2://root:#{ROOT_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
+  set :database, "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
   set :data, ''
 
   enable :logging
