@@ -10,6 +10,13 @@ class Canto < Sinatra::Base
   set :database, "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
   set :data, ''
 
+  use Rack::Cors do 
+    allow do 
+      origins 'null', /localhost:(\d+)/
+      resource '/*', methods: [:get, :put, :post, :delete, :options], headers: :any
+    end
+  end
+
   enable :logging
 
   file = File.new(File.expand_path("../../log/canto.log", __FILE__), 'a+')
