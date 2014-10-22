@@ -12,7 +12,7 @@ class Canto < Sinatra::Base
 
   use Rack::Cors do 
     allow do 
-      origins 'null', /localhost:(\d+)/
+      origins 'null', /localhost(.*)/
       resource '/*', methods: [:get, :put, :post, :delete, :options], headers: :any
     end
   end
