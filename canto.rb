@@ -22,6 +22,7 @@ class Canto < Sinatra::Base
 
   before do
     File.open('./log/canto.log', 'a+') do |file| 
+      file.puts "\n"
       request.env.each {|key, value| file.puts("#{key.upcase}: #{value}")}
     end
 
