@@ -4,6 +4,7 @@ ruby '2.1.3'
 # Require Sinatra and JSON for back-end
 gem 'sinatra', '~> 1.4.5'
 gem 'json',    '~> 1.8.1'
+gem 'rack-cors', '~> 0.2.9', require: 'rack/cors'
 
 # Use Thin web server
 gem 'thin', '~> 1.6.2'
