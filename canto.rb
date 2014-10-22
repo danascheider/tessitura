@@ -21,6 +21,10 @@ class Canto < Sinatra::Base
   end
 
   before do
+    File.open('./log/canto.log', 'a+') do |file| 
+      request.env.each {|key, value| file.puts("#{key.upcase}: #{value}")}
+    end
+
     @id = request.path_info.match(/\d+/).to_s
   end
 
