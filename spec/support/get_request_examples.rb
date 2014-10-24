@@ -8,6 +8,10 @@ shared_examples 'an authorized GET request' do
     expect(response_body).to eql resource.to_json
   end
 
+  it 'indicates response type JSON' do 
+    expect(last_response.original_headers['Content-Type']).to eql 'application/json'
+  end
+
   it 'returns status 200' do 
     expect(response_status).to eql 200
   end

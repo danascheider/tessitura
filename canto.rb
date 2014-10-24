@@ -61,6 +61,7 @@ class Canto < Sinatra::Base
 
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
     get route do 
+      headers('Content-Type' => 'application/json')
       @resource && @resource.to_json || 404
     end
 
