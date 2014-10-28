@@ -36,11 +36,19 @@ class Canto < Sinatra::Base
   end
 
   before /\/tasks\/(\d+)(\/*)?/ do 
+    request.body.rewind
+    @request_body = parse_json(request.body.read)
     protect(Task)
   end
 
   before /\/admin\/*/ do 
     admin_only!
+  end
+
+  after do 
+    File.open('./log/response.log', 'a+') do |file|
+      file.puts "\n#{response.inspect}"
+    end
   end
 
   # The following paths are included for debugging purposes only:
@@ -61,14 +69,12 @@ class Canto < Sinatra::Base
 
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
     get route do 
-      headers('Content-Type' => 'application/json')
+      headers('Content Type' => 'application/json')
       @resource && @resource.to_json || 404
     end
 
     put route do 
-      request.body.rewind; @request_body = parse_json(request.body.read)
-      return 404 unless @resource
-      @resource.update(@request_body) && 200 rescue 422
+      update_resource(@request_body, @resource)
     end
 
     delete route do 

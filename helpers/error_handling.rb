@@ -28,7 +28,8 @@ module Sinatra
     #      corroborated in IRB, where it works as expected.
     def update_resource(attributes, object=nil)
       return 404 unless object
-      object.try_rescue(:update, attributes) ? 200 : 422
+      attributes.delete(:id)
+      object.try(:update, attributes) ? 200 : [422, attributes]
     end
   end
 
