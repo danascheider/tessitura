@@ -2,18 +2,18 @@ class Task < Sequel::Model
   include JSON
   many_to_one :task_list
 
-  STATUS_OPTIONS   = [ 'new', 'in_progress', 'blocking', 'complete' ]
-  PRIORITY_OPTIONS = [ 'urgent', 'high', 'normal', 'low', 'not_important' ]
+  STATUS_OPTIONS   = [ 'New', 'In Progress', 'Blocking', 'Complete' ]
+  PRIORITY_OPTIONS = [ 'Urgent', 'High', 'Normal', 'Low', 'Not Important' ]
 
   def before_validation
     super
     self.owner_id ||= self.task_list.user_id rescue false
-    self.status   = 'new' unless self.status.in? STATUS_OPTIONS
-    self.priority = 'normal' unless self.priority.in? PRIORITY_OPTIONS
+    self.status   = 'New' unless self.status.in? STATUS_OPTIONS
+    self.priority = 'Normal' unless self.priority.in? PRIORITY_OPTIONS
   end
 
   def self.complete
-    Task.where(status: 'complete')
+    Task.where(status: 'Complete')
   end
 
   def self.first_complete
@@ -21,7 +21,7 @@ class Task < Sequel::Model
   end
 
   def complete?
-    self.status == 'complete'
+    self.status == 'Complete'
   end
 
   def incomplete?

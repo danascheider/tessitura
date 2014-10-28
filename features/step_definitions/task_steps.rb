@@ -12,7 +12,7 @@ end
 
 Given(/^the (\d+[a-z]{2}) task is complete$/) do |task_id|
   @task = Task[task_id]
-  @task.update(status: 'complete')
+  @task.update(status: 'Complete')
 end
 
 Then(/^no task should be created$/) do

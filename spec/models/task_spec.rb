@@ -61,17 +61,17 @@ describe Task do
 
         it 'sets status and priority' do 
           task.save
-          expect([task.status, task.priority]).to eql ['new', 'normal']
+          expect([task.status, task.priority]).to eql ['New', 'Normal']
         end
 
         it 'corrects invalid status and priority' do 
           task.status, task.priority = 'foo', 'bar'; task.save
-          expect([task.status, task.priority]).to eql ['new', 'normal']
+          expect([task.status, task.priority]).to eql ['New', 'Normal']
         end
 
         it 'doesn\'t change valid status and priority' do 
-          task.status, task.priority = 'blocking', 'low'; task.save
-          expect([task.status, task.priority]).to eql ['blocking', 'low']
+          task.status, task.priority = 'Blocking', 'Low'; task.save
+          expect([task.status, task.priority]).to eql ['Blocking', 'Low']
         end
 
         it 'sets owner and owner ID' do 
@@ -82,7 +82,7 @@ describe Task do
         context 'when status is set to complete' do 
           it 'instantiates as the first complete task' do 
             pending('Ordering functionality not yet implemented')
-            expect(FactoryGirl.create(:task, title: 'Foo', status: 'complete', task_list_id: list.id).position).to eql 5
+            expect(FactoryGirl.create(:task, title: 'Foo', status: 'Complete', task_list_id: list.id).position).to eql 5
           end
         end
 
@@ -101,11 +101,11 @@ describe Task do
       end
 
       it 'includes all the complete tasks' do 
-        expect(Task.complete).to eql Task.where(status: 'complete')
+        expect(Task.complete).to eql Task.where(status: 'Complete')
       end
 
       it 'doesn\'t include the incomplete tasks' do 
-        Task.where(status: 'complete').invert.each {|t| expect(Task.complete).not_to include(t) }
+        Task.where(status: 'Complete').invert.each {|t| expect(Task.complete).not_to include(t) }
       end
     end
 
@@ -117,7 +117,7 @@ describe Task do
 
   describe 'instance methods' do 
     let(:task_list) { FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks) }
-    let(:complete_task) { Task.where(task_list_id: task_list.id, status: 'complete').first }
+    let(:complete_task) { Task.where(task_list_id: task_list.id, status: 'Complete').first }
 
     describe '#complete?' do 
       it 'returns true when a task is complete' do 

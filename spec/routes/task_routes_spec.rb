@@ -97,7 +97,7 @@ describe Canto do
 
   describe 'POST' do 
     let(:path) { "/users/#{user.id}/tasks"}
-    let(:valid_attributes) { { title: 'Water the garden', status: 'new', priority: 'normal' }.to_json }
+    let(:valid_attributes) { { title: 'Water the garden', status: 'New', priority: 'Normal' }.to_json }
     let(:invalid_attributes) { { status: 'foobar' }.to_json }
 
     context 'with user authorization' do 
@@ -109,7 +109,7 @@ describe Canto do
     context 'with admin authorization' do 
       it_behaves_like 'an authorized POST request' do 
         let(:agent) { admin }
-        let(:valid_attributes) { { title: 'Water the garden', status: 'new', priority: 'normal' }.to_json }
+        let(:valid_attributes) { { title: 'Water the garden', status: 'New', priority: 'Normal' }.to_json }
       end
 
       it 'assigns task ownership to the user, not the admin' do 
@@ -133,7 +133,7 @@ describe Canto do
 
   describe 'PUT' do 
     let(:task) { user.tasks.first }
-    let(:valid_attributes) { { status: 'blocking' }.to_json }
+    let(:valid_attributes) { { status: 'Blocking' }.to_json }
     let(:invalid_attributes) { { priority: 'MOST IMPORTANT THING EVER OMG!!!!!' }.to_json }
     let(:path) { "/tasks/#{task.id}" }
 
@@ -164,7 +164,7 @@ describe Canto do
     context 'when the task doesn\'t exist' do 
       it 'returns status 404' do 
         allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
-        make_request('PUT', '/tasks/1000000', { 'status' => 'blocking' }.to_json)
+        make_request('PUT', '/tasks/1000000', { 'status' => 'Blocking' }.to_json)
         expect(response_status).to eql 404
       end
     end

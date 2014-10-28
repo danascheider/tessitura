@@ -171,7 +171,7 @@ describe Sinatra::ErrorHandling do
       context 'tasks' do 
         it 'updates the task' do 
           expect_any_instance_of(Task).to receive(:update)
-          update_resource({ priority: 'high' }, task)
+          update_resource({ priority: 'High' }, task)
         end
       end
     end

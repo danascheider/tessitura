@@ -27,15 +27,15 @@ Ultimately, user attributes will be used to provide the users with relevant info
 Tasks belong to TaskLists, a less important model that is, in turn, owned by a User. Users can have multiple lists. Tasks currently have these attributes:
 * Title
 * Status:
-  * 'new'
-  * 'in_progress'
-  * 'blocking'
-  * 'complete'
+  * 'New'
+  * 'In Progress'
+  * 'Blocking'
+  * 'Complete'
 * Priority:
-  * 'urgent'
-  * 'high'
-  * 'normal'
-  * 'low'
+  * 'Urgent'
+  * 'High'
+  * 'Normal'
+  * 'Low'
   * 'not_important'
 * Description
 * Deadline
