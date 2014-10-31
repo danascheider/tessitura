@@ -133,13 +133,16 @@ describe Canto do
 
   describe 'PUT' do 
     let(:task) { user.tasks.first }
-    let(:valid_attributes) { { status: 'Blocking' }.to_json }
-    let(:invalid_attributes) { { priority: 'MOST IMPORTANT THING EVER OMG!!!!!' }.to_json }
+    let(:valid_attributes) { URI::encode_www_form({ status: 'Blocking' }) }
+    let(:invalid_attributes) { URI::encode_www_form({ priority: 'MOST IMPORTANT THING EVER OMG!!!!!' }) }
     let(:path) { "/tasks/#{task.id}" }
 
     context 'with user authorization' do
       it_behaves_like 'an authorized PUT request' do 
         let(:agent) { user }
+        let(:invalid_attributes) { 
+          URI::encode_www_form({ priority: 'MOST IMPORTANT THING EVER OMG!!!!!' }) 
+        }
       end
     end
 

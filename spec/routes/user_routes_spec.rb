@@ -10,22 +10,26 @@ describe Canto do
 
   describe 'POST' do 
     let(:path) { '/users' }
-    let(:valid_attributes) { { email: "user@example.com", username: "justine7", password: "validpassword666"} }
-    let(:invalid_attributes) { { first_name: 'Frank' } }
+    let(:valid_attributes) { 
+      { 'email' => 'user@example.com', 
+        'username' => 'justine7', 
+        'password' => 'validpassword666'} 
+      }
+    let(:invalid_attributes) { { 'first_name' => 'Frank' } }
 
     context 'with valid attributes' do 
       it 'calls the #validate_standard_create method' do 
         expect_any_instance_of(Canto).to receive(:validate_standard_create).and_return(nil)
-        make_request('POST', path, valid_attributes.to_json)
+        make_request('POST', path, URI::encode_www_form(valid_attributes))
       end
 
       it 'calls the User create method' do 
         expect(User).to receive(:create).with(valid_attributes)
-        post path, valid_attributes.to_json
+        post path, URI::encode_www_form(valid_attributes)
       end
 
       it 'returns status 201' do 
-        post path, valid_attributes.to_json 
+        post path, URI::encode_www_form(valid_attributes) 
         expect(response_status).to eql 201
       end
     end
@@ -43,21 +47,28 @@ describe Canto do
     end
 
     context 'attempting to create an admin' do
-      let(:admin_attributes) { { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json }
+      let(:admin_attributes) { 
+        URI::encode_www_form({ 
+                              'username' => 'someuser', 
+                              'password' => 'someuserpasswd', 
+                              'email'    => 'peterpiper@example.com',
+                              'admin'    => true
+                             })
+      }
 
       context 'to the main /users path' do 
         it 'calls the #validate_standard_create method' do 
           expect_any_instance_of(Canto).to receive(:validate_standard_create)
-          make_request('POST', '/users', { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json)
+          make_request('POST', '/users', admin_attributes)
         end
 
         it 'doesn\'t create the user' do 
           expect(User).not_to receive(:create)
-          make_request('POST', '/users', { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json)
+          make_request('POST', '/users', admin_attributes)
         end
 
         it 'returns status 401' do 
-          make_request('POST', '/users', { username: 'someuser', password: 'someuserpasswd', email: 'peterpiper@example.com', admin: true }.to_json)
+          make_request('POST', '/users', admin_attributes)
           expect(response_status).to eql 401
         end
       end
@@ -130,8 +141,8 @@ describe Canto do
 
   describe 'PUT' do 
     let(:path) { "/users/#{user.id}" }
-    let(:valid_attributes) { { fach: 'lyric spinto' }.to_json }
-    let(:invalid_attributes) { { username: nil }.to_json }
+    let(:valid_attributes) { URI::encode_www_form({ 'fach' => 'lyric spinto' }) }
+    let(:invalid_attributes) { URI::encode_www_form({ 'username' => nil }) }
 
     context 'with user credentials' do 
       it_behaves_like 'an authorized PUT request' do 
@@ -140,12 +151,12 @@ describe Canto do
 
       context 'attempting to set admin status to true' do 
         it 'doesn\'t update the profile' do 
-          expect_any_instance_of(User).not_to receive(:update!)
-          make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
+          expect_any_instance_of(User).not_to receive(:update)
+          make_request('PUT', "/users/#{user.id}", URI::encode_www_form({ 'admin' => true }))
         end
 
         it 'returns status 401' do 
-          make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
+          make_request('PUT', "/users/#{user.id}", URI::encode_www_form({ 'admin' => true }))
           expect(response_status).to eql 401
         end
       end
@@ -171,7 +182,7 @@ describe Canto do
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
         authorize_with admin
-        make_request('PUT', '/users/1000000', { "fach" => "lyric coloratura" }.to_json)
+        make_request('PUT', '/users/1000000', { 'fach' => 'lyric coloratura' }.to_json)
         expect(response_status).to eql 404
       end
     end
@@ -183,14 +194,14 @@ describe Canto do
     context 'with user credentials' do 
       it_behaves_like 'an authorized DELETE request' do 
         let(:agent) { user }
-        let(:nonexistent_resource_path) { "/users/1000000"}
+        let(:nonexistent_resource_path) { '/users/1000000'}
       end
     end
 
     context 'with admin credentials' do 
       it_behaves_like 'an authorized DELETE request' do 
         let(:agent) { admin }
-        let(:nonexistent_resource_path) { "/users/1000000"}
+        let(:nonexistent_resource_path) { '/users/1000000' }
       end
     end
 
