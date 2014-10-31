@@ -8,8 +8,14 @@ shared_examples 'an authorized GET request' do
     expect(response_body).to eql resource.to_json
   end
 
-  it 'indicates response type JSON' do 
-    expect(last_response.original_headers['Content-Type']).to eql 'application/json'
+  it 'indicates content type text/html' do 
+    # NOTE: This originally was supposed to indicate content type JSON,
+    #       but that was causing a problem for the front end the nature
+    #       of which, frankly, I don't remember and can't find records
+    #       of in the logs. It is aesthetically offensive to have a JSON
+    #       API return a content type header indicating text/html so I
+    #       will look into this eventually. 
+    expect(last_response.original_headers['Content-Type']).to eql 'text/html;charset=utf-8'
   end
 
   it 'returns status 200' do 

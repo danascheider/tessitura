@@ -7,10 +7,8 @@ shared_examples 'an authorized POST request' do
     it 'creates a resource' do 
       # I really want to specify that model should be created with the
       # valid_attributes hash as an argument. But when the model is 
-      # Task, sthe task_list_id has to 
-      # be added in the route, since the model will not know the user 
-      # otherwise.
-
+      # Task, the task_list_id has to be added in the route handler, 
+      # since this information is encoded in the route.
       expect(model).to receive(:create)
       make_request('POST', path, valid_attributes)
     end
