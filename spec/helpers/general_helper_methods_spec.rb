@@ -23,4 +23,12 @@ describe Sinatra::GeneralHelperMethods do
       end
     end
   end
+
+  describe '::decode_form_data' do 
+    let(:data) { URI::encode_www_form({ foo: 'Bar' }) }
+
+    it 'turns x-www-form-urlencoded object into a hash' do 
+      expect(decode_form_data(data)).to eql({'foo' => 'Bar'})
+    end
+  end
 end

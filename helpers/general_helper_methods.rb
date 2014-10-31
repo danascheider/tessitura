@@ -3,7 +3,11 @@ module Sinatra
     def return_json(obj)
       obj.to_json unless obj.blank?
     end
-  end
 
-  helpers GeneralHelperMethods
+    def decode_form_data(data) 
+      form_data = URI::decode_www_form(data).flatten
+      hash = Hash[*form_data]
+      hash
+    end
+  end
 end
