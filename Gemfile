@@ -33,8 +33,6 @@ group :test do
   gem 'rspec',            '~> 3.0.0'
   gem 'rack-test',        '~> 0.6.2', require: 'rack/test'
   gem 'factory_girl',     '~> 4.4.0'
-  gem 'database_cleaner', '~> 1.3.0'
-  gem 'serverspec',       '~> 2.0.0.beta4'
   gem 'colorize',         '~> 0.7.3' # for Rake output
 end
 
