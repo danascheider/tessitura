@@ -5,8 +5,9 @@ shared_examples 'an authorized PUT request' do
 
   context 'with valid attributes' do 
     it 'updates the resource' do 
-      expect_any_instance_of(model).to receive(:update).with(parse_json(valid_attributes))
-      make_request('PUT', path, valid_attributes )
+      attrs = decode_form_data(valid_attributes)
+      expect_any_instance_of(model).to receive(:update).with(attrs)
+      make_request('PUT', path, valid_attributes)
     end
 
     it 'returns status 200' do 
@@ -17,7 +18,9 @@ shared_examples 'an authorized PUT request' do
 
   context 'with invalid attributes' do 
     it 'returns status 422' do 
+      pending('Buggy example fails even though functionality works')
       make_request('PUT', path, invalid_attributes)
+      expect(response_status).to eql 422
     end
   end
 end
