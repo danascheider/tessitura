@@ -43,12 +43,12 @@ class Canto < Sinatra::Base
   ###################
 
   before /\/users\/(\d+)(\/*)?/ do 
+    request.body.rewind; @request_body = decode_form_data(request.body.read)
     protect(User)
   end
 
   before /\/tasks\/(\d+)(\/*)?/ do 
-    request.body.rewind
-    @request_body = parse_json(request.body.read)
+    request.body.rewind; @request_body = decode_form_data(request.body.read)
     protect(Task)
   end
 
