@@ -9,9 +9,8 @@ Cucumber::Rake::Task.new
 RSpec::Core::RakeTask.new
 
 task 'suite:run' do 
-  Rake::Task['db:test:clean'].invoke
   Rake::Task[:spec].invoke
-  Rake::Task['db:test:clean'].invoke
+  Rake::Task['db:test:prepare'].invoke
   Rake::Task[:cucumber].invoke
 end
 
