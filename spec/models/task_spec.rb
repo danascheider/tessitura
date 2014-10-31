@@ -188,7 +188,7 @@ describe Task do
         end
 
         it 'doesn\'t change other attributes' do 
-          expect(complete_task.status).to eql 'complete'
+          expect(complete_task.status).to eql 'Complete'
         end
       end
 
