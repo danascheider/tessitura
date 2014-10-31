@@ -30,8 +30,6 @@ class Canto < Sinatra::Base
   end
 
   before /\/users\/(\d+)(\/*)?/ do 
-    request.body.rewind
-    @request_body = parse_json(request.body.read)
     protect(User)
   end
 
@@ -47,22 +45,15 @@ class Canto < Sinatra::Base
 
   after do 
     File.open('./log/response.log', 'a+') do |file|
-      file.puts "\n#{response.inspect}"
+      file.puts "\n=============================================================="
+      file.puts "#{Time.now}: #{request.env['REQUEST METHOD']} - #{request.env['PATH_INFO']}"
+      file.puts "=============================================================="
+      file.puts "#{response.inspect}"
     end
   end
 
-  # The following paths are included for debugging purposes only:
-
-  # get '/' do 
-  #   "Hello Canto!\n"
-  # end
-
-  # post '/' do 
-  #   "Hello Canto!\nYou posted #{@request_body}!\n"
-  # end
-  
   post '/users' do  
-    request.body.rewind; @request_body = parse_json(request.body.read)
+    request.body.rewind; @request_body = decode_form_data(request.body.read)
     validate_standard_create
     User.create(@request_body) && 201 rescue 422
   end
@@ -73,6 +64,7 @@ class Canto < Sinatra::Base
     end
 
     put route do 
+      request.body.rewind; @request_body = decode_form_data(request.body.read)
       update_resource(@request_body, @resource)
     end
 
