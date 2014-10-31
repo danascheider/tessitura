@@ -27,9 +27,9 @@ module Sinatra
     #      and updated the task despite validation failure. However, this is not
     #      corroborated in IRB, where it works as expected.
     def update_resource(attributes, object=nil)
-      return 404 unless object
-      attributes.delete(:id)
-      object.try(:update, attributes) ? 200 : [422, attributes]
+      return 404 unless object && attributes
+      attributes.delete_if {|key, val| key == :id }
+      object.try_rescue(:update, attributes) ? 200 : 422
     end
   end
 
