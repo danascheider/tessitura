@@ -20,6 +20,8 @@ class Canto < Sinatra::Base
     [404, '' ]
   end
 
+  ##### Logging #####
+
   before do
     File.open('./log/canto.log', 'a+') do |file| 
       file.puts "\n"
@@ -28,6 +30,17 @@ class Canto < Sinatra::Base
 
     @id = request.path_info.match(/\d+/).to_s
   end
+
+  after do 
+    File.open('./log/response.log', 'a+') do |file|
+      file.puts "\n=============================================================="
+      file.puts "#{Time.now}: #{request.env['REQUEST METHOD']} - #{request.env['PATH_INFO']}"
+      file.puts "=============================================================="
+      file.puts "#{response.inspect}"
+    end
+  end
+
+  ###################
 
   before /\/users\/(\d+)(\/*)?/ do 
     protect(User)
@@ -41,15 +54,6 @@ class Canto < Sinatra::Base
 
   before /\/admin\/*/ do 
     admin_only!
-  end
-
-  after do 
-    File.open('./log/response.log', 'a+') do |file|
-      file.puts "\n=============================================================="
-      file.puts "#{Time.now}: #{request.env['REQUEST METHOD']} - #{request.env['PATH_INFO']}"
-      file.puts "=============================================================="
-      file.puts "#{response.inspect}"
-    end
   end
 
   post '/users' do  
