@@ -8,7 +8,7 @@ FactoryGirl.define do
     sequence(:title) {|n| "Task List #{n}"}
 
     factory :task_list_with_tasks do 
-      ignore do 
+      transient do 
         tasks_count 3
       end
 
@@ -18,7 +18,7 @@ FactoryGirl.define do
     end
 
     factory :task_list_with_complete_and_incomplete_tasks do 
-      ignore do 
+      transient do 
         complete_tasks_count 2
         incomplete_tasks_count 3
       end
@@ -56,7 +56,7 @@ FactoryGirl.define do
     end
 
     factory :user_with_task_lists do 
-      ignore do 
+      transient do 
         lists_count 2
       end
 
