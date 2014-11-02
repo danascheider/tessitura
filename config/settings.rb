@@ -33,11 +33,17 @@ class Canto < Sinatra::Base
   db_loggers << Logger.new(STDOUT) if ENV['LOG'] == true
   DB = Sequel.connect(database, loggers: db_loggers)
 
-  # Use Sequel validations and automatically updating timestamps
-  # ============================================================
+  # Sequel settings and modifications
+  # =================================
 
   Sequel::Model.plugin :timestamps
   Sequel::Model.plugin :validation_helpers
+
+  class Sequel::Dataset
+    def to_json
+      all.to_json
+    end
+  end
 
   # Canto-specific helper modules
   # =============================
