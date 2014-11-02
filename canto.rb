@@ -56,6 +56,8 @@ class Canto < Sinatra::Base
     admin_only!
   end
 
+  ##### End Filters #####
+
   post '/users' do  
     request.body.rewind; @request_body = decode_form_data(request.body.read)
     validate_standard_create
@@ -75,6 +77,15 @@ class Canto < Sinatra::Base
     delete route do 
       destroy_resource(@resource)
     end
+  end
+
+  post '/users/:id/filter' do |id|
+    request.body.rewind; @request_body = parse_json(request.body.read)
+
+    resource = Module.const_get(@request_body[:resource])
+    scope    = @request_body[:scope].to_sym
+    
+    return_json(resource.send(scope))
   end
 
   post '/users/:id/tasks' do |id|
