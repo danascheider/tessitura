@@ -36,13 +36,11 @@ Tasks belong to TaskLists, a less important model that is, in turn, owned by a U
   * 'High'
   * 'Normal'
   * 'Low'
-  * 'not_important'
+  * 'Not Important'
 * Description
 * Deadline
 * Created At 
 * Updated At
-
-Tasks are ordered by the +position+ column, which is configured with the +acts_like_list+ gem to re-order the list when a given task changes position.
 
 === Development Approach
 

@@ -37,13 +37,12 @@ Feature: Update task
       { "status":"<value>" }
       """
     Then the task's status should be <value>
-    And the task's position should be changed to <pos>
     And the response should indicate the task was updated successfully
 
     Examples:
-      | url      | value       | pos |
-      | /tasks/1 | Complete    | 2   |
-      | /tasks/3 | In Progress | 0   |
+      | url      | value       |
+      | /tasks/1 | Complete    |
+      | /tasks/3 | In Progress |
 
   Scenario: User attempts to update a task that doesn't exist
     When the client submits a PUT request to /tasks/1000000 with the 1st user's credentials and:
