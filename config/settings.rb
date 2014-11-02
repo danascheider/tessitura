@@ -10,12 +10,18 @@ class Canto < Sinatra::Base
   set :database, "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
   set :data, ''
 
+  # Rack::Cors manages cross-origin issues
+  # ======================================
+
   use Rack::Cors do 
     allow do 
       origins 'null', /localhost(.*)/
       resource '/*', methods: [:get, :put, :post, :delete, :options], headers: :any
     end
   end
+
+  # Enable logging for database and web server
+  # ==========================================
 
   enable :logging
 
@@ -27,8 +33,14 @@ class Canto < Sinatra::Base
   db_loggers << Logger.new(STDOUT) if ENV['LOG'] == true
   DB = Sequel.connect(database, loggers: db_loggers)
 
+  # Use Sequel validations and automatically updating timestamps
+  # ============================================================
+
   Sequel::Model.plugin :timestamps
   Sequel::Model.plugin :validation_helpers
+
+  # Canto-specific helper modules
+  # =============================
 
   helpers Sinatra::AuthorizationHelper 
   helpers Sinatra::ErrorHandling
