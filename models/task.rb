@@ -16,8 +16,8 @@ class Task < Sequel::Model
     Task.where(status: 'Complete')
   end
 
-  def self.first_complete
-    Task.complete.order(:position).first
+  def self.incomplete
+    Task.exclude(status: 'Complete')
   end
 
   def complete?
@@ -60,6 +60,5 @@ class Task < Sequel::Model
     validates_presence [:title, :task_list_id, :owner_id]
     validates_includes STATUS_OPTIONS, :status
     validates_includes PRIORITY_OPTIONS, :priority
-    validates_unique   :position
   end
 end

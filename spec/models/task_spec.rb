@@ -8,7 +8,6 @@ describe Task do
   describe 'attributes' do 
     it { is_expected.to respond_to(:title) }
     it { is_expected.to respond_to(:status) }
-    it { is_expected.to respond_to(:position) }
     it { is_expected.to respond_to(:deadline) }
     it { is_expected.to respond_to(:description) }
     it { is_expected.to respond_to(:priority) }
@@ -78,20 +77,6 @@ describe Task do
           task.save
           expect([task.owner, task.owner_id]).to eql [task.task_list.user, task.task_list.user_id]
         end
-
-        context 'when status is set to complete' do 
-          it 'instantiates as the first complete task' do 
-            pending('Ordering functionality not yet implemented')
-            expect(FactoryGirl.create(:task, title: 'Foo', status: 'Complete', task_list_id: list.id).position).to eql 5
-          end
-        end
-
-        context 'when status is not set to complete' do 
-          it 'instantiates at position 0' do 
-            pending('Ordering functionality not yet implemented')
-            expect(new_task.position).to eql 0
-          end
-        end
       end
     end
 
@@ -109,9 +94,18 @@ describe Task do
       end
     end
 
-    describe '::first_complete' do 
-      it 'returns a Task object'
-      it 'returns the complete task with the lowest position value' 
+    describe '::incomplete' do 
+      before(:each) do
+        FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks)
+      end
+
+      it 'includes all the incomplete tasks' do 
+        expect(Task.incomplete).to eql Task.exclude(status: 'Complete')
+      end
+
+      it 'doesn\'t include complete tasks' do 
+        Task.where(status: 'Complete').each {|t| expect(Task.incomplete).not_to include(t) }
+      end
     end
   end
 
