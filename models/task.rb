@@ -33,7 +33,7 @@ class Task < Sequel::Model
   end
 
   def to_hash
-    {
+    hash = {
       id: self.id,
       task_list_id: self.task_list_id,
       owner_id: self.owner_id,
@@ -43,7 +43,9 @@ class Task < Sequel::Model
       status: self.status,
       description: self.description,
       created_at: self.created_at,
-    }.reject! {|k,v| v.blank? }
+    }.reject {|key, value| value.blank? }
+
+    hash
   end
 
   def to_json(options={})

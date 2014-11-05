@@ -70,7 +70,7 @@ class Canto < Sinatra::Base
     end
 
     put route do 
-      request.body.rewind; @request_body = decode_form_data(request.body.read)
+      request.body.rewind; @request_body = parse_json(request.body.read)
       update_resource(@request_body, @resource)
     end
 
@@ -89,8 +89,9 @@ class Canto < Sinatra::Base
   end
 
   post '/users/:id/tasks' do |id|
-    request.body.rewind; @request_body = decode_form_data(request.body.read)
+    request.body.rewind; @request_body = parse_json(request.body.read)
     @request_body[:task_list_id] ||= User[id].default_task_list.id
+
     create_resource(Task, @request_body)
   end
 
