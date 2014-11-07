@@ -26,6 +26,8 @@ class Canto < Sinatra::Base
     File.open('./log/canto.log', 'a+') do |file| 
       file.puts "\n"
       request.env.each {|key, value| file.puts("#{key.upcase}: #{value}")}
+      request.body.rewind
+      file.puts "BODY: #{parse_json(request.body.read)}"
     end
 
     @id = request.path_info.match(/\d+/).to_s
@@ -34,7 +36,7 @@ class Canto < Sinatra::Base
   after do 
     File.open('./log/response.log', 'a+') do |file|
       file.puts "\n=============================================================="
-      file.puts "#{Time.now}: #{request.env['REQUEST METHOD']} - #{request.env['PATH_INFO']}"
+      file.puts "#{Time.now}: #{request.env['REQUEST_METHOD']} - #{request.env['PATH_INFO']}"
       file.puts "=============================================================="
       file.puts "#{response.inspect}"
     end
