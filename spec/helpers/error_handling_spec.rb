@@ -167,12 +167,6 @@ describe Sinatra::ErrorHandling do
           expect{ update_resource(hash, user) }.not_to raise_error
         end
 
-        it 'deletes the ID from the hash' do 
-          hash = { id: user.id, city: 'Honolulu' }
-          expect(hash).to receive(:delete).with(:id)
-          update_resource(hash, user)
-        end
-
         it 'updates the user' do 
           expect_any_instance_of(User).to receive(:update)
           update_resource({ id: user.id, city: 'Honolulu' }, user)
@@ -183,12 +177,6 @@ describe Sinatra::ErrorHandling do
         it 'doesn\'t raise a primary key error' do 
           hash = { id: task.id, priority: 'High' }
           expect{ update_resource(hash, task) }.not_to raise_error
-        end
-
-        it 'deletes the ID from the hash' do 
-          hash = { id: task.id, priority: 'High' }
-          expect(hash).to receive(:delete).with(:id)
-          update_resource(hash, task)
         end
 
         it 'updates the task' do 
@@ -229,6 +217,15 @@ describe Sinatra::ErrorHandling do
     context 'with a missing resource' do 
       it 'returns 404' do 
         expect(update_resource({ country: 'Peru' }, nil)).to eql 404
+      end
+    end
+
+    context 'with unchanged attributes' do 
+      let(:task) { FactoryGirl.create(:task, status: 'Blocking') }
+      let(:attributes) { { id: task.id, status: 'Blocking' }}
+
+      it 'returns 200' do 
+        expect(update_resource(attributes, task)).to eql 200
       end
     end
   end
