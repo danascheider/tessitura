@@ -167,6 +167,12 @@ describe Sinatra::ErrorHandling do
           expect{ update_resource(hash, user) }.not_to raise_error
         end
 
+        it 'deletes the ID from the hash' do 
+          hash = { id: user.id, city: 'Honolulu' }
+          expect(hash).to receive(:delete).with(:id)
+          update_resource(hash, user)
+        end
+
         it 'updates the user' do 
           expect_any_instance_of(User).to receive(:update)
           update_resource({ id: user.id, city: 'Honolulu' }, user)
@@ -178,10 +184,16 @@ describe Sinatra::ErrorHandling do
           hash = { id: task.id, priority: 'High' }
           expect{ update_resource(hash, task) }.not_to raise_error
         end
-        
+
+        it 'deletes the ID from the hash' do 
+          hash = { id: task.id, priority: 'High' }
+          expect(hash).to receive(:delete).with(:id)
+          update_resource(hash, task)
+        end
+
         it 'updates the task' do 
           expect_any_instance_of(Task).to receive(:update)
-          update_resource({ priority: 'High' }, task)
+          update_resource({ id: task.id, priority: 'High' }, task)
         end
       end
     end
