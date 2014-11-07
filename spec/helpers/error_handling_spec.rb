@@ -162,13 +162,23 @@ describe Sinatra::ErrorHandling do
 
     context 'with valid attributes' do 
       context 'users' do 
+        it 'doesn\'t raise a primary key error' do 
+          hash = { id: user.id, city: 'Honolulu' }
+          expect{ update_resource(hash, user) }.not_to raise_error
+        end
+
         it 'updates the user' do 
           expect_any_instance_of(User).to receive(:update)
-          update_resource({ city: 'Honolulu' }, user)
+          update_resource({ id: user.id, city: 'Honolulu' }, user)
         end
       end
 
       context 'tasks' do 
+        it 'doesn\'t raise a primary key error' do 
+          hash = { id: task.id, priority: 'High' }
+          expect{ update_resource(hash, task) }.not_to raise_error
+        end
+        
         it 'updates the task' do 
           expect_any_instance_of(Task).to receive(:update)
           update_resource({ priority: 'High' }, task)
