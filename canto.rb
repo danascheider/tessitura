@@ -91,10 +91,12 @@ class Canto < Sinatra::Base
   end
 
   post '/users/:id/tasks' do |id|
-    request.body.rewind; @request_body = parse_json(request.body.read)
-    @request_body[:task_list_id] ||= User[id].default_task_list.id
+    request.body.rewind; @request_body = decode_form_data(request.body.read)
 
-    create_resource(Task, @request_body)
+    @request_body[:task_list_id] ||= User[id].default_task_list.id
+    return 422 unless new_task = Task.try_rescue(:create, @request_body)
+
+    [201, new_task.to_json]
   end
 
   get '/users/:id/tasks' do |id|
