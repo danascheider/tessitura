@@ -32,13 +32,13 @@ describe Canto do
   describe 'creating an admin' do 
     let(:model) { User }
     let(:valid_attributes) { 
-      URI::encode_www_form({ 'username'=>'abcd1234', 
-                             'password'=>'abcde12345', 
-                             'email'=>'a@example.com', 
-                             'admin'=>true 
-                          })
+      { :username => 'abcd1234', 
+        :password => 'abcde12345', 
+        :email => 'a@example.com', 
+        :admin => true 
+      }.to_json
     }
-    let(:invalid_attributes) { URI::encode_www_form({ 'admin'=>true }) }
+    let(:invalid_attributes) { { :admin => true }.to_json }
 
     context 'with valid authorization' do 
       it_behaves_like 'an authorized POST request' do 

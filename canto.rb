@@ -45,7 +45,7 @@ class Canto < Sinatra::Base
   ###################
 
   before /\/users\/(\d+)(\/*)?/ do 
-    request.body.rewind; @request_body = decode_form_data(request.body.read)
+    request.body.rewind; @request_body = parse_json (request.body.read)
     protect(User)
   end
 
@@ -61,9 +61,10 @@ class Canto < Sinatra::Base
   ##### End Filters #####
 
   post '/users' do  
-    request.body.rewind; @request_body = decode_form_data(request.body.read)
+    request.body.rewind; @request_body = parse_json(request.body.read)
     validate_standard_create
-    User.create(@request_body) && 201 rescue 422
+    return 422 unless new_user = User.try_rescue(:create, @request_body)
+    [201, new_user.to_json]
   end
 
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
@@ -91,7 +92,7 @@ class Canto < Sinatra::Base
   end
 
   post '/users/:id/tasks' do |id|
-    request.body.rewind; @request_body = decode_form_data(request.body.read)
+    request.body.rewind; @request_body = parse_json(request.body.read)
 
     @request_body[:task_list_id] ||= User[id].default_task_list.id
     return 422 unless new_task = Task.try_rescue(:create, @request_body)
@@ -111,8 +112,9 @@ class Canto < Sinatra::Base
   # =================
 
   post '/admin/users' do 
-    request.body.rewind; @request_body = decode_form_data(request.body.read)
-    User.create(@request_body) && 201 rescue 422
+    request.body.rewind; @request_body = parse_json(request.body.read)
+    return 422 unless new_user = User.try_rescue(:create, @request_body)
+    [201, new_user.to_json]
   end
 
   get '/admin/users' do 

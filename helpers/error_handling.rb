@@ -29,7 +29,9 @@ module Sinatra
     def update_resource(attributes, object=nil)
       return 404 unless object && attributes
 
-      attributes.reject! {|key, value| key === :id || (value === object[key]) }
+      bad_keys = [:id, :created_at, :updated_at]
+
+      attributes.reject! {|key, value| key.in?(bad_keys) || (value === object[key]) }
       return 200 if attributes.blank?
 
       object.try_rescue(:update, attributes) ? 200 : 422

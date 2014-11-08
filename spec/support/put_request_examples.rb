@@ -5,7 +5,7 @@ shared_examples 'an authorized PUT request' do
 
   context 'with valid attributes' do 
     it 'updates the resource' do 
-      attrs = decode_form_data(valid_attributes)
+      attrs = parse_json(valid_attributes)
       expect_any_instance_of(model).to receive(:update).with(attrs)
       make_request('PUT', path, valid_attributes)
     end

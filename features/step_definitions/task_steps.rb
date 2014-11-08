@@ -20,7 +20,7 @@ Then(/^no task should be created$/) do
 end
 
 Then(/^the task's title should (not )?be changed to (.*)$/) do |neg, title|
-  expect(Task[@task.id].title == title).to neg ? be_falsey : be_truthy
+  expect(Task[@task.id].title === title).to neg ? be_falsey : be_truthy
 end
 
 Then(/^the task's title should not be changed$/) do 

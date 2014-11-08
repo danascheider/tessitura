@@ -13,6 +13,8 @@ shared_examples 'an authorized POST request' do
       make_request('POST', path, valid_attributes)
     end
 
+    it 'returns the resource as a JSON object'
+
     it 'returns status 201' do 
       make_request('POST', path, valid_attributes)
       expect(response_status).to eql 201
@@ -20,9 +22,19 @@ shared_examples 'an authorized POST request' do
   end
 
   context 'with invalid attributes' do 
+    it 'does not create the resource' do 
+      expect(model).to receive(:try_rescue).and_return(nil)
+      make_request('POST', path, invalid_attributes)
+    end
+
     it 'returns status 422' do 
       make_request('POST', path, invalid_attributes)
       expect(response_status).to eql 422
+    end
+
+    it 'does not return a response body' do 
+      make_request('POST', path, invalid_attributes)
+      expect(response_body).to be_blank
     end
   end
 end
