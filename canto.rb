@@ -35,10 +35,12 @@ class Canto < Sinatra::Base
 
   after do 
     File.open('./log/response.log', 'a+') do |file|
-      file.puts "\n=============================================================="
-      file.puts "#{Time.now}: #{request.env['REQUEST_METHOD']} - #{request.env['PATH_INFO']}"
-      file.puts "=============================================================="
-      file.puts "#{response.inspect}"
+      file.write <<-EOF
+\n==============================================================
+#{Time.now}: #{request.env['REQUEST_METHOD']} - #{request.env['PATH_INFO']}
+==============================================================
+#{response.inspect}
+EOF
     end
   end
 
