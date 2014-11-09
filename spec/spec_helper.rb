@@ -42,7 +42,6 @@ RSpec.configure do |config|
   config.order = 'random'
 
   DB = Sequel.connect(DB_PATH)
-  CLIENT = Mysql2::Client.new(host: '127.0.0.1', username: 'canto', password: DB_PASSWD, port: 3306, database: ENV['RACK_ENV'])
 
   config.before(:each) do 
     if ENV['TRAVIS']
