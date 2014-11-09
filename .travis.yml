@@ -6,6 +6,6 @@ services: mysql
 install: 'bundle install'
 before_install: 'sudo apt-get install -y libmysqlclient-dev; mkdir log; touch log/canto.log'
 before_script: 
-  - 'cat script/mysql_add_user.sql | mysql -uroot'
+  - 'cat script/mysql_add_user.sql | mysql -utravis'
 notifications:
   email: false

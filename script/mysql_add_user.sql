@@ -1,4 +1,2 @@
-CREATE USER 'tester'@'%' IDENTIFIED BY 'testpass';
-GRANT ALL PRIVILEGES ON *.* TO 'tester'@'%' WITH GRANT OPTION;
-
-create database if not exists test;
+CREATE USER 'travis'@'%';
+GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%' WITH GRANT OPTION;
