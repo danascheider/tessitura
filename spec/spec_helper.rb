@@ -7,9 +7,6 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 ]
 SimpleCov.start if ENV["COVERAGE"]
 
-ENV['RACK_ENV'] = 'test'
-DB_PASSWD = 'hunter2'
-
 support_path = File.expand_path('../../features/support', __FILE__)
 app_path = File.expand_path('../..', __FILE__)
 
@@ -25,6 +22,18 @@ require_relative support_path + '/helpers'
 
 Dir["./spec/support/**/*.rb"].sort.each {|f| require f }
 
+ENV['RACK_ENV'] = 'test'
+DB_PASSWD = 'hunter2'
+DB_PATH = ENV['TRAVIS'] ? "mysql2://travis@127.0.0.1:3306/test" : "mysql2://canto:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}"
+
+db_info = {host: '127.0.0.1', port: 3306}
+
+if ENV['TRAVIS']
+  db_info[:username], db_info[:database] = 'travis', 'test'
+else
+  db_info[:username], db_info[:password], db_info[:database] = 'canto', DB_PASSWD, ENV['RACK_ENV']
+end
+
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
   config.include Rack::Test::Methods
@@ -32,11 +41,15 @@ RSpec.configure do |config|
 
   config.order = 'random'
 
-  DB = Sequel.connect("mysql2://canto:#{DB_PASSWD}@127.0.0.1:3306/#{ENV['RACK_ENV']}")
+  DB = Sequel.connect(DB_PATH)
   CLIENT = Mysql2::Client.new(host: '127.0.0.1', username: 'canto', password: DB_PASSWD, port: 3306, database: ENV['RACK_ENV'])
 
   config.before(:each) do 
-    system 'rake db:test:prepare > /dev/null 2>&1'
+    if ENV['TRAVIS']
+      system 'rake travis:prepare'
+    else
+      system 'rake db:test:prepare > /dev/null 2>&1'
+    end
   end
 end
 

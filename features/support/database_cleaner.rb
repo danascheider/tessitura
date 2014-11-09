@@ -1,3 +1,7 @@
 Before do 
-  system 'rake db:test:prepare > /dev/null 2>&1'
+  if ENV['TRAVIS']
+    system 'rake travis:prepare'
+  else
+    system 'rake db:test:prepare > /dev/null 2>&1'
+  end
 end

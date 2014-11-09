@@ -14,9 +14,13 @@ task 'suite:run' do
   Rake::Task[:cucumber].invoke
 end
 
+task 'travis:run' do 
+  Rake::Task[:spec].invoke
+  Rake::Task['travis:prepare'].invoke
+  Rake::Task[:cucumber].invoke
+end
+
 task :default => [:all]
 
 desc "Run all tests."
-task :all => [
-  'suite:run'
-]
+task :all => ENV['TRAVIS'] ? ['travis:run'] : ['suite:run']
