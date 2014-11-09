@@ -5,10 +5,12 @@ class Canto < Sinatra::Base
 
   ENV['RACK_ENV'] ||= 'development'
   DB_PASSWORD = 'hunter2'
+  db = "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
+  db_travis = 'mysql2://travis@127.0.0.1:3306/test'
 
   set :root, File.dirname(__FILE__)
   set :app_file, __FILE__
-  set :database, Sinatra::CIHelper.database_string
+  set :database, ENV['TRAVIS'] ? db_travis : db
   set :data, ''
 
   # Rack::Cors manages cross-origin issues
@@ -50,5 +52,4 @@ class Canto < Sinatra::Base
   helpers Sinatra::ErrorHandling
   helpers Sinatra::GeneralHelperMethods
   helpers Sinatra::LogHelper
-  helpers Sinatra::CIHelper
 end
