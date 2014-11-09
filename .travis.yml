@@ -1,9 +1,10 @@
 language: ruby
 rvm:
   - "2.1.3"
-env: DB=sqlite3 COVERAGE=true
+env: DB=mysql2 COVERAGE=true
 install: 'bundle install'
 before_install: 'sudo apt-get install -y libmysqlclient-dev; mkdir log; touch log/canto.log'
-before_script: "mysql -e 'create database test;'"
+before_script: 
+  - mysql -e 'create database canto_test;'
 notifications:
   email: false
