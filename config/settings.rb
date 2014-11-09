@@ -5,7 +5,7 @@ class Canto < Sinatra::Base
 
   ENV['RACK_ENV'] ||= 'development'
   DB_PASSWORD = 'hunter2'
-  db = "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
+  db = "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENV['RACK_ENV']}"
   db_travis = 'mysql2://travis@127.0.0.1:3306/test'
 
   set :root, File.dirname(__FILE__)
