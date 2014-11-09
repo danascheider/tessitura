@@ -11,8 +11,7 @@ test: &test
   adapter: mysql2
   host: 127.0.0.1
   port: 3306
-  username: canto
-  password: hunter2
+  username: travis
   pool: 5
   timeout: 5000
 

@@ -5,7 +5,5 @@ env: DB=mysql2 COVERAGE=true
 services: mysql
 install: 'bundle install'
 before_install: 'sudo apt-get install -y libmysqlclient-dev; mkdir log; touch log/canto.log'
-before_script: 
-  - mysql -e 'create database canto_test;'
 notifications:
   email: false
