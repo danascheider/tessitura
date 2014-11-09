@@ -6,6 +6,6 @@ services: mysql
 install: 'bundle install'
 before_install: 'mkdir log; touch log/canto.log'
 before_script: 
-  - USE mysql;\nUPDATE user SET password=PASSWORD('password') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+  - USE test;\nUPDATE user SET password=PASSWORD('password') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
 notifications:
   email: false
