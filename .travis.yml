@@ -6,5 +6,7 @@ install: 'bundle install'
 before_install: 
   - mkdir log; touch log/canto.log
   - mysql -e 'create database test;' -u travis
+script:
+  - bundle exec rake travis:run
 notifications:
   email: false

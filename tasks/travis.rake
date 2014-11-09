@@ -19,4 +19,10 @@ namespace :travis do
     client.query('CREATE DATABASE test;')
     Rake::Task['travis:migrate'].invoke
   end
+
+  task :run do 
+    Rake::Task['travis:migrate'].invoke
+    Rake::Task[:spec].invoke
+    Rake::Task[:cucumber].invoke
+  end
 end
