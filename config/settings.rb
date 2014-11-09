@@ -2,7 +2,14 @@ require 'logger'
 require_all File.expand_path('../../helpers',__FILE__)
 
 class Canto < Sinatra::Base
-  ENVIRONMENT = ENV['RACK_ENV'] || 'development'
+
+  helpers Sinatra::AuthorizationHelper 
+  helpers Sinatra::ErrorHandling
+  helpers Sinatra::GeneralHelperMethods
+  helpers Sinatra::LogHelper
+  helpers Sinatra::CIHelper
+
+  ENV['RACK_ENV'] ||= 'development'
   DB_PASSWORD = 'hunter2'
 
   set :root, File.dirname(__FILE__)
@@ -44,13 +51,4 @@ class Canto < Sinatra::Base
       all.to_json
     end
   end
-
-  # Canto-specific helper modules
-  # =============================
-
-  helpers Sinatra::AuthorizationHelper 
-  helpers Sinatra::ErrorHandling
-  helpers Sinatra::GeneralHelperMethods
-  helpers Sinatra::LogHelper
-  helpers Sinatra::CIHelper
 end
