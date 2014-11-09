@@ -7,7 +7,7 @@ class Canto < Sinatra::Base
 
   set :root, File.dirname(__FILE__)
   set :app_file, __FILE__
-  set :database, "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
+  set :database, database_string
   set :data, ''
 
   # Rack::Cors manages cross-origin issues
@@ -52,4 +52,5 @@ class Canto < Sinatra::Base
   helpers Sinatra::ErrorHandling
   helpers Sinatra::GeneralHelperMethods
   helpers Sinatra::LogHelper
+  helpers Sinatra::CIHelper
 end
