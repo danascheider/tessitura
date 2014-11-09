@@ -3,18 +3,12 @@ require_all File.expand_path('../../helpers',__FILE__)
 
 class Canto < Sinatra::Base
 
-  helpers Sinatra::AuthorizationHelper 
-  helpers Sinatra::ErrorHandling
-  helpers Sinatra::GeneralHelperMethods
-  helpers Sinatra::LogHelper
-  helpers Sinatra::CIHelper
-
   ENV['RACK_ENV'] ||= 'development'
   DB_PASSWORD = 'hunter2'
 
   set :root, File.dirname(__FILE__)
   set :app_file, __FILE__
-  set :database, database_string
+  set :database, Sinatra::CIHelper.database_string
   set :data, ''
 
   # Rack::Cors manages cross-origin issues
@@ -51,4 +45,10 @@ class Canto < Sinatra::Base
       all.to_json
     end
   end
+
+  helpers Sinatra::AuthorizationHelper 
+  helpers Sinatra::ErrorHandling
+  helpers Sinatra::GeneralHelperMethods
+  helpers Sinatra::LogHelper
+  helpers Sinatra::CIHelper
 end
