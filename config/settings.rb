@@ -51,4 +51,5 @@ class Canto < Sinatra::Base
   helpers Sinatra::AuthorizationHelper 
   helpers Sinatra::ErrorHandling
   helpers Sinatra::GeneralHelperMethods
+  helpers Sinatra::LogHelper
 end
