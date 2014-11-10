@@ -20,10 +20,6 @@ class Task < Sequel::Model
     Task.exclude(status: 'Complete')
   end
 
-  def siblings
-    self.task_list.tasks - [self]
-  end
-
   def to_hash
     hash = {
       id: self.id,

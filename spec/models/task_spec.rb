@@ -126,22 +126,6 @@ describe Task do
       end
     end
 
-    describe '#siblings' do 
-      let(:task) { task_list.tasks.first }
-
-      it 'returns an array' do 
-        expect(task.siblings).to be_an(Array)
-      end
-
-      it 'doesn\'t include itself' do 
-        expect(task.siblings).not_to include(task)
-      end
-
-      it 'includes the task\'s siblings' do 
-        expect(task.siblings).to eql(task_list.tasks.to_a - [task])
-      end
-    end
-
     describe '#to_json' do 
       it 'converts itself to hash form first' do 
         expect(task.to_json).to eql task.to_hash.to_json
