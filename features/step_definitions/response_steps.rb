@@ -6,31 +6,12 @@ Then(/^the JSON response should include all the users$/) do
   expect(response_body).to eql User.all.to_json
 end
 
-Then(/^the JSON response should include task (\d+)$/) do |id|
-  response_body.should === [Task[id].to_hash].to_json
-end
-
 Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |id|
   response_body.should === Task[id].to_json
 end
 
-Then(/^the JSON response should include tasks (\d+) and (\d+)$/) do |id1, id2|
-  arr = [Task[id1].to_hash, Task[id2].to_hash]
-  response_body.should === arr.to_json
-end
-
-Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's last (\d+) tasks$/) do |id, qty|
-  arr = Task.where(owner_id: id).last(qty).to_a.map! {|task| task.to_hash }
-  response_body.should === arr.to_json
-end
-
 Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile information$/) do |id|
   expect(response_body).to eql User[id].to_json
-end
-
-Then(/^the response should not include any tasks without a(?:n?) (.*)$/) do |attribute|
-  excluded = Set.new(Task.where(attribute.to_sym => nil))
-  expect(Set.new(parse_json(response_body)).intersect?(excluded)).to be_falsey
 end
 
 Then(/^the response should not include any data$/) do 
