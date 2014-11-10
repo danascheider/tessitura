@@ -20,14 +20,6 @@ class Task < Sequel::Model
     Task.exclude(status: 'Complete')
   end
 
-  def complete?
-    self.status == 'Complete'
-  end
-
-  def incomplete?
-    !self.complete?
-  end
-
   def siblings
     self.task_list.tasks - [self]
   end

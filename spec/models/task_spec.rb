@@ -113,34 +113,10 @@ describe Task do
     let(:task_list) { FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks) }
     let(:complete_task) { Task.where(task_list_id: task_list.id, status: 'Complete').first }
 
-    describe '#complete?' do 
-      it 'returns true when a task is complete' do 
-        expect(complete_task.complete?).to be_truthy
-      end
-
-      it 'returns false when a task is incomplete' do 
-        expect(task.complete?).to be_falsey
-      end
-    end
-
     describe '#destroy' do 
       it 'removes the task from the database' do 
         task = complete_task
         expect{ task.destroy }.to change(Task, :count).by(-1)
-      end
-    end
-
-    describe '#incomplete?' do 
-      context 'when the task is incomplete' do 
-        it 'returns true' do 
-          expect(task.incomplete?).to be_truthy
-        end
-      end
-
-      context 'when the task is complete' do 
-        it 'returns false' do 
-          expect(complete_task.incomplete?).to be_falsey
-        end
       end
     end
 
