@@ -3,7 +3,6 @@ require 'sequel'
 
 Sequel.extension :migration
 
-MIGRATION_PATH = File.expand_path('db/migrate')
 DATABASE       = 'mysql2://travis@127.0.0.1:3306/test'
 DB             = Sequel.connect(DATABASE)
 

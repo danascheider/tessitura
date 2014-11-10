@@ -93,7 +93,7 @@ namespace :db do
     end
 
     desc 'Migrate the production database'
-    task :migrate, [:PATH] => ['db:development:create'] do |t, args|
+    task :migrate, [:PATH] => ['db:production:create'] do |t, args|
       path = args[:path] || MIGRATION_PATH
       Sequel::Migrator.run(PRODUCTION, path)
       STDOUT.puts 'Production database migrated successfully.'.green
@@ -124,7 +124,7 @@ namespace :db do
     end
 
     desc 'Migrate the test database'
-    task :migrate, [:PATH] => ['db:development:create'] do |t, args|
+    task :migrate, [:PATH] => ['db:test:create'] do |t, args|
       path = args[:path] || MIGRATION_PATH
       Sequel::Migrator.run(TEST, path)
       STDOUT.puts 'Test database migrated successfully.'.green
