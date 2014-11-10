@@ -29,24 +29,3 @@ def dump_user_tasks(id)
   puts "USER #{id}'S TASKS:"
   User[id].tasks.flatten.each {|task| puts "#{task.to_hash}\n"}
 end
-
-def response_status
-  last_response.status
-end
-
-def response_body
-  last_response.body
-end
-
-def make_request(method, path, string=nil)
-  case method
-  when 'POST'
-    post path, string, 'CONTENT-TYPE' => 'application/x-www-form-urlencoded'
-  when 'PUT'
-    put path, string, 'CONTENT-TYPE' => 'application/json'
-  when 'GET'
-    get path
-  when 'DELETE'
-    delete path 
-  end
-end

@@ -21,24 +21,24 @@ describe Canto do
     context 'with valid attributes' do 
       it 'calls the User create method' do 
         expect(User).to receive(:try_rescue).with(:create, valid_attributes)
-        make_request('POST', path, valid_attributes.to_json)
+        post path, valid_attributes.to_json, 'CONTENT-TYPE' => 'application/json'
       end
 
       it 'returns status 201' do 
-        make_request('POST', path, valid_attributes.to_json)
-        expect(response_status).to eql 201
+        post path, valid_attributes.to_json, 'CONTENT-TYPE' => 'application/json'
+        expect(last_response.status).to eql 201
       end
     end
 
     context 'with invalid attributes' do 
       it 'attempts to create a user' do 
         expect(User).to receive(:create)
-        make_request('POST', '/users', invalid_attributes.to_json)
+        post '/users', invalid_attributes.to_json, 'CONTENT-TYPE' => 'application/json'
       end
 
       it 'returns status 422' do 
-        make_request('POST', '/users', invalid_attributes.to_json)
-        expect(response_status).to eql 422
+        post '/users', invalid_attributes.to_json, 'CONTENT-TYPE' => 'application/json'
+        expect(last_response.status).to eql 422
       end
     end
 
@@ -55,12 +55,12 @@ describe Canto do
       context 'to the main /users path' do 
         it 'doesn\'t create the user' do 
           expect(User).not_to receive(:create)
-          make_request('POST', '/users', admin_attributes.to_json)
+          post '/users', admin_attributes.to_json, 'CONTENT-TYPE' => 'application/json'
         end
 
         it 'returns status 401' do 
-          make_request('POST', '/users', admin_attributes.to_json)
-          expect(response_status).to eql 401
+          post '/users', admin_attributes.to_json, 'CONTENT-TYPE' => 'application/json'
+          expect(last_response.status).to eql 401
         end
       end
 
@@ -124,8 +124,8 @@ describe Canto do
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
         authorize_with admin
-        make_request('GET', '/users/1000000')
-        expect(response_status).to eql 404
+        get '/users/1000000'
+        expect(last_response.status).to eql 404
       end
     end
   end
@@ -143,12 +143,12 @@ describe Canto do
       context 'attempting to set admin status to true' do 
         it 'doesn\'t update the profile' do 
           expect_any_instance_of(User).not_to receive(:update)
-          make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
+          put "/users/#{user.id}", { 'admin' => true }.to_json, 'CONTENT-TYPE' => 'application/json'
         end
 
         it 'returns status 401' do 
-          make_request('PUT', "/users/#{user.id}", { 'admin' => true }.to_json)
-          expect(response_status).to eql 401
+          put "/users/#{user.id}", { 'admin' => true }.to_json, 'CONTENT-TYPE' => 'application/json'
+          expect(last_response.status).to eql 401
         end
       end
     end
@@ -173,8 +173,8 @@ describe Canto do
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
         authorize_with admin
-        make_request('PUT', '/users/1000000', { 'fach' => 'lyric coloratura' }.to_json)
-        expect(response_status).to eql 404
+        put '/users/1000000', { 'fach' => 'lyric coloratura' }.to_json, 'CONTENT-TYPE' => 'application/json'
+        expect(last_response.status).to eql 404
       end
     end
   end

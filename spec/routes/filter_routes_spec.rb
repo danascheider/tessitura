@@ -19,24 +19,24 @@ describe Canto do
 
     it 'includes all resources filling the criteria' do 
       @tasks.to_hashes.each do |task|
-        expect(response_body).to include(task.to_json) unless task[:status] == 'Complete'
+        expect(last_response.body).to include(task.to_json) unless task[:status] == 'Complete'
       end
     end
 
     it 'doesn\'t return other resources' do 
-      JSON.parse(response_body).each do |task|
+      JSON.parse(last_response.body).each do |task|
         expect(task['status']).not_to eql 'Complete'
       end
     end
 
     it 'only returns resources belonging to the given user' do 
-      JSON.parse(response_body).each do |task|
+      JSON.parse(last_response.body).each do |task|
         expect(task['task_list_id']).to eql alice.task_lists.first.id
       end
     end
 
     it 'returns status 200' do 
-      expect(response_status).to eql 200
+      expect(last_response.status).to eql 200
     end
   end
 
@@ -49,24 +49,24 @@ describe Canto do
 
     it 'includes all the resources filling the criteria' do 
       @tasks.to_hashes.each do |task|
-        expect(response_body).to include(task.to_json) unless task[:status] == 'Complete'
+        expect(last_response.body).to include(task.to_json) unless task[:status] == 'Complete'
       end
     end
 
     it 'doesn\'t return other resources' do 
-      JSON.parse(response_body).each do |task|
+      JSON.parse(last_response.body).each do |task|
         expect(task['status']).not_to eql 'Complete'
       end
     end
 
     it 'only returns resources belonging to the given user' do 
-      JSON.parse(response_body).each do |task|
+      JSON.parse(last_response.body).each do |task|
         expect(task['task_list_id']).to eql alice.task_lists.first.id
       end
     end
 
     it 'returns status 200' do 
-      expect(response_status).to eql 200
+      expect(last_response.status).to eql 200
     end
   end
 
@@ -77,11 +77,11 @@ describe Canto do
     end
 
     it 'returns status 401' do 
-      expect(response_status).to eql 401
+      expect(last_response.status).to eql 401
     end
 
     it 'says "Authorization Required"' do 
-      expect(response_body).to eql "Authorization Required\n"
+      expect(last_response.body).to eql "Authorization Required\n"
     end
   end
 
@@ -91,11 +91,11 @@ describe Canto do
     end
 
     it 'returns status 401' do 
-      expect(response_status).to eql 401
+      expect(last_response.status).to eql 401
     end
 
     it 'says "Authorization Required"' do 
-      expect(response_body).to eql "Authorization Required\n"
+      expect(last_response.body).to eql "Authorization Required\n"
     end
   end
 end

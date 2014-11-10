@@ -7,12 +7,12 @@ shared_examples 'an authorized PUT request' do
     it 'updates the resource' do 
       attrs = parse_json(valid_attributes)
       expect_any_instance_of(model).to receive(:update).with(attrs)
-      make_request('PUT', path, valid_attributes)
+      put path, valid_attributes, 'CONTENT-TYPE' => 'application/json'
     end
 
     it 'returns status 200' do 
-      make_request('PUT', path, valid_attributes)
-      expect(response_status).to eql 200
+      put path, valid_attributes, 'CONTENT-TYPE' => 'application/json'
+      expect(last_response.status).to eql 200
     end
   end
 
@@ -24,8 +24,8 @@ shared_examples 'an authorized PUT request' do
       # passes in one scenario when admin credentials are entered.
       #
       # Efforts to investigate this issue further have come up short.
-      make_request('PUT', path, invalid_attributes)
-      expect(response_status).to eql 422
+      put path, invalid_attributes, 'CONTENT-TYPE' => 'application/json'
+      expect(last_response.status).to eql 422
     end
   end
 end
@@ -37,23 +37,23 @@ shared_examples 'an unauthorized PUT request' do
 
   it 'doesn\'t update the resource' do 
     expect_any_instance_of(model).not_to receive(:update).with(parse_json(valid_attributes))
-    make_request('PUT', path, valid_attributes)
+    put path, valid_attributes, 'CONTENT-TYPE' => 'application/json'
   end
 
   it 'returns status 401' do 
-    make_request('PUT', path, valid_attributes)
-    expect(response_status).to eql 401
+    put path, valid_attributes, 'CONTENT-TYPE' => 'application/json'
+    expect(last_response.status).to eql 401
   end
 end
 
 shared_examples 'a PUT request without credentials' do 
   it 'doesn\'t update the resource' do 
     expect_any_instance_of(model).not_to receive(:update).with(parse_json(valid_attributes))
-    make_request('PUT', path, valid_attributes)
+    put path, valid_attributes, 'CONTENT-TYPE' => 'application/json'
   end
 
   it 'returns status 401' do 
-    make_request('PUT', path, valid_attributes)
-    expect(response_status).to eql 401
+    put path, valid_attributes, 'CONTENT-TYPE' => 'application/json'
+    expect(last_response.status).to eql 401
   end
 end

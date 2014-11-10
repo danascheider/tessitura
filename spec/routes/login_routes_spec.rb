@@ -14,11 +14,11 @@ describe Canto do
       end
 
       it 'returns the user\'s ID' do 
-        expect(response_body).to include user.to_json
+        expect(last_response.body).to include user.to_json
       end
 
       it 'returns a JSON object' do 
-        expect{ JSON.parse(response_body) }.not_to raise_error
+        expect{ JSON.parse(last_response.body) }.not_to raise_error
       end
     end
 
@@ -26,7 +26,7 @@ describe Canto do
       it 'returns status 401' do 
         authorize 'foo', 'bar'
         post '/login'
-        expect(response_status).to eql 401
+        expect(last_response.status).to eql 401
       end
     end
 
@@ -35,7 +35,7 @@ describe Canto do
       it 'returns status 401' do 
         authorize user.username, 'foobar22'
         post '/login'
-        expect(response_status).to eql 401
+        expect(last_response.status).to eql 401
       end
     end
   end

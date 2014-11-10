@@ -10,8 +10,8 @@ shared_examples 'an authorized DELETE request' do
     end
 
     it 'returns status 204' do 
-      make_request('DELETE', path)
-      expect(response_status).to eql 204
+      delete path
+      expect(last_response.status).to eql 204
     end
   end
 
@@ -23,7 +23,7 @@ shared_examples 'an authorized DELETE request' do
 
     it 'returns status 404' do 
       delete nonexistent_resource_path
-      expect(response_status).to eql 404
+      expect(last_response.status).to eql 404
     end
   end
 end
@@ -40,7 +40,7 @@ shared_examples 'an unauthorized DELETE request' do
 
   it 'returns status 401' do 
     delete path
-    expect(response_status).to eql 401
+    expect(last_response.status).to eql 401
   end
 end
 
@@ -52,6 +52,6 @@ shared_examples 'a DELETE request without credentials' do
 
   it 'returns status 401' do 
     delete path
-    expect(response_status).to eql 401
+    expect(last_response.status).to eql 401
   end
 end

@@ -55,22 +55,22 @@ describe Sinatra::AuthorizationHelper do
     context 'when logged-in user is not an admin' do 
       it 'doesn\'t allow access to the resource' do 
         @auth = Rack::Auth::Basic::Request.new(@env2)
-        make_request('GET', '/test/admin_only')
-        expect(response_body).to eql "Authorization Required\n"
+        get '/test/admin_only'
+        expect(last_response.body).to eql "Authorization Required\n"
       end
     end
 
     context 'when not logged in' do 
       it 'doesn\'t allow access to the resource' do 
-        make_request('GET', '/test/admin_only')
-        expect(response_body).to eql "Authorization Required\n"
+        get '/test/admin_only'
+        expect(last_response.body).to eql "Authorization Required\n"
       end
     end
   end
 
   describe '::access_denied' do 
     before(:each) do 
-      make_request('GET', '/test/access_denied')
+      get '/test/access_denied'
     end
 
     it 'sets the WWW-Authenticate header' do 
@@ -78,11 +78,11 @@ describe Sinatra::AuthorizationHelper do
     end
 
     it 'returns status 401' do 
-      expect(response_status).to eql 401
+      expect(last_response.status).to eql 401
     end
 
     it 'halts the request' do 
-      expect(response_body).not_to eql({ 'message' => 'Hello world' }.to_json)
+      expect(last_response.body).not_to eql({ 'message' => 'Hello world' }.to_json)
     end
   end
 
@@ -159,8 +159,8 @@ describe Sinatra::AuthorizationHelper do
       end
 
       it 'returns 401' do 
-        make_request('GET', "/test/users/#{admin.id}")
-        expect(response_status).to eql 401
+        get "/test/users/#{admin.id}"
+        expect(last_response.status).to eql 401
       end
 
       # FIX: This sends ::access_denied two times - need to find out why
@@ -168,7 +168,7 @@ describe Sinatra::AuthorizationHelper do
         pending('Debug')
         @id = user.id
         expect_any_instance_of(Canto).to receive(:access_denied)
-        make_request('GET', "/test/users/#{admin.id}")
+        get "/test/users/#{admin.id}"
       end
     end
 
