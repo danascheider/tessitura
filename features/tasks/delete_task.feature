@@ -24,6 +24,6 @@ Feature: Delete task
     Then the 4th task should not be deleted from the database
     And the response should indicate the request was unauthorized
 
-  Scenario: User attempts to exist a task that doesn't exist
+  Scenario: User attempts to delete a task that doesn't exist
     When the client submits a DELETE request to /tasks/1000000 with the 1st user's credentials
     Then the response should indicate the task was not found

@@ -80,7 +80,7 @@ describe Task do
       end
     end
 
-    describe '::complete' do 
+    describe '::complete scope' do 
       before(:each) do 
         FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks)
       end
@@ -94,7 +94,7 @@ describe Task do
       end
     end
 
-    describe '::incomplete' do 
+    describe '::incomplete scope' do 
       before(:each) do
         FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks)
       end

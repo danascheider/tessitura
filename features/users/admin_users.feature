@@ -32,19 +32,6 @@ Feature: Admin users
       | the 3rd user's |   not    | 401    |
       | no             |   not    | 401    |
 
-  Scenario Outline: Deleting an admin account 
-    Given there is a user with the following attributes:
-      | id | email              | username      | password  |
-      | 4  | admin2@example.com | admin2uname   | admin2pwd |
-    When the client submits a DELETE request to /users/4 with the <id> user's credentials
-    Then the 4th user should be deleted
-    And the response should return status 204
-
-    Examples:
-      | id  |
-      | 4th |
-      | 1st |
-
   Scenario: Deleting the last admin account 
     When the client submits a DELETE request to /users/1 with the 1st user's credentials
     Then the 1st user should not be deleted

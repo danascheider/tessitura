@@ -20,7 +20,7 @@ Feature: Create task
       | 2nd | 
       | 1st |
 
-  Scenario Outline: Unauthorized user attempts to create a task
+  Scenario Outline: Unsuccessful attempt to create a task
     When the client submits a POST request to /users/2/tasks with <type> credentials and:
       """json
       { "<attribute>":"<value>" }

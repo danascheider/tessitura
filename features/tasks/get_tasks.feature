@@ -5,7 +5,7 @@ Feature: Get tasks
   As an android
   I need to see my tasks in JSON format.
 
-  Scenario Outline: Authorized user views all tasks of a singler user
+  Scenario Outline: Authorized user views all tasks of a single user
     When the client submits a GET request to /users/2/tasks with the <id> user's credentials
     Then the JSON response should include all the 2nd user's tasks
     And the response should return status 200

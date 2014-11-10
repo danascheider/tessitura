@@ -30,20 +30,6 @@ Feature: Update task
       | the 3rd user's | title     | Feed the cat          |
       | no             | title     | Rescue Princess Peach |
 
-  Scenario Outline: Change task status
-    Given the 3rd task is complete
-    When the client submits a PUT request to <url> with the 1st user's credentials and:
-      """json
-      { "status":"<value>" }
-      """
-    Then the task's status should be <value>
-    And the response should indicate the task was updated successfully
-
-    Examples:
-      | url      | value       |
-      | /tasks/1 | Complete    |
-      | /tasks/3 | In Progress |
-
   Scenario: User attempts to update a task that doesn't exist
     When the client submits a PUT request to /tasks/1000000 with the 1st user's credentials and:
       """json
