@@ -1,10 +1,6 @@
 require 'mysql2'
 require 'sequel'
 
-require_relative 'database_task_helper'
-
-Sequel.extension :migration
-
 DEV        = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['development'], 'development'))
 TEST       = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['test'], 'test'))
 PRODUCTION = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['production'], 'production'))
