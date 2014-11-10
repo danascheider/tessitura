@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Canto do 
-  include Rack::Test::Methods 
   include Sinatra::ErrorHandling
+  include Rack::Test::Methods 
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
@@ -144,17 +144,13 @@ describe Canto do
   end
 
   describe 'PUT' do 
-    let(:task) { user.tasks.first }
     let(:valid_attributes) { { status: 'Blocking' }.to_json }
-    let(:invalid_attributes) { { priority: 'MOST IMPORTANT THING EVER OMG!!!!!' }.to_json }
-    let(:path) { "/tasks/#{task.id}" }
+    let(:invalid_attributes) { { status: 'doomed' }.to_json }
+    let(:path) { "/tasks/#{user.tasks.first.id}" }
 
     context 'with user authorization' do
       it_behaves_like 'an authorized PUT request' do 
         let(:agent) { user }
-        let(:invalid_attributes) { 
-         { priority: 'MOST IMPORTANT THING EVER OMG!!!!!' }.to_json 
-        }
       end
     end
 

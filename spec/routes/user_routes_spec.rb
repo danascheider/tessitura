@@ -145,7 +145,7 @@ describe Canto do
     let(:valid_attributes) { { 'fach' => 'lyric spinto' }.to_json }
     let(:invalid_attributes) { { 'username' => nil }.to_json }
 
-    context 'with user credentials' do 
+    context 'with user authorization' do 
       it_behaves_like 'an authorized PUT request' do 
         let(:agent) { user }
       end
@@ -163,20 +163,20 @@ describe Canto do
       end
     end
 
-    context 'with admin credentials' do 
+    context 'with admin authorization' do 
       it_behaves_like 'an authorized PUT request' do 
         let(:agent) { admin }
       end
     end
 
-    context 'with invalid credentials' do 
+    context 'with invalid authorization' do 
       it_behaves_like 'an unauthorized PUT request' do 
         let(:agent) { user }
         let(:path) { "/users/#{admin.id}" }
       end
     end
 
-    context 'with no credentials' do 
+    context 'with no authorization' do 
       it_behaves_like 'a PUT request without credentials'
     end
 
