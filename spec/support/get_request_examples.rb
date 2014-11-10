@@ -5,7 +5,7 @@ shared_examples 'an authorized GET request' do
   end
 
   it 'returns the requested resource' do 
-    expect(response_body).to eql resource.to_json
+    expect(last_response.body).to eql resource.to_json
   end
 
   it 'indicates content type text/html' do 
@@ -30,7 +30,7 @@ shared_examples 'an unauthorized GET request' do
   end
 
   it 'doesn\'t return the requested resource' do 
-    expect(response_body).not_to include resource.to_json
+    expect(last_response.body).not_to include resource.to_json
   end
 
   it 'returns status 401' do 
@@ -44,7 +44,7 @@ shared_examples 'a GET request without credentials' do
   end
 
   it 'doesn\'t return the requested resource' do 
-    expect(response_body).not_to include resource.to_json
+    expect(last_response.body).not_to include resource.to_json
   end
 
   it 'returns status 401' do 
