@@ -29,7 +29,7 @@ describe Canto do
       end
     end
 
-    it 'only returns resources beloging to the given user' do 
+    it 'only returns resources belonging to the given user' do 
       JSON.parse(response_body).each do |task|
         expect(task['task_list_id']).to eql alice.task_lists.first.id
       end
