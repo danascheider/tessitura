@@ -23,11 +23,7 @@ class User < Sequel::Model(:users)
   def default_task_list
     self.task_lists.length > 0 ? self.task_lists.first : TaskList.create(user: self)
   end
-
-  def name
-    "#{self.first_name} #{self.last_name}"
-  end
-
+  
   # This method is added automatically by Sequel and has been overridden
   # here so as not to interfere with the foreign key constraint on the table
 

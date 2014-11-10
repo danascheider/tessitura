@@ -96,7 +96,7 @@ describe User do
   describe 'instance methods' do
     let(:user) { FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith') }
 
-    describe '#admin' do 
+    describe '#admin?' do 
       context 'when the user is not an admin' do 
         it 'returns false' do 
           expect(user.admin?).to eql false
@@ -175,12 +175,6 @@ describe User do
       end
     end
 
-    describe '#task_lists_dataset' do 
-      it 'returns a Sequel::Dataset object' do 
-        expect(user.task_lists_dataset).to be_a(Sequel::Dataset)
-      end
-    end
-
     describe '#tasks' do 
       it 'returns an array' do 
         expect(user.tasks).to be_an(Array)
@@ -188,16 +182,6 @@ describe User do
 
       it 'returns all its tasks' do 
         expect(user.tasks).to eql (user.task_lists.map {|list| list.tasks }).flatten
-      end
-    end
-
-    describe '#tasks_dataset' do 
-      it 'returns all the tasks' do 
-        expect(user.tasks_dataset).to eql DB[:tasks].filter(owner_id: user.id)
-      end
-
-      it 'returns a Sequel::Dataset object' do 
-        expect(user.tasks_dataset).to be_a(Sequel::Dataset)
       end
     end
 
@@ -221,12 +205,6 @@ describe User do
     describe '#to_json' do 
       it 'converts itself to hash form first' do 
         expect(user.to_json).to eql user.to_hash.to_json
-      end
-    end
-
-    describe '#name' do 
-      it 'concatenates first and last name' do 
-        expect(user.name).to eql 'Jacob Smith'
       end
     end
 
