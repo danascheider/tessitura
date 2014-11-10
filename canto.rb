@@ -39,7 +39,6 @@ class Canto < Sinatra::Base
   end
 
   before /\/tasks\/(\d+)(\/*)?/ do 
-    request.body.rewind; @request_body = decode_form_data(request.body.read)
     protect(Task)
   end
 
