@@ -24,7 +24,8 @@ class Canto < Sinatra::Base
 
   before do
     log_request
-    @id = request.path_info.match(/\d+/).to_s
+    request.body.rewind
+    @id, @request_body = request.path_info.match(/\d+/).to_s, parse_json(request.body.read)
   end
 
   after do 
@@ -34,7 +35,6 @@ class Canto < Sinatra::Base
   ###################
 
   before /\/users\/(\d+)(\/*)?/ do 
-    request.body.rewind; @request_body = parse_json (request.body.read)
     protect(User)
   end
 
