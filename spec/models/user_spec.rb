@@ -259,6 +259,13 @@ describe User do
         end
       end
     end
+
+    describe '#add_task_list' do 
+      it 'raises a NoMethodError' do 
+        list = FactoryGirl.create(:task_list)
+        expect{ user.add_task_list(list) }.to raise_error(NoMethodError)
+      end
+    end
   end
 
   describe 'admin scope' do 
