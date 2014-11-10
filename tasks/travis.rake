@@ -15,7 +15,7 @@ namespace :travis do
 
   task :prepare do 
     client = Mysql2::Client.new({adapter: 'mysql2', username: 'travis', host: '127.0.0.1', port: 3306})
-    client.query('DROP DATABASE test IF EXISTS test;')
+    client.query('DROP DATABASE test;') rescue nil
     client.query('CREATE DATABASE test;')
     Rake::Task['travis:migrate'].invoke
   end
