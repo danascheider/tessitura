@@ -49,10 +49,6 @@ module Sinatra
         false
       end
     end
-
-    def validate_standard_create
-      access_denied if setting_admin?
-    end
   end
 
   helpers AuthorizationHelper

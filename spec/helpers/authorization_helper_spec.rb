@@ -224,31 +224,4 @@ describe Sinatra::AuthorizationHelper do
       end
     end
   end
-
-  describe '::validate_standard_create' do 
-
-    context 'not setting admin' do 
-      it 'returns nil' do 
-        @request_body = {username: 'frankjones', password: 'jonesfrank', email: 'fj@jones.org'}
-        expect(validate_standard_create).to eql nil
-      end
-    end
-
-    context 'setting admin' do
-      before(:each) do
-        @request_body = {admin: true, username: 'frankjones', password: 'jonesfrank', email: 'fj@jones.org'}
-      end  
-
-      it 'calls ::validate_standard_create' do 
-        expect_any_instance_of(Canto).to receive(:validate_standard_create)
-        make_request('GET', '/test/create', @request_body.to_json)
-      end
-
-      it 'calls ::access_denied' do 
-        pending('Debugging test support module')
-        expect_any_instance_of(Canto).to receive(:access_denied)
-        make_request('GET', '/test/create', @request_body.to_json)
-      end
-    end
-  end
 end

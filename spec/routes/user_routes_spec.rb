@@ -19,11 +19,6 @@ describe Canto do
     let(:invalid_attributes) { { 'first_name' => 'Frank' } }
 
     context 'with valid attributes' do 
-      it 'calls the #validate_standard_create method' do 
-        expect_any_instance_of(Canto).to receive(:validate_standard_create).and_return(nil)
-        make_request('POST', path, valid_attributes.to_json)
-      end
-
       it 'calls the User create method' do 
         expect(User).to receive(:try_rescue).with(:create, valid_attributes)
         make_request('POST', path, valid_attributes.to_json)
@@ -58,11 +53,6 @@ describe Canto do
       }
 
       context 'to the main /users path' do 
-        it 'calls the #validate_standard_create method' do 
-          expect_any_instance_of(Canto).to receive(:validate_standard_create)
-          make_request('POST', '/users', admin_attributes.to_json)
-        end
-
         it 'doesn\'t create the user' do 
           expect(User).not_to receive(:create)
           make_request('POST', '/users', admin_attributes.to_json)

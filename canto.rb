@@ -50,7 +50,7 @@ class Canto < Sinatra::Base
 
   post '/users' do  
     request.body.rewind; @request_body = parse_json(request.body.read)
-    validate_standard_create
+    halt 401 if @request_body.has_key?('admin') || @request_body.has_key?(:admin)
     return 422 unless new_user = User.try_rescue(:create, @request_body)
     [201, new_user.to_json]
   end
