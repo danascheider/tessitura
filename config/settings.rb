@@ -2,12 +2,15 @@ require 'logger'
 require_all File.expand_path('../../helpers',__FILE__)
 
 class Canto < Sinatra::Base
-  ENVIRONMENT = ENV['RACK_ENV'] || 'development'
+
+  ENV['RACK_ENV'] ||= 'development'
   DB_PASSWORD = 'hunter2'
+  db = "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENV['RACK_ENV']}"
+  db_travis = 'mysql2://travis@127.0.0.1:3306/test'
 
   set :root, File.dirname(__FILE__)
   set :app_file, __FILE__
-  set :database, "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENVIRONMENT}"
+  set :database, ENV['TRAVIS'] ? db_travis : db
   set :data, ''
 
   # Rack::Cors manages cross-origin issues
@@ -44,9 +47,6 @@ class Canto < Sinatra::Base
       all.to_json
     end
   end
-
-  # Canto-specific helper modules
-  # =============================
 
   helpers Sinatra::AuthorizationHelper 
   helpers Sinatra::ErrorHandling
