@@ -10,11 +10,6 @@ Then(/^the new task should have the following attributes:$/) do |attributes|
   end
 end
 
-Given(/^the (\d+[a-z]{2}) task is complete$/) do |task_id|
-  @task = Task[task_id]
-  @task.update(status: 'Complete')
-end
-
 Then(/^no task should be created$/) do
   expect(User[@user.id].tasks.count).to eql @user_task_count
 end
@@ -25,10 +20,6 @@ end
 
 Then(/^the task's title should not be changed$/) do 
   expect(Task[@task.id].title).to eql @task.title
-end
-
-Then(/^the task's status should be (.*)$/) do |status|
-  expect(Task[@task.id].status).to eql status
 end
 
 Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
