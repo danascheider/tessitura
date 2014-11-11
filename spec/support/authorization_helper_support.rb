@@ -9,11 +9,6 @@ class Canto < Sinatra::Base
     { 'message' => 'Hello world' }.to_json
   end
 
-  get '/test/create' do 
-    validate_standard_create 
-    { 'message' => 'Hello world' }.to_json
-  end
-
   get '/test/users/:id' do 
     protect(User)
     { 'message' => 'Hello world' }.to_json
