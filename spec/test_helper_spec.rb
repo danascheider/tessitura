@@ -42,12 +42,4 @@ describe 'test helper methods' do
       expect { dump_user_tasks(@user.id) }.to output(@output).to_stdout
     end
   end
-
-  describe '::decode_form_data' do 
-    let(:data) { URI::encode_www_form(foo: 'Bar') }
-
-    it 'turns x-www-form-urlencoded object into a hash' do 
-      expect(decode_form_data(data)).to eql({'foo' => 'Bar'})
-    end
-  end
 end
