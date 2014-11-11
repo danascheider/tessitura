@@ -44,10 +44,6 @@ class User < Sequel::Model(:users)
     (self.task_lists.map {|list| list.tasks.flatten }).flatten
   end
 
-  def tasks_dataset
-    DB[:tasks].filter(owner_id: self.id)
-  end
-
   def to_hash
     {
       id: self.id,
