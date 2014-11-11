@@ -1,11 +1,7 @@
 module Sinatra
   module AuthorizationHelper
-    def admin_access?
-      current_user.admin?
-    end
-
     def admin_only!
-      return if authorized? && admin_access?
+      return if authorized? && current_user.admin?
       access_denied
     end
 
@@ -20,7 +16,7 @@ module Sinatra
     end
 
     def authorized_for_resource?(user_id)
-      (current_user.id == user_id && !setting_admin?) || admin_access?
+      (current_user.id == user_id && !setting_admin?) || current_user.admin?
     end
 
     def current_user

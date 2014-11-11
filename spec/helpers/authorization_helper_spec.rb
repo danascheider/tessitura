@@ -25,22 +25,6 @@ describe Sinatra::AuthorizationHelper do
     @env3 = { "HTTP_AUTHORIZATION" => "Basic #{bogus_credentials}" }
   end
 
-  describe '::admin_access?' do 
-    context 'when logged-in user is an admin' do 
-      it 'returns true' do 
-        @auth = Rack::Auth::Basic::Request.new(@env1)
-        expect(admin_access?).to eql true
-      end
-    end
-
-    context 'when logged-in user is not an admin' do 
-      it 'returns false' do 
-        @auth = Rack::Auth::Basic::Request.new(@env2)
-        expect(admin_access?).to be_falsey
-      end
-    end
-  end
-
   # ::admin_only! and ::protect methods return nil if authorization is successful;
   # otherwise, they return status code 401 and WWW-Authorization headers
 
