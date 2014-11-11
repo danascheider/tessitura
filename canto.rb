@@ -24,6 +24,7 @@ class Canto < Sinatra::Base
 
   before do
     @id = request.path_info.match(/\d+/).to_s
+    @request_body = request_body
   end
 
   after do 
@@ -33,12 +34,10 @@ class Canto < Sinatra::Base
   ###################
 
   before /\/users\/(\d+)(\/*)?/ do 
-    @request_body = request_body
     protect(User)
   end
 
   before /\/tasks\/(\d+)(\/*)?/ do 
-    @request_body = request_body
     protect(Task)
   end
 
@@ -60,8 +59,7 @@ class Canto < Sinatra::Base
     end
 
     put route do 
-      request.body.rewind; @request_body = parse_json(request.body.read)
-      update_resource(@request_body, @resource)
+      update_resource(request_body, @resource)
     end
 
     delete route do 

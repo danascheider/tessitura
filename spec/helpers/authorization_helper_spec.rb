@@ -104,6 +104,7 @@ describe Sinatra::AuthorizationHelper do
     context 'when the logged-in user is the owner of the resource' do 
       it 'returns true' do 
         allow(@auth).to receive(:credentials).and_return([user.username, user.password])
+        stub(:request_body).and_return(nil)
         expect(authorized_for_resource?(user.id)).to be_truthy
       end
     end
@@ -116,7 +117,7 @@ describe Sinatra::AuthorizationHelper do
 
       it 'doesn\'t let a user set admin' do
         allow(@auth).to receive(:credentials).and_return([user.username, user.password])
-        stub(:setting_admin?).and_return(true)
+        stub(:request_body).and_return({admin: true})
         expect(authorized_for_resource?(user.id)).to be_falsey
       end
     end
@@ -159,6 +160,7 @@ describe Sinatra::AuthorizationHelper do
     context 'when the user is authorized' do 
       it 'returns nil' do 
         @auth, @id = Rack::Auth::Basic::Request.new(@env2), user.id
+        stub(:request_body).and_return({fach: 'dramatic coloratura'})
         expect(protect(User)).to eql nil
       end
     end
@@ -167,20 +169,21 @@ describe Sinatra::AuthorizationHelper do
   describe '::setting_admin' do 
     context 'when the request body has :admin key' do 
       it 'returns true' do 
-        @request_body = { admin: true }
+        stub(:request_body).and_return({ admin: true })
         expect(setting_admin?).to be_truthy
       end
     end
 
     context 'when the request body does not have :admin key' do 
       it 'returns false' do 
-        @request_body = { 'fach' => 'dramatic coloratura' }
+        stub(:request_body).and_return({ 'fach' => 'dramatic coloratura' })
         expect(setting_admin?).to be_falsey
       end
     end
 
     context 'when there is no request body' do 
       it 'returns false' do 
+        stub(:request_body).and_return(nil)
         expect(setting_admin?).to be_falsey
       end
     end
