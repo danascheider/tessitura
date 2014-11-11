@@ -45,7 +45,7 @@ module Sinatra
     def valid_credentials?
       begin
         @auth.credentials.last == User.find(username: @auth.credentials.first).password
-      rescue
+      rescue NoMethodError
         false
       end
     end
