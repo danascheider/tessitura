@@ -50,6 +50,4 @@ module Sinatra
       end
     end
   end
-
-  helpers AuthorizationHelper
 end
