@@ -1,13 +1,12 @@
 module Sinatra
   module GeneralHelperMethods
+    def request_body
+      request.body.rewind
+      parse_json(request.body.read)
+    end
+    
     def return_json(obj)
       obj.to_json unless obj.blank?
-    end
-
-    def decode_form_data(data) 
-      form_data = URI::decode_www_form(data).flatten
-      hash = Hash[*form_data]
-      hash
     end
   end
 end
