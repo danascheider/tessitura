@@ -39,9 +39,3 @@ end
 Then(/^no user should be deleted$/) do
   expect(User.count).to eql @user_count
 end
-
-# Background
-# ==========
-Given(/^there is a user with the following attributes:$/) do |string|
-  string.hashes.each {|hash| FactoryGirl.create(:user, hash) }
-end
