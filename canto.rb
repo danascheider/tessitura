@@ -23,9 +23,7 @@ class Canto < Sinatra::Base
   ##### Logging #####
 
   before do
-    log_request
-    request.body.rewind
-    @id, @request_body = request.path_info.match(/\d+/).to_s, parse_json(request.body.read)
+    @id = request.path_info.match(/\d+/).to_s
   end
 
   after do 
@@ -35,10 +33,12 @@ class Canto < Sinatra::Base
   ###################
 
   before /\/users\/(\d+)(\/*)?/ do 
+    @request_body = request_body
     protect(User)
   end
 
   before /\/tasks\/(\d+)(\/*)?/ do 
+    @request_body = request_body
     protect(Task)
   end
 
@@ -49,11 +49,8 @@ class Canto < Sinatra::Base
   ##### End Filters #####
 
   post '/users' do  
-    request.body.rewind; @request_body = parse_json(request.body.read)
-
     access_denied if setting_admin?
-    
-    return 422 unless new_user = User.try_rescue(:create, @request_body)
+    return 422 unless new_user = User.try_rescue(:create, request_body)
     [201, new_user.to_json]
   end
 
@@ -73,10 +70,8 @@ class Canto < Sinatra::Base
   end
 
   post '/users/:id/filter' do |id|
-    request.body.rewind; @request_body = parse_json(request.body.read)
-
-    resource = Module.const_get(@request_body[:resource])
-    scope    = @request_body[:scope].to_sym
+    resource = Module.const_get(request_body[:resource])
+    scope    = request_body[:scope].to_sym
     
     return_json(resource.send(scope))
   end

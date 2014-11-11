@@ -196,7 +196,8 @@ describe Sinatra::AuthorizationHelper do
 
     context 'with bad credentials' do 
       it 'returns false' do 
-        @auth = Rack::Auth::Basic::Request.new({ "HTTP_AUTHORIZATION" => "Basic #{user.username}:badpassword" })
+        bad_credentials = Base64.encode64("#{user.username}:badpassword")
+        @auth = Rack::Auth::Basic::Request.new({ "HTTP_AUTHORIZATION" => "Basic #{bad_credentials}" })
         expect(valid_credentials?).to be_falsey
       end
     end

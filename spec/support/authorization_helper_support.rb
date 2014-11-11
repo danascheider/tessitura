@@ -13,4 +13,8 @@ class Canto < Sinatra::Base
     protect(User)
     { 'message' => 'Hello world' }.to_json
   end
+
+  post '/test/request-body' do 
+    request_body.class.to_s
+  end
 end
