@@ -30,6 +30,7 @@ class Task < Sequel::Model
       priority: self.priority,
       status: self.status,
       description: self.description,
+      backlog: self.backlog,
       created_at: self.created_at,
     }.reject {|key, value| value.blank? }
 
