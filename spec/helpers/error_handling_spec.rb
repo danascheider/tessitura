@@ -171,6 +171,11 @@ describe Sinatra::ErrorHandling do
           expect_any_instance_of(User).to receive(:update)
           update_resource({ id: user.id, city: 'Honolulu' }, user)
         end
+
+        it 'returns an array with status and updated object' do 
+          updated = (user.update({city: 'Honolulu'})).to_json
+          expect(update_resource({id: user.id, city: 'Honolulu'}, user)).to eql([200, updated])
+        end
       end
 
       context 'tasks' do 
@@ -182,6 +187,11 @@ describe Sinatra::ErrorHandling do
         it 'updates the task' do 
           expect_any_instance_of(Task).to receive(:update)
           update_resource({ id: task.id, priority: 'High' }, task)
+        end
+
+        it 'returns an array with status and updated object' do 
+          updated = (task.update({priority: 'High'})).to_json
+          expect(update_resource({id: task.id, priority: 'High'}, task)).to eql([200, updated])
         end
       end
     end
@@ -224,8 +234,8 @@ describe Sinatra::ErrorHandling do
       let(:task) { FactoryGirl.create(:task, status: 'Blocking') }
       let(:attributes) { { id: task.id, status: 'Blocking' }}
 
-      it 'returns 200' do 
-        expect(update_resource(attributes, task)).to eql 200
+      it 'returns an array with status and unchanged object' do 
+        expect(update_resource(attributes, task)).to eql([200, task.to_json])
       end
     end
   end

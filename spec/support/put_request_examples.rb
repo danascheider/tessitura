@@ -14,6 +14,12 @@ shared_examples 'an authorized PUT request' do
       put path, valid_attributes, 'CONTENT-TYPE' => 'application/json'
       expect(last_response.status).to eql 200
     end
+
+    it 'returns the updated resource as a JSON object' do 
+      updated = resource.update(JSON.parse(valid_attributes))
+      put path, valid_attributes, 'CONTENT-TYPE' => 'application/json'
+      expect(last_response.body).to eql(updated.to_json);
+    end
   end
 
   context 'with invalid attributes' do 

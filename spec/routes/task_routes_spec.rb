@@ -147,6 +147,7 @@ describe Canto do
     let(:valid_attributes) { { status: 'Blocking' }.to_json }
     let(:invalid_attributes) { { status: 'doomed' }.to_json }
     let(:path) { "/tasks/#{user.tasks.first.id}" }
+    let(:resource) { user.tasks.first }
 
     context 'with user authorization' do
       it_behaves_like 'an authorized PUT request' do 
@@ -177,6 +178,13 @@ describe Canto do
         allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
         put '/tasks/1000000', { :status => 'Blocking' }.to_json, 'CONTENT-TYPE' => 'application/json'
         expect(last_response.status).to eql 404
+      end
+
+      it 'doesn\'t return a response body' do 
+        # To my future self: I am including this  because this behavior has 
+        # failed to work as expected. Don't refactor it away.
+        put '/tasks/1000000', { :status => 'Blocking' }.to_json, 'CONTENT-TYPE' => 'application/json'
+        expect(parse_json(last_response.body)).to eql nil
       end
     end
   end
