@@ -11,6 +11,7 @@ describe Task do
     it { is_expected.to respond_to(:deadline) }
     it { is_expected.to respond_to(:description) }
     it { is_expected.to respond_to(:priority) }
+    it { is_expected.to respond_to(:backlog) }
     it { is_expected.to respond_to(:owner_id) }
   end
 
@@ -76,6 +77,11 @@ describe Task do
         it 'sets owner and owner ID' do 
           task.save
           expect([task.owner, task.owner_id]).to eql [task.task_list.user, task.task_list.user_id]
+        end
+
+        it 'leaves backlog false' do 
+          task.save
+          expect(task.backlog).to be_falsey
         end
       end
     end
