@@ -21,8 +21,6 @@ class Task < Sequel::Model
   end
 
   def to_hash
-    # FIX: Method definition isn't uniform across all the models
-    #      in Canto.
     hash = {
       id: self.id,
       task_list_id: self.task_list_id,
@@ -34,9 +32,7 @@ class Task < Sequel::Model
       description: self.description,
       backlog: self.backlog,
       created_at: self.created_at,
-    }.reject {|key, value| value.blank? }
-
-    hash
+    }.reject! {|key, value| value.blank? }
   end
 
   alias_method :to_h, :to_hash
