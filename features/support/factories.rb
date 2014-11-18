@@ -64,5 +64,15 @@ FactoryGirl.define do
         create_list(:task_list_with_tasks, evaluator.lists_count, user: user)
       end
     end
+
+    factory :user_with_complete_and_incomplete_tasks do 
+      transient do 
+        list_count 2
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:task_list_with_complete_and_incomplete_tasks, evaluator.list_count, user: user)
+      end
+    end
   end
 end
