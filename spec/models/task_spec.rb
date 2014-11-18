@@ -132,6 +132,28 @@ describe Task do
       end
     end
 
+    describe '#to_hash' do 
+      let(:hash) {
+        {
+          id: task.id,
+          task_list_id: task.task_list_id,
+          owner_id: task.owner_id,
+          title: task.title,
+          priority: task.priority,
+          status: task.status,
+          created_at: task.created_at
+        }
+      }
+
+      it 'returns a hash of its values' do 
+        expect(task.to_hash).to eql(hash)
+      end
+
+      it 'doesn\'t include blank or nil values' do 
+        expect(task.to_hash).not_to have_key(:description)
+      end
+    end
+
     describe '#to_json' do 
       it 'converts itself to hash form first' do 
         expect(task.to_json).to eql task.to_hash.to_json
