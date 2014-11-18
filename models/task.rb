@@ -21,6 +21,8 @@ class Task < Sequel::Model
   end
 
   def to_hash
+    # FIX: Method definition isn't uniform across all the models
+    #      in Canto.
     hash = {
       id: self.id,
       task_list_id: self.task_list_id,
@@ -36,6 +38,8 @@ class Task < Sequel::Model
 
     hash
   end
+
+  alias_method :to_h, :to_hash
 
   def to_json(options={})
     self.to_hash.to_json

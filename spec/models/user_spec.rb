@@ -186,19 +186,29 @@ describe User do
     end
 
     describe '#to_hash' do 
-      before(:each) do 
-        @hash = { id:         user.id,
-                  username:   user.username,
-                  email:      user.email,
-                  first_name: 'Jacob', 
-                  last_name:  'Smith', 
-                  country:    'USA',
-                  created_at: user.created_at
-                }
-      end
+      let(:hash) {
+        { id:         user.id,
+          username:   user.username,
+          email:      user.email,
+          first_name: 'Jacob', 
+          last_name:  'Smith', 
+          country:    'USA',
+          created_at: user.created_at
+        }
+      }
 
       it 'returns a hash of its attributes' do 
-        expect(user.to_hash).to eql @hash
+        expect(user.to_hash).to eql hash
+      end
+
+      it 'doesn\'t include blank or nil attributes' do 
+        expect(user.to_hash).not_to have_key(:fach)
+      end
+    end
+
+    describe '#to_h' do 
+      it 'is the same as #to_hash' do 
+        expect(user.to_h).to eql user.to_hash
       end
     end
 

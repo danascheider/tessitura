@@ -154,6 +154,12 @@ describe Task do
       end
     end
 
+    describe '#to_h' do 
+      it 'is the same as #to_hash' do 
+        expect(task.to_h).to eql(task.to_hash)
+      end
+    end
+
     describe '#to_json' do 
       it 'converts itself to hash form first' do 
         expect(task.to_json).to eql task.to_hash.to_json
