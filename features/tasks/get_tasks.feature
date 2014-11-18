@@ -3,10 +3,20 @@ Feature: Get tasks
 
   In order to know what I need to do today
   As an android
-  I need to see my tasks in JSON format.
+  I need to see my tasks in a properly serialized JSON format.
+
+  Scenario Outline: Authorized user views incomplete tasks of a single user
+    When the client submits a GET request to /users/2/tasks with the <id> user's credentials
+    Then the JSON response should include the 2nd user's incomplete tasks
+    And the response should return status 200
+
+    Examples:
+      | id  |
+      | 2nd |
+      | 1st |
 
   Scenario Outline: Authorized user views all tasks of a single user
-    When the client submits a GET request to /users/2/tasks with the <id> user's credentials
+    When the client submits a GET request to /users/2/tasks/all with the <id> user's credentials
     Then the JSON response should include all the 2nd user's tasks
     And the response should return status 200
     
@@ -31,11 +41,13 @@ Feature: Get tasks
     And the response should indicate the request was unauthorized
 
     Examples:
-      | url            | type           |
-      | /users/2/tasks | the 3rd user's |
-      | /users/2/tasks | no             |
-      | /tasks/1       | the 2nd user's |
-      | /tasks/1       | no             |
+      | url                | type           |
+      | /users/2/tasks     | the 3rd user's |
+      | /users/2/tasks     | no             |
+      | /users/2/tasks/all | the 3rd user's |
+      | /users/2/tasks/all | no             |
+      | /tasks/1           | the 2nd user's |
+      | /tasks/1           | no             |
 
   Scenario: Try to get information about a task that doesn't exist
     When the client submits a GET request to /tasks/10000000 with the 1st user's credentials 

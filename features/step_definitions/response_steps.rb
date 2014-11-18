@@ -1,5 +1,9 @@
-Then(/^the JSON response should include all the (\d+)nd user's tasks$/) do |id|
+Then(/^the JSON response should include all the (\d+)(?:[a-z]{2}) user's tasks$/) do |id|
   expect(last_response.body).to eql User[id].tasks.to_json
+end
+
+Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's incomplete tasks$/) do |id|
+  expect(last_response.body).to eql User[id].tasks.where_not(:status, 'Complete').to_json
 end
 
 Then(/^the JSON response should include all the users$/) do 

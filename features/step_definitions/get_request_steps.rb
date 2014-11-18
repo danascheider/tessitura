@@ -6,6 +6,12 @@ When(/^the client submits a GET request to \/users\/(\d+)\/tasks with the (\d+)(
   get "/users/#{id1}/tasks"
 end
 
+When(/^the client submits a GET request to \/users\/(\d+)\/tasks\/all with the (\d+)(?:[a-z]{2}) user's credentials$/) do |id1, id2|
+  @user, @current = User[id1], User[id2]
+  authorize_with @current 
+  get "/users/#{id1}/tasks/all"
+end
+
 # View Task(s)
 # ============
 When(/^the client submits a GET request to \/tasks\/(\d+) with the (\d+)(?:[a-z]{2}) user's credentials$/) do |task_id, user_id|

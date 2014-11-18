@@ -9,7 +9,7 @@ describe Canto do
   let(:model) { Task }
 
   describe 'GET' do 
-    describe 'task list route' do 
+    describe 'main task list route' do 
       let(:path) { "/users/#{user.id}/tasks" }
       let(:resource) { user.tasks.where_not(:status, 'Complete').map {|t| t.to_hash } }
 
@@ -47,6 +47,46 @@ describe Canto do
         it_behaves_like 'a GET request without credentials' do 
           let(:resource) { user.tasks.map {|t| t.to_hash } }
           let(:path) { "/users/#{user.id}/tasks" }
+        end
+      end
+    end
+
+    describe 'full task list route' do 
+      let(:path) { "/users/#{user.id}/tasks/all" }
+      let(:resource) { user.tasks.map {|t| t.to_h } }
+
+      context 'with owner authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { user }
+        end
+      end
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { admin }
+        end
+      end
+
+      context 'with wrong authorization' do
+        it_behaves_like 'an unauthorized GET request' do 
+          let(:path) { "/users/#{admin.id}/tasks/all" }
+          let(:resource) { admin.tasks.map {|t| t.to_h } }
+          let(:username) { user.username }
+          let(:password) { user.password }
+        end
+      end
+
+      context 'with invalid credentials' do 
+        it_behaves_like 'an unauthorized GET request' do 
+          let(:username) { 'foo' }
+          let(:password) { 'bar' }
+        end
+      end
+
+      context 'with no credentials' do 
+        it_behaves_like 'an unauthorized GET request' do 
+          let(:username) { nil }
+          let(:password) { nil }
         end
       end
     end

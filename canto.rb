@@ -89,6 +89,10 @@ class Canto < Sinatra::Base
     return_json(@resource.tasks.where_not(:status, 'Complete'))
   end
 
+  get '/users/:id/tasks/all' do |id|
+    return_json(@resource.tasks)
+  end
+
   post '/login' do
     login
   end
