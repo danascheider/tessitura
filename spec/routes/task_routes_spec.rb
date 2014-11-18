@@ -5,13 +5,13 @@ describe Canto do
   include Rack::Test::Methods 
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
-  let(:user) { FactoryGirl.create(:user_with_task_lists) }
+  let(:user) { FactoryGirl.create(:user_with_complete_and_incomplete_tasks) }
   let(:model) { Task }
 
   describe 'GET' do 
     describe 'task list route' do 
       let(:path) { "/users/#{user.id}/tasks" }
-      let(:resource) { user.tasks.map {|t| t.to_hash } }
+      let(:resource) { user.tasks.where_not(:status, 'Complete').map {|t| t.to_hash } }
 
       context 'with owner authorization' do 
         it_behaves_like 'an authorized GET request' do 
@@ -27,7 +27,7 @@ describe Canto do
 
       context 'with inadequate authorization' do 
         it_behaves_like 'an unauthorized GET request' do 
-          let(:resource) { admin.tasks.map {|t| t.to_hash } }
+          let(:resource) { admin.tasks.where_not(:status, 'Complete').map {|t| t.to_hash } }
           let(:username) { user.username }
           let(:password) { user.password }
           let(:path) { "/users/#{admin.id}" }
@@ -36,7 +36,7 @@ describe Canto do
 
       context 'with invalid credentials' do 
         it_behaves_like 'an unauthorized GET request' do 
-          let(:resource) { user.tasks.map {|t| t.to_hash } }
+          let(:resource) { user.tasks.where_not(:status, 'Complete').map {|t| t.to_hash } }
           let(:username) { 'foo' }
           let(:password) { 'bar' }
           let(:path) { "/users/#{user.id}/tasks" }

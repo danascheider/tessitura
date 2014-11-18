@@ -8,6 +8,7 @@ require 'reactive_support/core_ext/object/blank'
 require 'reactive_support/core_ext/object/inclusion'
 require 'reactive_support/core_ext/object/try'
 require 'reactive_support/extensions/reactive_extensions'
+require 'reactive_support/extensions/array_extensions'
 require 'json'
 require File.expand_path('../config/settings', __FILE__)
 
@@ -85,7 +86,7 @@ class Canto < Sinatra::Base
   end
 
   get '/users/:id/tasks' do |id|
-    return_json(@resource.tasks)
+    return_json(@resource.tasks.where_not(:status, 'Complete'))
   end
 
   post '/login' do
