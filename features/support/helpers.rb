@@ -1,9 +1,3 @@
-def decode_form_data(data)
-  form_data = URI::decode_www_form(data).flatten
-  hash = Hash[*form_data]
-  hash
-end
-
 def authorize_with(user)
   authorize user.username, user.password
 end
