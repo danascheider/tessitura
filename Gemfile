@@ -15,10 +15,6 @@ gem 'mysql2', '~> 0.3', '>= 0.3.16'
 gem 'sinatra-sequel_extension', '~> 0.9.0', git: 'https://github.com/danascheider/sinatra-sequel_extension'
 gem 'rake',    '~> 10.3.2'
 
-# Use Sinatra-Backbone for the RestAPI module to prepare for integration
-# with Backbone.js front-end
-gem 'sinatra-backbone', '~> 0.1.1', :require => 'sinatra/backbone'
-
 # Use ReactiveSupport to provide utility methods
 gem 'reactive_support', '~> 0.2.2.beta2'
 
