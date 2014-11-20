@@ -31,7 +31,7 @@ class Canto < Sinatra::Base
   enable :logging
 
   slogger = Slogger::Logger.new 'canto', :info, :local0
-  use Slogger::Rack::Request::Logger, slogger
+  use Slogger::Rack::RequestLogger, slogger
 
   db_loggers = [Logger.new(File.expand_path('../../log/db.log', __FILE__))]
   db_loggers << Logger.new(STDOUT) if ENV['LOG'] == true
