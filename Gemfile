@@ -9,6 +9,9 @@ gem 'rack-cors', '~> 0.2.9', require: 'rack/cors'
 # Use Thin web server
 gem 'thin', '~> 1.6.2'
 
+# Use Slogger as middleware to integrate with syslog
+gem 'slogger', '~> 0.0', '>= 0.0.10'
+
 # Use Sequel ORM tool
 gem 'sequel',  '~> 4.13'
 gem 'mysql2', '~> 0.3', '>= 0.3.16'
