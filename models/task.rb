@@ -25,6 +25,7 @@ class Task < Sequel::Model
       id: self.id,
       task_list_id: self.task_list_id,
       owner_id: self.owner_id,
+      position: self.position,
       title: self.title,
       deadline: self.deadline,
       priority: self.priority,

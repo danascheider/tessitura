@@ -13,6 +13,7 @@ describe Task do
     it { is_expected.to respond_to(:priority) }
     it { is_expected.to respond_to(:backlog) }
     it { is_expected.to respond_to(:owner_id) }
+    it { is_expected.to respond_to(:position) }
   end
 
   describe 'class methods' do 
@@ -138,6 +139,7 @@ describe Task do
           id: task.id,
           task_list_id: task.task_list_id,
           owner_id: task.owner_id,
+          position: task.position,
           title: task.title,
           priority: task.priority,
           status: task.status,
@@ -146,6 +148,7 @@ describe Task do
       }
 
       it 'returns a hash of its values' do 
+        task.update(position: 3)
         expect(task.to_hash).to eql(hash)
       end
 
