@@ -1,4 +1,4 @@
-require 'logger'
+require 'slogger'
 require_all File.expand_path('../../helpers',__FILE__)
 
 class Canto < Sinatra::Base
@@ -13,8 +13,9 @@ class Canto < Sinatra::Base
   set :database, ENV['TRAVIS'] ? db_travis : db
   set :data, ''
 
-  # Rack::Cors manages cross-origin issues
-  # ======================================
+  # =======================================#
+  # Rack::Cors manages cross-origin issues #
+  # =======================================#
 
   use Rack::Cors do 
     allow do 
@@ -23,21 +24,22 @@ class Canto < Sinatra::Base
     end
   end
 
-  # Enable logging for database and web server
-  # ==========================================
+  # ===========================================#
+  # Enable logging for database and web server #
+  # ===========================================#
 
   enable :logging
 
-  file = File.new(File.expand_path("../../log/canto.log", __FILE__), 'a+')
-  file.sync = true
-  use Rack::CommonLogger, file
+  slogger = Slogger::Logger.new 'canto', :info, :local0
+  use Slogger::Rack::Request::Logger, slogger
 
   db_loggers = [Logger.new(File.expand_path('../../log/db.log', __FILE__))]
   db_loggers << Logger.new(STDOUT) if ENV['LOG'] == true
   DB = Sequel.connect(database, loggers: db_loggers)
 
-  # Sequel settings and modifications
-  # =================================
+  # ==================================#
+  # Sequel settings and modifications #
+  # ==================================#
 
   Sequel::Model.plugin :timestamps
   Sequel::Model.plugin :validation_helpers
