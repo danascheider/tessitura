@@ -190,6 +190,7 @@ describe Sinatra::AuthorizationHelper do
     context 'when the user is authorized' do 
       it 'returns nil' do 
         @auth, @id = Rack::Auth::Basic::Request.new(@env2), user.id 
+        tasks = user.task_lists.first.to_hashes
         expect(protect_collection(user.task_lists.first.tasks)).to eql nil
       end
     end

@@ -24,3 +24,9 @@ When(/^the client submits a PUT request to \/tasks\/(\d+) with no credentials an
   @task = Task[id]
   put "/tasks/#{id}", string, 'CONTENT-TYPE' => 'application/json'
 end
+
+When(/^the client submits a PUT request to \/users\/(\d+)\/tasks with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |uid1, uid2, string|
+  @user, @current = User[uid1], User[uid2]
+  authorize_with @current
+  put "users/#{uid1}/tasks", string, 'CONTENT-TYPE' => 'application/json'
+end

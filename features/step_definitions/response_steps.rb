@@ -27,7 +27,7 @@ Then(/^the response should indicate the (?:.*) was (not )?saved successfully$/) 
   expect(last_response.status).to eql negation ? 422 : 201
 end
 
-Then(/^the response should indicate the (?:.*) was (not )?updated successfully$/) do |negation|
+Then(/^the response should indicate the (?:.*)(not )?updated successfully$/) do |negation|
   expect(last_response.status).to eql negation ? 422 : 200
 end
 
@@ -35,12 +35,16 @@ Then(/^the response should indicate the request was unauthorized$/) do
   expect(last_response.status).to eql 401
 end
 
-Then(/^the response should return status (\d{3})$/) do |status|
-  expect(last_response.status).to eql status
+Then(/^the response should (not )?return status (\d{3})$/) do |status, neg|
+  if neg 
+    expect(last_response.status).not_to eql status
+  else
+    expect(last_response.status).to eql status
+  end
 end
 
 Then(/^the response should indicate the (?:.*) was deleted successfully$/) do
-  expect(last_response.status).to eql 204
+  expect(last_response.status).to eql (204)
 end
 
 Then(/^the response should indicate the (?:.*) was not found$/) do
