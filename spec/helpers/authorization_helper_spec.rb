@@ -166,6 +166,15 @@ describe Sinatra::AuthorizationHelper do
     end
   end
 
+  describe '::protect_collection' do 
+    context 'when the user doesn\'t exist' do 
+      it 'returns 404' do 
+        @id = 10000000
+        expect(protect_collection(user.tasks)).to eql 404
+      end
+    end
+  end
+
   describe '::setting_admin' do 
     context 'when the request body has :admin key' do 
       it 'returns true' do 

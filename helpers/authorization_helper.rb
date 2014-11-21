@@ -34,6 +34,10 @@ module Sinatra
       self.access_denied
     end
 
+    def protect_collection(body)
+      return 404 unless (owner = User[@id])
+    end
+
     def setting_admin?
       request_body.try(:has_key?, :admin) || request_body.try(:has_key?, 'admin')
     end
