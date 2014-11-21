@@ -34,12 +34,15 @@ class Canto < Sinatra::Base
   end
 
   ###################
+  before /^\/users\/(\d+)\/tasks/ do 
+    request.put? ? protect_collection(request_body) : protect(User)
+  end
 
-  before /\/users\/(\d+)(\/*)?/ do 
+  before /^\/users\/(\d+)(\/*)?/ do 
     protect(User)
   end
 
-  before /\/tasks\/(\d+)(\/*)?/ do 
+  before /^\/tasks\/(\d+)(\/*)?/ do 
     protect(Task)
   end
 

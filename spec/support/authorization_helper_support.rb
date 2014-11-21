@@ -1,5 +1,8 @@
 class Canto < Sinatra::Base
-  before do
+  before /\/test\/(.*)/ do
+    # FIX: It is possible that this filter is the reason for the problems
+    #      I'm having elsewhere with instance variables set in filters
+    #      not being available
     @request_body = parse_json(request.body.read)
     @id = request.path_info.match(/\d+/).to_s
   end
@@ -12,6 +15,11 @@ class Canto < Sinatra::Base
   get '/test/users/:id' do 
     protect(User)
     { 'message' => 'Hello world' }.to_json
+  end
+
+  put '/test/users/:id/tasks' do 
+    protect_collection(request_body)
+    [200, { 'message' => 'Successful' }.to_json]
   end
 
   post '/test/request-body' do 

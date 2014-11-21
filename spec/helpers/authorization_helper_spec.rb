@@ -148,10 +148,7 @@ describe Sinatra::AuthorizationHelper do
         expect(last_response.status).to eql 401
       end
 
-      # FIX: This sends ::access_denied two times - need to find out why
       it 'calls ::access_denied' do 
-        pending('Debug')
-        @id = user.id
         expect_any_instance_of(Canto).to receive(:access_denied)
         get "/test/users/#{admin.id}"
       end
@@ -171,6 +168,22 @@ describe Sinatra::AuthorizationHelper do
       it 'returns 404' do 
         @id = 10000000
         expect(protect_collection(user.tasks)).to eql 404
+      end
+    end
+
+    context 'when the user doesn\'t have access' do 
+      before(:each) do 
+        allow_any_instance_of(Canto).to receive(:authorized?).and_return(false)
+      end
+
+      it 'returns 401' do 
+        put "/test/users/#{user.id}/tasks", user.tasks.to_json
+        expect(last_response.status).to eql 401
+      end
+
+      it 'calls ::access_denied' do 
+        expect_any_instance_of(Canto).to receive(:access_denied)
+        put "/test/users/#{user.id}/tasks", user.tasks.to_json
       end
     end
   end
