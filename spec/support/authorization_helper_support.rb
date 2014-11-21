@@ -19,7 +19,7 @@ class Canto < Sinatra::Base
 
   put '/test/users/:id/tasks' do 
     protect_collection(request_body)
-    [200, { 'message' => 'Successful' }.to_json]
+    { 'message' => 'Successful' }.to_json
   end
 
   post '/test/request-body' do 

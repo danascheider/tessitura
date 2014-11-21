@@ -186,6 +186,36 @@ describe Sinatra::AuthorizationHelper do
         put "/test/users/#{user.id}/tasks", user.tasks.to_json
       end
     end
+
+    context 'when the user is authorized' do 
+      it 'returns nil' do 
+        @auth, @id = Rack::Auth::Basic::Request.new(@env2), user.id 
+        expect(protect_collection(user.task_lists.first.tasks)).to eql nil
+      end
+    end
+
+    context 'when one task belongs to someone else' do 
+      before(:each) do 
+        FactoryGirl.create(:task_list_with_tasks, user_id: admin.id)
+        @tasks = (user.task_lists.first.tasks << admin.tasks.first).map {|t| t.to_h }
+      end
+
+      context 'owner authorization' do 
+        it 'calls access denied' do 
+          expect_any_instance_of(Canto).to receive(:access_denied)
+          authorize_with user
+          put "/test/users/#{user.id}/tasks", @tasks.to_json
+        end
+      end
+
+      context 'admin authorization' do 
+        it 'does not call access denied' do 
+          expect_any_instance_of(Canto).not_to receive(:access_denied)
+          authorize_with admin 
+          put "/test/users/#{user.id}/tasks", @tasks.to_json
+        end
+      end
+    end
   end
 
   describe '::setting_admin' do 

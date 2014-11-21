@@ -16,7 +16,6 @@ module Sinatra
     end
 
     def authorized_for_resource?(user_id)
-      STDOUT.puts('CALLED: ::authorized_for_resource?')
       (current_user.id == user_id && !setting_admin?) || current_user.admin?
     end
 
@@ -37,7 +36,7 @@ module Sinatra
     def protect_collection(body)
       return 404 unless (owner = User[@id])
       allowed = body.select {|hash| Task[hash[:id]].owner_id == @id}
-      access_denied unless authorized? && (body === allowed)
+      access_denied unless authorized? && (body === allowed || current_user.admin?)
     end
 
     def setting_admin?
