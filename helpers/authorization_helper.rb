@@ -35,12 +35,12 @@ module Sinatra
 
     def protect_collection(body)
       return 404 unless (owner = User[@id])
-      allowed = body.select {|hash| Task[hash[:id]].owner_id == @id}
+      allowed = body.select {|hash| Task[hash[:id]].owner_id == @id.to_i}
       access_denied unless authorized? && (body === allowed || current_user.admin?)
     end
 
     def setting_admin?
-      request_body.try(:has_key?, :admin) || request_body.try(:has_key?, 'admin')
+      request_body.respond_to?(:has_key) && (request_body.try_rescue(:has_key?, :admin) || request_body.try(:has_key?, 'admin'))
     end
 
     def valid_credentials?

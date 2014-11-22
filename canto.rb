@@ -34,6 +34,7 @@ class Canto < Sinatra::Base
   end
 
   ###################
+
   before /^\/users\/(\d+)\/tasks/ do 
     request.put? ? protect_collection(request_body) : protect(User)
   end
@@ -79,13 +80,23 @@ class Canto < Sinatra::Base
     return_json(resource.send(scope))
   end
 
-  post '/users/:id/tasks' do |id|
-    request.body.rewind; @request_body = parse_json(request.body.read)
 
-    @request_body[:task_list_id] ||= User[id].default_task_list.id
-    return 422 unless new_task = Task.try_rescue(:create, @request_body)
+  post '/users/:id/tasks' do |id|
+    request.body.rewind; body = parse_json(request.body.read)
+
+    body[:task_list_id] ||= User[id].default_task_list.id
+    return 422 unless new_task = Task.try_rescue(:create, body)
 
     [201, new_task.to_json]
+  end
+
+  put '/users/:id/tasks' do |id|
+    request.body.rewind; body = parse_json(request.body.read)
+    body.each do |hash|
+      task = Task[hash[:id]]
+      update_resource(hash, task)
+    end
+    200
   end
 
   get '/users/:id/tasks' do |id|

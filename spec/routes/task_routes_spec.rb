@@ -166,7 +166,7 @@ describe Canto do
 
       it 'assigns task ownership to the user, not the admin' do 
         authorize_with admin
-        post "/users/#{user.id}/tasks", { :title => 'Water the garden' }.to_json, 'CONTENT-TYPE' => 'application/json'
+        post "/users/#{user.id}/tasks", { :title => 'Water the garden' }.to_json, 'CONTENT_TYPE' => 'application/json'
         expect(Task.last.owner_id).to eql user.id
       end
     end
@@ -217,14 +217,14 @@ describe Canto do
       context 'when the task doesn\'t exist' do 
         it 'returns status 404' do 
           allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
-          put '/tasks/1000000', { :status => 'Blocking' }.to_json, 'CONTENT-TYPE' => 'application/json'
+          put '/tasks/1000000', { :status => 'Blocking' }.to_json, 'CONTENT_TYPE' => 'application/json'
           expect(last_response.status).to eql 404
         end
 
         it 'doesn\'t return a response body' do 
           # To my future self: I am including this  because this behavior has 
           # failed to work as expected. Don't refactor it away.
-          put '/tasks/1000000', { :status => 'Blocking' }.to_json, 'CONTENT-TYPE' => 'application/json'
+          put '/tasks/1000000', { :status => 'Blocking' }.to_json, 'CONTENT_TYPE' => 'application/json'
           expect(parse_json(last_response.body)).to eql nil
         end
       end
@@ -235,34 +235,42 @@ describe Canto do
 
       let(:valid_attributes) {
         [
-          { id: tasks[0][:id], position: 2 }, 
-          { id: tasks[1][:id], position: 3 }
+          { id: resource[0][:id], position: 2 }, 
+          { id: resource[1][:id], position: 3 }
         ]        
       }
+
       let(:invalid_attributes) {
         [
-          { id: tasks[0][:id], position: 2 },
-          { id: admin.tasks.first.id, position: 3 }
+          { id: resource[0][:id], title: nil },
+          { id: admin.tasks.first.id, title: nil }
         ]
       }
+
       let(:path) {
         "/users/#{user.id}/tasks"
       }
 
       context 'with user authorization' do 
-        before(:each) do 
-          authorize_with user 
-        end
-
         context 'valid attributes' do 
+          before(:each) do 
+            authorize_with user 
+          end
+
+          it 'calls ::protect_collection' do 
+            expect_any_instance_of(Canto).to receive(:protect_collection).with(valid_attributes)
+            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+          end
+
           it 'updates the tasks' do 
-            expect(Task[resource[0][:id]]).to receive(:update).with(resource[0])
-            expect(Task[resource[1][:id]]).to receive(:update).with(resource[1])
-            put path, valid_attributes.to_json
+            id1, id2 = resource[0][:id], resource[1][:id]
+            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+            expect(Task[id1].position).to eql 2
+            expect(Task[id2].position).to eql 3
           end
 
           it 'returns status 200' do 
-            put path, valid_attributes.to_json
+            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
             expect(last_response.status).to eql 200
           end
         end
