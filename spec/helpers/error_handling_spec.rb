@@ -161,19 +161,43 @@ describe Sinatra::ErrorHandling do
     let(:valid_attributes) { { id: task.id, position: 4 } }
     let(:invalid_attributes) { { id: task.id, title: nil } }
 
-    context 'valid attributes' do 
-      it 'sets the task attributes' do 
-        expect(task).to receive(:set).with({ position: 4 })
-        set_attributes(valid_attributes, task)
+    context 'when the resource exists' do 
+      context 'valid attributes' do 
+        it 'sets the task attributes' do 
+          expect(task).to receive(:set).with({ position: 4 })
+          set_attributes(valid_attributes, task)
+        end
+
+        it 'doesn\'t persist the changes' do 
+          set_attributes(valid_attributes, task)
+          expect(task).to be_modified
+        end
+
+        it 'doesn\'t raise a Sequel error' do 
+          expect{set_attributes(valid_attributes, task)}.not_to raise_error
+        end
       end
 
-      it 'doesn\'t persist the changes' do 
-        set_attributes(valid_attributes, task)
-        expect(task).to be_modified
-      end
+      context 'invalid attributes' do 
+        it 'sets the task attributes' do 
+          expect(task).to receive(:set).with({title: nil})
+          set_attributes(invalid_attributes, task)
+        end
 
-      it 'doesn\'t raise a Sequel error' do 
-        expect{set_attributes(valid_attributes, task)}.not_to raise_error
+        it 'doesn\'t persist the changes' do 
+          set_attributes(invalid_attributes, task)
+          expect(task).to be_modified
+        end
+
+        it 'doesn\'t raise a validation error' do 
+          expect{ set_attributes(invalid_attributes, task) }.not_to raise_error
+        end
+      end
+    end
+
+    context 'when the resource doesn\'t exist' do 
+      it 'returns nil' do 
+        expect(set_attributes(valid_attributes, Task[20000000])).to eql nil
       end
     end
   end
