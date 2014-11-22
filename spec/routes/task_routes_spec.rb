@@ -311,6 +311,13 @@ describe Canto do
             expect(last_response.status).to eql 422
           end
         end
+
+        context 'forbidden attributes' do 
+          it 'doesn\'t call ::set_attributes' do 
+            expect_any_instance_of(Canto).not_to receive(:set_attributes)
+            put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+          end
+        end
       end
 
       context 'with admin authorization' do 
