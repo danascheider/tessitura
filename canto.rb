@@ -99,10 +99,8 @@ class Canto < Sinatra::Base
       return 422 unless task.valid?
       updated << task
     end
-    
-    updated.each {|task| task.save }
-    
-    200
+
+    updated.each {|task| task.save } && 200 rescue 422
   end
 
   get '/users/:id/tasks' do |id|
