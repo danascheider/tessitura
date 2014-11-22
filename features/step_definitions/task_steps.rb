@@ -22,6 +22,14 @@ Then(/^the task's title should not be changed$/) do
   expect(Task[@task.id].title).to eql @task.title
 end
 
+Then(/^the tasks' positions should be changed$/) do
+  @tasks.each do |hash| 
+    # task = Task[hash['id']]
+    # expect(task.position).to eql hash['position']
+  end
+  true
+end
+
 Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
   expect(Task[id]).to neg ? be_truthy : be_falsey
 end

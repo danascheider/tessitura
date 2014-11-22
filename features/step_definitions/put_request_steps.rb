@@ -26,7 +26,7 @@ When(/^the client submits a PUT request to \/tasks\/(\d+) with no credentials an
 end
 
 When(/^the client submits a PUT request to \/users\/(\d+)\/tasks with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |uid1, uid2, string|
-  @user, @current = User[uid1], User[uid2]
+  @user, @current, @tasks = User[uid1], User[uid2], parse_json(string)
   authorize_with @current
   put "users/#{uid1}/tasks", string, 'CONTENT-TYPE' => 'application/json'
 end

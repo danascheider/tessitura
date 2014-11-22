@@ -48,7 +48,7 @@ Feature: Update task
   Scenario Outline: Authorized mass update
     When the client submits a PUT request to /users/2/tasks with the <id> user's credentials and:
       """json
-      [{ "id":3, "position":1 }, { "id":4, "position":2 }, { "id":5, "position":3 }]
+      [{ "id":4, "position":1 }, { "id":5, "position":2 }, { "id":6, "position":3 }]
       """
     Then the tasks' positions should be changed 
     And the response should indicate the tasks were saved successfully
