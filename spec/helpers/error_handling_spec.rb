@@ -3,38 +3,6 @@ require 'spec_helper'
 describe Sinatra::ErrorHandling do 
   include Sinatra::ErrorHandling
 
-  describe '::get_resource' do 
-    context 'when the resource exists' do 
-      let(:user) { FactoryGirl.create(:user) }
-      
-      context 'no block given' do 
-        it 'returns the resource' do 
-          expect(get_resource(User, user.id)).to eql user
-        end
-      end
-
-      context 'block given' do 
-        it 'returns the output of the block' do 
-          expect(get_resource(User, user.id) {|user| user.username.upcase! }).to eql user.username.upcase!
-        end
-      end
-    end
-
-    context 'when the resource doesn\'t exist' do 
-      context 'no block given' do 
-        it 'returns nil' do 
-          expect(get_resource(User, 20000)).to eql nil
-        end
-      end
-
-      context 'block given' do 
-        it 'returns nil' do 
-          expect(get_resource(User, 20000) {|user| user.username.upcase! }).to eql nil
-        end
-      end
-    end
-  end
-
   describe '::parse_json' do 
     context 'when a valid JSON object is given' do 
       it 'returns a hash' do 

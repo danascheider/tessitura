@@ -5,11 +5,6 @@ module Sinatra
       object.try_rescue(:destroy) ? 204 : 403
     end
 
-    def get_resource(klass, id, &block)
-      return nil unless klass[id]
-      if block_given? then yield klass[id]; else klass[id]; end
-    end
-
     def parse_json(object)
       begin
         JSON.parse(object, symbolize_names: true)
