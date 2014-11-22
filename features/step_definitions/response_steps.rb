@@ -27,8 +27,12 @@ Then(/^the response should indicate the (?:.*) was (not )?saved successfully$/) 
   expect(last_response.status).to eql negation ? 422 : 201
 end
 
-Then(/^the response should indicate the (?:.*)(not )?updated successfully$/) do |negation|
-  expect(last_response.status).to eql negation ? 422 : 200
+Then(/^the response should indicate the (?:.*) was updated successfully$/) do
+  expect(last_response.status).to eql 200
+end
+
+Then(/^the response should indicate the (?:.*) was not updated successfully$/) do
+  expect(last_response.status).to eql 422
 end
 
 Then(/^the response should indicate the request was unauthorized$/) do
