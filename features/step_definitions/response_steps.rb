@@ -31,8 +31,8 @@ Then(/^the response should indicate the (?:.*) was updated successfully$/) do
   expect(last_response.status).to eql 200
 end
 
-Then(/^the response should indicate the (?:.*) were saved successfully$/) do 
-  expect(last_response.status).to eql 200
+Then(/^the response should indicate the (?:.*) were( not)? saved successfully$/) do |neg|
+  expect(last_response.status).to eql (neg ? 422 : 200)
 end
 
 Then(/^the response should indicate the (?:.*) was not updated successfully$/) do

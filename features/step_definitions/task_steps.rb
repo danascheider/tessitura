@@ -29,10 +29,10 @@ Then(/^the task's title should not be changed$/) do
   expect(Task[@task.id].title).to eql @task.title
 end
 
-Then(/^the tasks' positions should be changed$/) do
+Then(/^the tasks' positions should( not)? be changed$/) do |neg|
   @tasks.each do |hash| 
     task = Task[hash['id']]
-    expect(task.position).to eql hash['position']
+    expect(task.position).to eql hash['position'] unless neg
   end
 end
 

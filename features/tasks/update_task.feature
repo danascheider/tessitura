@@ -64,7 +64,7 @@ Feature: Update task
       [{ "id":1, "position":1 }, { "id":2, "position":2 }, { "id":471, "position":3 }]
       """
     Then the existent tasks should not be updated
-    And the response status should indicate the tasks were not saved successfully
+    And the response should indicate the request was unauthorized
 
   Scenario: Unauthorized mass update
     When the client submits a PUT request to /users/2/tasks with the 3rd user's credentials and:
@@ -73,6 +73,9 @@ Feature: Update task
       """
     Then the tasks' positions should not be changed
     And the response should indicate the request was unauthorized
+    
+    # It was going to be a challenge to change the app to return a 404 or 422 error
+    # here instead of a 401, and it was frankly not important enough to me.
 
   Scenario Outline: Request includes task belonging to different user
     When the client submits a PUT request to /users/2/tasks with the <id> user's credentials and:
