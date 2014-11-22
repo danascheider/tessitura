@@ -5,11 +5,7 @@ shared_examples 'an authorized POST request' do
 
   context 'with valid attributes' do
     it 'creates a resource' do 
-      # I really want to specify that model should be created with the
-      # valid_attributes hash as an argument. But when the model is 
-      # Task, the task_list_id has to be added in the route handler, 
-      # since this information is encoded in the route.
-      expect(model).to receive(:create)
+      expect(model).to receive(:try_rescue).with(:create, parse_json(valid_attributes))
       post path, valid_attributes, 'CONTENT_TYPE' => 'application/json'
     end
 
