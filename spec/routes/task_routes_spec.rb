@@ -397,6 +397,22 @@ describe Canto do
           end
         end
       end
+
+      context 'with invalid authorization' do 
+        before(:each) do 
+          authorize 'foo', 'bar'
+        end
+
+        it 'returns status 401' do 
+          put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+          expect(last_response.status).to eql 401
+        end
+
+        it 'doesn\'t call ::set_attributes' do 
+          expect_any_instance_of(Canto).not_to receive(:set_attributes)
+          put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+        end
+      end
     end
   end
 
