@@ -1,10 +1,5 @@
 module Sinatra
   module ErrorHandling
-    def destroy_resource(object)
-      return 404 unless object
-      object.try_rescue(:destroy) ? 204 : 403
-    end
-
     def parse_json(object)
       begin
         JSON.parse(object, symbolize_names: true)

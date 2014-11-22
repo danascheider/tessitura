@@ -69,7 +69,8 @@ class Canto < Sinatra::Base
     end
 
     delete route do 
-      destroy_resource(@resource)
+      return 404 unless @resource
+      @resource.try_rescue(:destroy) && 204 || 403
     end
   end
 
