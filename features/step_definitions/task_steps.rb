@@ -1,6 +1,17 @@
 Transform(/^\d+$/) {|number| number.to_i }
 Transform(/^(\d+)([a-z]{2})$/) {|num, ordinal| num.to_s.to_i }
 
+Then(/^no task should be created$/) do
+  expect(User[@user.id].tasks.count).to eql @user_task_count
+end
+
+Then(/^the existent tasks should not be updated$/) do
+  # This is only used in one step - update_task.feature:66
+  [1, 2].each do |id|
+    expect(Task[id].position).not_to eql(@tasks[id - 1]['position'])
+  end
+end
+
 Then(/^the new task should have the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     hash.each do |key, value|
@@ -8,10 +19,6 @@ Then(/^the new task should have the following attributes:$/) do |attributes|
       expect(Task.last.to_hash).to include(key.intern => value)
     end
   end
-end
-
-Then(/^no task should be created$/) do
-  expect(User[@user.id].tasks.count).to eql @user_task_count
 end
 
 Then(/^the task's title should (not )?be changed to (.*)$/) do |neg, title|
