@@ -286,7 +286,7 @@ describe Canto do
 
         context 'invalid attributes' do 
           it 'doesn\'t update the tasks' do 
-            expect_any_instance_of(Canto).not_to receive(:update_resource)
+            expect_any_instance_of(Task).not_to receive(:save)
             put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
           end
 
