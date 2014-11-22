@@ -265,15 +265,14 @@ describe Canto do
 
       context 'with user authorization' do 
         before(:each) do 
+          @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
           authorize_with user 
         end
 
         context 'valid attributes' do 
           it 'calls ::set_attributes' do 
-            task1, task2 = Task[resource[0][:id]], Task[resource[1][:id]]
-
-            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], task1)
-            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], task2)
+            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], @task1)
+            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], @task2)
 
             put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
           end
@@ -305,8 +304,10 @@ describe Canto do
 
           it 'calls ::set_attributes' do 
             task1, task2 = Task[resource[0][:id]], Task[resource[1][:id]]
+
             expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], task1)
             expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], task2)
+
             put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
           end
 
