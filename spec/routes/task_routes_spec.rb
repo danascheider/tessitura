@@ -249,7 +249,7 @@ describe Canto do
 
       let(:forbidden_attributes) {
         [
-          { id: resource[0][:id], title: nil },
+          { id: resource[0][:id], position: 2 },
           { id: admin.tasks.first.id, position: 3 }
         ]
       }
@@ -371,6 +371,27 @@ describe Canto do
 
           it 'returns status 422' do 
             put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+            expect(last_response.status).to eql 422
+          end
+        end
+
+        context 'forbidden attributes' do 
+          it 'doesn\'t persist any changes' do 
+            put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+
+            a = [
+              [ Task[@task1.id], forbidden_attributes[0][:position] ],
+              [ Task[@task2.id], forbidden_attributes[1][:position] ]
+            ]
+
+            a.each do |arr|
+              expect(arr[0].position).not_to eql arr[1]
+              expect(arr[0]).not_to be_modified
+            end
+          end
+
+          it 'returns status 422' do 
+            put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
             expect(last_response.status).to eql 422
           end
         end

@@ -96,7 +96,7 @@ class Canto < Sinatra::Base
     request_body.each do |hash|
       task = Task[hash[:id]]
       set_attributes(hash, task)
-      return 422 unless task.valid?
+      return 422 unless task.valid? && task.owner_id === id.to_i
       updated << task
     end
 
