@@ -376,9 +376,11 @@ describe Canto do
         end
 
         context 'forbidden attributes' do 
-          it 'doesn\'t persist any changes' do 
+          before(:each) do 
             put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+          end
 
+          it 'doesn\'t persist any changes' do 
             a = [
               [ Task[@task1.id], forbidden_attributes[0][:position] ],
               [ Task[@task2.id], forbidden_attributes[1][:position] ]
@@ -391,7 +393,6 @@ describe Canto do
           end
 
           it 'returns status 422' do 
-            put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
             expect(last_response.status).to eql 422
           end
         end
