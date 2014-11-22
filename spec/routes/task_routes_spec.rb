@@ -303,11 +303,11 @@ describe Canto do
             authorize_with admin
           end
 
-          it 'updates the tasks' do 
-            id1, id2 = resource[0][:id], resource[1][:id]
+          it 'calls ::set_attributes' do 
+            task1, task2 = Task[resource[0][:id]], Task[resource[1][:id]]
+            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], task1)
+            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], task2)
             put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-            expect(Task[id1].position).to eql 2
-            expect(Task[id2].position).to eql 3
           end
 
           it 'returns status 200' do 
