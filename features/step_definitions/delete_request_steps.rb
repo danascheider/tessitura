@@ -16,6 +16,6 @@ end
 
 # Unauthorized
 # ============
-When(/^the client submits a DELETE request to (.*) with no credentials$/) do |id|
-  delete "/users/#{id}"
+When(/^the client submits a DELETE request to (.*) with no credentials$/) do |path|
+  delete path
 end
