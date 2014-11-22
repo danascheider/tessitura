@@ -40,7 +40,7 @@ module Sinatra
     end
 
     def setting_admin?
-      request_body.respond_to?(:has_key) && (request_body.try_rescue(:has_key?, :admin) || request_body.try(:has_key?, 'admin'))
+      request_body.try(:respond_to?, :has_key?) && (request_body.try(:has_key?, :admin) || request_body.try(:has_key?, 'admin'))
     end
 
     def valid_credentials?
