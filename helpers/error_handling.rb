@@ -1,10 +1,5 @@
 module Sinatra
   module ErrorHandling
-
-    def create_resource(klass, attributes)
-      klass.try_rescue(:create, attributes) ? 201 : 422
-    end
-
     def destroy_resource(object)
       return 404 unless object
       object.try_rescue(:destroy) ? 204 : 403

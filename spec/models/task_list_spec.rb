@@ -28,7 +28,7 @@ describe TaskList do
         let(:attributes) { { user_id: 'foo' } }
 
         it 'doesn\'t create the task list' do 
-          expect{ create_resource(TaskList, attributes) }.not_to change(TaskList, :count)
+          expect{ TaskList.try_rescue(:create, attributes) }.not_to change(TaskList, :count)
         end
 
         it 'raises Sequel::ValidationFailed' do 
