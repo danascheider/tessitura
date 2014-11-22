@@ -23,6 +23,11 @@ module Sinatra
       end
     end
 
+    def set_attributes(attributes, object=nil)
+      bad_keys = [:id, :created_at, :updated_at, :owner_id]
+      object.set(attributes.reject {|k,v| k.in?(bad_keys)})
+    end
+
     # FIX: In Task spec, this method appears to have bypassed Sequel validation
     #      and updated the task despite validation failure. However, this is not
     #      corroborated in IRB, where it works as expected.
