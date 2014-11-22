@@ -92,9 +92,7 @@ class Canto < Sinatra::Base
 
   put '/users/:id/tasks' do |id|
     request.body.rewind; body = parse_json(request.body.read)
-    body.each do |hash|
-      update_resource(hash, Task[hash[:id]])
-    end
+    body.each {|hash| update_resource(hash, Task[hash[:id]]) }
     200
   end
 
