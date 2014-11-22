@@ -63,8 +63,8 @@ Feature: Update task
       """json
       [{ "id":1, "position":1 }, { "id":2, "position":2 }, { "id":471, "position":3 }]
       """
-    Then the existent tasks should be updated
-    And the response status should not be 404
+    Then the existent tasks should not be updated
+    And the response status should indicate the tasks were not saved successfully
 
   Scenario: Unauthorized mass update
     When the client submits a PUT request to /users/2/tasks with the 3rd user's credentials and:

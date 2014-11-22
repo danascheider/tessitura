@@ -24,8 +24,8 @@ end
 
 Then(/^the tasks' positions should be changed$/) do
   @tasks.each do |hash| 
-    # task = Task[hash['id']]
-    # expect(task.position).to eql hash['position']
+    task = Task[hash['id']]
+    expect(task.position).to eql hash['position']
   end
   true
 end
