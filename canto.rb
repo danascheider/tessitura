@@ -73,14 +73,6 @@ class Canto < Sinatra::Base
     end
   end
 
-  post '/users/:id/filter' do |id|
-    resource = Module.const_get(request_body[:resource])
-    scope    = request_body[:scope].to_sym
-    
-    return_json(resource.send(scope))
-  end
-
-
   post '/users/:id/tasks' do |id|
     request.body.rewind; body = parse_json(request.body.read)
 
