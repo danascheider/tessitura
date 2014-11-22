@@ -27,7 +27,6 @@ Then(/^the tasks' positions should be changed$/) do
     task = Task[hash['id']]
     expect(task.position).to eql hash['position']
   end
-  true
 end
 
 Then(/^the (\d+[a-z]{2}) task should( not)? be deleted from the database$/) do |id, neg|
