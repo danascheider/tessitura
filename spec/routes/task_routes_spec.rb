@@ -269,9 +269,9 @@ describe Canto do
         end
 
         context 'valid attributes' do 
-          it 'calls #set on the tasks' do 
+          it 'calls ::set_attributes' do 
             task1, task2 = Task[resource[0][:id]], Task[resource[1][:id]]
-            
+
             expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], task1)
             expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], task2)
 
