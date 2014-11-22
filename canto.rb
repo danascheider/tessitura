@@ -91,7 +91,16 @@ class Canto < Sinatra::Base
   end
 
   put '/users/:id/tasks' do |id|
-    request_body.each {|hash| update_resource(hash, Task[hash[:id]]) }
+    updated = []
+
+    request_body.each do |hash|
+      task = Task[hash[:id]]
+      set_attributes(hash, task)
+      return 422 unless task.valid?
+      updated << task
+    end
+    
+    updated.each {|task| task.save }
     
     200
   end

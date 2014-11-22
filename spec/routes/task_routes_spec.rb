@@ -242,8 +242,15 @@ describe Canto do
 
       let(:invalid_attributes) {
         [
+          { id: resource[0][:id], position: 2 },
+          { id: resource[1][:id], title: nil }
+        ]
+      }
+
+      let(:forbidden_attributes) {
+        [
           { id: resource[0][:id], title: nil },
-          { id: admin.tasks.first.id, title: nil }
+          { id: admin.tasks.first.id, position: 3 }
         ]
       }
 
@@ -251,15 +258,49 @@ describe Canto do
         "/users/#{user.id}/tasks"
       }
 
+      it 'calls ::protect_collection' do 
+        expect_any_instance_of(Canto).to receive(:protect_collection).with(valid_attributes)
+        put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+      end
+
       context 'with user authorization' do 
+        before(:each) do 
+          authorize_with user 
+        end
+
         context 'valid attributes' do 
-          before(:each) do 
-            authorize_with user 
+          it 'calls #set on the tasks' do 
+            task1, task2 = Task[resource[0][:id]], Task[resource[1][:id]]
+            
+            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], task1)
+            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], task2)
+
+            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
           end
 
-          it 'calls ::protect_collection' do 
-            expect_any_instance_of(Canto).to receive(:protect_collection).with(valid_attributes)
+          it 'returns status 200' do 
             put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+            expect(last_response.status).to eql 200
+          end
+        end
+
+        context 'invalid attributes' do 
+          it 'doesn\'t update the tasks' do 
+            expect_any_instance_of(Canto).not_to receive(:update_resource)
+            put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+          end
+
+          it 'returns status 422' do 
+            put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+            expect(last_response.status).to eql 422
+          end
+        end
+      end
+
+      context 'with admin authorization' do 
+        context 'valid attributes' do 
+          before(:each) do 
+            authorize_with admin
           end
 
           it 'updates the tasks' do 
