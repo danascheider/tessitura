@@ -314,12 +314,12 @@ describe Canto do
       end
 
       context 'with admin authorization' do 
-        context 'valid attributes' do 
-          before(:each) do 
-            @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
-            authorize_with admin
-          end
+        before(:each) do 
+          @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
+          authorize_with admin
+        end
 
+        context 'valid attributes' do 
           it 'calls ::set_attributes' do 
             expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], @task1)
             expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], @task2)
@@ -329,7 +329,7 @@ describe Canto do
 
           it 'saves the tasks' do 
             put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-            
+
             a = [
                   [Task[@task1.id], valid_attributes[0][:position]],
                   [Task[@task2.id], valid_attributes[1][:position]]
@@ -344,6 +344,22 @@ describe Canto do
           it 'returns status 200' do 
             put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
             expect(last_response.status).to eql 200
+          end
+        end
+
+        context 'invalid attributes' do 
+          it 'doesn\'t persist any changes' do 
+            expect_any_instance_of(Task).not_to receive(:save)
+            put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+          end
+
+          it 'reverts even valid tasks to their original form' do 
+            expect(Task[@task1.id].position).to be_nil
+          end
+
+          it 'returns status 422' do 
+            put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+            expect(last_response.status).to eql 422
           end
         end
       end
