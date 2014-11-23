@@ -86,9 +86,8 @@ class Canto < Sinatra::Base
     updated = request_body.map {|hash| Task[hash[:id]] }
 
     request_body.each do |hash|
-      set_attributes(hash, (task = Task[hash[:id]]))
+      updated << set_attributes(hash, (task = Task[hash[:id]]))
       return 422 unless task.valid? && task.owner_id === id.to_i
-      updated << task
     end
 
     updated.each {|task| task.save } && 200 rescue 422
