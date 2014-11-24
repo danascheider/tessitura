@@ -4,34 +4,34 @@ When(/^the client submits a POST request to \/users\/(\d+)\/tasks with the (\d+)
   @user, @current = User[id1], User[id2]
   @user_task_count = @user.tasks.count
   authorize_with @current
-  post "/users/#{id1}/tasks", string, 'CONTENT-TYPE' => 'application/json'
+  post "/users/#{id1}/tasks", string, 'CONTENT_TYPE' => 'application/json'
 end
 
 When(/^the client submits a POST request to \/users\/(\d+)\/tasks with no credentials and:$/) do |id, string|
   @user = User[id]
   @user_task_count = @user.tasks.count if @user
-  post "/users/#{id}/tasks", string, 'CONTENT-TYPE' => 'application/json'
+  post "/users/#{id}/tasks", string, 'CONTENT_TYPE' => 'application/json'
 end
 
 # Create User
 # ===========
 When(/^the client submits a POST request to \/users with:$/) do |string|
   @user_count = User.count
-  post '/users', string, 'CONTENT-TYPE' => 'application/json'
+  post '/users', string, 'CONTENT_TYPE' => 'application/json'
 end
 
 When(/^the client submits a POST request to \/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
   authorize_with (@current = User[id])
-  post '/users', string, 'CONTENT-TYPE' => 'application/json'
+  post '/users', string, 'CONTENT_TYPE' => 'application/json'
 end
 
 # Create Admin User
 # =================
 When(/^the client submits a POST request to \/admin\/users with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |id, string|
   authorize_with (@current = User[id])
-  post '/admin/users', string, 'CONTENT-TYPE' => 'application/json'
+  post '/admin/users', string, 'CONTENT_TYPE' => 'application/json'
 end
 
 When(/^the client submits a POST request to \/admin\/users with no credentials and:$/) do |string|
-  post '/admin/users', string, 'CONTENT-TYPE' => 'application/json'
+  post '/admin/users', string, 'CONTENT_TYPE' => 'application/json'
 end
