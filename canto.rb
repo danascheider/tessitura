@@ -83,7 +83,7 @@ class Canto < Sinatra::Base
   end
 
   put '/users/:id/tasks' do |id|
-    updated = request_body.map {|hash| Task[hash[:id]] }
+    updated = request_body.map {|h| Task[h[:id]] } 
 
     request_body.each do |hash|
       updated << set_attributes(hash, (task = Task[hash[:id]]))
