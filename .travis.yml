@@ -10,6 +10,6 @@ before_install:
   - rm tasks/database_tasks.rake
   - mysql -e 'create database test;' -u travis
 script:
-  - bundle exec rake $TEST_SUITE
+  - bundle exec rake travis:run
 notifications:
   email: false
