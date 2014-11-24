@@ -41,13 +41,20 @@ RSpec.configure do |config|
 
   config.order = 'random'
 
-  DB = Sequel.connect(DB_PATH)
+  db = Sequel.connect(DB_PATH)
+  DB = Sequel::DATABASES.first
 
-  config.before(:each) do 
+  config.before(:suite) do
     if ENV['TRAVIS']
-      system 'rake travis:prepare'
+      system 'rake travis:prepare' 
     else
-      system 'rake db:test:prepare > /dev/null 2>&1'
+      system 'rake db:test:prepare'
+    end
+  end
+
+  config.around(:each) do |example|
+    DB.transaction(rollback: :always) do 
+      example.run 
     end
   end
 end
