@@ -1,7 +1,13 @@
 language: ruby
 rvm:
   - "2.1.3"
-env: COVERAGE=true
+env: 
+  - COVERAGE=true
+
+  matrix: 
+    - SUITE='rspec'
+    - SUITE='cucumber'
+    
 install: 'bundle install'
 before_install: 
   - mkdir log; touch log/canto.log

@@ -14,9 +14,18 @@ Cucumber::Rake::Task.new
 RSpec::Core::RakeTask.new
 
 task 'suite:run' do 
-  Rake::Task[:spec].invoke
-  Rake::Task['db:test:prepare'].invoke
-  Rake::Task[:cucumber].invoke
+  if ENV['SUITE'] === 'rspec'
+    std
+    Rake::Task[:spec].invoke 
+  elsif ENV['SUITE'] === 'cucumber'
+    Rake::Task[:cucumber].invoke
+  else 
+    Rake::Task[:spec].invoke 
+    Rake::Task['db:test:prepare'].invoke 
+    Rake::Task[:cucumber.invoke]
+  end
+
+  Rake::Task['db:test:prepare'].invoke if ENV['SUITE']
 end
 
 task :default => [:all]
