@@ -234,7 +234,7 @@ describe Canto do
 
     context 'mass update route' do 
       let(:models) { user.tasks[0..1] }
-      let(:resource) { models.map {|t| t.to_h } }
+      let(:resource) { models.map {|t| t.to_h }}
 
       let(:valid_attributes) {
         [
@@ -277,19 +277,6 @@ describe Canto do
         end
 
         context 'valid attributes' do 
-          it 'saves the tasks' do 
-            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-            a = [
-                  [Task[@task1.id], valid_attributes[0][:position]],
-                  [Task[@task2.id], valid_attributes[1][:position]]
-                ]
-
-            a.each do |arr|
-              expect(arr[0].position).to eql(arr[1])
-              expect(arr[0]).not_to be_modified
-            end
-          end
-
           it 'returns status 200' do 
             put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
             expect(last_response.status).to eql 200
