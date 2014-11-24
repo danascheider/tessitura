@@ -6,7 +6,6 @@ env:
   matrix: 
     - SUITE='rspec'
     - SUITE='cucumber'
-
 install: 'bundle install'
 before_install: 
   - mkdir log; touch log/canto.log
