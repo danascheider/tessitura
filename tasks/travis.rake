@@ -21,7 +21,7 @@ namespace :travis do
 
   task :run do 
     Rake::Task['travis:migrate'].invoke
-    Rake::Task[ENV['spec']].invoke
-    Rake::Task[ENV['cucumber']].invoke
+    Rake::Task['spec'].invoke
+    Rake::Task['cucumber'].invoke
   end
 end
