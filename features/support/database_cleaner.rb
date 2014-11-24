@@ -1,7 +1,5 @@
-Before do 
-  if ENV['TRAVIS']
-    system 'rake travis:prepare'
-  else
-    system 'rake db:test:prepare > /dev/null 2>&1'
+Around do |scenario, block|
+  Sequel::DATABASES.first.transaction(rollback: :always) do 
+    block.call
   end
 end
