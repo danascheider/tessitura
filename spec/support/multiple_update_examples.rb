@@ -16,6 +16,9 @@ shared_examples 'an authorized multiple update' do
     it 'saves the models' do 
       put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
 
+      # model.class[model.id] refreshes the model stored in the array
+      # If I just use `model` it doesn't work.
+
       a = models.map {|model| [ model.class[model.id], valid_attributes[models.index(model)] ] }
 
       a.each do |arr|
@@ -33,6 +36,21 @@ shared_examples 'an authorized multiple update' do
     it 'doesn\'t persist any changes' do 
       models.each {|model| expect(model).not_to receive(:save) }
       put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+    end
+
+    it 'reverts even valid models' do 
+      put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+
+      invalid_attributes.each do |hash|
+        i = invalid_attributes.index(hash)
+        hash.reject! {|key, value| key === :id }
+        hash.each {|key, value| expect(models[i].class[models[i].id].send(key)).not_to eql value }
+      end
+    end
+
+    it 'returns status 422' do 
+      put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+      expect(last_response.status).to eql 422
     end
   end
 end

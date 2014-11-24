@@ -277,11 +277,6 @@ describe Canto do
         end
 
         context 'invalid attributes' do 
-          it 'reverts even valid tasks to their original form' do 
-            put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-            expect(Task[@task1.id].position).to be_nil
-          end
-
           it 'returns status 422' do 
             put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
             expect(last_response.status).to eql 422
