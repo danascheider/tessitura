@@ -272,19 +272,10 @@ describe Canto do
         end
 
         context 'forbidden attributes' do 
-          before(:each) do 
-            @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
-            authorize_with user 
-          end
-
-          it 'doesn\'t call ::set_attributes' do 
-            expect_any_instance_of(Canto).not_to receive(:set_attributes)
-            put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-          end
-
-          it 'returns status 401' do 
-            put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-            expect(last_response.status).to eql 401
+          it_behaves_like 'an unauthorized multiple update' do 
+            let(:username) { user.username }
+            let(:password) { user.password }
+            let(:valid_attributes) { forbidden_attributes } # just this once
           end
         end
       end
@@ -296,20 +287,16 @@ describe Canto do
 
         context 'forbidden attributes' do 
           before(:each) do 
-            @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
             authorize_with admin
             put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
           end
 
           it 'doesn\'t persist any changes' do 
-            a = [
-              [ Task[@task1.id], forbidden_attributes[0][:position] ],
-              [ Task[@task2.id], forbidden_attributes[1][:position] ]
-            ]
+            a = models.map {|model| [model.class[model.id], forbidden_attributes[models.index(model)]] }
 
             a.each do |arr|
-              expect(arr[0].position).not_to eql arr[1]
-              expect(arr[0]).not_to be_modified
+              arr[1].reject! {|key, value| key === :id }
+              arr[1].each {|key, value| expect(arr[0].send(key)).not_to eql value }
             end
           end
 
