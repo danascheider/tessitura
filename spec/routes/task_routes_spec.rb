@@ -271,19 +271,12 @@ describe Canto do
           let(:agent) { user }
         end
 
-        before(:each) do 
-          @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
-          authorize_with user 
-        end
-
-        context 'invalid attributes' do 
-          it 'returns status 422' do 
-            put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-            expect(last_response.status).to eql 422
-          end
-        end
-
         context 'forbidden attributes' do 
+          before(:each) do 
+            @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
+            authorize_with user 
+          end
+
           it 'doesn\'t call ::set_attributes' do 
             expect_any_instance_of(Canto).not_to receive(:set_attributes)
             put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
@@ -297,57 +290,14 @@ describe Canto do
       end
 
       context 'with admin authorization' do 
-        before(:each) do 
-          @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
-          authorize_with admin
-        end
-
-        context 'valid attributes' do 
-          it 'calls ::set_attributes' do 
-            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], @task1)
-            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], @task2)
-
-            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-          end
-
-          it 'saves the tasks' do 
-            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-
-            a = [
-                  [Task[@task1.id], valid_attributes[0][:position]],
-                  [Task[@task2.id], valid_attributes[1][:position]]
-                ]
-
-            a.each do |arr|
-              expect(arr[0].position).to eql(arr[1])
-              expect(arr[0]).not_to be_modified
-            end
-          end
-
-          it 'returns status 200' do 
-            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-            expect(last_response.status).to eql 200
-          end
-        end
-
-        context 'invalid attributes' do 
-          it 'doesn\'t persist any changes' do 
-            expect_any_instance_of(Task).not_to receive(:save)
-            put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-          end
-
-          it 'reverts even valid tasks to their original form' do 
-            expect(Task[@task1.id].position).to be_nil
-          end
-
-          it 'returns status 422' do 
-            put path, invalid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-            expect(last_response.status).to eql 422
-          end
+        it_behaves_like 'an authorized multiple update' do 
+          let(:agent) { admin }
         end
 
         context 'forbidden attributes' do 
           before(:each) do 
+            @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
+            authorize_with admin
             put path, forbidden_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
           end
 
