@@ -233,8 +233,8 @@ describe Canto do
     end
 
     context 'mass update route' do 
-      let(:klass) { Task }
-      let(:resource) { user.tasks[0..1].map {|t| t.to_h } }
+      let(:models) { user.tasks[0..1] }
+      let(:resource) { models.map {|t| t.to_h } }
 
       let(:valid_attributes) {
         [
