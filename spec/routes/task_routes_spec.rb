@@ -320,30 +320,16 @@ describe Canto do
       end
 
       context 'with invalid authorization' do 
-        before(:each) do 
-          authorize 'foo', 'bar'
-        end
-
-        it 'returns status 401' do 
-          put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-          expect(last_response.status).to eql 401
-        end
-
-        it 'doesn\'t call ::set_attributes' do 
-          expect_any_instance_of(Canto).not_to receive(:set_attributes)
-          put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+        it_behaves_like 'an unauthorized multiple update' do 
+          let(:username) { 'foo' }
+          let(:password) { 'bar' }
         end
       end
 
       context 'with no authorization' do 
-        it 'doesn\'t call ::set_attributes' do 
-          expect_any_instance_of(Canto).not_to receive(:set_attributes)
-          put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-        end
-
-        it 'returns status 401' do 
-          put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-          expect(last_response.status).to eql 401
+        it_behaves_like 'an unauthorized multiple update' do 
+          let(:username) { nil }
+          let(:password) { nil }
         end
       end
     end

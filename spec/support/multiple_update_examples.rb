@@ -54,3 +54,19 @@ shared_examples 'an authorized multiple update' do
     end
   end
 end
+
+shared_examples 'an unauthorized multiple update' do 
+  before(:each) do 
+    authorize username, password
+  end
+
+  it 'returns status 401' do 
+    put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+    expect(last_response.status).to eql 401
+  end
+
+  it 'doesn\'t call ::set_attributes' do 
+    expect_any_instance_of(Canto).not_to receive(:set_attributes)
+    put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
+  end
+end
