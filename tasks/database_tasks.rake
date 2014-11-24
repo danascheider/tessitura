@@ -133,8 +133,11 @@ namespace :db do
     desc 'Re-create test database and update schema'
     task :prepare, :PATH do |t, args|
       path = args[:path] || SCHEMA_PATH
-      client.query('DROP DATABASE test')
-      Rake::Task['db:test:migrate'].invoke(SCHEMA_PATH)
+      client.query('SET FOREIGN_KEY_CHECKS = 0')
+      client.query('TRUNCATE TABLE tasks')
+      client.query('TRUNCATE TABLE task_lists')
+      client.query('TRUNCATE TABLE users')
+      client.query('SET FOREIGN_KEY_CHECKS = 1')
       puts "Success!".green
     end
   end

@@ -4,6 +4,7 @@ development:
   port: 3306
   username: canto
   password: hunter2
+  database: development
   pool: 5
   timeout: 5000
 
@@ -13,6 +14,7 @@ test: &test
   port: 3306
   username: canto
   password: hunter2
+  database: test
   pool: 5
   timeout: 5000
 
@@ -22,6 +24,7 @@ production:
   port: 3306
   username: canto
   password: hunter2
+  database: production
   pool: 5
   timeout: 5000
 
