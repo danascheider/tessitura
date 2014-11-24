@@ -233,13 +233,14 @@ describe Canto do
     end
 
     context 'mass update route' do 
+      let(:klass) { Task }
       let(:resource) { user.tasks[0..1].map {|t| t.to_h } }
 
       let(:valid_attributes) {
         [
           { id: resource[0][:id], position: 2 }, 
           { id: resource[1][:id], position: 3 }
-        ]        
+        ]
       }
 
       let(:invalid_attributes) {
@@ -266,19 +267,16 @@ describe Canto do
       end
 
       context 'with user authorization' do 
+        it_behaves_like 'an authorized multiple update' do 
+          let(:agent) { user }
+        end
+
         before(:each) do 
           @task1, @task2 = Task[resource[0][:id]], Task[resource[1][:id]]
           authorize_with user 
         end
 
         context 'valid attributes' do 
-          it 'calls ::set_attributes' do 
-            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[0], @task1)
-            expect_any_instance_of(Canto).to receive(:set_attributes).with(valid_attributes[1], @task2)
-
-            put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-          end
-
           it 'saves the tasks' do 
             put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
             a = [
