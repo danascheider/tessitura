@@ -19,7 +19,7 @@ gem 'sinatra-sequel_extension', '~> 0.9.0', git: 'https://github.com/danascheide
 gem 'rake',    '~> 10.3.2'
 
 # Use ReactiveSupport to provide utility methods
-gem 'reactive_support', '~> 0.2.2.beta2'
+gem 'reactive_support', '~> 0.3.0.beta'
 
 # Use Cucumber and RSpec for testing
 # Coveralls and SimpleCov monitor test coverage
