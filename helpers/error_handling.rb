@@ -14,12 +14,21 @@ module Sinatra
       object.set(attributes.reject {|k,v| k.in?(bad_keys)})
     end
 
+    def update_all(array, klass)
+      update_all = Proc.new do 
+        array.each do |hash|
+          bad_keys = [:id, :created_at, :updated_at, :owner_id]
+          klass[hash[:id]].update(hash.reject! {|k,v| k.in?(bad_keys) })
+        end
+      end
+    end
+
     def update_resource(attributes, object=nil)
       return 404 unless object && attributes
 
-      bad_keys = [:id, :created_at, :updated_at]
+      sanitize_attributes!(attributes)
 
-      attributes.reject! {|key, value| key.in?(bad_keys) || (value === object[key]) }
+      attributes.reject! {|key, value| value === object[key] }
       return [200, object.to_json] if attributes.blank?
 
       object.try_rescue(:update, attributes) ? [200, object.to_json] : 422

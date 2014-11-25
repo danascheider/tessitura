@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Sinatra::ErrorHandling do 
   include Sinatra::ErrorHandling
+  include Sinatra::GeneralHelperMethods
 
   describe '::parse_json' do 
     context 'when a valid JSON object is given' do 

@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe TaskList do 
   include Sinatra::ErrorHandling
+  include Sinatra::GeneralHelperMethods
 
   let(:owner) { FactoryGirl.create(:user_with_task_lists) }
   let(:task_list) { owner.default_task_list }
