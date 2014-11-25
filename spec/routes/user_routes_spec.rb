@@ -16,7 +16,7 @@ describe Canto do
                                :password => 'validpassword666'
                              } 
                            }
-    let(:invalid_attributes) { { 'first_name' => 'Frank' } }
+    let(:invalid_attributes) { { :first_name => 'Frank' } }
 
     context 'with valid attributes' do 
       it 'calls the User create method' do 
@@ -45,10 +45,10 @@ describe Canto do
     context 'attempting to create an admin' do
       let(:admin_attributes) { 
         { 
-          'username' => 'someuser', 
-          'password' => 'someuserpasswd', 
-          'email'    => 'peterpiper@example.com',
-          'admin'    => true
+          :username => 'someuser', 
+          :password => 'someuserpasswd', 
+          :email    => 'peterpiper@example.com',
+          :admin    => true
          }
       }
 
@@ -132,8 +132,8 @@ describe Canto do
 
   describe 'PUT' do 
     let(:path) { "/users/#{user.id}" }
-    let(:valid_attributes) { { 'fach' => 'lyric spinto' }.to_json }
-    let(:invalid_attributes) { { 'username' => nil }.to_json }
+    let(:valid_attributes) { { :fach => 'lyric spinto' }.to_json }
+    let(:invalid_attributes) { { :username => nil }.to_json }
     let(:resource) { user } 
 
     context 'with user authorization' do 
@@ -145,14 +145,14 @@ describe Canto do
         before(:each) do 
           authorize_with user 
         end
-        
+
         it 'doesn\'t update the profile' do 
           expect_any_instance_of(User).not_to receive(:update)
-          put "/users/#{user.id}", { 'admin' => true }.to_json, 'CONTENT-TYPE' => 'application/json'
+          put "/users/#{user.id}", { :admin => true }.to_json, 'CONTENT-TYPE' => 'application/json'
         end
 
         it 'returns status 401' do 
-          put "/users/#{user.id}", { 'admin' => true }.to_json, 'CONTENT-TYPE' => 'application/json'
+          put "/users/#{user.id}", { :admin => true }.to_json, 'CONTENT-TYPE' => 'application/json'
           expect(last_response.status).to eql 401
         end
       end
@@ -178,7 +178,7 @@ describe Canto do
     context 'when the user doesn\'t exist' do 
       it 'returns status 404' do 
         authorize_with admin
-        put '/users/1000000', { 'fach' => 'lyric coloratura' }.to_json, 'CONTENT-TYPE' => 'application/json'
+        put '/users/1000000', { :fach => 'lyric coloratura' }.to_json, 'CONTENT-TYPE' => 'application/json'
         expect(last_response.status).to eql 404
       end
     end
