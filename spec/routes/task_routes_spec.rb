@@ -187,9 +187,9 @@ describe Canto do
 
   describe 'PUT' do 
     context 'single task route' do 
-      let(:valid_attributes) { { status: 'Blocking' }.to_json }
-      let(:invalid_attributes) { { status: 'doomed' }.to_json }
       let(:path) { "/tasks/#{user.tasks.first.id}" }
+      let(:valid_attributes) { { :title => 'Fix bad RSpec expectations' }.to_json }
+      let(:invalid_attributes) { { :title => nil }.to_json }
       let(:resource) { user.tasks.first }
 
       context 'with user authorization' do
