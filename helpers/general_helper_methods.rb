@@ -8,5 +8,10 @@ module Sinatra
     def return_json(obj)
       obj.to_json unless obj.blank?
     end
+
+    def sanitize_attributes!(hash)
+      bad_keys = [:id, :created_at, :updated_at, :owner_id]
+      hash.reject! {|k,v| k.in?(bad_keys) }
+    end
   end
 end
