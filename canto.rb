@@ -9,6 +9,7 @@ require 'reactive_support/core_ext/object/inclusion'
 require 'reactive_support/core_ext/object/try'
 require 'reactive_support/extensions/reactive_extensions'
 require 'reactive_support/extensions/array_extensions'
+require 'reactive_support/extensions/proc_extensions'
 require 'json'
 require File.expand_path('../config/settings', __FILE__)
 
