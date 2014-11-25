@@ -25,7 +25,6 @@ class Canto < Sinatra::Base
 
   before do
     @id = request.path_info.match(/\d+/).to_s
-    @request_body = request_body
     log_request
   end
 
