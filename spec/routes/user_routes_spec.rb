@@ -142,6 +142,10 @@ describe Canto do
       end
 
       context 'attempting to set admin status to true' do 
+        before(:each) do 
+          authorize_with user 
+        end
+        
         it 'doesn\'t update the profile' do 
           expect_any_instance_of(User).not_to receive(:update)
           put "/users/#{user.id}", { 'admin' => true }.to_json, 'CONTENT-TYPE' => 'application/json'
