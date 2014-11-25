@@ -27,9 +27,7 @@ module Sinatra
       return 404 unless !!(object && sanitize_attributes!(attributes))
 
       attributes.reject! {|key, value| value === object[key] }
-      return [200, object.to_json] if attributes.blank?
-
-      object.try_rescue(:update, attributes) ? [200, object.to_json] : 422
+      object.try_rescue(:update, attributes) || attributes.blank? ? [200, object.to_json] : 422
     end
   end
 
