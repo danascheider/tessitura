@@ -24,9 +24,7 @@ module Sinatra
     end
 
     def update_resource(attributes, object=nil)
-      return 404 unless object && attributes
-
-      sanitize_attributes!(attributes)
+      return 404 unless !!(object && sanitize_attributes!(attributes))
 
       attributes.reject! {|key, value| value === object[key] }
       return [200, object.to_json] if attributes.blank?

@@ -40,18 +40,29 @@ describe Sinatra::GeneralHelperMethods do
     end
 
     context 'when there are unpermitted attributes' do 
-      it 'removes disallowed attributes' do 
-        hash = {
+      let(:hash) {
+        {
           id: 476,
           title: 'Hello world',
           created_at: 'Four days ago',
           updated_at: 'Just now',
           owner_id: '2'
         }
+      }
 
+      it 'removes disallowed attributes' do 
         sanitize_attributes!(hash)
-
         expect(hash).to eql({title: 'Hello world'})
+      end
+
+      it 'returns the hash' do 
+        expect(sanitize_attributes!(hash)).to eql hash
+      end
+    end
+
+    context 'when there are no permitted attributes' do 
+      it 'returns an empty hash' do 
+        expect(sanitize_attributes!({id: 4})).to eql({})
       end
     end
   end
