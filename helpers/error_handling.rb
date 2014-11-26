@@ -14,15 +14,6 @@ module Sinatra
       object.set(attributes.reject {|k,v| k.in?(bad_keys)})
     end
 
-    def update_all(array, klass)
-      update_all = Proc.new do 
-        array.each do |hash|
-          bad_keys = [:id, :created_at, :updated_at, :owner_id]
-          klass[hash[:id]].update(hash.reject! {|k,v| k.in?(bad_keys) })
-        end
-      end
-    end
-
     def update_resource(attributes, object=nil)
       return 404 unless !!(object && sanitize_attributes!(attributes))
 
