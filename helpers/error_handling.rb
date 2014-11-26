@@ -20,6 +20,11 @@ module Sinatra
       attributes.reject! {|key, value| value === object[key] }
       object.try_rescue(:update, attributes) || attributes.blank? ? [200, object.to_json] : 422
     end
+
+    def verify_uniform_ownership(models)
+      models.map! {|model| model.owner_id }
+      models.uniq.length === 1 ? true : false
+    end
   end
 
   helpers ErrorHandling

@@ -147,4 +147,53 @@ describe Sinatra::ErrorHandling do
       end
     end
   end
+
+  describe '::verify_uniform_ownership' do 
+    let(:users) { FactoryGirl.create_list(:user_with_task_lists, 2) }
+
+    context 'users' do 
+      it 'returns false' do 
+        expect(verify_uniform_ownership(users)).to be false
+      end
+    end
+
+    context 'task lists' do 
+      context 'lists belong to the same user' do 
+        it 'returns true' do 
+          expect(verify_uniform_ownership(users.first.task_lists)).to be true
+        end
+      end
+
+      context 'lists do not belong to the same user' do 
+        it 'returns false' do 
+          lists = [users.first.task_lists.first, users.last.task_lists].flatten
+          expect(verify_uniform_ownership(lists)).to be false
+        end
+      end
+    end
+
+    context 'tasks' do 
+      context 'tasks are on the same list' do 
+        it 'returns true' do 
+          tasks = users.first.task_lists.first.tasks[0..1]
+          expect(verify_uniform_ownership(tasks)).to be true
+        end
+      end
+
+      context 'different lists, same owner' do 
+        it 'returns true' do 
+          lists = users.first.task_lists
+          tasks = [lists.first.tasks, lists.last.tasks].flatten
+          expect(verify_uniform_ownership(tasks)).to be true
+        end
+      end
+
+      context 'different owners' do 
+        it 'returns false' do 
+          tasks = [users.first.tasks, users.last.tasks].flatten
+          expect(verify_uniform_ownership(tasks)).to be false 
+        end
+      end
+    end
+  end
 end
