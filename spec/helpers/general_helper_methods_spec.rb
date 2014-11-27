@@ -31,6 +31,35 @@ describe Sinatra::GeneralHelperMethods do
     end
   end
 
+  describe '::sanitize_attributes' do 
+    context 'when attributes are all permitted' do 
+      it 'doesn\'t make changes' do 
+        hash = {:foo => :bar}
+        expect(sanitize_attributes(hash)).to eql hash
+      end
+    end
+
+    context 'when there are unpermitted attributes' do 
+      let(:hash) {
+        {
+          id: 476,
+          title: 'Hello world',
+          created_at: 'Four days ago',
+          updated_at: 'Just now',
+          owner_id: '2'
+        }
+      }
+
+      it 'removes disallowed attributes' do 
+        expect(sanitize_attributes(hash)).to eql({title: 'Hello world'})
+      end
+
+      it 'doesn\'t change the hash itself' do 
+        expect{ sanitize_attributes(hash) }.not_to change(hash, :keys)
+      end
+    end
+  end
+
   describe '::sanitize_attributes!' do 
     context 'when attributes are all permitted' do 
       it 'doesn\'t change the hash' do 
