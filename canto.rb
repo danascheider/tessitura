@@ -86,12 +86,8 @@ class Canto < Sinatra::Base
     tasks = (body = request_body).map {|h| Task[h.delete(:id)] } 
     return 422 unless verify_uniform_ownership(tasks) === id.to_i
 
-    body.each do |hash|
-      set_attributes(hash, (task = tasks[body.index(hash)]))
-      return 422 unless task.valid?
-    end
-
-    tasks.each {|task| task.save } && 200 rescue 422
+    body.each {|hash| return 422 unless tasks[body.index(hash)].set(sanitize_attributes(hash)).valid? }
+    tasks.each {|task| task.save } && 200
   end
 
   get '/users/:id/tasks' do |id|

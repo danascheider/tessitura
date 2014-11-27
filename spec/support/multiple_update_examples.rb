@@ -4,16 +4,7 @@ shared_examples 'an authorized multiple update' do
   end
 
   context 'with valid attributes' do 
-    it 'calls ::set_attributes' do 
-      valid_attributes.each do |hash|
-        index = valid_attributes.index(hash)
-        expect_any_instance_of(Canto).to receive(:set_attributes).with(sanitize_attributes(hash), models[index])
-      end
-
-      put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
-    end
-
-    it 'saves the models' do 
+    it 'updates all the models' do 
       put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
 
       # model.class[model.id] refreshes the model stored in the array
@@ -65,8 +56,8 @@ shared_examples 'an unauthorized multiple update' do
     expect(last_response.status).to eql 401
   end
 
-  it 'doesn\'t call ::set_attributes' do 
-    expect_any_instance_of(Canto).not_to receive(:set_attributes)
+  it 'doesn\'t call ::set' do 
+    expect_any_instance_of(Task).not_to receive(:set)
     put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
   end
 end
