@@ -12,6 +12,7 @@ module Sinatra
       return nil unless object && attributes
       bad_keys = [:id, :created_at, :updated_at, :owner_id]
       object.set(attributes.reject {|k,v| k.in?(bad_keys)})
+      object
     end
 
     def update_resource(attributes, object=nil)

@@ -38,6 +38,10 @@ describe Sinatra::ErrorHandling do
         it 'doesn\'t raise a Sequel error' do 
           expect{set_attributes(valid_attributes, task)}.not_to raise_error
         end
+
+        it 'returns the model' do 
+          expect(set_attributes(valid_attributes, task)).to eql task
+        end
       end
 
       context 'invalid attributes' do 
@@ -53,6 +57,10 @@ describe Sinatra::ErrorHandling do
 
         it 'doesn\'t raise a validation error' do 
           expect{ set_attributes(invalid_attributes, task) }.not_to raise_error
+        end
+
+        it 'returns the model' do 
+          expect(set_attributes(invalid_attributes, task)).to eql task
         end
       end
     end
