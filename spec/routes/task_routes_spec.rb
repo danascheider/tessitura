@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Canto do 
   include Sinatra::ErrorHandling
+  include Sinatra::GeneralHelperMethods
   include Rack::Test::Methods 
 
   let(:admin) { FactoryGirl.create(:user_with_task_lists, admin: true) }
