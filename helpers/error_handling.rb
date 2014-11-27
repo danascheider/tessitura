@@ -22,8 +22,8 @@ module Sinatra
     end
 
     def verify_uniform_ownership(models)
-      models.map! {|model| model.owner_id }
-      models.uniq.length === 1 ? models[0] : false
+      ids = models.map {|model| model.owner_id }
+      ids.uniq.length === 1 ? ids[0] : false
     end
   end
 
