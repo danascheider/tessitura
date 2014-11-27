@@ -84,10 +84,11 @@ class Canto < Sinatra::Base
 
   put '/users/:id/tasks' do |id|
     updated = request_body.map {|h| Task[h[:id]] } 
+    return 422 unless verify_uniform_ownership(updated) === id.to_i
 
     request_body.each do |hash|
       updated << set_attributes(hash, (task = Task[hash[:id]]))
-      return 422 unless task.valid? && task.owner_id === id.to_i
+      return 422 unless task.valid?
     end
 
     updated.each {|task| task.save } && 200 rescue 422
