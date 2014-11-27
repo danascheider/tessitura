@@ -162,6 +162,10 @@ describe Sinatra::ErrorHandling do
         it 'returns a truthy value' do 
           expect(verify_uniform_ownership(users.first.task_lists)).to be_truthy
         end
+
+        it 'returns the owner ID' do 
+          expect(verify_uniform_ownership(users.first.task_lists)).to eql users.first.id
+        end
       end
 
       context 'lists do not belong to the same user' do 
@@ -181,10 +185,15 @@ describe Sinatra::ErrorHandling do
       end
 
       context 'different lists, same owner' do 
+        let(:lists) { users.first.task_lists }
+        let(:tasks) { [lists.first.tasks, lists.last.tasks].flatten }
+
         it 'returns a truthy value' do 
-          lists = users.first.task_lists
-          tasks = [lists.first.tasks, lists.last.tasks].flatten
           expect(verify_uniform_ownership(tasks)).to be_truthy
+        end
+
+        it 'returns the owner ID' do 
+          expect(verify_uniform_ownership(tasks)).to eql users.first.id
         end
       end
 
