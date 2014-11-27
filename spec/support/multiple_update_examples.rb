@@ -7,7 +7,7 @@ shared_examples 'an authorized multiple update' do
     it 'calls ::set_attributes' do 
       valid_attributes.each do |hash|
         index = valid_attributes.index(hash)
-        expect_any_instance_of(Canto).to receive(:set_attributes).with(hash, models[index])
+        expect_any_instance_of(Canto).to receive(:set_attributes).with(sanitize_attributes(hash), models[index])
       end
 
       put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
