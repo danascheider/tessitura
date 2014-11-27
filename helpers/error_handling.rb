@@ -8,13 +8,6 @@ module Sinatra
       end
     end
 
-    def set_attributes(attributes, object=nil)
-      return nil unless !!(object && sanitize_attributes!(attributes))
-      bad_keys = [:id, :created_at, :updated_at, :owner_id]
-      object.set(attributes.reject {|k,v| k.in?(bad_keys)})
-      object
-    end
-
     def update_resource(attributes, object=nil)
       return 404 unless !!(object && sanitize_attributes!(attributes))
 

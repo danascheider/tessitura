@@ -18,60 +18,6 @@ describe Sinatra::ErrorHandling do
     end
   end
 
-  describe '::set_attributes' do 
-    let(:task) { FactoryGirl.create(:task) }
-    let(:valid_attributes) { { id: task.id, position: 4 } }
-    let(:invalid_attributes) { { id: task.id, title: nil } }
-
-    context 'when the resource exists' do 
-      context 'valid attributes' do 
-        it 'sets the task attributes' do 
-          expect(task).to receive(:set).with({ position: 4 })
-          set_attributes(valid_attributes, task)
-        end
-
-        it 'doesn\'t persist the changes' do 
-          set_attributes(valid_attributes, task)
-          expect(task).to be_modified
-        end
-
-        it 'doesn\'t raise a Sequel error' do 
-          expect{set_attributes(valid_attributes, task)}.not_to raise_error
-        end
-
-        it 'returns the model' do 
-          expect(set_attributes(valid_attributes, task)).to eql task
-        end
-      end
-
-      context 'invalid attributes' do 
-        it 'sets the task attributes' do 
-          expect(task).to receive(:set).with({title: nil})
-          set_attributes(invalid_attributes, task)
-        end
-
-        it 'doesn\'t persist the changes' do 
-          set_attributes(invalid_attributes, task)
-          expect(task).to be_modified
-        end
-
-        it 'doesn\'t raise a validation error' do 
-          expect{ set_attributes(invalid_attributes, task) }.not_to raise_error
-        end
-
-        it 'returns the model' do 
-          expect(set_attributes(invalid_attributes, task)).to eql task
-        end
-      end
-    end
-
-    context 'when the resource doesn\'t exist' do 
-      it 'returns nil' do 
-        expect(set_attributes(valid_attributes, Task[20000000])).to eql nil
-      end
-    end
-  end
-
   describe '::update_resource' do 
     let(:user) { FactoryGirl.create(:user_with_task_lists) }
     let(:task) { user.task_lists.first.tasks.first }
