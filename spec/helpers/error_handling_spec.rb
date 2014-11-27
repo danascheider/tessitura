@@ -159,8 +159,8 @@ describe Sinatra::ErrorHandling do
 
     context 'task lists' do 
       context 'lists belong to the same user' do 
-        it 'returns true' do 
-          expect(verify_uniform_ownership(users.first.task_lists)).to be true
+        it 'returns a truthy value' do 
+          expect(verify_uniform_ownership(users.first.task_lists)).to be_truthy
         end
       end
 
@@ -174,17 +174,17 @@ describe Sinatra::ErrorHandling do
 
     context 'tasks' do 
       context 'tasks are on the same list' do 
-        it 'returns true' do 
+        it 'returns a truthy value' do 
           tasks = users.first.task_lists.first.tasks[0..1]
-          expect(verify_uniform_ownership(tasks)).to be true
+          expect(verify_uniform_ownership(tasks)).to be_truthy
         end
       end
 
       context 'different lists, same owner' do 
-        it 'returns true' do 
+        it 'returns a truthy value' do 
           lists = users.first.task_lists
           tasks = [lists.first.tasks, lists.last.tasks].flatten
-          expect(verify_uniform_ownership(tasks)).to be true
+          expect(verify_uniform_ownership(tasks)).to be_truthy
         end
       end
 
