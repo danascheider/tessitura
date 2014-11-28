@@ -1,4 +1,3 @@
-require 'require_all'
 require 'sinatra/base'
 require 'sinatra/sequel'
 require 'sequel'

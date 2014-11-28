@@ -34,6 +34,3 @@ group :test do
   gem 'factory_girl',     '~> 4.4'
   gem 'colorize',         '~> 0.7.3' # for Rake output
 end
-
-# Use require_all to clean up requires
-gem 'require_all', '~> 1.3.2'

@@ -1,5 +1,5 @@
 require 'slogger'
-require_all File.expand_path('../../helpers',__FILE__)
+Dir['./helpers/**/*'].each {|f| require f }
 
 class Canto < Sinatra::Base
 
