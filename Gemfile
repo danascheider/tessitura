@@ -16,7 +16,7 @@ gem 'slogger', '~> 0.0', '>= 0.0.10'
 gem 'sequel',  '~> 4.13'
 gem 'mysql2', '~> 0.3', '>= 0.3.16'
 gem 'sinatra-sequel_extension', '~> 0.9.0', git: 'https://github.com/danascheider/sinatra-sequel_extension'
-gem 'rake',    '~> 10.3'
+gem 'rake',    '~> 10.4'
 
 # Use ReactiveSupport to provide utility methods
 gem 'reactive_support', '~> 0.3.0.beta'
