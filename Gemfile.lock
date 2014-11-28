@@ -116,7 +116,7 @@ DEPENDENCIES
   rack-cors (~> 0.2.9)
   rack-test (~> 0.6.2)
   rake (~> 10.4)
-  reactive_support (~> 0.3.0.beta)
+  reactive_support (~> 0.3.0.beta2)
   rspec (~> 3.0)
   sequel (~> 4.13)
   simplecov (>= 0.8.2)
