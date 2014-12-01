@@ -19,7 +19,7 @@ gem 'sinatra-sequel_extension', '~> 0.9.0', github: 'danascheider/sinatra-sequel
 gem 'rake',    '~> 10.4'
 
 # Use ReactiveSupport to provide utility methods
-gem 'reactive_support', '~> 0.5.0.beta'
+gem 'reactive_support', '~> 0.5.0'
 gem 'reactive_extensions', '~> 0.5.0'
 
 # Use Cucumber and RSpec for testing
