@@ -15,11 +15,12 @@ gem 'slogger', '~> 0.0', '>= 0.0.10'
 # Use Sequel ORM tool
 gem 'sequel',  '~> 4.13'
 gem 'mysql2', '~> 0.3', '>= 0.3.16'
-gem 'sinatra-sequel_extension', '~> 0.9.0', git: 'https://github.com/danascheider/sinatra-sequel_extension'
+gem 'sinatra-sequel_extension', '~> 0.9.0', github: 'danascheider/sinatra-sequel_extension'
 gem 'rake',    '~> 10.4'
 
 # Use ReactiveSupport to provide utility methods
-gem 'reactive_support', '~> 0.4.0.beta2'
+gem 'reactive_support', '~> 0.5.0.beta'
+gem 'reactive_extensions', '~> 0.5.0'
 
 # Use Cucumber and RSpec for testing
 # Coveralls and SimpleCov monitor test coverage
