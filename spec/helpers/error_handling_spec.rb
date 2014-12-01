@@ -24,36 +24,37 @@ describe Sinatra::ErrorHandling do
 
     context 'with valid attributes' do 
       context 'users' do 
+        let(:hash) { {id: user.id, city: 'Honolulu'} }
+
         it 'doesn\'t raise a primary key error' do 
-          hash = { id: user.id, city: 'Honolulu' }
           expect{ update_resource(hash, user) }.not_to raise_error
         end
 
         it 'updates the user' do 
-          expect_any_instance_of(User).to receive(:update)
-          update_resource({ id: user.id, city: 'Honolulu' }, user)
+          expect_any_instance_of(User).to receive(:try_rescue).with(:update, hash.only(:city))
+          update_resource(hash, user)
         end
 
         it 'returns an array with status and updated object' do 
-          updated = (user.update({city: 'Honolulu'})).to_json
-          expect(update_resource({id: user.id, city: 'Honolulu'}, user)).to eql([200, updated])
+          updated = (user.update(hash.only(:city))).to_json
+          expect(update_resource(hash, user)).to eql([200, updated])
         end
       end
 
       context 'tasks' do 
+        let(:hash) { {id: task.id, priority: 'High'} }
         it 'doesn\'t raise a primary key error' do 
-          hash = { id: task.id, priority: 'High' }
           expect{ update_resource(hash, task) }.not_to raise_error
         end
 
         it 'updates the task' do 
-          expect_any_instance_of(Task).to receive(:update)
-          update_resource({ id: task.id, priority: 'High' }, task)
+          expect_any_instance_of(Task).to receive(:try_rescue).with(:update, hash.only(:priority))
+          update_resource(hash, task)
         end
 
         it 'returns an array with status and updated object' do 
-          updated = (task.update({priority: 'High'})).to_json
-          expect(update_resource({id: task.id, priority: 'High'}, task)).to eql([200, updated])
+          updated = (task.update(hash.only(:priority))).to_json
+          expect(update_resource(hash, task)).to eql([200, updated])
         end
       end
     end

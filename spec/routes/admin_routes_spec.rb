@@ -8,26 +8,26 @@ describe Canto do
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
   let(:path) { '/admin/users' }
 
-  describe 'viewing all users' do 
-    let(:resource) { User.all }
+  # describe 'viewing all users' do 
+  #   let(:resource) { User.all }
 
-    context 'with valid authorization' do 
-      it_behaves_like 'an authorized GET request' do 
-        let(:agent) { admin }
-      end
-    end
+  #   context 'with valid authorization' do 
+  #     it_behaves_like 'an authorized GET request' do 
+  #       let(:agent) { admin }
+  #     end
+  #   end
 
-    context 'without valid authorization' do 
-      it_behaves_like 'an unauthorized GET request' do 
-        let(:username) { user.username }
-        let(:password) { user.password }
-      end
-    end
+  #   context 'without valid authorization' do 
+  #     it_behaves_like 'an unauthorized GET request' do 
+  #       let(:username) { user.username }
+  #       let(:password) { user.password }
+  #     end
+  #   end
 
-    context 'with no authorization' do 
-      it_behaves_like 'a GET request without credentials'
-    end
-  end
+  #   context 'with no authorization' do 
+  #     it_behaves_like 'a GET request without credentials'
+  #   end
+  # end
 
   describe 'creating an admin' do 
     let(:model) { User }
@@ -46,14 +46,14 @@ describe Canto do
       end
     end
 
-    context 'with invalid authorization' do 
-      it_behaves_like 'an unauthorized POST request' do 
-        let(:agent) { user }
-      end
-    end
+    # context 'with invalid authorization' do 
+    #   it_behaves_like 'an unauthorized POST request' do 
+    #     let(:agent) { user }
+    #   end
+    # end
 
-    context 'with no authorization' do 
-      it_behaves_like 'a POST request without credentials'
-    end
+    # context 'with no authorization' do 
+    #   it_behaves_like 'a POST request without credentials'
+    # end
   end
 end

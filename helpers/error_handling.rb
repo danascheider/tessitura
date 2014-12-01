@@ -10,7 +10,6 @@ module Sinatra
 
     def update_resource(attributes, object=nil)
       return 404 unless !!(object && attributes.clean!(:id, :created_at, :updated_at, :owner_id))
-
       attributes.reject! {|key, value| value === object[key] }
       object.try_rescue(:update, attributes) || attributes.blank? ? [200, object.to_json] : 422
     end
