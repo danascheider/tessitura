@@ -72,8 +72,7 @@ class Canto < Sinatra::Base
   end
 
   post '/users/:id/tasks' do |id|
-    body = request_body
-    body[:task_list_id] ||= User[id].default_task_list.id
+    (body = request_body)[:task_list_id] ||= User[id].default_task_list.id
     return 422 unless new_task = Task.try_rescue(:create, body)
 
     [201, new_task.to_json]
@@ -81,9 +80,12 @@ class Canto < Sinatra::Base
 
   put '/users/:id/tasks' do |id|
     tasks = (body = request_body).map {|h| Task[h.delete(:id)] } 
-    return 422 unless verify_uniform_ownership(tasks) === id.to_i
 
-    body.each {|hash| return 422 unless tasks[body.index(hash)].set(sanitize_attributes(hash)).valid? }
+    body.each do |hash| 
+      (task = tasks[body.index(hash)]).set(sanitize_attributes(hash))
+      return 422 unless task.valid? && task.owner_id === id.to_i
+    end
+    
     tasks.each {|task| task.save } && 200
   end
 
