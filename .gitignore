@@ -19,3 +19,6 @@
 /.vagrant
 /.vagrant/*
 /.vagrant/**/*
+
+# Ignore RVM file
+/.ruby-gemset
