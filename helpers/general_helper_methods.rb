@@ -10,15 +10,11 @@ module Sinatra
     end
 
     def sanitize_attributes(hash)
-      bad_keys = [:id, :created_at, :updated_at, :owner_id]
-      new_hash = hash.reject {|k,v| k.in?(bad_keys) }
-      new_hash
+      hash.clean(:id, :created_at, :updated_at, :owner_id)
     end
 
     def sanitize_attributes!(hash)
-      bad_keys = [:id, :created_at, :updated_at, :owner_id]
-      hash.reject! {|k,v| k.in?(bad_keys) }
-      hash
+      hash.clean!(:id, :created_at, :updated_at, :owner_id)
     end
   end
 end
