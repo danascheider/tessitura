@@ -2,15 +2,12 @@ require 'sinatra/base'
 require 'sinatra/sequel'
 require 'sequel'
 require 'rack/cors'
-require 'reactive_support'
 require 'reactive_support/core_ext/object/blank'
 require 'reactive_support/core_ext/object/inclusion'
 require 'reactive_support/core_ext/object/try'
-require 'reactive_support/extensions/reactive_extensions'
-require 'reactive_support/extensions/object_extensions'
-require 'reactive_support/extensions/array_extensions'
-require 'reactive_support/extensions/hash_extensions'
-require 'reactive_support/extensions/proc_extensions'
+require 'reactive_extensions/object'
+require 'reactive_extensions/hash'
+require 'reactive_extensions/array'
 require 'json'
 
 require File.expand_path('../config/settings', __FILE__)
@@ -108,9 +105,8 @@ class Canto < Sinatra::Base
   # =================
 
   post '/admin/users' do 
-    request.body.rewind; @request_body = parse_json(request.body.read)
-    return 422 unless new_user = User.try_rescue(:create, @request_body)
-    [201, new_user.to_json]
+    return 422 unless u = User.try_rescue(:create, request_body)
+    [201, u.to_json]
   end
 
   get '/admin/users' do 
