@@ -13,7 +13,6 @@ support_path = File.expand_path('../../features/support', __FILE__)
 app_path = File.expand_path('../..', __FILE__)
 
 require          'factory_girl'
-require          'json_spec/helpers'
 require          'rack/test'
 require          'mysql2'
 require          'rspec/core/rake_task'
@@ -25,7 +24,6 @@ require_relative support_path + '/helpers'
 Dir["./spec/support/**/*.rb"].sort.each {|f| require f }
 
 RSpec.configure do |config|
-  config.include JsonSpec::Helpers
   config.include Rack::Test::Methods
   config.include FactoryGirl::Syntax::Methods
 
