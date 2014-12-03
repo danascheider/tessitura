@@ -14,6 +14,7 @@ ENV['RACK_ENV'] = 'test'
 require File.join(File.dirname(__FILE__), '..', '..', './canto.rb')
 
 require 'rspec'
+require 'capybara/cucumber'
 require 'json_spec/cucumber'
 require 'rack/test'
 
@@ -31,6 +32,8 @@ class CantoWorld
   def last_json
     page.source
   end
+
+  Capybara.app = Canto
 end
 
 World do
