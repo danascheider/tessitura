@@ -25,14 +25,15 @@ gem 'reactive_extensions', '~> 0.5.0'
 # Use Cucumber and RSpec for testing
 # Coveralls and SimpleCov monitor test coverage
 group :test do 
-  gem 'simplecov',        '>= 0.8.2'
-  gem 'coveralls',        '>= 0.7.0'
-  gem 'json_spec',        '~> 1.1.2'
-  gem 'cucumber-sinatra', '~> 0.5.0'
-  gem 'cucumber',         '~> 1.3.16'
-  gem 'capybara',         '~> 2.4.4'
-  gem 'rspec',            '~> 3.0'
-  gem 'rack-test',        '~> 0.6.2', require: 'rack/test'
-  gem 'factory_girl',     '~> 4.4'
-  gem 'colorize',         '~> 0.7.3' # for Rake output
+  gem 'simplecov',          '>= 0.8.2'
+  gem 'coveralls',          '>= 0.7.0'
+  gem 'json_spec',          '~> 1.1.2'
+  gem 'cucumber-sinatra',   '~> 0.5.0'
+  gem 'cucumber',           '~> 1.3.16'
+  gem 'capybara',           '~> 2.4.4'
+  gem 'selenium-webdriver', '~> 2.44.0'
+  gem 'rspec',              '~> 3.0'
+  gem 'rack-test',          '~> 0.6.2', require: 'rack/test'
+  gem 'factory_girl',       '~> 4.4'
+  gem 'colorize',           '~> 0.7.3' # for Rake output
 end

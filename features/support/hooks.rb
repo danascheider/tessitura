@@ -25,3 +25,10 @@ Before('@tasks') do |scenario|
   FactoryGirl.create(:task, task_list_id: list_id_3, id: 8)
   FactoryGirl.create(:task, task_list_id: list_id_3, id: 9)
 end
+
+# Expects Canto front-end to be running on webserver listening on port 80
+Before('@integration') do 
+  Capybara.current_driver = :selenium
+  Capybara.app_host = 'http://localhost:80'
+  Capybara.run_server = false
+end
