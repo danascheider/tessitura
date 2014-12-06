@@ -39,3 +39,10 @@ end
 Then(/^no user should be deleted$/) do
   expect(User.count).to eql @user_count
 end
+
+# User Tasks
+# ==========
+Given(/^the (\d+)(?:[a-z]{2}) user has no tasks$/) do |id|
+  @user = FactoryGirl.create(:user, id: id)
+  User[id].tasks.count === 0
+end

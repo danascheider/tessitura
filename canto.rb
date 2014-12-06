@@ -90,7 +90,7 @@ class Canto < Sinatra::Base
   end
 
   get '/users/:id/tasks' do |id|
-    return_json(@resource.tasks.where_not(:status, 'Complete'))
+    return_json(@resource.tasks.where_not(:status, 'Complete')) || [].to_json
   end
 
   get '/users/:id/tasks/all' do |id|

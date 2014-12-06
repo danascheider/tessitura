@@ -52,3 +52,9 @@ Feature: Get tasks
   Scenario: Try to get information about a task that doesn't exist
     When the client submits a GET request to /tasks/10000000 with the 1st user's credentials 
     Then the response should indicate the task was not found
+
+  Scenario: Authorized user has no tasks
+    Given the 4th user has no tasks
+    When the client submits a GET request to /users/4/tasks with the 4th user's credentials
+    Then the response should include an empty JSON object
+    And the response should return status 200

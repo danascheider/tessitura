@@ -50,6 +50,22 @@ describe Canto do
           let(:path) { "/users/#{user.id}/tasks" }
         end
       end
+
+      context 'authorized user with no tasks' do 
+        before(:each) do 
+          user = FactoryGirl.create(:user)
+          authorize_with(user)
+          get "/users/#{user.id}/tasks"
+        end
+
+        it 'returns an empty JSON object' do 
+          expect(last_response.body).to eql([].to_json)
+        end
+
+        it 'returns status 200' do 
+          expect(last_response.status).to eql(200)
+        end
+      end
     end
 
     describe 'full task list route' do 

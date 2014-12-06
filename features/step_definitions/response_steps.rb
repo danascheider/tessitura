@@ -23,6 +23,10 @@ Then(/^the response should not include any data$/) do
   expect(ok_values).to include last_response.body
 end
 
+Then(/^the response should include an empty JSON object$/) do 
+  expect(last_response.body).to eql([].to_json)
+end
+
 Then(/^the response should indicate the (?:.*) was (not )?saved successfully$/) do |negation|
   expect(last_response.status).to eql negation ? 422 : 201
 end
