@@ -15,7 +15,7 @@ gem 'slogger', '~> 0.0', '>= 0.0.10'
 # Use Sequel ORM tool
 gem 'sequel',  '~> 4.13'
 gem 'mysql2', '~> 0.3', '>= 0.3.16'
-gem 'sinatra-sequel_extension', '~> 0.9.0', github: 'danascheider/sinatra-sequel_extension'
+gem 'sinatra-sequel_extension', '~> 0.9.0', github: 'danascheider/sinatra-sequel_extension', require: 'sinatra/sequel'
 gem 'rake',    '~> 10.4'
 
 # Use ReactiveSupport to provide utility methods
@@ -31,7 +31,7 @@ group :test do
   gem 'cucumber-sinatra',   '~> 0.5.0'
   gem 'cucumber',           '~> 1.3.16'
   gem 'capybara',           '~> 2.4.4'
-  gem 'selenium-webdriver', '~> 2.44.0'
+  gem 'capybara-webkit'
   gem 'rspec',              '~> 3.0'
   gem 'rack-test',          '~> 0.6.2', require: 'rack/test'
   gem 'factory_girl',       '~> 4.4'
