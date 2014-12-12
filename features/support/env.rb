@@ -15,8 +15,10 @@ require File.join(File.dirname(__FILE__), '..', '..', './canto.rb')
 
 require 'rspec'
 require 'capybara/cucumber'
+require 'capybara/webkit'
 require 'json_spec/cucumber'
 require 'rack/test'
+require 'base64'
 
 class CantoWorld
   include RSpec::Expectations
@@ -33,7 +35,8 @@ class CantoWorld
     page.source
   end
 
-  Capybara.app = Canto
+  Capybara.app = Canto.new
+  Capybara.javascript_driver = :webkit
 end
 
 World do

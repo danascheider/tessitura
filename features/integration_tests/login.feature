@@ -1,4 +1,4 @@
-@integration
+@javascript @integration
 
 Feature: User login
 
@@ -6,7 +6,9 @@ Feature: User login
   other than the homepage.
 
   Scenario:
-    Given I am not logged in
+    Given I am a registered user
+    And I am not logged in
     When I navigate to '/#login'
     And I submit the login form
     Then I should be redirected to my dashboard
+    And the page status should be 200

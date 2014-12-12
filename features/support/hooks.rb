@@ -28,7 +28,6 @@ end
 
 # Expects Canto front-end to be running on webserver listening on port 80
 Before('@integration') do 
-  Capybara.current_driver = :selenium
   Capybara.app_host = 'http://localhost:80'
   Capybara.run_server = false
 end
