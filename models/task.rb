@@ -64,10 +64,7 @@ class Task < Sequel::Model
   private
     def self.update_positions(authoritative)
       authoritative.position ||= 1
-      tasks = Task.where({owner_id: authoritative.owner_id})
-      n = 1
-
-      tasks.each do |task|
+      Task.where({owner_id: authoritative.owner_id}).each do |task|
         if task.position >= 1 && !(task === authoritative)
           task.update({position: task.position + 1})
         end
