@@ -69,10 +69,7 @@ class Task < Sequel::Model
 
       tasks.each do |task|
         if task.position >= 1 && !(task === authoritative)
-          initial = task.position.dup rescue task.position
-          task.position += 1
-          task.save
-          #puts "INITIAL: #{initial}, FINAL: #{task.position}" if Task.count >= 10
+          task.update({position: task.position + 1})
         end
       end
     end
