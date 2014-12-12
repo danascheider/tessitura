@@ -2,8 +2,15 @@ class Task < Sequel::Model
   include JSON
   many_to_one :task_list
 
+  # Possible values for task status and priority, enforced on validation
+
   STATUS_OPTIONS   = [ 'New', 'In Progress', 'Blocking', 'Complete' ]
   PRIORITY_OPTIONS = [ 'Urgent', 'High', 'Normal', 'Low', 'Not Important' ]
+
+  def before_create
+    Task.update_positions(self)
+    super 
+  end
 
   def before_validation
     super
@@ -53,4 +60,20 @@ class Task < Sequel::Model
     validates_includes STATUS_OPTIONS, :status
     validates_includes PRIORITY_OPTIONS, :priority
   end
+
+  private
+    def self.update_positions(authoritative)
+      authoritative.position ||= 1
+      tasks = Task.where({owner_id: authoritative.owner_id})
+      n = 1
+
+      tasks.each do |task|
+        if task.position >= 1 && !(task === authoritative)
+          initial = task.position.dup rescue task.position
+          task.position += 1
+          task.save
+          #puts "INITIAL: #{initial}, FINAL: #{task.position}" if Task.count >= 10
+        end
+      end
+    end
 end

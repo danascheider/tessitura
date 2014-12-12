@@ -220,4 +220,25 @@ describe Task do
       expect(Task[task.id]).to be nil
     end
   end
+
+  describe 'positioning' do 
+    let(:user) { FactoryGirl.create(:user_with_task_lists) }
+
+    context 'on create' do 
+      it 'is instantiated at position 1' do 
+        new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id)
+        expect(new_task.position).to eql 1
+      end
+
+      it 'changes the position of the other tasks' do 
+        new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id)
+        positions = (user.tasks - [new_task]).map {|t| t.position }
+
+        # Expected outcome is [n, ..., 3, 2] because earlier tasks have 
+        # higher positions.
+
+        expect(positions).to eql((2..user.tasks.length).to_a.reverse)
+      end
+    end
+  end
 end
