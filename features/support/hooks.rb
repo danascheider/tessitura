@@ -26,6 +26,18 @@ Before('@tasks') do |scenario|
   FactoryGirl.create(:task, task_list_id: list_id_3, id: 9)
 end
 
+# Testing task positioning requires a user to have more tasks
+Before('@position') do
+  list_id = User[3].default_task_list.id
+  FactoryGirl.create(:task, task_list_id: list_id, id: 10)
+  FactoryGirl.create(:task, task_list_id: list_id, id: 11)
+  FactoryGirl.create(:task, task_list_id: list_id, id: 12)
+  FactoryGirl.create(:task, task_list_id: list_id, id: 13)
+  FactoryGirl.create(:task, task_list_id: list_id, id: 14)
+  FactoryGirl.create(:task, task_list_id: list_id, id: 15)
+  FactoryGirl.create(:task, task_list_id: list_id, id: 16)
+end
+
 # Expects Canto front-end to be running on webserver listening on port 80
 Before('@integration') do 
   Capybara.app_host = 'http://localhost:80'

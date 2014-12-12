@@ -21,6 +21,20 @@ Feature: Update task position
 
   Scenario: Task is moved higher in the list
 
+    Moving a task with position n0 to position n1 should cause another task's
+    positions to be incremented if that task's position p satisfies n1 <= p < n0.
+
+    # Task 9 is currently in position 8
+    When the client submits a PUT request to /tasks/9 with the 3rd user's credentials and:
+      """json
+        {"position":4}
+      """
+    Then the position of task 9 should be 4
+
+    # Task 13 is the task currently in position 4
+    And the positions of tasks 13, 12, 11, and 10 should be 5, 6, 7, and 8
+    And the positions of tasks 7, 8, 14, 15, and 16 should not be changed
+
   Scenario: Task is moved lower in the list
 
   Scenario: Task is marked complete
