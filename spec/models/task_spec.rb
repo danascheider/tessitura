@@ -247,13 +247,29 @@ describe Task do
         @subset = user.tasks.select {|t| t.position >= 2 && t.position < 6 }
       end
 
-      it 'changes the positions of the tasks between old and new positions' do 
+      it 'increments the positions of tasks between old and new positions' do 
         initial_positions = @subset.map {|t| t.position }
-        
+
         @task.update({position: 2})
 
         changed_positions = @subset.map {|t| Task[t.id].position }
         expect(changed_positions).to eql(initial_positions.map {|num| num + 1 })
+      end
+    end
+
+    context 'task moved down on the list' do 
+      before(:each) do 
+        @task = user.tasks.find {|t| t.position === 2 }
+        @subset = user.tasks.select {|t| t.position > 2 && t.position <= 6 }
+      end
+
+      it 'descrements the positions of tasks between old and new positions' do 
+        initial_positions = @subset.map {|t| t.position }
+
+        @task.update({position: 6})
+
+        changed_positions = @subset.map {|t| Task[t.id].position }
+        expect(changed_positions).to eql(initial_positions.map {|num| num - 1 })
       end
     end
   end

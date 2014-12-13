@@ -1,4 +1,4 @@
-When(/^the client request to change the (\d+)(?:[a-z]{2}) task's position to (\d+)$/) do |id, pos|
+When(/^the client requests to change the (\d+)(?:[a-z]{2}) task's position to (\d+)$/) do |id, pos|
   @user = User[Task[id].owner_id]
   @positions = @user.tasks.map {|t| [t.id, t.position] }
   authorize_with @user

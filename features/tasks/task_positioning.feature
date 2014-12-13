@@ -21,19 +21,30 @@ Feature: Update task position
 
   Scenario: Task is moved higher in the list
 
-    Moving a task with position n0 to position n1 should cause another task's
-    positions to be incremented if that task's position p satisfies n1 <= p < n0.
+    Moving a task with position n0 to position n1, where n1 < n0, should cause 
+    another task's position to be incremented if that position p satisfies n1 <= p < n0.
 
-    # Task 9 is currently in position 8
-    When the client request to change the 9th task's position to 4
+    In this scenario, task 9 is moved from position 8 to position 4, which is 
+    initially occupied by task 13.
+
+    When the client requests to change the 9th task's position to 4
     Then the position of task 9 should be 4
-
-    # Task 13 is the task currently in position 4
     And the positions of tasks 13, 12, 11, and 10 should be 5, 6, 7, and 8
     And the positions of tasks 7, 8, 14, 15, and 16 should not be changed
 
   Scenario: Task is moved lower in the list
 
-  Scenario: Task is marked complete
+    Moving a task with position n0 to position n1, where n1 > n0, should cause
+    another task's position to be decremented if that position p satisfies n0 < p <= n1.
+
+    In this scenario, task 13 is moved from position 4 to position 8, which is 
+    initially occupied by task 9.
+
+    When the client requests to change the 13th task's position to 8
+    Then the position of task 13 should be 8
+    And the positions of tasks 12, 11, 10, and 9 should be 4, 5, 6, and 7
+    And the positions of tasks 7, 8, 14, 15, and 16 should not be changed
 
   Scenario: Task is deleted
+
+  Scenario: Task is marked complete

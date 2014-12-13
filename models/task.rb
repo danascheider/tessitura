@@ -92,6 +92,10 @@ class Task < Sequel::Model
         scoped_tasks.where([[:position, dup..gap]]).each do |t|
           t.this.update(position: t.position + 1) unless t === changed 
         end
+      when dup && gap && dup > gap
+        scoped_tasks.where([[:position, gap..dup]]).each do |t|
+          t.this.update(position: t.position - 1) unless t === changed
+        end
       when dup
         scoped_tasks.where([[:position, dup..scoped_tasks.count]]).each do |t|
           t.this.update(position: t.position + 1) unless t === changed
