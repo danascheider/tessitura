@@ -17,6 +17,11 @@ class Task < Sequel::Model
     Task.adjust_positions(self)
   end
 
+  def after_destroy
+    super
+    Task.where('position > ?', self.position).each {|t| t.this.update(position: t.position - 1 )}
+  end
+
   def before_validation
     super
     self.owner_id ||= self.task_list.user_id rescue false
@@ -74,34 +79,48 @@ class Task < Sequel::Model
     # which would lead to infinite recursion.
 
     def self.adjust_positions(changed)
-      positions = (scoped_tasks = Task.where(owner_id: changed.owner_id)).map {|t| t.position }
-      positions.sort!
-      # puts "INITIAL: #{positions}"
+      positions = ((scoped_tasks = Task.where(owner_id: changed.owner_id)).map {|t| t.position }).sort!
 
-      # Whereas the #select method returns an array of values meeting the given 
-      # criterion, the #find method returns the first value that meets the
-      # criterion
-
+      # When a new task has been added or the position of a task has been
+      # changed, one or both of two things will happen to the sequence of 
+      # positions:
+      #   1. A duplicate position will appear at the position the 
+      #      task was created at or moved to
+      #   2. A gap will appear at the position the task was removed from
+      #
+      # `dup` and `gap` represent the duplicate position number and the 
+      # missing position number, respectively
+      
       dup = positions.find {|num| positions.count(num) > 1 }
       gap = (1..positions.last).find {|num| positions.count(num) === 0 }
-      # puts "  DUP: #{dup}"
-      # puts "  GAP: #{gap}"
+
+      # The 3 cases handled here signify, respectively, that:
+      #   1. A task has been moved towards the top of the list (its 
+      #      position number has gotten lower)
+      #   2. A task has been moved towards the bottom of the list
+      #      (its position number has gotten higher)
+      #   3. A task has been added to the list
+      #
+      # No `dup` and no `gap` indicates no positions have been changed.
+      # A `gap` with no `dup` indicates a task was destroyed, in which case
+      # that will be taken care of in the `after_destroy` hook.
 
       case
       when dup && gap && dup < gap
+        puts "case 1" if Task.count === 10
         scoped_tasks.where([[:position, dup..gap]]).each do |t|
           t.this.update(position: t.position + 1) unless t === changed 
         end
       when dup && gap && dup > gap
+        puts "case 2" if Task.count === 10
         scoped_tasks.where([[:position, gap..dup]]).each do |t|
           t.this.update(position: t.position - 1) unless t === changed
         end
       when dup
+        puts "case 3" if Task.count === 10
         scoped_tasks.where([[:position, dup..scoped_tasks.count]]).each do |t|
           t.this.update(position: t.position + 1) unless t === changed
         end
       end
-
-      # puts "  FINAL: #{scoped_tasks.map {|t| t.position }}\n\n"
     end
 end

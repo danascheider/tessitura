@@ -263,13 +263,35 @@ describe Task do
         @subset = user.tasks.select {|t| t.position > 2 && t.position <= 6 }
       end
 
-      it 'descrements the positions of tasks between old and new positions' do 
+      it 'decrements the positions of tasks between old and new positions' do 
         initial_positions = @subset.map {|t| t.position }
 
         @task.update({position: 6})
 
         changed_positions = @subset.map {|t| Task[t.id].position }
         expect(changed_positions).to eql(initial_positions.map {|num| num - 1 })
+      end
+
+      it 'doesn\'t change the positions of other tasks' do 
+        other_positions = (other_tasks = user.tasks - [@task] - @subset).map {|t| t.position }
+        @task.update({position: 6})
+        changed_positions = other_tasks.map {|t| Task[t.id].position }
+
+        expect(changed_positions).to eql other_positions
+      end
+    end
+
+    context 'task deleted' do 
+      before(:each) do 
+        @task = user.tasks.find {|t| t.position === 7 }
+        @subset = user.tasks.select {|t| t.position > 7 }
+      end
+
+      it 'decrements the positions of tasks after the deleted one' do 
+        initial_positions = @subset.map {|t| t.position }
+        @task.destroy
+        changed_positions = @subset.map {|t| Task[t.id].position }
+        expect(changed_positions).to eql(initial_positions.map {|num| num - 1})
       end
     end
   end

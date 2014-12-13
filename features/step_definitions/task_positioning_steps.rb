@@ -1,8 +1,15 @@
 When(/^the client requests to change the (\d+)(?:[a-z]{2}) task's position to (\d+)$/) do |id, pos|
-  @user = User[Task[id].owner_id]
-  @positions = @user.tasks.map {|t| [t.id, t.position] }
-  authorize_with @user
+  user = User[Task[id].owner_id]
+  @positions = user.tasks.map {|t| [t.id, t.position] }
+  authorize_with user
   put "/tasks/#{id}", {:position => pos}.to_json
+end
+
+When(/^the client requests to delete task (\d+)$/) do |id|
+  user = User[Task[id].owner_id]
+  @positions = user.tasks.map {|t| [t.id, t.position] }
+  authorize_with user 
+  delete "/tasks/#{id}"
 end
 
 Then(/^the position of the new task should be (\d+)$/) do |position|
