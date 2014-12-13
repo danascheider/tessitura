@@ -100,12 +100,4 @@ class Task < Sequel::Model
 
       # puts "  FINAL: #{scoped_tasks.map {|t| t.position }}\n\n"
     end
-
-    def self.update_positions(authoritative, old=nil)
-      scoped_tasks = Task.where(owner_id: authoritative.owner_id)
-
-      tasks.each do |task|
-        task.this.update({position: task.position + 1}) unless task === authoritative
-      end
-    end
 end
