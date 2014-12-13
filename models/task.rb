@@ -106,13 +106,12 @@ class Task < Sequel::Model
       # that will be taken care of in the `after_destroy` hook.
 
       case
-      when dup && gap && dup < gap
-        scoped_tasks.where([[:position, dup..gap]]).each do |t|
-          t.this.update(position: t.position + 1) unless t === changed 
-        end
-      when dup && gap && dup > gap
-        scoped_tasks.where([[:position, gap..dup]]).each do |t|
-          t.this.update(position: t.position - 1) unless t === changed
+      when dup && gap
+        min = dup > gap ? gap : dup
+        max = dup > gap ? dup : gap
+        val = dup > gap ? -1 : 1
+        scoped_tasks.where([[:position, min..max]]).each do |t|
+          t.this.update(position: t.position + val) unless t === changed 
         end
       when dup
         scoped_tasks.where([[:position, dup..scoped_tasks.count]]).each do |t|
