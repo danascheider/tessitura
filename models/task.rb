@@ -90,7 +90,7 @@ class Task < Sequel::Model
       #
       # `dup` and `gap` represent the duplicate position number and the 
       # missing position number, respectively
-      
+
       dup = positions.find {|num| positions.count(num) > 1 }
       gap = (1..positions.last).find {|num| positions.count(num) === 0 }
 
@@ -107,17 +107,14 @@ class Task < Sequel::Model
 
       case
       when dup && gap && dup < gap
-        puts "case 1" if Task.count === 10
         scoped_tasks.where([[:position, dup..gap]]).each do |t|
           t.this.update(position: t.position + 1) unless t === changed 
         end
       when dup && gap && dup > gap
-        puts "case 2" if Task.count === 10
         scoped_tasks.where([[:position, gap..dup]]).each do |t|
           t.this.update(position: t.position - 1) unless t === changed
         end
       when dup
-        puts "case 3" if Task.count === 10
         scoped_tasks.where([[:position, dup..scoped_tasks.count]]).each do |t|
           t.this.update(position: t.position + 1) unless t === changed
         end
