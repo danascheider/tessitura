@@ -240,5 +240,21 @@ describe Task do
         expect(positions).to eql((2..user.tasks.length).to_a.reverse)
       end
     end
+
+    context 'task moved up on the list' do 
+      before(:each) do 
+        @task = user.tasks.find {|t| t.position === 6 }
+        @subset = user.tasks.select {|t| t.position >= 2 && t.position < 6 }
+      end
+
+      it 'changes the positions of the tasks between old and new positions' do 
+        initial_positions = @subset.map {|t| t.position }
+        
+        @task.update({position: 2})
+
+        changed_positions = @subset.map {|t| Task[t.id].position }
+        expect(changed_positions).to eql(initial_positions.map {|num| num + 1 })
+      end
+    end
   end
 end

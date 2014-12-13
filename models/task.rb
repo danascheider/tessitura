@@ -8,8 +8,13 @@ class Task < Sequel::Model
   PRIORITY_OPTIONS = [ 'Urgent', 'High', 'Normal', 'Low', 'Not Important' ]
 
   def before_create
-    Task.update_positions(self)
+    self.position ||= 1
     super 
+  end
+
+  def after_save
+    super
+    Task.adjust_positions(self)
   end
 
   def before_validation
@@ -62,12 +67,45 @@ class Task < Sequel::Model
   end
 
   private
-    def self.update_positions(authoritative)
-      authoritative.position ||= 1
-      Task.where({owner_id: authoritative.owner_id}).each do |task|
-        if task.position >= 1 && !(task === authoritative)
-          task.update({position: task.position + 1})
+
+    # The Task.update_positions method uses `task.this` to carry out the 
+    # #update action on a dataset consisting of the task. This is done to 
+    # skip the `before_update`/`before_save` hook calling update_positions,
+    # which would lead to infinite recursion.
+
+    def self.adjust_positions(changed)
+      positions = (scoped_tasks = Task.where(owner_id: changed.owner_id)).map {|t| t.position }
+      positions.sort!
+      # puts "INITIAL: #{positions}"
+
+      # Whereas the #select method returns an array of values meeting the given 
+      # criterion, the #find method returns the first value that meets the
+      # criterion
+
+      dup = positions.find {|num| positions.count(num) > 1 }
+      gap = (1..positions.last).find {|num| positions.count(num) === 0 }
+      # puts "  DUP: #{dup}"
+      # puts "  GAP: #{gap}"
+
+      case
+      when dup && gap && dup < gap
+        scoped_tasks.where([[:position, dup..gap]]).each do |t|
+          t.this.update(position: t.position + 1) unless t === changed 
         end
+      when dup
+        scoped_tasks.where([[:position, dup..scoped_tasks.count]]).each do |t|
+          t.this.update(position: t.position + 1) unless t === changed
+        end
+      end
+
+      # puts "  FINAL: #{scoped_tasks.map {|t| t.position }}\n\n"
+    end
+
+    def self.update_positions(authoritative, old=nil)
+      scoped_tasks = Task.where(owner_id: authoritative.owner_id)
+
+      tasks.each do |task|
+        task.this.update({position: task.position + 1}) unless task === authoritative
       end
     end
 end

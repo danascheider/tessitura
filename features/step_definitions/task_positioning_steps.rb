@@ -1,3 +1,10 @@
+When(/^the client request to change the (\d+)(?:[a-z]{2}) task's position to (\d+)$/) do |id, pos|
+  @user = User[Task[id].owner_id]
+  @positions = @user.tasks.map {|t| [t.id, t.position] }
+  authorize_with @user
+  put "/tasks/#{id}", {:position => pos}.to_json
+end
+
 Then(/^the position of the new task should be (\d+)$/) do |position|
   expect(Task.last.position).to eql position.to_i
 end
@@ -7,10 +14,19 @@ Then(/^the position of task (\d+) should be (\d+)$/) do |id, position|
 end
 
 Then(/^the positions of tasks (.*) should be (.*)$/) do |ids, positions|
+
+  # I have no bloody idea why this won't work if I put it in a transform.
+  # But it won't. I've tried different things for hours. I recommend against
+  # trying any more.
+
   ids = ids.gsub(/[^\d+|\,]/, '').split(',').map {|num| num.to_i }
   positions = positions.gsub(/[^\d+|\,]/, '').split(',').map {|num| num.to_i }
-
   ids.each {|id| expect(Task[id].position).to eql(positions[ids.index(id)]) }
+end
+
+Then(/^the positions of tasks (.*) should not be changed$/) do |ids|
+  ids = ids.gsub(/[^\d+|\,]/, '').split(',').map {|num| num.to_i }
+  ids.each {|id| expect(Task[id].position).to eql(@positions.to_h[id]) }
 end
 
 Then(/^the (\d+)(?:[a-z]{2}) user\'s other tasks should have their positions incremented$/) do |uid|
