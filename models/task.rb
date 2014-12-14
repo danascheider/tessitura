@@ -1,5 +1,4 @@
 class Task < Sequel::Model
-  include JSON
   many_to_one :task_list
 
   # Possible values for task status and priority, enforced on validation
@@ -93,7 +92,7 @@ class Task < Sequel::Model
   # users own tasks only through the `:task_lists` table, this provides
   # a direct reference to the user object that owns the list the given
   # task is on.
-  
+
   def user
     self.task_list.user
   end
