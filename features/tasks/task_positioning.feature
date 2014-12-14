@@ -72,3 +72,19 @@ Feature: Update task position
     Then its position should be changed to 8
     And the positions of tasks 12, 11, and 10 should be 5, 6, and 7
     And the positions of tasks 16, 15, 7, 14, 8, and 9 should not be changed
+
+  Scenario: Task is marked complete with a position specified
+
+    If a task is marked complete and a position is specified for it, it 
+    should honor the position being passed instead of going with the
+    default behavior.
+
+    Given tasks with the following attributes:
+      | id | status   | position |
+      | 7  | Complete | 3        |
+      | 8  | Complete | 10       |
+      | 9  | Complete | 9        |
+    When the task in position 5 on the 3rd user's list is updated with:
+      | status   | position |
+      | Complete | 2        |
+    Then its position should be changed to 2

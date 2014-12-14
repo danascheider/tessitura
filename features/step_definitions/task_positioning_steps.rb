@@ -23,6 +23,12 @@ When(/^the task in position (\d+) on the (\d+)(?:[a-z]{2}) user's list is marked
   @task.update(status: 'Complete')
 end
 
+When(/^the task in position (\d+) on the (\d+)(?:[a-z]{2}) user's list is updated with:$/) do |position, id, attributes|
+  user = User[id]
+  @task = user.tasks.find {|t| t.position === position }
+  @task.update(attributes.hashes.first)
+end
+
 Then(/^its position should be changed to (\d+)$/) do |position|
   expect(@task.position).to eql position.to_i
 end
