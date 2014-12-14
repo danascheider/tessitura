@@ -255,6 +255,14 @@ describe Task do
         changed_positions = @subset.map {|t| Task[t.id].position }
         expect(changed_positions).to eql(initial_positions.map {|num| num + 1 })
       end
+
+      it 'doesn\'t change the positions of other tasks' do 
+        other_positions = (other_tasks = user.tasks - [@task] - @subset).map {|t| t.position }
+        @task.update({position: 6})
+        changed_positions = other_tasks.map {|t| Task[t.id].position }
+
+        expect(changed_positions).to eql other_positions
+      end
     end
 
     context 'task moved down on the list' do 
@@ -288,10 +296,17 @@ describe Task do
       end
 
       it 'decrements the positions of tasks after the deleted one' do 
-        initial_positions = @subset.map {|t| t.position }
+        initial = @subset.map {|t| t.position}
         @task.destroy
         changed_positions = @subset.map {|t| Task[t.id].position }
-        expect(changed_positions).to eql(initial_positions.map {|num| num - 1})
+        expect(changed_positions).to eql(initial.map {|num| num - 1})
+      end
+
+      it 'doesn\'t change the positions of tasks before the deleted one' do 
+        initial = (other = user.tasks - @subset - [@task]).map {|t| t.position }
+        @task.destroy
+        final = other.map {|t| Task[t.id].position}
+        expect(final).to eql initial
       end
     end
   end
