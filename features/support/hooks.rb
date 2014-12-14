@@ -21,21 +21,21 @@ Before('@tasks') do |scenario|
   FactoryGirl.create(:task, task_list_id: list_id_2, id: 5)
   FactoryGirl.create(:task, task_list_id: list_id_2, id: 6)
 
-  FactoryGirl.create(:task, task_list_id: list_id_3, id: 7)
-  FactoryGirl.create(:task, task_list_id: list_id_3, id: 8)
-  FactoryGirl.create(:task, task_list_id: list_id_3, id: 9)
+  FactoryGirl.create(:task, task_list_id: list_id_3, position: 10, id: 7)
+  FactoryGirl.create(:task, task_list_id: list_id_3, position: 9, id: 8)
+  FactoryGirl.create(:task, task_list_id: list_id_3, position: 8, id: 9)
 end
 
 # Testing task positioning requires a user to have more tasks
 Before('@position') do
   list_id = User[3].default_task_list.id
-  FactoryGirl.create(:task, task_list_id: list_id, id: 10)
-  FactoryGirl.create(:task, task_list_id: list_id, id: 11)
-  FactoryGirl.create(:task, task_list_id: list_id, id: 12)
-  FactoryGirl.create(:task, task_list_id: list_id, id: 13)
-  FactoryGirl.create(:task, task_list_id: list_id, id: 14)
-  FactoryGirl.create(:task, task_list_id: list_id, id: 15)
-  FactoryGirl.create(:task, task_list_id: list_id, id: 16)
+  FactoryGirl.create(:task, task_list_id: list_id, position: 7, id: 10)
+  FactoryGirl.create(:task, task_list_id: list_id, position: 6, id: 11)
+  FactoryGirl.create(:task, task_list_id: list_id, position: 5, id: 12)
+  FactoryGirl.create(:task, task_list_id: list_id, position: 4, id: 13)
+  FactoryGirl.create(:task, task_list_id: list_id, position: 3, id: 14)
+  FactoryGirl.create(:task, task_list_id: list_id, position: 2, id: 15)
+  FactoryGirl.create(:task, task_list_id: list_id, position: 1, id: 16)
 end
 
 # Expects Canto front-end to be running on webserver listening on port 80

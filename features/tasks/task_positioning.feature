@@ -47,3 +47,12 @@ Feature: Update task position
     And the positions of tasks 11, 12, 13, 14, 15, and 16 should not be changed
 
   Scenario: Task is marked complete
+
+    Completed tasks are moved lower on the list than incomplete ones. When 
+    a task is marked complete, it goes on the list directly below the last
+    incomplete task.
+
+    When the task in position 6 on the 3rd user's list is marked complete
+    Then its position should be changed to 10
+    And the positions of tasks 10, 9, 8, and 7 should be 6, 7, 8, and 9
+    And the positions of tasks 12, 13, 14, 15, and 16 should not be changed

@@ -13,6 +13,16 @@ class Task < Sequel::Model
     super 
   end
 
+  #
+
+  def before_update
+    if self.modified?(:status) && self.status === 'Complete' && !self.modified?(:position)
+      self.position = Task.incomplete.where(owner_id: self.owner_id).order_by(:position).last.position
+    end
+
+    super
+  end
+
   # When a task has been saved, either on create or on update, the `after_save`
   # hook adjusts the positions of the other tasks belonging to the same user 
   # such that there are no gaps or duplicate indices on the list

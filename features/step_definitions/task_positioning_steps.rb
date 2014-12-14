@@ -12,6 +12,17 @@ When(/^the client requests to delete task (\d+)$/) do |id|
   delete "/tasks/#{id}"
 end
 
+When(/^the task in position (\d+) on the (\d+)(?:[a-z]{2}) user's list is marked complete$/) do |position, id|
+  user = User[id]
+  @positions = user.tasks.map {|t| [t.id, t.position] }
+  @task = user.tasks.find {|t| t.position === position }
+  @task.update(status: 'Complete')
+end
+
+Then(/^its position should be changed to (\d+)$/) do |position|
+  expect(@task.position).to eql position.to_i
+end
+
 Then(/^the position of the new task should be (\d+)$/) do |position|
   expect(Task.last.position).to eql position.to_i
 end

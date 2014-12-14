@@ -309,5 +309,32 @@ describe Task do
         expect(final).to eql initial
       end
     end
+
+    context 'status changed to \'Complete\'' do 
+      context 'other tasks are all incomplete' do 
+        before(:each) do 
+          user.tasks.each {|t| t.update(status: 'New') }
+          @lower = user.tasks.select {|t| t.position > 3 }
+          @task = @lower.pop
+        end
+
+        it 'moves the complete task to the bottom of the list' do 
+          @task.update(status: 'Complete')
+          expect(@task.position).to eql user.tasks.length
+        end
+
+        it 'moves the other tasks up' do 
+          initial = (@lower).map {|t| t.position }
+          @task.update(status: 'Complete')
+          final = @lower.map {|t| Task[t.id].position }
+          expect(final).to eql(initial.map {|num| num - 1 })
+        end
+
+        it 'honors an explicit position assignment' do 
+          @task.update(status: 'Complete', position: 2)
+          expect(@task.position).to eql 2
+        end
+      end
+    end
   end
 end
