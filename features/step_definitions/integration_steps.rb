@@ -32,11 +32,11 @@ When(/^I submit the login form$/) do
 end
 
 Then(/^I should be redirected to my dashboard$/) do
-  expect(current_path).not_to match(/\/$/)
+  expect(current_path).to match(/\/\#dashboard$/)
 end
 
 Then(/^I should see the homepage$/) do 
-  expect(page).to have_selector('body#homepage')
+  expect(page).to have_selector('#homepage-wrapper')
 end
 
 Then(/^the page status should be (\d+)$/) do |status|
