@@ -1,3 +1,7 @@
+Given(/^tasks with the following attributes:$/) do |attributes|
+  attributes.hashes.each {|hash| Task[hash.delete('id')].update(hash) }
+end
+
 When(/^the client requests to change the (\d+)(?:[a-z]{2}) task's position to (\d+)$/) do |id, pos|
   user = User[Task[id].owner_id]
   @positions = user.tasks.map {|t| [t.id, t.position] }

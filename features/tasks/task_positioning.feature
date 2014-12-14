@@ -56,3 +56,19 @@ Feature: Update task position
     Then its position should be changed to 10
     And the positions of tasks 10, 9, 8, and 7 should be 6, 7, 8, and 9
     And the positions of tasks 12, 13, 14, 15, and 16 should not be changed
+
+  Scenario: Task is marked complete with other tasks also complete
+
+    If a task is marked complete, it should go below the last incomplete task,
+    even if there are complete tasks with higher positions (i.e., complete 
+    tasks to which the user purposefully assigned a different position)
+
+    Given tasks with the following attributes:
+      | id | status   | position |
+      | 7  | Complete | 3        |
+      | 8  | Complete | 10       |
+      | 9  | Complete | 9        |
+    When the task in position 5 on the 3rd user's list is marked complete
+    Then its position should be changed to 8
+    And the positions of tasks 12, 11, and 10 should be 5, 6, and 7
+    And the positions of tasks 16, 15, 7, 14, 8, and 9 should not be changed
