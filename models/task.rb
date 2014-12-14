@@ -7,20 +7,38 @@ class Task < Sequel::Model
   STATUS_OPTIONS   = [ 'New', 'In Progress', 'Blocking', 'Complete' ]
   PRIORITY_OPTIONS = [ 'Urgent', 'High', 'Normal', 'Low', 'Not Important' ]
 
+  # By default, tasks are created at the top of the list
+
   def before_create
     self.position ||= 1
     super 
   end
+
+  # When a task has been saved, either on create or on update, the `after_save`
+  # hook adjusts the positions of the other tasks belonging to the same user 
+  # such that there are no gaps or duplicate indices on the list
 
   def after_save
     super
     Task.adjust_positions(self)
   end
 
+  # When a task is destroyed, the rest of the tasks with the same owner should
+  # have their list position incremented such that there are no gaps in the 
+  # indices. 
+
   def after_destroy
     super
     Task.where('position > ?', self.position).each {|t| t.this.update(position: t.position - 1 )}
   end
+
+  # The `before_validation` hook assigns automatic values before a task is 
+  # validated on creation or update:
+  # * Ensures that a task list has been specified
+  # * Assigns the `:owner_id` attribute based on the owner of the specified task list
+  # * Sets `:status` to a default value of 'New' unless a valid status is given
+  # * Sets `:priority` to a default value of 'Normal' unless a valid priority level
+  #   is given
 
   def before_validation
     super
@@ -29,13 +47,22 @@ class Task < Sequel::Model
     self.priority = 'Normal' unless self.priority.in? PRIORITY_OPTIONS
   end
 
+  # The `Task.complete` scope returns all tasks whose status is 'Complete'
+
   def self.complete
     Task.where(status: 'Complete')
   end
 
+  # The `Task.incomplete` scope includes all tasks with a status other 
+  # than 'Complete'. 
+
   def self.incomplete
     Task.exclude(status: 'Complete')
   end
+
+  # The `#to_hash` or `#to_h` method returns a hash of all of the task's 
+  # non-empty attributes. Keys for blank attributes are removed from the
+  # hash, so not all columns will necessarily be represented in the hash.
 
   def to_hash
     hash = {
@@ -55,10 +82,18 @@ class Task < Sequel::Model
 
   alias_method :to_h, :to_hash
 
+  # Overwrites the default `#to_json` method to return a JSON object based
+  # on the task's attribute hash
+
   def to_json(options={})
     self.to_hash.to_json
   end
 
+  # The `user` method returns the user who ultimately owns the task. Since
+  # users own tasks only through the `:task_lists` table, this provides
+  # a direct reference to the user object that owns the list the given
+  # task is on.
+  
   def user
     self.task_list.user
   end
@@ -100,23 +135,24 @@ class Task < Sequel::Model
       #   2. A task has been moved towards the bottom of the list
       #      (its position number has gotten higher)
       #   3. A task has been added to the list
-      #
+
+      min, max, val = dup, gap, 1 if dup && gap && dup < gap 
+      min, max, val = gap, dup, -1 if dup && gap && gap < dup
+      min, max, val = dup, scoped_tasks.count, 1 if dup && !gap
+
       # No `dup` and no `gap` indicates no positions have been changed.
       # A `gap` with no `dup` indicates a task was destroyed, in which case
       # that will be taken care of in the `after_destroy` hook.
 
-      case
-      when dup && gap
-        min = dup > gap ? gap : dup
-        max = dup > gap ? dup : gap
-        val = dup > gap ? -1 : 1
-        scoped_tasks.where([[:position, min..max]]).each do |t|
-          t.this.update(position: t.position + val) unless t === changed 
-        end
-      when dup
-        scoped_tasks.where([[:position, dup..scoped_tasks.count]]).each do |t|
-          t.this.update(position: t.position + 1) unless t === changed
-        end
+      return true unless dup || gap
+
+      # Tasks iterate through tasks, updating the positions. Note the use
+      # of `t.this.update(args)` - this carries out the `update` action on
+      # a Sequel::Dataset representation of the task model, thus bypassing
+      # any hooks otherwise triggered by an update.
+
+      scoped_tasks.where([[:position, min..max]]).each do |t|
+        t.this.update(position: t.position + val) unless t === changed
       end
     end
 end
