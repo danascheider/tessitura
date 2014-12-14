@@ -19,31 +19,23 @@ Feature: Update task position
     Then the position of the new task should be 1
     And the 1st user's other tasks should have their positions incremented
 
-  Scenario: Task is moved higher in the list
+  Scenario Outline: Task position is changed
 
     Moving a task with position n0 to position n1, where "n1 < n0", should cause 
     another task's position to be incremented if that position p satisfies "n1 <= p < n0".
 
-    In this scenario, task 9 is moved from position 8 to position 4, which is 
-    initially occupied by task 13.
-
-    When the client requests to change the 9th task's position to 4
-    Then the position of task 9 should be 4
-    And the positions of tasks 13, 12, 11, and 10 should be 5, 6, 7, and 8
-    And the positions of tasks 7, 8, 14, 15, and 16 should not be changed
-
-  Scenario: Task is moved lower in the list
-
     Moving a task with position n0 to position n1, where "n1 > n0", should cause
     another task's position to be decremented if that position p satisfies "n0 < p <= n1".
 
-    In this scenario, task 13 is moved from position 4 to position 8, which is 
-    initially occupied by task 9.
+    When the client requests to change the <id>th task's position to <pos>
+    Then the position of task <id> should be <pos>
+    And the positions of tasks <changed> should be <positions>
+    And the positions of tasks <unchanged> should not be changed
 
-    When the client requests to change the 13th task's position to 8
-    Then the position of task 13 should be 8
-    And the positions of tasks 12, 11, 10, and 9 should be 4, 5, 6, and 7
-    And the positions of tasks 7, 8, 14, 15, and 16 should not be changed
+    Examples:
+      | id | pos | changed            | positions      | unchanged            |
+      | 9  |  4  | 13, 12, 11, and 10 | 5, 6, 7, and 8 | 7, 8, 14, 15, and 16 |
+      | 13 |  8  | 12, 11, 10, and 9  | 4, 5, 6, and 7 | 7, 8, 14, 15, and 16 |
 
   Scenario: Task is deleted
 
