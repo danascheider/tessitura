@@ -31,7 +31,7 @@ group :test do
   gem 'cucumber-sinatra',   '~> 0.5.0'
   gem 'cucumber',           '~> 1.3.16'
   gem 'capybara',           '~> 2.4.4'
-  gem 'capybara-webkit'
+  gem 'capybara-webkit',    '~> 1.3.1'
   gem 'rspec',              '~> 3.0'
   gem 'rack-test',          '~> 0.6.2', require: 'rack/test'
   gem 'factory_girl',       '~> 4.4'
