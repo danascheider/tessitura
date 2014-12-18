@@ -11,7 +11,9 @@ class User < Sequel::Model(:users)
   # The `#admin?` method aliases the `#admin` attribute - a boolean returning
   # true if the user is an admin.
 
-  alias_method :admin?, :admin
+  def admin?
+    self.admin
+  end
 
   # The `User.admin` scope returns all users who are admins
 
