@@ -8,7 +8,7 @@ Feature: User login
   Scenario:
     Given I am a registered user
     And I am not logged in
-    When I navigate to '/#login'
+    When I visit the homepage and click the login link
     And I submit the login form
     Then I should be redirected to my dashboard
     And the page status should be 200

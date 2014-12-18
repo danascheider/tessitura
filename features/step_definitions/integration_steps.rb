@@ -7,10 +7,17 @@ Given(/^I am not logged in$/) do
 end
 
 Given(/^I am logged in$/) do 
-  visit('/#login')
-  fill_in 'Username', with: @user.username 
-  fill_in 'Password', with: @user.password
-  click_button 'Login'
+  visit('/')
+
+  within(:css, 'ul.top-nav') do 
+    find('a.login-link').click 
+  end
+
+  within(:css, '#login-form') do 
+    fill_in 'Username', with: @user.username 
+    fill_in 'Password', with: @user.password
+    click_button 'Login'
+  end
 end
 
 When(/^I navigate to '\/'$/) do
@@ -32,7 +39,12 @@ When(/^I submit the login form$/) do
 end
 
 Then(/^I should be redirected to my dashboard$/) do
-  expect(current_path).to match(/\/\#dashboard$/)
+  pending('Further investigation')
+  expect(page).to have_selector('#dashboard-wrapper')
+end
+
+Then(/^I should not be redirected to my dashboard$/) do 
+  expect(page).not_to have_selector('#dashboard-wrapper')
 end
 
 Then(/^I should see the homepage$/) do 

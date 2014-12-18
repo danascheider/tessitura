@@ -14,4 +14,8 @@ describe Listing do
     it { is_expected.to respond_to :organization }
     it { is_expected.to respond_to :deadline }
   end
+
+  describe 'validations' do 
+    #
+  end
 end
