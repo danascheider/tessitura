@@ -17,6 +17,31 @@ describe Listing do
   end
 
   describe 'validations' do 
-    #
+    let(:listing) { FactoryGirl.build(:listing) }
+
+    it 'is invalid without a title' do 
+      listing.title = nil
+      expect(listing).not_to be_valid
+    end
+
+    it 'is invalid without a web site' do 
+      listing.web_site = nil 
+      expect(listing).not_to be_valid
+    end
+
+    it 'is invalid without a country' do 
+      listing.country = nil 
+      expect(listing).not_to be_valid
+    end
+
+    it 'is invalid without a city' do 
+      listing.city = nil 
+      expect(listing).not_to be_valid
+    end
+
+    it 'is invalid without a start date' do 
+      listing.program_start_date = nil 
+      expect(listing).not_to be_valid
+    end
   end
 end

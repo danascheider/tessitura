@@ -2,6 +2,15 @@ require 'factory_girl'
 
 FactoryGirl.define do 
   to_create {|i| i.save }
+
+  factory :listing do 
+    sequence(:title) {|n| "Program #{n}" }
+    sequence(:program_start_date) { Time.now }
+    sequence(:web_site) {|n| "http://www.program-#{n}.com" }
+    country 'USA'
+    city 'New York City'
+    sequence(:deadline) { Time.now }
+  end
   
   factory :task_list do 
     association :user
