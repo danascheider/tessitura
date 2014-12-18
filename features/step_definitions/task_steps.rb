@@ -8,7 +8,7 @@ end
 Then(/^the existent tasks should not be updated$/) do
   # This is only used in one step - update_task.feature:66
   [1, 2].each do |id|
-    expect(Task[id].position).not_to eql(@tasks[id - 1]['position'])
+    expect(Task[id].title).not_to eql(@tasks[id - 1]['title'])
   end
 end
 

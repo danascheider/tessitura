@@ -61,7 +61,7 @@ Feature: Update task
   Scenario: Task not found
     When the client submits a PUT request to /users/2/tasks with the 2nd user's credentials and:
       """json
-      [{ "id":1, "position":1 }, { "id":2, "position":2 }, { "id":471, "position":3 }]
+      [{ "id":1, "title":"Hello" }, { "id":2, "title":"world" }, { "id":471, "position":3 }]
       """
     Then the existent tasks should not be updated
     And the response should indicate the request was unauthorized
