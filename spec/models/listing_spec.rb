@@ -6,6 +6,7 @@ describe Listing do
   describe 'attributes' do 
     it { is_expected.to respond_to :title }
     it { is_expected.to respond_to :web_site }
+    it { is_expected.to respond_to :type }
     it { is_expected.to respond_to :country }
     it { is_expected.to respond_to :region }
     it { is_expected.to respond_to :city }

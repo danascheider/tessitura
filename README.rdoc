@@ -42,19 +42,38 @@ Tasks belong to TaskLists, which are owned by a User. Users can have multiple li
 * Created At 
 * Updated At
 
+==== Listings
+
+Listings are audition listings. Currently, they have the following attributes:
+* ID
+* Title
+* Type
+* Web site
+* Country
+* Region (or state)
+* City
+* Deadline
+* Program start date
+* Program end date
+* Organization
+
 === Development Approach
 
 This app is being developed using a rigorous behavior-driven approach, meaning test-first, agile work-flows. I aim for 100% test coverage and Code Climate rating >= 3.8 for classes and modules other than Canto itself\*. Refactoring both app code and tests is a major part of the workflow on this project. Everything should stay as DRY as possible.
 
 At this point, development is happening on the following git branches:
 ==== not_passing
-This is the branch where new tests are written. The code stays here until either all the tests pass or something gets ugly. If tests pass, the code is merged to +master+ and refactoring begins. If something gets ugly, the code is merged to +messy+.
+This is the branch where new tests are written. The code stays here until either all the tests pass\* or something gets ugly. If tests pass, the code is merged to +master+ and refactoring begins. If something gets ugly, the code is merged to +messy+.
 ==== messy
 This is where code goes when it becomes clear that implementation of a certain feature will be non-trivial. One sign that this may be the case is if, on the +not_passing+ branch, implementing one feature causes another test to break, or something like that.
 ==== refactoring
-This is the branch where passing code gets refactored. Non-passing code should not be committed to +refactoring+. After each iteration, both the app and the tests should be refactored.
+This is the branch where passing code gets refactored. Non-passing code should not be committed to +refactoring+.\* After each iteration, both the app and the tests should be refactored.
 ==== master
-When code passes, it gets merged to +master+. Non-passing code should not be merged.
+When code passes, it gets merged to +master+. Non-passing code should not be merged.\*
+
+\* At this point in development, it should be noted that Cucumber tests marked +@integration+ are 
+permitted and expected to fail due to problems with the test configuration that don't appear to 
+reflect the functionality. These tests should be marked pending so as not to break Travis builds.
 
 === Contributing
 While contributions are welcome and appreciated, I ask contributors to keep in mind that this app will most likely be taken closed-source in the not-so-distant future. As the app grows, I will spin off helper modules into gems as I am able, which will then be made open-source and available on https://rubygems.org. Since these will continue to be available to the community, they are where I recommend you focus if you would like to contribute.
