@@ -14,6 +14,15 @@ describe TaskList do
     it { is_expected.to respond_to(:owner_id) }
   end
 
+  describe 'associations' do 
+    it 'is destroyed with its user' do 
+      owner = FactoryGirl.create(:user_with_task_lists)
+      task_list = owner.default_task_list
+      owner.destroy
+      expect(TaskList[task_list.id]).to be nil
+    end
+  end
+
   describe 'class methods' do 
     describe '::create' do 
       context 'with valid attributes' do 
