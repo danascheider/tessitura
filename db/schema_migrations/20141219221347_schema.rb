@@ -8,6 +8,12 @@ Sequel.migration do
       Date :date
       DateTime :created_at
       DateTime :updated_at
+      Date :deadline
+      Integer :listing_id
+      TrueClass :pianist_provided
+      TrueClass :can_bring_own_pianist
+      Float :pianist_fee
+      Float :fee
     end
     
     create_table(:listings) do
@@ -26,6 +32,7 @@ Sequel.migration do
       DateTime :updated_at
       Integer :min_age
       Integer :max_age
+      TrueClass :stale
     end
     
     create_table(:users, :ignore_index_errors=>true) do
@@ -45,6 +52,14 @@ Sequel.migration do
       
       index [:email], :name=>:email, :unique=>true
       index [:username], :name=>:username, :unique=>true
+    end
+    
+    create_table(:listings_users, :ignore_index_errors=>true) do
+      foreign_key :listing_id, :listings, :key=>[:id]
+      foreign_key :user_id, :users, :key=>[:id]
+      
+      index [:listing_id], :name=>:listing_id
+      index [:user_id], :name=>:user_id
     end
     
     create_table(:task_lists, :ignore_index_errors=>true) do
