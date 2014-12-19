@@ -43,5 +43,10 @@ describe Listing do
       listing.program_start_date = nil 
       expect(listing).not_to be_valid
     end
+
+    it 'is invalid without a valid web site' do 
+      listing.web_site = 'foo'
+      expect(listing).not_to be_valid
+    end
   end
 end
