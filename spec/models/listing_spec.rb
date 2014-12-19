@@ -16,8 +16,13 @@ describe Listing do
     it { is_expected.to respond_to :deadline }
     it { is_expected.to respond_to :min_age }
     it { is_expected.to respond_to :max_age }
+    it { is_expected.to respond_to :stale }
+    it { is_expected.to respond_to :fresh }
     it { is_expected.to respond_to :created_at }
     it { is_expected.to respond_to :updated_at }
+  end
+
+  describe 'instance methods' do 
   end
 
   describe 'validations' do 
@@ -59,7 +64,5 @@ describe Listing do
       listing = FactoryGirl.create(:listing_with_auditions)
       expect(listing.auditions).to eql([listing.auditions.first, listing.auditions.last])
     end
-
-    # Many-to-many association with User model should also be tested
   end
 end

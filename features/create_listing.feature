@@ -9,4 +9,3 @@ Feature: Create audition listing
 
     When the client submits a POST request to /listings with valid attributes
     Then a new listing should be created with the same attributes
-    And the listing should be flagged for review
