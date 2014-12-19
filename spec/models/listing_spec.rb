@@ -14,6 +14,8 @@ describe Listing do
     it { is_expected.to respond_to :program_end_date }
     it { is_expected.to respond_to :organization }
     it { is_expected.to respond_to :deadline }
+    it { is_expected.to respond_to :min_age }
+    it { is_expected.to respond_to :max_age }
   end
 
   describe 'validations' do 
