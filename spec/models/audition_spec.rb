@@ -6,6 +6,10 @@ describe Audition do
   it { is_expected.to respond_to :city }
   it { is_expected.to respond_to :date }
   it { is_expected.to respond_to :deadline }
+  it { is_expected.to respond_to :fee }
+  it { is_expected.to respond_to :pianist_provided }
+  it { is_expected.to respond_to :can_bring_own_pianist }
+  it { is_expected.to respond_to :pianist_fee }
   it { is_expected.to respond_to :created_at }
   it { is_expected.to respond_to :updated_at }
 

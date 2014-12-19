@@ -59,5 +59,7 @@ describe Listing do
       listing = FactoryGirl.create(:listing_with_auditions)
       expect(listing.auditions).to eql([listing.auditions.first, listing.auditions.last])
     end
+
+    # Many-to-many association with User model should also be tested
   end
 end

@@ -1,5 +1,6 @@
 class Listing < Sequel::Model
   one_to_many :auditions
+  many_to_many :users, left_key: :listing_id, right_key: :user_id, join_table: :listings_users
 
   # Listings require pretty much all information that all programs will be 
   # guaranteed to have. Customers will use this information to make decisions
