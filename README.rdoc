@@ -7,7 +7,7 @@ For the most up-to-date information about models and their attributes, see +/db/
 
 ==== Users
 
-Users can be regular users or admins. They are assumed to be opera singers and have the following attributes:
+Users can be regular users or admins. Users own task lists (and by extension, the tasks on the lists), and have a many-to-many relationship to listings (which act in this context as recommendations). Users are assumed to be classical singers and have the following attributes:
 * Username
 * Password
 * E-mail address
@@ -44,7 +44,7 @@ Tasks belong to TaskLists, which are owned by a User. Users can have multiple li
 
 ==== Listings
 
-Listings are audition listings. Currently, they have the following attributes:
+Listings are audition listings. Listings have a many-to-many relationship to users, allowing them to be treated as recommendations to a certain user. They also may be associated with one or more auditions (representations of auditions by time and place, along with other audition-specific information).  Currently, they have the following attributes:
 * ID
 * Title
 * Type
@@ -53,9 +53,28 @@ Listings are audition listings. Currently, they have the following attributes:
 * Region (or state)
 * City
 * Deadline
-* Program start date
-* Program end date
+* Program Start Date
+* Program End Date
+* Minimum Age
+* Maximum Age
 * Organization
+* Created At
+* Updated At
+
+==== Auditions
+
+Auditions are representations of physical audition times and places. They also store information specific to a given audition time or location, such as the deadline for submitting an application to participate in that audition (which may be different from the deadline for other auditions for the same opportunity). Auditions are owned by listings and are destroyed when their listing is destroyed. Auditions currently have the following attributes:
+* Date
+* City
+* Region (or state)
+* Country
+* Deadline
+* Fee
+* Pianist Provided (boolean)
+* Can Bring Own Pianist (boolean)
+* Pianist Fee
+* Created At
+* Updated At
 
 === Development Approach
 
