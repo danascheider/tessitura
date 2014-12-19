@@ -10,6 +10,24 @@ FactoryGirl.define do
     country 'USA'
     city 'New York City'
     sequence(:deadline) { Time.now }
+
+    factory :listing_with_auditions do 
+      transient do 
+        auditions_count 2
+      end
+
+      after(:create) do |listing, evaluator|
+        create_list(:audition, evaluator.auditions_count, listing_id: listing.id)
+      end
+    end
+  end
+
+  factory :audition do 
+    listing
+    country 'USA'
+    region 'New York'
+    city 'New York City'
+    sequence(:deadline) { Time.now }
   end
   
   factory :task_list do 

@@ -1,4 +1,5 @@
 class Listing < Sequel::Model
+  one_to_many :auditions
 
   # Listings require pretty much all information that all programs will be 
   # guaranteed to have. Customers will use this information to make decisions

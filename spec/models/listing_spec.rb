@@ -16,6 +16,8 @@ describe Listing do
     it { is_expected.to respond_to :deadline }
     it { is_expected.to respond_to :min_age }
     it { is_expected.to respond_to :max_age }
+    it { is_expected.to respond_to :created_at }
+    it { is_expected.to respond_to :updated_at }
   end
 
   describe 'validations' do 
@@ -49,6 +51,13 @@ describe Listing do
     it 'is invalid without a valid web site' do 
       listing.web_site = 'foo'
       expect(listing).not_to be_valid
+    end
+  end
+
+  describe 'associations' do 
+    it 'lists its auditions' do 
+      listing = FactoryGirl.create(:listing_with_auditions)
+      expect(listing.auditions).to eql([listing.auditions.first, listing.auditions.last])
     end
   end
 end
