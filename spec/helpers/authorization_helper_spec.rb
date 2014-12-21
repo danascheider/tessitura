@@ -198,7 +198,7 @@ describe Sinatra::AuthorizationHelper do
     context 'when one task belongs to someone else' do 
       before(:each) do 
         FactoryGirl.create(:task_list_with_tasks, user_id: admin.id)
-        @tasks = (user.task_lists.first.tasks << admin.tasks.first).map {|t| t.to_h }
+        @tasks = (user.task_lists.first.tasks << admin.tasks.first).map(&:to_h)
       end
 
       context 'owner authorization' do 
