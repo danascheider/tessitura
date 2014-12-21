@@ -15,10 +15,36 @@ describe Audition do
 
   describe 'associations' do 
     it 'is deleted with its associated listing' do 
-      listings = FactoryGirl.create(:listing_with_auditions)
-      auditions = listings.auditions
-      listings.destroy
+      listing = FactoryGirl.create(:listing_with_auditions)
+      auditions = listing.auditions
+      listing.destroy
       auditions.each{ |a| expect(Audition[a.id]).to be nil }
+    end
+  end
+
+  describe 'validations' do 
+    before(:each) do 
+      @audition = FactoryGirl.build(:audition)
+    end
+
+    it 'is invalid without a country' do 
+      @audition.country = nil
+      expect(@audition).not_to be_valid
+    end
+
+    it 'is invalid without a city' do 
+      @audition.city = nil
+    end
+
+    it 'is invalid without a date' do 
+      @audition.date = nil 
+      expect(@audition).not_to be_valid
+    end
+
+    it 'is invalid without a region if in the US' do 
+      @audition.country = 'USA'
+      @audition.region = nil
+      expect(@audition).not_to be_valid
     end
   end
 end

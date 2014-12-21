@@ -13,7 +13,6 @@ class Listing < Sequel::Model
 
   def validate
     super
-    validates_presence [:title, :web_site, :country, :city, :program_start_date]
-    validates_format /(.*)\.(.*)/, :web_site
+    validates_presence [:title]
   end
 end
