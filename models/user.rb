@@ -13,7 +13,7 @@ class User < Sequel::Model(:users)
   # true if the user is an admin.
 
   def admin?
-    self.admin
+    admin
   end
 
   # The `User.admin` scope returns all users who are admins
@@ -31,8 +31,8 @@ class User < Sequel::Model(:users)
   # foreign key errors from the database.
 
   def before_destroy
-    return false if self.admin? && User.admin.count == 1
-    self.remove_all_task_lists
+    return false if admin? && User.admin.count == 1
+    remove_all_task_lists
   end
 
   # Users own tasks through task lists. If a user who doesn't have any task lists
@@ -41,15 +41,15 @@ class User < Sequel::Model(:users)
   # added to the user's first task list.
 
   def default_task_list
-    self.task_lists.length > 0 ? self.task_lists.first : TaskList.create(user: self)
+    task_lists.length > 0 ? task_lists.first : TaskList.create(user: self)
   end
   
   # This method is added automatically by Sequel and has been overridden
   # here so as not to interfere with the foreign key constraint on the table
 
   def remove_all_task_lists
-    self.task_lists.each {|list| list.destroy }
-    self.reload # to prevent lists from being cached
+    task_lists.each(&:destroy)
+    reload # to prevent lists from being cached
   end
 
   # This method is added automatically by Sequel and has been overridden
@@ -57,14 +57,14 @@ class User < Sequel::Model(:users)
 
   def remove_task_list(list)
     list.destroy
-    self.reload # to prevent list from being cached
+    reload # to prevent list from being cached
   end
 
   # The `#tasks` method returns an array of all the tasks the user owns,
   # regardless of which task list they belong to.
 
   def tasks
-    (self.task_lists.map {|list| list.tasks.flatten }).flatten
+    (task_lists.map {|list| list.tasks.flatten }).flatten
   end
 
   # The `#to_hash` or `:to_h` method returns a hash of all the user's non-empty
@@ -76,18 +76,18 @@ class User < Sequel::Model(:users)
 
   def to_hash
     {
-      id: self.id,
-      username: self.username,
-      email: self.email,
-      first_name: self.first_name,
-      last_name: self.last_name,
-      city: self.city,
-      country: self.country,
-      fach: self.fach,
-      admin: self.admin,
-      task_lists: self.task_lists.map {|list| list.id },
-      created_at: self.created_at,
-      updated_at: self.updated_at
+      id: id,
+      username: username,
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      city: city,
+      country: country,
+      fach: fach,
+      admin: admin,
+      task_lists: task_lists.map(&:id),
+      created_at: created_at,
+      updated_at: updated_at
     }.reject! {|k,v| v.blank? }
   end
 
@@ -97,7 +97,7 @@ class User < Sequel::Model(:users)
   # hash of the user's attributes instead of from the user object itself
 
   def to_json(options={})
-    self.to_hash.to_json
+    to_hash.to_json
   end
 
   # Users must provide a valid username, password, and e-mail address. The

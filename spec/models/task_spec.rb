@@ -143,7 +143,8 @@ describe Task do
           title: task.title,
           priority: task.priority,
           status: task.status,
-          created_at: task.created_at
+          created_at: task.created_at,
+          updated_at: task.updated_at
         }
       }
 

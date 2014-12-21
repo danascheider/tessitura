@@ -73,17 +73,18 @@ class Task < Sequel::Model
 
   def to_hash
     hash = {
-      id: self.id,
-      task_list_id: self.task_list_id,
-      owner_id: self.owner_id,
-      position: self.position,
-      title: self.title,
-      deadline: self.deadline,
-      priority: self.priority,
-      status: self.status,
-      description: self.description,
-      backlog: self.backlog,
-      created_at: self.created_at,
+      id: id,
+      task_list_id: task_list_id,
+      owner_id: owner_id,
+      position: position,
+      title: title,
+      deadline: deadline,
+      priority: priority,
+      status: status,
+      description: description,
+      backlog: backlog,
+      created_at: created_at,
+      updated_at: updated_at
     }.reject! {|key, value| value.blank? }
   end
 

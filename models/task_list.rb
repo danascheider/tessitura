@@ -5,15 +5,15 @@ class TaskList < Sequel::Model
   alias_method :owner, :user
 
   def before_destroy
-    self.tasks.each(&:destroy)
+    tasks.each(&:destroy)
   end
 
   def owner_id
-    self.user.id 
+    user.id 
   end
 
   def to_hashes
-    self.tasks.map(&:to_h)
+    tasks.map(&:to_h)
   end
 
   alias_method :to_a, :to_hashes
