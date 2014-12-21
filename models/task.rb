@@ -36,7 +36,7 @@ class Task < Sequel::Model
 
   def after_destroy
     super
-    Task.where('position > ?', self.position).each {|t| t.this.update(position: t.position - 1 )}
+    Task.where('position > ?', position).each {|t| t.this.update(position: t.position - 1 )}
   end
 
   # The `before_validation` hook assigns automatic values before a task is 
@@ -49,9 +49,9 @@ class Task < Sequel::Model
 
   def before_validation
     super
-    self.owner_id ||= self.task_list.user_id rescue false
-    self.status   = 'New' unless self.status.in? STATUS_OPTIONS
-    self.priority = 'Normal' unless self.priority.in? PRIORITY_OPTIONS
+    self.owner_id ||= task_list.user_id rescue false
+    self.status   = 'New' unless status.in? STATUS_OPTIONS
+    self.priority = 'Normal' unless priority.in? PRIORITY_OPTIONS
   end
 
   # The `Task.complete` scope returns all tasks whose status is 'Complete'
@@ -93,7 +93,7 @@ class Task < Sequel::Model
   # on the task's attribute hash
 
   def to_json(options={})
-    self.to_hash.to_json
+    to_hash.to_json
   end
 
   # The `user` method returns the user who ultimately owns the task. Since
@@ -102,7 +102,7 @@ class Task < Sequel::Model
   # task is on.
 
   def user
-    self.task_list.user
+    task_list.user
   end
   alias_method :owner, :user
 
