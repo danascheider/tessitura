@@ -14,8 +14,8 @@ class Task < Sequel::Model
   end
 
   def before_update
-    if self.modified?(:status) && self.status === 'Complete' && !self.modified?(:position)
-      self.position = Task.incomplete.where(owner_id: self.owner_id).order_by(:position).last.position
+    if modified?(:status) && status === 'Complete' && !modified?(:position)
+      self.position = Task.incomplete.where(owner_id: owner_id).order_by(:position).last.position
     end
 
     super
