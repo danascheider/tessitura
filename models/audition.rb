@@ -1,5 +1,5 @@
 class Audition < Sequel::Model
-  many_to_one :listing
+  # many_to_one :season
 
   # Auditions are required to have a country, city, and date. If the audition is in
   # the US, a state is also required.

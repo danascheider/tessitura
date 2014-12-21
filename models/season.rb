@@ -3,4 +3,5 @@
 # the owner of Audition and Listing objects.
 
 class Season < Sequel::Model
+  one_to_one :listing
 end
