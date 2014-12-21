@@ -1,6 +1,6 @@
 class User < Sequel::Model(:users)
   one_to_many :task_lists
-  many_to_many :listings, left_key: :user_id, right_key: :listing_id, join_table: :listings_users
+  many_to_many :programs, left_key: :user_id, right_key: :program_id, join_table: :programs_users
 
   # The `#owner_id` method returns the user's `:id` attribute, since the 
   # user table has no foreign keys. This method allows all of Canto's 

@@ -13,4 +13,13 @@ describe Program do
   it { is_expected.to respond_to(:contact_email) }
   it { is_expected.to respond_to(:contact_phone) }
   it { is_expected.to respond_to(:organization_id) }
+
+  describe 'associations' do 
+    it 'is destroyed with its organization' do 
+      org = FactoryGirl.create(:organization_with_everything)
+      programs = org.programs 
+      org.destroy 
+      programs.each {|p| expect(Season[p.id]).to be nil }
+    end
+  end
 end

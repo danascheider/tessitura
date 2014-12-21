@@ -9,6 +9,7 @@
 class Program < Sequel::Model
   many_to_one :organization
   one_to_many :seasons
+  many_to_many :users, left_key: :program_id, right_key: :user_id, join_table: :programs_users
 
   self.plugin :association_dependencies, seasons: :destroy
 end

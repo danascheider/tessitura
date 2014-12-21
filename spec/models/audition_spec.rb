@@ -46,5 +46,11 @@ describe Audition do
       @audition.region = nil
       expect(@audition).not_to be_valid
     end
+
+    it 'is valid without a region if not in the US' do 
+      @audition.country = 'Bolivia'
+      @audition.region = nil
+      expect(@audition).to be_valid
+    end
   end
 end

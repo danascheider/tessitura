@@ -14,4 +14,13 @@ describe Season do
   it { is_expected.to respond_to :program_id }
   it { is_expected.to respond_to :created_at }
   it { is_expected.to respond_to :updated_at }
+
+  describe 'associations' do 
+    it 'is destroyed with its program' do 
+      program = FactoryGirl.create(:program_with_everything)
+      seasons = program.seasons
+      program.destroy
+      seasons.each {|s| expect(Season[s.id]).to be nil }
+    end
+  end
 end

@@ -20,4 +20,13 @@ describe Listing do
       expect(listing).not_to be_valid
     end
   end
+
+  describe 'associations' do
+    it 'is destroyed with its season' do 
+      season = FactoryGirl.create(:season_with_listing)
+      listing = season.listing 
+      season.destroy
+      expect(Listing[listing.id]).to be nil
+    end
+  end
 end
