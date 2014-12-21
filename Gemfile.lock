@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/danascheider/sinatra-sequel_extension.git
-  revision: a10ed857c2d6f3c90699ccae67d289b542fe9f91
+  revision: 3716726169e6f4296b1fbf6c1aaef0df4936ee8f
   specs:
     sinatra-sequel_extension (0.9.0)
       sequel (>= 3.2)
