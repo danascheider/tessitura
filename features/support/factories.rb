@@ -91,7 +91,7 @@ FactoryGirl.define do
     country 'USA'
     region 'New York'
     city 'New York City'
-    sequence(:date) { m, d = rand(12), rand(28); Date.new(2015, m, d) }
+    sequence(:date) {|n| Date.today + n }
     deadline Date.new(2015,2,15)
   end
   
