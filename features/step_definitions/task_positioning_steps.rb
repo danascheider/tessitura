@@ -47,18 +47,18 @@ Then(/^the positions of tasks (.*) should be (.*)$/) do |ids, positions|
   # But it won't. I've tried different things for hours. I recommend against
   # trying any more.
 
-  ids = ids.gsub(/[^\d+|\,]/, '').split(',').map {|num| num.to_i }
-  positions = positions.gsub(/[^\d+|\,]/, '').split(',').map {|num| num.to_i }
+  ids = ids.gsub(/[^\d+|\,]/, '').split(',').map(&:to_i)
+  positions = positions.gsub(/[^\d+|\,]/, '').split(',').map(&:to_i)
   ids.each {|id| expect(Task[id].position).to eql(positions[ids.index(id)]) }
 end
 
 Then(/^the positions of tasks (.*) should not be changed$/) do |ids|
-  ids = ids.gsub(/[^\d+|\,]/, '').split(',').map {|num| num.to_i }
+  ids = ids.gsub(/[^\d+|\,]/, '').split(',').map(&:to_i)
   ids.each {|id| expect(Task[id].position).to eql(@positions.to_h[id]) }
 end
 
 Then(/^the (\d+)(?:[a-z]{2}) user\'s other tasks should have their positions incremented$/) do |uid|
-  positions = (User[uid].tasks - [Task.last]).map {|task| task.position }
+  positions = (User[uid].tasks - [Task.last]).map(&:position)
 
   # Positions are expected to be [4, 3, 2] instead of [2, 3, 4] because tasks are 
   # instantiated at position 1, so tasks with higher IDs will have lower positions
