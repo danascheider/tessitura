@@ -1,21 +1,5 @@
 Sequel.migration do
   change do
-    create_table(:auditions) do
-      primary_key :id
-      String :country, :size=>255
-      String :region, :size=>255
-      String :city, :size=>255
-      Date :date
-      DateTime :created_at
-      DateTime :updated_at
-      Date :deadline
-      Integer :listing_id
-      TrueClass :pianist_provided
-      TrueClass :can_bring_own_pianist
-      Float :pianist_fee
-      Float :fee
-    end
-    
     create_table(:organizations) do
       primary_key :id
       String :name, :size=>255
@@ -73,6 +57,14 @@ Sequel.migration do
       index [:username], :name=>:username, :unique=>true
     end
     
+    create_table(:programs_users, :ignore_index_errors=>true) do
+      foreign_key :program_id, :programs, :key=>[:id]
+      foreign_key :user_id, :users, :key=>[:id]
+      
+      index [:program_id], :name=>:program_id
+      index [:user_id], :name=>:user_id
+    end
+    
     create_table(:seasons, :ignore_index_errors=>true) do
       primary_key :id
       Date :start_date
@@ -102,19 +94,31 @@ Sequel.migration do
       index [:user_id], :name=>:user_id
     end
     
+    create_table(:auditions, :ignore_index_errors=>true) do
+      primary_key :id
+      String :country, :size=>255
+      String :region, :size=>255
+      String :city, :size=>255
+      Date :date
+      DateTime :created_at
+      DateTime :updated_at
+      Date :deadline
+      TrueClass :pianist_provided
+      TrueClass :can_bring_own_pianist
+      Float :pianist_fee
+      Float :fee
+      foreign_key :season_id, :seasons, :key=>[:id]
+      
+      index [:season_id], :name=>:season_id
+    end
+    
     create_table(:listings, :ignore_index_errors=>true) do
       primary_key :id
       String :title, :size=>255, :null=>false
-      Date :deadline
-      Date :program_start_date, :null=>false
-      Date :program_end_date
       DateTime :created_at
       DateTime :updated_at
-      TrueClass :stale
-      foreign_key :program_id, :programs, :key=>[:id]
       foreign_key :season_id, :seasons, :key=>[:id]
       
-      index [:program_id], :name=>:program_id
       index [:season_id], :name=>:season_id
     end
     
@@ -133,14 +137,6 @@ Sequel.migration do
       Integer :position
       
       index [:task_list_id], :name=>:task_list_id
-    end
-    
-    create_table(:listings_users, :ignore_index_errors=>true) do
-      foreign_key :listing_id, :listings, :key=>[:id]
-      foreign_key :user_id, :users, :key=>[:id]
-      
-      index [:listing_id], :name=>:listing_id
-      index [:user_id], :name=>:user_id
     end
   end
 end

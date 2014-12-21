@@ -1,40 +1,5 @@
 Sequel.migration do
   change do
-    create_table(:auditions) do
-      primary_key :id
-      String :country, :size=>255
-      String :region, :size=>255
-      String :city, :size=>255
-      Date :date
-      DateTime :created_at
-      DateTime :updated_at
-      Date :deadline
-      Integer :listing_id
-      TrueClass :pianist_provided
-      TrueClass :can_bring_own_pianist
-      Float :pianist_fee
-      Float :fee
-    end
-    
-    create_table(:listings) do
-      primary_key :id
-      String :title, :size=>255, :null=>false
-      String :web_site, :size=>255, :null=>false
-      String :country, :size=>255, :null=>false
-      String :region, :size=>255
-      String :city, :size=>255, :null=>false
-      Date :deadline
-      Date :program_start_date, :null=>false
-      Date :program_end_date
-      String :organization, :size=>255
-      String :type, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
-      Integer :min_age
-      Integer :max_age
-      TrueClass :stale
-    end
-    
     create_table(:organizations) do
       primary_key :id
       String :name, :size=>255
@@ -56,6 +21,7 @@ Sequel.migration do
     end
     
     create_table(:programs) do
+      primary_key :id
       Integer :organization_id
       String :type, :size=>255
       Integer :min_age
@@ -64,6 +30,12 @@ Sequel.migration do
       String :contact_name, :size=>255
       String :contact_phone, :size=>255
       String :contact_email, :size=>255
+      DateTime :created_at
+      DateTime :updated_at
+      String :name, :size=>255
+      String :country, :size=>255
+      String :region, :size=>255
+      String :city, :size=>255
     end
     
     create_table(:users, :ignore_index_errors=>true) do
@@ -85,12 +57,31 @@ Sequel.migration do
       index [:username], :name=>:username, :unique=>true
     end
     
-    create_table(:listings_users, :ignore_index_errors=>true) do
-      foreign_key :listing_id, :listings, :key=>[:id]
+    create_table(:programs_users, :ignore_index_errors=>true) do
+      foreign_key :program_id, :programs, :key=>[:id]
       foreign_key :user_id, :users, :key=>[:id]
       
-      index [:listing_id], :name=>:listing_id
+      index [:program_id], :name=>:program_id
       index [:user_id], :name=>:user_id
+    end
+    
+    create_table(:seasons, :ignore_index_errors=>true) do
+      primary_key :id
+      Date :start_date
+      Date :end_date
+      Date :early_bird_deadline
+      Date :priority_deadline
+      Date :final_deadline
+      Float :payments
+      Float :program_fees
+      Float :peripheral_fees
+      Float :application_fee
+      foreign_key :program_id, :programs, :key=>[:id]
+      DateTime :created_at
+      DateTime :updated_at
+      TrueClass :stale
+      
+      index [:program_id], :name=>:program_id
     end
     
     create_table(:task_lists, :ignore_index_errors=>true) do
@@ -101,6 +92,34 @@ Sequel.migration do
       DateTime :updated_at
       
       index [:user_id], :name=>:user_id
+    end
+    
+    create_table(:auditions, :ignore_index_errors=>true) do
+      primary_key :id
+      String :country, :size=>255
+      String :region, :size=>255
+      String :city, :size=>255
+      Date :date
+      DateTime :created_at
+      DateTime :updated_at
+      Date :deadline
+      TrueClass :pianist_provided
+      TrueClass :can_bring_own_pianist
+      Float :pianist_fee
+      Float :fee
+      foreign_key :season_id, :seasons, :key=>[:id]
+      
+      index [:season_id], :name=>:season_id
+    end
+    
+    create_table(:listings, :ignore_index_errors=>true) do
+      primary_key :id
+      String :title, :size=>255, :null=>false
+      DateTime :created_at
+      DateTime :updated_at
+      foreign_key :season_id, :seasons, :key=>[:id]
+      
+      index [:season_id], :name=>:season_id
     end
     
     create_table(:tasks, :ignore_index_errors=>true) do

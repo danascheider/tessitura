@@ -1,13 +1,14 @@
 == Canto {<img src="https://travis-ci.org/danascheider/canto.svg?branch=pure-sinatra" alt="Build Status" />}[https://travis-ci.org/danascheider/canto] {<img src="https://codeclimate.com/github/danascheider/canto.png" />}[https://codeclimate.com/github/danascheider/canto] {<img src="https://coveralls.io/repos/danascheider/canto/badge.png?branch=master" />}[https://coveralls.io/r/danascheider/canto] {<img src="https://gemnasium.com/danascheider/canto.svg" alt="Dependency Status" />}[https://gemnasium.com/danascheider/canto] 
 
-Canto is a web-based to-do list and task management app for opera singers. Eventually, this app will provide a variety of functionality tailored to the specific needs of opera singers. This repo contains the code for the Sinatra API. The API uses MySQL with the Mysql2 adapter and with the Sequel gem handling ORM functions. The (front end)[https://github.com/danascheider/canto-front-end] is being developed in another repo using Backbone.js. 
+Canto is a web-based career management app for classical singers. It provides a variety of functionality tailored to the specific needs of opera singers. This repo contains the code for the back-end Sinatra API. The API uses MySQL with the Mysql2 adapter and with the Sequel gem handling ORM functions. The (front end)[https://github.com/danascheider/canto-front-end] is being developed in another repo using Backbone.js. 
 
 === Models
-For the most up-to-date information about models and their attributes, see +/db/schema.rb+. 
+For the most up-to-date information about models and their attributes, see the most recent schema file in the +/db/schema_migrations+ directory. 
 
 ==== Users
 
-Users can be regular users or admins. Users own task lists (and by extension, the tasks on the lists), and have a many-to-many relationship to listings (which act in this context as recommendations). Users are assumed to be classical singers and have the following attributes:
+Users can be regular users or admins. Users own task lists (and by extension, the tasks on the lists), and have a many-to-many relationship to programs (which act in this context as recommendations). Users are assumed to be classical singers and have the following attributes:
+* ID
 * Username
 * Password
 * E-mail address
@@ -17,14 +18,25 @@ Users can be regular users or admins. Users own task lists (and by extension, th
 * Fach
 * City 
 * Country
-* Created At
-* Updated At
+* Created at
+* Updated at
 
 Ultimately, user attributes will be used to provide the users with relevant information and recommendations.
 
+==== Task Lists
+
+TaskLists are owned by a user and contain tasks. They currently do not have a very prominent place in the app, and will soon either be modified to serve a more important organizational function, or replaced with another model that fills such a role. Task lists have the following attributes:
+* ID
+* Title
+* User ID
+* Created at
+* Updated at
+
 ==== Tasks
 
-Tasks belong to TaskLists, which are owned by a User. Users can have multiple lists. Tasks currently have these attributes:
+Tasks belong to TaskLists, which are owned by a User. Users can have multiple lists. Tasks have the following attributes:
+* ID
+* Task list ID
 * Title
 * Status:
   * 'New'
@@ -39,27 +51,83 @@ Tasks belong to TaskLists, which are owned by a User. Users can have multiple li
   * 'Not Important'
 * Description
 * Deadline
-* Created At 
-* Updated At
+* Created at 
+* Updated at
+
+==== Organizations
+
+An organization is any organization offering programs of interest to Canto subscribers. They may be, among other things, opera companies, churches, government agencies, universities, and foundations. Each organization can own multiple programs. Organizations have the following attributes:
+* ID
+* Name
+* Address 1
+* Address 2
+* Country
+* Region (or state)
+* City
+* Postal code (ZIP)
+* Web address
+* Contact name
+* Contact phone 1
+* Contact phone 2 
+* Contact email 1
+* Contact email 2
+* Fax
+* Created at
+* Updated at
+
+When an organization is destroyed, all the programs it owns are destroyed with it.
+
+==== Programs
+
+Programs are any of a variety of types of events or activities of interest to Canto subscribers. The Program model stores data about a program that remains consistent from year to year (e.g., geographic region, age restrictions, etc.). Each program is owned by an Organization and associated with many Users who have been matched with the Program by an algorithm handling recommendations (not implemented yet). The association between Users and Programs is coordinated through the programs_users join table. 
+
+Programs are typically cyclical in nature, revolving around semesters, seasons, fiscal years, or some other recurring period of time. Data specific to a particular cycle is stored in the Seasons table. Each program can have many seasons.
+
+Programs have the following attributes:
+* ID
+* Organization ID
+* Type
+* Minimum age
+* Maximum age
+* Web site
+* Contact name
+* Contact phone
+* Contact e-mail
+* Name
+* Country
+* Region (or state)
+* City
+* Created at
+* Updated at
+
+==== Seasons
+
+Seasons contain data about Programs that is specific to a period of time, such as a fiscal year, season, semester, or other recurrent cycle. Each Program has multiple Seasons, and each Season belongs to a single Program. 
+
+Seasons own both listings (one-to-one) and auditions (one-to-many). Seasons have the following attributes:
+* ID
+* Program ID
+* Start date
+* End date
+* Early bird deadline
+* Priority deadline
+* Final deadline
+* Payments
+* Program fees
+* Peripheral fees
+* Application fee
+* Stale (boolean applied to seasons whose deadlines have passed)
+* Created at
+* Updated at
 
 ==== Listings
 
 Listings are audition listings. Listings have a many-to-many relationship to users, allowing them to be treated as recommendations to a certain user. They also may be associated with one or more auditions (representations of auditions by time and place, along with other audition-specific information).  Currently, they have the following attributes:
 * ID
+* Season ID
 * Title
-* Type
-* Web site
-* Country
-* Region (or state)
-* City
-* Deadline
-* Program Start Date
-* Program End Date
-* Minimum Age
-* Maximum Age
-* Organization
-* Created At
-* Updated At
+* Created at
+* Updated at
 
 ==== Auditions
 
@@ -70,11 +138,11 @@ Auditions are representations of physical audition times and places. They also s
 * Country
 * Deadline
 * Fee
-* Pianist Provided (boolean)
-* Can Bring Own Pianist (boolean)
-* Pianist Fee
-* Created At
-* Updated At
+* Pianist provided (boolean)
+* Can bring own pianist (boolean)
+* Pianist fee
+* Created at
+* Updated at
 
 === Development Approach
 
