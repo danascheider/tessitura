@@ -232,7 +232,7 @@ describe Task do
 
       it 'changes the position of the other tasks' do 
         new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id)
-        positions = (user.tasks - [new_task]).map {|t| t.position }
+        positions = (user.tasks - [new_task]).map(&:position)
 
         # Expected outcome is [n, ..., 3, 2] because earlier tasks have 
         # higher positions.
@@ -248,7 +248,7 @@ describe Task do
       end
 
       it 'increments the positions of tasks between old and new positions' do 
-        initial_positions = @subset.map {|t| t.position }
+        initial_positions = @subset.map(&:position)
 
         @task.update({position: 2})
 
@@ -257,7 +257,7 @@ describe Task do
       end
 
       it 'doesn\'t change the positions of other tasks' do 
-        other_positions = (other_tasks = user.tasks - [@task] - @subset).map {|t| t.position }
+        other_positions = (other_tasks = user.tasks - [@task] - @subset).map(&:position)
         @task.update({position: 6})
         changed_positions = other_tasks.map {|t| Task[t.id].position }
 
@@ -272,7 +272,7 @@ describe Task do
       end
 
       it 'decrements the positions of tasks between old and new positions' do 
-        initial_positions = @subset.map {|t| t.position }
+        initial_positions = @subset.map(&:position)
 
         @task.update({position: 6})
 
@@ -281,7 +281,7 @@ describe Task do
       end
 
       it 'doesn\'t change the positions of other tasks' do 
-        other_positions = (other_tasks = user.tasks - [@task] - @subset).map {|t| t.position }
+        other_positions = (other_tasks = user.tasks - [@task] - @subset).map(&:position)
         @task.update({position: 6})
         changed_positions = other_tasks.map {|t| Task[t.id].position }
 
@@ -296,14 +296,14 @@ describe Task do
       end
 
       it 'decrements the positions of tasks after the deleted one' do 
-        initial = @subset.map {|t| t.position}
+        initial = @subset.map(&:position)
         @task.destroy
         changed_positions = @subset.map {|t| Task[t.id].position }
         expect(changed_positions).to eql(initial.map {|num| num - 1})
       end
 
       it 'doesn\'t change the positions of tasks before the deleted one' do 
-        initial = (other = user.tasks - @subset - [@task]).map {|t| t.position }
+        initial = (other = user.tasks - @subset - [@task]).map(&:position)
         @task.destroy
         final = other.map {|t| Task[t.id].position}
         expect(final).to eql initial
@@ -324,7 +324,7 @@ describe Task do
         end
 
         it 'moves the other tasks up' do 
-          initial = (@lower).map {|t| t.position }
+          initial = (@lower).map(&:position)
           @task.update(status: 'Complete')
           final = @lower.map {|t| Task[t.id].position }
           expect(final).to eql(initial.map {|num| num - 1 })
