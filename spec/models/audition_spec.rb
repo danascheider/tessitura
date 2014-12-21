@@ -14,11 +14,11 @@ describe Audition do
   it { is_expected.to respond_to :updated_at }
 
   describe 'associations' do 
-    it 'is deleted with its associated listing' do 
-      listing = FactoryGirl.create(:listing_with_auditions)
-      auditions = listing.auditions
-      listing.destroy
-      auditions.each{ |a| expect(Audition[a.id]).to be nil }
+    it 'is deleted with its associated season' do 
+      season = FactoryGirl.create(:season_with_auditions)
+      auditions = season.auditions
+      season.destroy
+      auditions.each {|a| expect(Audition[a.id]).to be nil }
     end
   end
 

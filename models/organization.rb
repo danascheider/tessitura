@@ -4,4 +4,6 @@
 # university departments, or community organizations.
 
 class Organization < Sequel::Model
+  one_to_many :programs
+  self.plugin :association_dependencies, programs: :destroy
 end

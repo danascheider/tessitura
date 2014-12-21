@@ -13,14 +13,11 @@ describe Listing do
   end
 
   describe 'validations' do 
-    let(:listing) { FactoryGirl.build(:listing) }
+    let(:listing) { FactoryGirl.create(:listing) }
 
     it 'is invalid without a title' do 
       listing.title = nil
       expect(listing).not_to be_valid
     end
-  end
-
-  describe 'associations' do 
   end
 end

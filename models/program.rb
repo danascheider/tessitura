@@ -8,4 +8,7 @@
 
 class Program < Sequel::Model
   many_to_one :organization
+  one_to_many :seasons
+
+  self.plugin :association_dependencies, seasons: :destroy
 end

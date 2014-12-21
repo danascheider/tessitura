@@ -4,4 +4,9 @@
 
 class Season < Sequel::Model
   one_to_one :listing
+  one_to_many :auditions
+  many_to_one :program
+
+  self.plugin :association_dependencies, listing: :destroy
+  self.plugin :association_dependencies, auditions: :destroy
 end

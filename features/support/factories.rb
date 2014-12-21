@@ -3,26 +3,95 @@ require 'factory_girl'
 FactoryGirl.define do 
   to_create {|i| i.save }
 
-  factory :listing do 
-    sequence(:title) {|n| "Program #{n}" }
+  factory :organization do 
+    sequence(:name) {|n| "Organization #{n}" }
 
-    factory :listing_with_auditions do 
+    factory :organization_with_programs do 
       transient do 
-        auditions_count 2
+        program_count 2
       end
 
-      after(:create) do |listing, evaluator|
-        create_list(:audition, evaluator.auditions_count, listing_id: listing.id)
+      after(:create) do |org, evaluator|
+        create_list(:program, evaluator.program_count, organization: org)
+      end
+    end
+
+    factory :organization_with_everything do 
+      transient do 
+        program_count 2
+      end
+
+      after(:create) do |org, evaluator|
+        create_list(:program_with_everything, evaluator.program_count, organization: org)
       end
     end
   end
 
-  factory :audition do 
-    listing
+  factory :program do 
+    organization
+    sequence(:name) {|n| "Program #{n}" }
+    type 'Competition'
     country 'USA'
     region 'New York'
     city 'New York City'
-    date Date.new(2015,4,11)
+
+    factory :program_with_season do 
+      after(:create) do |program, evaluator|
+        create(:season, program: program)
+      end
+    end
+
+    factory :program_with_everything do 
+      after(:create) do |program, evaluator|
+        create(:season_with_everything, program: program)
+      end
+    end
+  end
+
+  factory :season do 
+    program
+    final_deadline Date.new(2015,8,1)
+    start_date Date.new(2015,8,22)
+
+    factory :season_with_listing do 
+      after(:create) do |season, evaluator|
+        create(:listing, season: season)
+      end
+    end
+
+    factory :season_with_auditions do 
+      transient do 
+        audition_count 4
+      end
+
+      after(:create) do |season, evaluator|
+        create_list(:audition, evaluator.audition_count, season: season)
+      end
+    end
+
+    factory :season_with_everything do 
+      transient do 
+        audition_count 4
+      end
+
+      after(:create) do |season, evaluator|
+        create_list(:audition, evaluator.audition_count, season: season)
+        create(:listing, season: season)
+      end
+    end
+  end
+
+  factory :listing do 
+    association :season
+    sequence(:title) {|n| "Program #{n}" }
+  end
+
+  factory :audition do 
+    season
+    country 'USA'
+    region 'New York'
+    city 'New York City'
+    sequence(:date) { m, d = rand(12), rand(28); Date.new(2015, m, d) }
     deadline Date.new(2015,2,15)
   end
   
