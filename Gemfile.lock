@@ -64,7 +64,7 @@ GEM
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
     rack (1.6.0)
-    rack-cors (0.2.9)
+    rack-cors (0.3.0)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.2)
@@ -131,7 +131,7 @@ DEPENDENCIES
   json (~> 1.8.1)
   json_spec (~> 1.1.2)
   mysql2 (~> 0.3, >= 0.3.16)
-  rack-cors (~> 0.2.9)
+  rack-cors (~> 0.3)
   rack-test (~> 0.6.2)
   rake (~> 10.4)
   reactive_extensions (~> 0.5.0)
