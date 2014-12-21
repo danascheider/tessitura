@@ -5,11 +5,6 @@ FactoryGirl.define do
 
   factory :listing do 
     sequence(:title) {|n| "Program #{n}" }
-    sequence(:program_start_date) { Time.now }
-    sequence(:web_site) {|n| "http://www.program-#{n}.com" }
-    country 'USA'
-    city 'New York City'
-    sequence(:deadline) { Time.now }
 
     factory :listing_with_auditions do 
       transient do 
@@ -27,7 +22,8 @@ FactoryGirl.define do
     country 'USA'
     region 'New York'
     city 'New York City'
-    sequence(:deadline) { Time.now }
+    date Date.new(2015,4,11)
+    deadline Date.new(2015,2,15)
   end
   
   factory :task_list do 
