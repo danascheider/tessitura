@@ -113,7 +113,7 @@ describe User do
 
     describe '#default_task_list' do 
       it 'creates a task list if there isn\'t one' do 
-        user.task_lists.each {|l| l.destroy }; user.reload
+        user.task_lists.each(&:destroy); user.reload
         expect { user.default_task_list }.to change { user.task_lists.count }.from(0).to(1)
       end
 
