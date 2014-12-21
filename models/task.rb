@@ -121,35 +121,42 @@ class Task < Sequel::Model
     # which would lead to infinite recursion.
 
     def self.adjust_positions(changed)
-      positions = ((scoped_tasks = Task.where(owner_id: changed.owner_id)).map {|t| t.position }).sort!
+      positions = (scoped_tasks = Task.where(owner_id: changed.owner_id)).map(&:position).sort!
 
-      dup, gap = Task.get_dup_and_gap(positions)[0], Task.get_dup_and_gap(positions)[1]
+      values = Task.return_values(positions)
 
-      # The 3 cases handled here signify, respectively, that:
-      #   1. A task has been moved towards the top of the list (its 
-      #      position number has gotten lower)
-      #   2. A task has been moved towards the bottom of the list
-      #      (its position number has gotten higher)
-      #   3. A task has been added to the list
-
-      min, max, val = dup, gap, 1 if dup && gap && dup < gap 
-      min, max, val = gap, dup, -1 if dup && gap && gap < dup
-      min, max, val = dup, scoped_tasks.count, 1 if dup && !gap
-
-      # No `dup` and no `gap` indicates no positions have been changed.
-      # A `gap` with no `dup` indicates a task was destroyed, in which case
-      # that will be taken care of in the `after_destroy` hook.
-
-      return true unless dup || gap
+      return true if values === []
 
       # Tasks iterate through tasks, updating the positions. Note the use
       # of `t.this.update(args)` - this carries out the `update` action on
       # a Sequel::Dataset representation of the task model, thus bypassing
       # any hooks otherwise triggered by an update.
 
-      scoped_tasks.where([[:position, min..max]]).each do |t|
-        t.this.update(position: t.position + val) unless t === changed
+      scoped_tasks.where([[:position, values[0]..values[1]]]).each do |t|
+        t.this.update(position: t.position + values[2]) unless t === changed
       end
+    end
+
+    def self.return_values(positions) 
+      dup, gap = Task.get_dup_and_gap(positions)[0], Task.get_dup_and_gap(positions)[1]
+
+      # No `dup` and no `gap` indicates no positions have been changed.
+      # (A `gap` with no `dup` indicates a task was destroyed, in which case
+      # that will be taken care of in the `after_destroy` hook.)
+
+      return [] unless dup
+
+      # This method returns an array with three elements: A minimum
+      # value, a maximum value, and an incrementor. The three arrangements
+      # of this array reflect three possible situations:
+      #   1. A task has been moved towards the top of the list (its 
+      #      position number has gotten lower)
+      #   2. A task has been moved towards the bottom of the list
+      #      (its position number has gotten higher)
+      #   3. A task has been added to the list
+
+      return [dup, positions.count, 1] unless gap
+      return [dup, gap].sort << (gap < dup ? -1 : 1)
     end
 
     # The `Task.get_dup_and_gap` method takes a sorted list of indices as 
