@@ -72,12 +72,9 @@ CREATE TABLE `listings` (
   `title` varchar(255) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `program_id` int(11) DEFAULT NULL,
   `season_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `program_id` (`program_id`),
   KEY `season_id` (`season_id`),
-  CONSTRAINT `listings_ibfk_1` FOREIGN KEY (`program_id`) REFERENCES `programs` (`id`),
   CONSTRAINT `listings_ibfk_2` FOREIGN KEY (`season_id`) REFERENCES `seasons` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -88,7 +85,7 @@ CREATE TABLE `listings` (
 
 LOCK TABLES `listings` WRITE;
 /*!40000 ALTER TABLE `listings` DISABLE KEYS */;
-INSERT INTO `listings` VALUES (1,'Spotlight on Opera Program Auditions',NULL,NULL,1,1),(2,'New York Lyric Opera Theatre Vocal Competition',NULL,NULL,2,2),(3,'Canto de las Americas',NULL,NULL,3,3),(4,'Manhattan Opera Studio Summer Festival',NULL,NULL,4,4),(5,'Professional Fellows, Developing, and Young Artist Vocal Program',NULL,NULL,5,5);
+INSERT INTO `listings` VALUES (1,'Spotlight on Opera Program Auditions',NULL,NULL,1),(2,'New York Lyric Opera Theatre Vocal Competition',NULL,NULL,2),(3,'Canto de las Americas',NULL,NULL,3),(4,'Manhattan Opera Studio Summer Festival',NULL,NULL,4),(5,'Professional Fellows, Developing, and Young Artist Vocal Program',NULL,NULL,5);
 /*!40000 ALTER TABLE `listings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -213,7 +210,7 @@ CREATE TABLE `schema_migrations` (
 
 LOCK TABLES `schema_migrations` WRITE;
 /*!40000 ALTER TABLE `schema_migrations` DISABLE KEYS */;
-INSERT INTO `schema_migrations` VALUES ('20140914215616_create_users.rb'),('20140914215823_add_username_and_password_to_users.rb'),('20140914220503_add_first_name_last_name_and_email_to_users.rb'),('20140914224652_require_unique_username_for_users.rb'),('20140914224908_require_unique_email_for_users.rb'),('20140914225023_disallow_null_username_for_users.rb'),('20140914225152_disallow_null_email_and_password_for_users.rb'),('20140914225745_add_birthdate_to_users.rb'),('20140914225945_add_city_country_fach_and_admin_to_users.rb'),('20140914231052_add_timestamps_to_users.rb'),('20140914234548_create_task_lists.rb'),('20140916222632_create_tasks.rb'),('20140916223554_add_position_to_tasks.rb'),('20140916230602_remove_not_null_constraint_from_foreign_key_in_tasks.rb'),('20140927221503_drop_not_null_constraint_on_owner_id_from_tasks.rb'),('20141102193851_drop_position_from_tasks.rb'),('20141117023818_add_backlog_to_tasks.rb'),('20141120183809_add_position_to_tasks.rb'),('20141218225353_create_listings.rb'),('20141218232135_add_type_to_listings.rb'),('20141219065231_create_auditions.rb'),('20141219071638_add_timestamps_and_age_limits_to_listings.rb'),('20141219075311_add_deadline_to_auditions.rb'),('20141219200617_create_users_listings.rb'),('20141219201528_add_listing_id_pianist_provided_can_bring_own_pianist_pianist_fee_and_fee_to_auditions.rb'),('20141219220945_add_stale_to_listings.rb'),('20141220234324_create_organizations.rb'),('20141221000635_create_programs.rb'),('20141221002034_add_primary_key_to_organizations.rb'),('20141221002338_add_primary_key_and_timestamps_to_programs.rb'),('20141221003344_add_name_country_city_and_region_to_programs.rb'),('20141221005944_add_program_id_to_listings.rb'),('20141221010501_remove_program_data_from_listings.rb'),('20141221011702_create_seasons.rb'),('20141221012333_add_stale_to_seasons.rb'),('20141221013533_add_season_id_to_listings.rb'),('20141221054028_drop_program_dates_deadline_and_stale_from_listings.rb'),('20141221054752_add_season_id_and_drop_listing_id_from_auditions.rb'),('20141221091027_drop_listings_users.rb'),('20141221091348_create_programs_users.rb');
+INSERT INTO `schema_migrations` VALUES ('20140914215616_create_users.rb'),('20140914215823_add_username_and_password_to_users.rb'),('20140914220503_add_first_name_last_name_and_email_to_users.rb'),('20140914224652_require_unique_username_for_users.rb'),('20140914224908_require_unique_email_for_users.rb'),('20140914225023_disallow_null_username_for_users.rb'),('20140914225152_disallow_null_email_and_password_for_users.rb'),('20140914225745_add_birthdate_to_users.rb'),('20140914225945_add_city_country_fach_and_admin_to_users.rb'),('20140914231052_add_timestamps_to_users.rb'),('20140914234548_create_task_lists.rb'),('20140916222632_create_tasks.rb'),('20140916223554_add_position_to_tasks.rb'),('20140916230602_remove_not_null_constraint_from_foreign_key_in_tasks.rb'),('20140927221503_drop_not_null_constraint_on_owner_id_from_tasks.rb'),('20141102193851_drop_position_from_tasks.rb'),('20141117023818_add_backlog_to_tasks.rb'),('20141120183809_add_position_to_tasks.rb'),('20141218225353_create_listings.rb'),('20141218232135_add_type_to_listings.rb'),('20141219065231_create_auditions.rb'),('20141219071638_add_timestamps_and_age_limits_to_listings.rb'),('20141219075311_add_deadline_to_auditions.rb'),('20141219200617_create_users_listings.rb'),('20141219201528_add_listing_id_pianist_provided_can_bring_own_pianist_pianist_fee_and_fee_to_auditions.rb'),('20141219220945_add_stale_to_listings.rb'),('20141220234324_create_organizations.rb'),('20141221000635_create_programs.rb'),('20141221002034_add_primary_key_to_organizations.rb'),('20141221002338_add_primary_key_and_timestamps_to_programs.rb'),('20141221003344_add_name_country_city_and_region_to_programs.rb'),('20141221005944_add_program_id_to_listings.rb'),('20141221010501_remove_program_data_from_listings.rb'),('20141221011702_create_seasons.rb'),('20141221012333_add_stale_to_seasons.rb'),('20141221013533_add_season_id_to_listings.rb'),('20141221054028_drop_program_dates_deadline_and_stale_from_listings.rb'),('20141221054752_add_season_id_and_drop_listing_id_from_auditions.rb'),('20141221091027_drop_listings_users.rb'),('20141221091348_create_programs_users.rb'),('20141221231852_drop_program_id_from_listings.rb');
 /*!40000 ALTER TABLE `schema_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,4 +363,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-12-21 14:52:36
+-- Dump completed on 2014-12-21 15:28:37
