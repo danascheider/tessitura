@@ -181,7 +181,7 @@ describe User do
       end
 
       it 'returns all its tasks' do 
-        expect(user.tasks).to eql (user.task_lists.map {|list| list.tasks }).flatten
+        expect(user.tasks).to eql user.task_lists.map(&:tasks).flatten
       end
     end
 

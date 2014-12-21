@@ -252,14 +252,14 @@ describe Task do
 
         @task.update({position: 2})
 
-        changed_positions = @subset.map {|t| Task[t.id].position }
+        changed_positions = @subset.map {|t| t.refresh.position }
         expect(changed_positions).to eql(initial_positions.map {|num| num + 1 })
       end
 
       it 'doesn\'t change the positions of other tasks' do 
         other_positions = (other_tasks = user.tasks - [@task] - @subset).map(&:position)
         @task.update({position: 6})
-        changed_positions = other_tasks.map {|t| Task[t.id].position }
+        changed_positions = other_tasks.map {|t| t.refresh.position }
 
         expect(changed_positions).to eql other_positions
       end
@@ -276,14 +276,14 @@ describe Task do
 
         @task.update({position: 6})
 
-        changed_positions = @subset.map {|t| Task[t.id].position }
+        changed_positions = @subset.map {|t| t.refresh.position }
         expect(changed_positions).to eql(initial_positions.map {|num| num - 1 })
       end
 
       it 'doesn\'t change the positions of other tasks' do 
         other_positions = (other_tasks = user.tasks - [@task] - @subset).map(&:position)
         @task.update({position: 6})
-        changed_positions = other_tasks.map {|t| Task[t.id].position }
+        changed_positions = other_tasks.map {|t| t.refresh.position }
 
         expect(changed_positions).to eql other_positions
       end
@@ -298,14 +298,14 @@ describe Task do
       it 'decrements the positions of tasks after the deleted one' do 
         initial = @subset.map(&:position)
         @task.destroy
-        changed_positions = @subset.map {|t| Task[t.id].position }
+        changed_positions = @subset.map {|t| t.refresh.position }
         expect(changed_positions).to eql(initial.map {|num| num - 1})
       end
 
       it 'doesn\'t change the positions of tasks before the deleted one' do 
         initial = (other = user.tasks - @subset - [@task]).map(&:position)
         @task.destroy
-        final = other.map {|t| Task[t.id].position}
+        final = other.map {|t| t.refresh.position}
         expect(final).to eql initial
       end
     end
@@ -326,7 +326,7 @@ describe Task do
         it 'moves the other tasks up' do 
           initial = (@lower).map(&:position)
           @task.update(status: 'Complete')
-          final = @lower.map {|t| Task[t.id].position }
+          final = @lower.map {|t| t.refresh.position }
           expect(final).to eql(initial.map {|num| num - 1 })
         end
 
