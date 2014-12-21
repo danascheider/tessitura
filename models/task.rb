@@ -123,18 +123,7 @@ class Task < Sequel::Model
     def self.adjust_positions(changed)
       positions = ((scoped_tasks = Task.where(owner_id: changed.owner_id)).map {|t| t.position }).sort!
 
-      # When a new task has been added or the position of a task has been
-      # changed, one or both of two things will happen to the sequence of 
-      # positions:
-      #   1. A duplicate position will appear at the position the 
-      #      task was created at or moved to
-      #   2. A gap will appear at the position the task was removed from
-      #
-      # `dup` and `gap` represent the duplicate position number and the 
-      # missing position number, respectively
-
-      dup = positions.find {|num| positions.count(num) > 1 }
-      gap = (1..positions.last).find {|num| positions.count(num) === 0 }
+      dup, gap = Task.get_dup_and_gap(positions)[0], Task.get_dup_and_gap(positions)[1]
 
       # The 3 cases handled here signify, respectively, that:
       #   1. A task has been moved towards the top of the list (its 
@@ -161,5 +150,27 @@ class Task < Sequel::Model
       scoped_tasks.where([[:position, min..max]]).each do |t|
         t.this.update(position: t.position + val) unless t === changed
       end
+    end
+
+    # The `Task.get_dup_and_gap` method takes a sorted list of indices as 
+    # a parameter and returns the value of any duplicates, as well as any
+    # indices that are missing between the lowest and highest indices on 
+    # the list.
+
+    def self.get_dup_and_gap(positions)
+
+      # When a new task has been added or the position of a task has been
+      # changed, one or both of two things will happen to the sequence of 
+      # positions:
+      #   1. A duplicate position will appear at the position the 
+      #      task was created at or moved to
+      #   2. A gap will appear at the position the task was removed from
+      #
+      # `dup` and `gap` represent the duplicate position number and the 
+      # missing position number, respectively
+      
+      dup = positions.find {|number| positions.count(number) > 1 }
+      gap = (1..positions.last).find {|number| positions.count(number) === 0 }
+      [dup, gap]
     end
 end
