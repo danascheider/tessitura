@@ -18,6 +18,10 @@ Then(/^the organization's (.*) should be "(.*?)"$/) do |attr,val|
   expect(@organization.refresh.send(attr.to_sym)).to eql val
 end
 
+Then(/^the organization's (.*) should not be "(.*?)"$/) do |attr, val|
+  expect(@organization.refresh.send(attr.to_sym)).not_to eql val
+end
+
 Then(/^the response body should include the new organization's ID$/) do
   expect(parse_json(last_response.body)['id']).to eql Organization.last.id
 end

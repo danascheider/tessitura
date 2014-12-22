@@ -34,7 +34,7 @@ end
 # Updating Organizations
 # ======================
 
-When(/^the client submits a PUT request to its individual endpoint with admin credentials and:$/) do |string|
-  authorize_with User[1]
+When(/^the client submits a PUT request to its individual endpoint with (.*) credentials and:$/) do |type, string|
+  authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
   put "organizations/#{@organization.id}", string, 'CONTENT_TYPE' => 'application/json'
 end
