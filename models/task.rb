@@ -79,8 +79,13 @@ class Task < Sequel::Model
 
   # Overwrites the default `#to_json` method to return a JSON object based
   # on the task's attribute hash
+  #
+  # NOTE: The definition of `#to_json` has to include the optional `opts`
+  #       arg, because in some of the tests, a JSON::Ext::Generator::State
+  #       object is passed to the method. I am not sure why this happens,
+  #       but including the optional arg makes it work as expected.
 
-  def to_json()
+  def to_json(opts={})
     to_h.to_json
   end
 

@@ -31,8 +31,13 @@ class TaskList < Sequel::Model
 
   # The `#to_json` method converts the output of `#to_hash` to JSON format, preventing
   # inscrutable JSON objects like `"\"#<TaskList:0x00000004b050c8>\""`.
+  #
+  # NOTE: The definition of `#to_json` has to include the optional `opts`
+  #       arg, because in some of the tests, a JSON::Ext::Generator::State
+  #       object is passed to the method. I am not sure why this happens,
+  #       but including the optional arg makes it work as expected.
 
-  def to_json
+  def to_json(opts={})
     to_a.to_json
   end
 
