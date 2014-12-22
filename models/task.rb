@@ -72,20 +72,7 @@ class Task < Sequel::Model
   # hash, so not all columns will necessarily be represented in the hash.
 
   def to_hash
-    hash = {
-      id: id,
-      task_list_id: task_list_id,
-      owner_id: owner_id,
-      position: position,
-      title: title,
-      deadline: deadline,
-      priority: priority,
-      status: status,
-      description: description,
-      backlog: backlog,
-      created_at: created_at,
-      updated_at: updated_at
-    }.reject! {|key, value| value.blank? }
+    super.reject {|k,v| v.blank? }
   end
 
   alias_method :to_h, :to_hash
@@ -93,8 +80,8 @@ class Task < Sequel::Model
   # Overwrites the default `#to_json` method to return a JSON object based
   # on the task's attribute hash
 
-  def to_json(options={})
-    to_hash.to_json
+  def to_json()
+    to_h.to_json
   end
 
   # The `user` method returns the user who ultimately owns the task. Since

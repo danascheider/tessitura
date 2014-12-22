@@ -7,6 +7,9 @@ class Organization < Sequel::Model
   one_to_many :programs
   self.plugin :association_dependencies, programs: :destroy
 
+  # The `#to_hash` or `#to_h` method returns all non-empty attributes in a hash
+  # with symbol keys.
+
   def to_hash
     super.reject {|k,v| v.blank? }
   end

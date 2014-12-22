@@ -75,20 +75,7 @@ class User < Sequel::Model(:users)
   # For security reasons, the password is not returned in the hash.
 
   def to_hash
-    {
-      id: id,
-      username: username,
-      email: email,
-      first_name: first_name,
-      last_name: last_name,
-      city: city,
-      country: country,
-      fach: fach,
-      admin: admin,
-      task_lists: task_lists.map(&:id),
-      created_at: created_at,
-      updated_at: updated_at
-    }.reject! {|k,v| v.blank? }
+    super.reject {|k,v| v.blank? }
   end
 
   alias_method :to_h, :to_hash
@@ -96,8 +83,8 @@ class User < Sequel::Model(:users)
   # Override the `#to_json` method so the JSON object is created from the 
   # hash of the user's attributes instead of from the user object itself
 
-  def to_json(options={})
-    to_hash.to_json
+  def to_json()
+    to_h.to_json
   end
 
   # Users must provide a valid username, password, and e-mail address. The

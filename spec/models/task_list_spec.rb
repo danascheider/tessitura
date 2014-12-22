@@ -71,6 +71,12 @@ describe TaskList do
       end
     end
 
+    describe '#to_json' do 
+      it 'converts to an array first' do 
+        expect(task_list.to_json).to eql task_list.to_a.to_json
+      end
+    end
+
     describe '#owner' do 
       it 'returns the task list\'s associated user' do
         expect(task_list.owner).to eql owner

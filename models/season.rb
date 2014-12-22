@@ -10,11 +10,17 @@ class Season < Sequel::Model
   self.plugin :association_dependencies, listing: :destroy
   self.plugin :association_dependencies, auditions: :destroy
 
+  # The `#to_hash` or `#to_h` method returns all non-empty attributes in a hash
+  # with symbol keys.
+
   def to_hash 
     super.reject {|k,v| v.blank? }
   end
 
   alias_method :to_h, :to_hash
+
+  # The `#to_json` method converts the output of `#to_hash` to JSON format, preventing
+  # inscrutable JSON objects like `"\"#<Season:0x00000004b050c8>\""`.
 
   def to_json
     to_h.to_json
