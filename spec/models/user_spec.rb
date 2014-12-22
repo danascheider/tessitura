@@ -204,6 +204,10 @@ describe User do
       it 'doesn\'t include blank or nil attributes' do 
         expect(user.to_hash).not_to have_key(:fach)
       end
+
+      it 'doesn\'t include the password' do 
+        expect(user.to_hash).not_to have_key(:password)
+      end
     end
 
     describe '#to_h' do 

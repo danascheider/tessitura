@@ -75,7 +75,7 @@ class User < Sequel::Model(:users)
   # For security reasons, the password is not returned in the hash.
 
   def to_hash
-    super.reject {|k,v| v.blank? }
+    super.reject {|k,v| v.blank? || k === :password }
   end
 
   alias_method :to_h, :to_hash
