@@ -23,4 +23,39 @@ describe Season do
       seasons.each {|s| expect(Season[s.id]).to be nil }
     end
   end
+
+  describe 'instance methods' do 
+    let(:season) { FactoryGirl.create(:season) }
+
+    describe '#to_h' do 
+      let(:hash) {
+        {
+          id: season.id,
+          program_id: season.program_id,
+          final_deadline: season.final_deadline,
+          start_date: season.start_date,
+          created_at: season.created_at
+        }
+      }
+
+      it 'returns a hash of non-blank attributes' do 
+        expect(season.to_h).to eql hash
+      end
+
+      it 'returns any attributes that are not blank' do 
+        season.update(program_fees: 2750)
+        expect(season.to_h).to have_key(:program_fees)
+      end
+
+      it 'aliases #to_hash' do 
+        expect(season.to_h).to eql season.to_hash
+      end
+    end
+
+    describe '#to_json' do 
+      it 'converts to a hash first' do 
+        expect(season.to_json).to eql season.to_h.to_json
+      end
+    end
+  end
 end

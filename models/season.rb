@@ -9,4 +9,14 @@ class Season < Sequel::Model
 
   self.plugin :association_dependencies, listing: :destroy
   self.plugin :association_dependencies, auditions: :destroy
+
+  def to_hash 
+    super.reject {|k,v| v.blank? }
+  end
+
+  alias_method :to_h, :to_hash
+
+  def to_json
+    to_h.to_json
+  end
 end
