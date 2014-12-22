@@ -137,6 +137,11 @@ namespace :db do
       client.query('TRUNCATE TABLE tasks')
       client.query('TRUNCATE TABLE task_lists')
       client.query('TRUNCATE TABLE users')
+      client.query('TRUNCATE TABLE organizations')
+      client.query('TRUNCATE TABLE programs')
+      client.query('TRUNCATE TABLE seasons')
+      client.query('TRUNCATE TABLE auditions')
+      client.query('TRUNCATE TABLE listings')
       client.query('SET FOREIGN_KEY_CHECKS = 1')
       puts "Success!".green
     end
