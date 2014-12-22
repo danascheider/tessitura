@@ -6,7 +6,7 @@ Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's incomplete 
   expect(last_response.body).to eql User[id].tasks.where_not(:status, 'Complete').to_json
 end
 
-Then(/^the JSON response should include all the (.*)s$/) do |model|
+Then(/^the JSON response should include all the (\w+)s$/) do |model|
   expect(last_response.body).to eql eval(model.capitalize).all.to_json
 end
 
