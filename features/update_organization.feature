@@ -6,8 +6,7 @@ Feature: Update organization
   to update organization information.
 
   Scenario: Admin updates organization
-    Given there is an organization
-    When the client submits a PUT request to its individual endpoint with admin credentials and:
+    When the client submits a PUT request to /organizations/1 with admin credentials and:
       """json
       {"contact_name":"Shelley Goldschmidt"}
       """
@@ -15,8 +14,7 @@ Feature: Update organization
     And the response should indicate the organization was updated successfully
 
   Scenario: Regular user attempts to update organization
-    Given there is an organization
-    When the client submits a PUT request to its individual endpoint with user credentials and:
+    When the client submits a PUT request to /organizations/1 with user credentials and:
       """json
       {"contact_name":"Shelley Goldschmidt"}
       """
@@ -24,8 +22,7 @@ Feature: Update organization
     And the response should indicate the request was unauthorized
 
   Scenario: User attempts to update organization without logging in
-    Given there is an organization
-    When the client submits a PUT request to its individual endpoint with no credentials and:
+    When the client submits a PUT request to /organizations/1 with no credentials and:
       """json
       {"contact_name":"Shelley Goldschmidt"}
       """
