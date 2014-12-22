@@ -29,11 +29,18 @@ describe Canto do
   end
 
   describe 'PUT' do
+    let(:path) { "/organizations/#{org.id}" }
+    let(:resource) { org }
+
     context 'with admin authorization' do 
       it_behaves_like 'an authorized PUT request' do 
-        let(:path) { "/organizations/#{org.id}" }
-        let(:resource) { org }
         let(:agent) { FactoryGirl.create(:admin) }
+      end
+    end
+
+    context 'with user authorization' do 
+      it_behaves_like 'an unauthorized PUT request' do 
+        let(:agent) { FactoryGirl.create(:user) }
       end
     end
   end
