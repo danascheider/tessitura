@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Canto do 
   include Sinatra::ErrorHandling
-  include Rack::Test::Methods
 
   let(:admin) { FactoryGirl.create(:admin) }
   let(:user) { FactoryGirl.create(:user) }
