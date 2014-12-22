@@ -17,6 +17,7 @@ class Canto < Sinatra::Base
 
   register Sinatra::Canto::Routing::UserRoutes
   register Sinatra::Canto::Routing::TaskRoutes
+  register Sinatra::Canto::Routing::AdminRoutes
 
   not_found do 
     [404, '' ]
@@ -51,8 +52,6 @@ class Canto < Sinatra::Base
     admin_only!
   end
 
-  ##### End Filters #####
-
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
     get route do 
       @resource && @resource.to_json || 404
@@ -75,17 +74,5 @@ class Canto < Sinatra::Base
 
   post '/login' do
     login
-  end
-
-  # Admin-Only Routes
-  # =================
-
-  post '/admin/users' do 
-    return 422 unless u = User.try_rescue(:create, request_body)
-    [201, u.to_json]
-  end
-
-  get '/admin/users' do 
-    return_json(User.all)
   end
 end
