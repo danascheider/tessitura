@@ -13,6 +13,14 @@ Feature: Update organization
     Then the organization's contact_name should be "Shelley Goldschmidt"
     And the response should indicate the organization was updated successfully
 
+  Scenario: Admin attempts to update organization with bad attributes
+    When the client submits a PUT request to /organizations/1 with admin credentials and:
+      """json
+      {"name":null}
+      """
+    Then the organization's name should not be empty
+    And the response should indicate the organization was not saved successfully
+
   Scenario: Regular user attempts to update organization
     When the client submits a PUT request to /organizations/1 with user credentials and:
       """json
