@@ -67,12 +67,8 @@ describe Audition do
           city: audition.city,
           date: audition.date,
           deadline: audition.deadline,
-          fee: audition.fee,
-          pianist_provided: audition.pianist_provided,
-          can_bring_own_pianist: audition.can_bring_own_pianist,
-          pianist_fee: audition.pianist_fee,
-          created_at: audition.created_at
-        }.reject {|k,v| v.blank? }
+          created_at: audition.created_at,
+        }
       }
 
       it 'returns only non-blank attributes' do 

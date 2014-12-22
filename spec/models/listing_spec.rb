@@ -10,6 +10,37 @@ describe Listing do
   end
 
   describe 'instance methods' do 
+    let(:listing) { FactoryGirl.create(:listing) }
+
+    describe '#to_h' do 
+      let(:hash) {
+        {
+          id: listing.id,
+          season_id: listing.season_id,
+          title: listing.title,
+          created_at: listing.created_at
+        }
+      }
+
+      it 'returns a hash of non-blank attributes' do
+        expect(listing.to_h).to eql hash
+      end
+
+      it 'is aliased as #to_hash' do 
+        expect(listing.to_h).to eql listing.to_hash
+      end
+
+      it 'returns any attributes that are not blank' do 
+        listing.update(title: 'My Super Awesome Listing')
+        expect(listing.to_h).to have_key(:updated_at)
+      end
+    end
+
+    describe '#to_json' do 
+      it 'converts hash to JSON object' do 
+        expect(listing.to_json).to eql(listing.to_h.to_json)
+      end
+    end
   end
 
   describe 'validations' do 
