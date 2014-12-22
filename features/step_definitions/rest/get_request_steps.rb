@@ -50,6 +50,14 @@ When(/^the client submits a GET request to \/organizations\/(\d+) with (user|adm
   get "/organizations/#{id}"
 end
 
+# View All Organizations
+# ======================
+
+When(/^the client submits a GET request to \/organizations with user credentials$/) do
+  authorize_with User[2]
+  get '/organizations'
+end
+
 # Unauthorized
 # ============
 When(/^the client submits a GET request to (.*) with no credentials$/) do |path|

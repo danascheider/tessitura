@@ -1,5 +1,6 @@
-Given(/^there is an organization$/) do
-  @organization = FactoryGirl.create(:organization)
+Given(/^there are (\d+) organizations$/) do |count|
+  # Subtract 1 because there is already one organization, from the hook
+  FactoryGirl.create_list(:organization, count.to_i - 1)
 end
 
 Given(/^there is no organization with ID (\d+)$/) do |id|

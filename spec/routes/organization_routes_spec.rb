@@ -56,6 +56,21 @@ describe Canto, organizations: true do
         it_behaves_like 'a GET request without credentials'
       end
     end
+
+    context 'all organizations' do 
+      let(:path) { '/organizations' }
+      let(:resource) { Organization.all }
+
+      before(:each) do 
+        FactoryGirl.create_list(:organization, 3)
+      end
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:admin) }
+        end
+      end
+    end
   end
 
   describe 'PUT' do
