@@ -9,11 +9,22 @@ describe Canto do
   let(:invalid_attributes) { { country: 'Swaziland' }.to_json }
 
   describe 'POST' do 
+    let(:path) { '/organizations' }
+
     context 'with admin authorization' do 
       it_behaves_like 'an authorized POST request' do 
-        let(:path) { '/organizations' }
         let(:agent) { FactoryGirl.create(:admin) }
       end
+    end
+
+    context 'with user authorization' do 
+      it_behaves_like 'an unauthorized POST request' do 
+        let(:agent) { FactoryGirl.create(:user) }
+      end
+    end
+
+    context 'with no authorization' do 
+      it_behaves_like 'a POST request without credentials'
     end
   end
 end
