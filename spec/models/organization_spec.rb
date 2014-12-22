@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Organization, organization: true do
+describe Organization, organizations: true do
   describe 'attributes' do 
     it { is_expected.to respond_to(:name) }
     it { is_expected.to respond_to(:address_1) }

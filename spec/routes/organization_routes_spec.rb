@@ -36,6 +36,14 @@ describe Canto, organizations: true do
       it_behaves_like 'an authorized PUT request' do 
         let(:agent) { FactoryGirl.create(:admin) }
       end
+
+      context 'when the organization doesn\'t exist' do 
+        it 'returns status 404' do 
+          authorize_with FactoryGirl.create(:admin)
+          put '/organizations/8320462', {contact_name: 'Shelley Goldschmidt'}.to_json, 'CONTENT_TYPE' => 'application/json'
+          expect(last_response.status).to eql 404
+        end
+      end
     end
 
     context 'with user authorization' do 
