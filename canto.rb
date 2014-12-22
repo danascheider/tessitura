@@ -18,6 +18,7 @@ class Canto < Sinatra::Base
   register Sinatra::Canto::Routing::UserRoutes
   register Sinatra::Canto::Routing::TaskRoutes
   register Sinatra::Canto::Routing::AdminRoutes
+  register Sinatra::Canto::Routing::ListingRoutes
 
   not_found do 
     [404, '' ]
@@ -34,7 +35,9 @@ class Canto < Sinatra::Base
     log_response
   end
 
-  ###################
+  # ------- #
+  # Filters #
+  # ------- #
 
   before /^\/users\/(\d+)\/tasks/ do 
     request.put? ? protect_collection(request_body) : protect(User)
@@ -52,6 +55,14 @@ class Canto < Sinatra::Base
     admin_only!
   end
 
+  # ------ #
+  # Routes #
+  # ------ #
+
+  post '/login' do
+    login
+  end
+
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
     get route do 
       @resource && @resource.to_json || 404
@@ -65,14 +76,5 @@ class Canto < Sinatra::Base
       return 404 unless @resource
       @resource.try_rescue(:destroy) && 204 || 403
     end
-  end
-
-  post '/listings' do 
-    return 422 unless listing = Listing.try_rescue(:create, request_body)
-    [201, listing.to_json]
-  end
-
-  post '/login' do
-    login
   end
 end
