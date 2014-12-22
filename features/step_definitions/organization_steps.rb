@@ -1,3 +1,7 @@
+Given(/^there is an organization$/) do
+  @organization = FactoryGirl.create(:organization)
+end
+
 Then(/^a new organization should be created$/) do
   expect(Organization.count).to eql(@count + 1)
 end
@@ -8,6 +12,10 @@ end
 
 Then(/^the new organization should be called "(.*?)"$/) do |arg1|
   expect(Organization.last.name).to eql arg1
+end
+
+Then(/^the organization's (.*) should be "(.*?)"$/) do |attr,val|
+  expect(@organization.refresh.send(attr.to_sym)).to eql val
 end
 
 Then(/^the response body should include the new organization's ID$/) do

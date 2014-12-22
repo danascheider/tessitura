@@ -6,7 +6,7 @@ describe Canto do
   let(:org) { FactoryGirl.create(:organization) }
   let(:model) { Organization }
   let(:valid_attributes) { { name: 'Chicago Lyric Opera', website: 'http://lyricopera.org' }.to_json }
-  let(:invalid_attributes) { { country: 'Swaziland' }.to_json }
+  let(:invalid_attributes) { { name: nil, country: 'Swaziland' }.to_json }
 
   describe 'POST' do 
     let(:path) { '/organizations' }
@@ -25,6 +25,16 @@ describe Canto do
 
     context 'with no authorization' do 
       it_behaves_like 'a POST request without credentials'
+    end
+  end
+
+  describe 'PUT' do
+    context 'with admin authorization' do 
+      it_behaves_like 'an authorized PUT request' do 
+        let(:path) { "/organizations/#{org.id}" }
+        let(:resource) { org }
+        let(:agent) { FactoryGirl.create(:admin) }
+      end
     end
   end
 end
