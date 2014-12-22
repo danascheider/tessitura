@@ -54,3 +54,12 @@ When(/^the client submits a POST request to \/organizations with the (\d+)(?:[a-
   authorize_with(User[uid])
   post '/organizations', string, 'CONTENT_TYPE' => 'application/json'
 end
+
+# Create Program
+# ==============
+
+When(/^the client submits a POST request to \/organizations\/(\d+)\/programs with (.*) credentials and:$/) do |id, type, string|
+  @count= Organization.count
+  authorize_with User[type === 'admin' ? 1 : 2]
+  post "/organizations/#{id}/programs", string, 'CONTENT_TYPE' => 'application/json'
+end

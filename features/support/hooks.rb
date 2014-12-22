@@ -38,7 +38,7 @@ Before('@position') do
   FactoryGirl.create(:task, task_list_id: list_id, position: 1, id: 16)
 end
 
-Before('@organizations') do 
+Before('@organizations, @programs') do 
   FactoryGirl.create(:organization, id: 1)
 end
 
