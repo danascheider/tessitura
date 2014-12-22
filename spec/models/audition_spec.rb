@@ -53,4 +53,46 @@ describe Audition do
       expect(@audition).to be_valid
     end
   end
+
+  describe 'instance methods' do 
+    let(:audition) { FactoryGirl.create(:audition) }
+
+    describe '#to_h' do 
+      let(:hash) {
+        {
+          id: audition.id,
+          season_id: audition.season_id,
+          country: audition.country,
+          region: audition.region,
+          city: audition.city,
+          date: audition.date,
+          deadline: audition.deadline,
+          fee: audition.fee,
+          pianist_provided: audition.pianist_provided,
+          can_bring_own_pianist: audition.can_bring_own_pianist,
+          pianist_fee: audition.pianist_fee,
+          created_at: audition.created_at
+        }.reject {|k,v| v.blank? }
+      }
+
+      it 'returns only non-blank attributes' do 
+        expect(audition.to_h).to eql(hash)
+      end
+
+      it 'includes attributes that are present' do 
+        audition.pianist_fee = 30.00
+        expect(audition.to_h).to have_key(:pianist_fee)
+      end
+
+      it 'is aliased as #to_hash' do 
+        expect(audition.to_hash).to eql(audition.to_h)
+      end
+    end
+
+    describe '#to_json' do 
+      it 'converts to a hash first' do 
+        expect(audition.to_json).to eql(audition.to_h.to_json)
+      end
+    end
+  end
 end
