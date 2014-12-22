@@ -5,21 +5,7 @@ class Audition < Sequel::Model
   # with symbol keys.
 
   def to_hash
-    {
-      id: id,
-      season_id: season_id,
-      country: country,
-      region: region,
-      city: city,
-      date: date,
-      deadline: deadline,
-      fee: fee,
-      pianist_provided: pianist_provided,
-      can_bring_own_pianist: can_bring_own_pianist,
-      pianist_fee: pianist_fee,
-      created_at: created_at,
-      updated_at: updated_at
-    }.reject {|k,v| v.blank? }
+    super.reject {|k,v| v.blank? }
   end
 
   alias_method :to_h, :to_hash

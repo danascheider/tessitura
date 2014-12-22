@@ -6,4 +6,17 @@
 class Organization < Sequel::Model
   one_to_many :programs
   self.plugin :association_dependencies, programs: :destroy
+
+  def to_hash
+    super.reject {|k,v| v.blank? }
+  end
+
+  alias_method :to_h, :to_hash
+
+  # The `#to_json` method converts the output of `#to_hash` to JSON format, preventing
+  # inscrutable JSON objects like `"\"#<Organization:0x00000004b050c8>\""`.
+
+  def to_json
+    to_h.to_json
+  end
 end
