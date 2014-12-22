@@ -52,6 +52,10 @@ class Canto < Sinatra::Base
     protect(Task)
   end
 
+  before /\organizations\/*/ do 
+    protect_communal
+  end
+
   before /\/admin\/*/ do 
     admin_only!
   end

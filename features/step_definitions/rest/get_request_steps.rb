@@ -36,9 +36,18 @@ When(/^the client submits a GET request to \/admin\/users with the (\d+)(?:[a-z]
   get '/admin/users'
 end
 
+# View Organization
+# =================
+
 When(/^the client submits a GET request to its individual endpoint with (.*) credentials$/) do |type|
   authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
   get "/organizations/#{@organization.id}"
+end
+
+When(/^the client submits a GET request to \/organizations\/(\d+) with (user|admin) credentials$/) do |id, type|
+  @organization = Organization[id]
+  authorize_with User[type === 'admin' ? 1 : 2]
+  get "/organizations/#{id}"
 end
 
 # Unauthorized
