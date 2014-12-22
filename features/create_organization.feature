@@ -27,3 +27,11 @@ Feature: Create organization
       | name                | website               |
       | Chicago Lyric Opera | lyricopera.org        |
       | null                | http://lyricopera.org |
+
+  Scenario: Regular user attempts to create organization
+    When the client submits a POST request to /organizations with the 2nd user's credentials and:
+      """json
+      {"name":"Metropolitan Opera", "website":"http://www.metropolitanopera.org"}
+      """
+    Then no new organization should be created 
+    And the response should return status 401
