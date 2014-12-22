@@ -39,6 +39,10 @@ module Sinatra
       access_denied unless authorized? && (body === allowed || current_user.admin?)
     end
 
+    def protect_communal
+      access_denied unless authorized?
+    end
+
     def setting_admin?
       request_body.try(:respond_to?, :has_key?) && (request_body.try(:has_key?, :admin) || request_body.try(:has_key?, 'admin'))
     end

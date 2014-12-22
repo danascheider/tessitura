@@ -22,6 +22,11 @@ class Canto < Sinatra::Base
     { 'message' => 'Successful' }.to_json
   end
 
+  get '/test/organizations/:id' do 
+    protect_communal
+    { 'message' => 'Successful' }.to_json
+  end
+
   post '/test/request-body' do 
     request_body.class.to_s
   end
