@@ -44,6 +44,11 @@ When(/^the client submits a POST request to \/organizations with admin credentia
   post '/organizations', string, 'CONTENT_TYPE' => 'application/json'
 end
 
+When(/^the client submits a POST request to \/organizations with no credentials and:$/) do |string|
+  @count = Organization.count 
+  post 'organizations', string, 'CONTENT_TYPE' => 'application/json'
+end
+
 When(/^the client submits a POST request to \/organizations with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |uid, string|
   @count = Organization.count
   authorize_with(User[uid])

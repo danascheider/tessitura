@@ -35,3 +35,11 @@ Feature: Create organization
       """
     Then no new organization should be created 
     And the response should return status 401
+
+  Scenario: Unregistered user attempts to create organization
+    When the client submits a POST request to /organizations with no credentials and:
+      """json
+      {"name":"New York City Opera", "website":"http://nyopera.com"}
+      """
+    Then no new organization should be created 
+    And the response should return status 401
