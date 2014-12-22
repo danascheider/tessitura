@@ -14,6 +14,15 @@ When(/^the client submits a DELETE request to \/tasks\/(\d+) with the (\d+)(?:[a
   delete "/tasks/#{task_id}"
 end
 
+# Delete Organization
+# ===================
+
+When(/^the client submits a DELETE request to \/organizations\/(\d+) with (admin|user) credentials$/) do |id, type|
+  @organization = Organization[id]
+  authorize_with User[type === 'admin' ? 1 : 2]
+  delete "/organizations/#{id}"
+end
+
 # Unauthorized
 # ============
 When(/^the client submits a DELETE request to (.*) with no credentials$/) do |path|

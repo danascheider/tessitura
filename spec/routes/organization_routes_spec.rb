@@ -118,4 +118,15 @@ describe Canto, organizations: true do
       it_behaves_like 'a PUT request without credentials'
     end
   end
+
+  describe 'DELETE' do 
+    let(:path) { "/organizations/#{org.id}" }
+    let(:nonexistent_resource_path) { "/organizations/8372311" }
+
+    context 'with admin authorization' do
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { FactoryGirl.create(:admin) }
+      end
+    end
+  end
 end

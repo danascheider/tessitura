@@ -15,8 +15,16 @@ Then(/^no new organization should be created$/) do
   expect(Organization.count).to eql @count
 end
 
-Then(/^the new organization should be called "(.*?)"$/) do |arg1|
-  expect(Organization.last.name).to eql arg1
+Then(/^the new organization should be called "(.*?)"$/) do |name|
+  expect(Organization.last.name).to eql name
+end
+
+Then(/^the organization should be destroyed$/) do
+  expect(Organization[@organization.id]).to be nil
+end
+
+Then(/^the organization should not be destroyed$/) do
+  expect(Organization[1]).to be_an(Organization)
 end
 
 Then(/^the organization's (.*) should be "(.*?)"$/) do |attr,val|
