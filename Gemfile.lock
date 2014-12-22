@@ -1,11 +1,3 @@
-GIT
-  remote: git://github.com/danascheider/sinatra-sequel_extension.git
-  revision: 3716726169e6f4296b1fbf6c1aaef0df4936ee8f
-  specs:
-    sinatra-sequel_extension (0.9.0)
-      sequel (>= 3.2)
-      sinatra (>= 0.9.4)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -140,6 +132,5 @@ DEPENDENCIES
   sequel (~> 4.13)
   simplecov (>= 0.8.2)
   sinatra (~> 1.4.5)
-  sinatra-sequel_extension (~> 0.9.0)!
   slogger (~> 0.0, >= 0.0.10)
   thin (~> 1.6.2)

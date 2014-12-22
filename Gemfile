@@ -15,7 +15,6 @@ gem 'slogger', '~> 0.0', '>= 0.0.10'
 # Use Sequel ORM tool
 gem 'sequel',  '~> 4.13'
 gem 'mysql2', '~> 0.3', '>= 0.3.16'
-gem 'sinatra-sequel_extension', '~> 0.9.0', github: 'danascheider/sinatra-sequel_extension', require: 'sinatra/sequel'
 gem 'rake',    '~> 10.4'
 
 # Use ReactiveSupport to provide utility methods

@@ -1,5 +1,4 @@
 require 'sinatra/base'
-require 'sinatra/sequel'
 require 'sequel'
 require 'rack/cors'
 require 'reactive_support/core_ext/object'
