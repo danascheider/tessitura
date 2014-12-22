@@ -31,6 +31,7 @@ describe Program do
         {
           id: program.id, 
           organization_id: program.organization_id,
+          name: program.name,
           type: program.type,
           country: program.country,
           region: program.region,
