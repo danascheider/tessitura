@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Canto do 
+describe Canto, organizations: true do 
   include Sinatra::ErrorHandling
   
   let(:org) { FactoryGirl.create(:organization) }
@@ -42,6 +42,10 @@ describe Canto do
       it_behaves_like 'an unauthorized PUT request' do 
         let(:agent) { FactoryGirl.create(:user) }
       end
+    end
+
+    context 'with no authorization' do 
+      it_behaves_like 'a PUT request without credentials'
     end
   end
 end

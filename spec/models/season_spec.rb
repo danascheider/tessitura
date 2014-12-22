@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Season do 
+describe Season, seasons: true do 
   it { is_expected.to respond_to :start_date }
   it { is_expected.to respond_to :end_date }
   it { is_expected.to respond_to :early_bird_deadline }

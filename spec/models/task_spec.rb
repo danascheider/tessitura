@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Task do 
+describe Task, tasks: true do 
   include Sinatra::ErrorHandling
   
   let(:task) { FactoryGirl.create(:task) }

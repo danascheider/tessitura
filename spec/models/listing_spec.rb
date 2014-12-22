@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Listing do 
+describe Listing, listings: true do 
 
   describe 'attributes' do 
     it { is_expected.to respond_to :title }

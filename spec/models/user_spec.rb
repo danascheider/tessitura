@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User do 
+describe User, users: true do 
   include Sinatra::ErrorHandling
 
   describe 'attributes' do 

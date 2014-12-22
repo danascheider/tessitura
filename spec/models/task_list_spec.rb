@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TaskList do 
+describe TaskList, task_lists: true do 
   include Sinatra::ErrorHandling
   include Sinatra::GeneralHelperMethods
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Audition do 
+describe Audition, auditions: true do 
   it { is_expected.to respond_to :country }
   it { is_expected.to respond_to :region }
   it { is_expected.to respond_to :city }
