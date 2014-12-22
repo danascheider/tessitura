@@ -82,8 +82,13 @@ class User < Sequel::Model(:users)
 
   # Override the `#to_json` method so the JSON object is created from the 
   # hash of the user's attributes instead of from the user object itself
+  #
+  # NOTE: The definition of `#to_json` has to include the optional `opts`
+  #       arg, because in some of the tests, a JSON::Ext::Generator::State
+  #       object is passed to the method. I am not sure why this happens,
+  #       but including the optional arg makes it work as expected.
 
-  def to_json()
+  def to_json(opts={})
     to_h.to_json
   end
 
