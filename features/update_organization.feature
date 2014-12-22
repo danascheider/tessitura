@@ -31,3 +31,11 @@ Feature: Update organization
       """
     Then the organization's contact_name should not be "Shelley Goldschmidt"
     And the response should indicate the request was unauthorized
+
+  Scenario: Attempt to update non-existent organization
+    Given there is no organization with ID 100
+    When the client submits a PUT request to /organizations/100 with admin credentials and:
+      """json
+      {"contact_name":"Shelley Goldschmidt"}
+      """
+    Then the response should indicate the resource was not found

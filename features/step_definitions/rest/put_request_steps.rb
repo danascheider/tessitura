@@ -38,3 +38,8 @@ When(/^the client submits a PUT request to its individual endpoint with (.*) cre
   authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
   put "organizations/#{@organization.id}", string, 'CONTENT_TYPE' => 'application/json'
 end
+
+When(/^the client submits a PUT request to \/organizations\/(\d+) with (.*) credentials and:$/) do |id, type, string|
+  authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
+  put "organizations/#{id}", string, 'CONTENT_TYPE' => 'application/json'
+end

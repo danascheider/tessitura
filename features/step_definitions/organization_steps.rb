@@ -2,6 +2,10 @@ Given(/^there is an organization$/) do
   @organization = FactoryGirl.create(:organization)
 end
 
+Given(/^there is no organization with ID (\d+)$/) do |id|
+  Organization[id] === nil
+end
+
 Then(/^a new organization should be created$/) do
   expect(Organization.count).to eql(@count + 1)
 end
