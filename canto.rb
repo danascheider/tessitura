@@ -11,8 +11,12 @@ require File.expand_path('../config/settings', __FILE__)
 
 Dir['./models/**'].each {|f| require f }
 Dir['../helpers/**/*'].each {|f| require f }
+Dir['./routes/**/*'].each {|f| require f }
 
 class Canto < Sinatra::Base
+
+  register Sinatra::Canto::Routing::UserRoutes
+  register Sinatra::Canto::Routing::TaskRoutes
 
   not_found do 
     [404, '' ]
@@ -49,12 +53,6 @@ class Canto < Sinatra::Base
 
   ##### End Filters #####
 
-  post '/users' do  
-    access_denied if setting_admin?
-    return 422 unless new_user = User.try_rescue(:create, request_body)
-    [201, new_user.to_json]
-  end
-
   [ '/users/:id', '/tasks/:id' ].each do |route, id|
     get route do 
       @resource && @resource.to_json || 404
@@ -68,32 +66,6 @@ class Canto < Sinatra::Base
       return 404 unless @resource
       @resource.try_rescue(:destroy) && 204 || 403
     end
-  end
-
-  post '/users/:id/tasks' do |id|
-    (body = request_body)[:task_list_id] ||= User[id].default_task_list.id
-    return 422 unless new_task = Task.try_rescue(:create, body)
-
-    [201, new_task.to_json]
-  end
-
-  put '/users/:id/tasks' do |id|
-    tasks = (body = request_body).map {|h| Task[h.delete(:id)] } 
-
-    body.each do |hash| 
-      (task = tasks[body.index(hash)]).set(sanitize_attributes(hash))
-      return 422 unless task.valid? && task.owner_id === id.to_i
-    end
-    
-    tasks.each {|task| task.save } && 200
-  end
-
-  get '/users/:id/tasks' do |id|
-    return_json(@resource.tasks.where_not(:status, 'Complete')) || [].to_json
-  end
-
-  get '/users/:id/tasks/all' do |id|
-    return_json(@resource.tasks)
   end
 
   post '/listings' do 
