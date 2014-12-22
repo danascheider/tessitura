@@ -26,6 +26,7 @@ describe Organization do
         {
           id: organization.id,
           name: organization.name,
+          website: organization.website,
           created_at: organization.created_at
         }
       }
@@ -48,6 +49,35 @@ describe Organization do
       it 'converts to a hash first' do 
         expect(organization.to_json).to eql organization.to_h.to_json
       end
+    end
+  end
+
+  describe 'validations' do 
+    let(:org) { FactoryGirl.build(:organization) }
+
+    it 'is invalid without a name' do 
+      org.name = nil 
+      expect(org).not_to be_valid
+    end
+
+    it 'is invalid without a web site' do 
+      org.website = nil
+      expect(org).not_to be_valid
+    end
+
+    it 'is invalid with web site in a wrong format' do 
+      org.website = 'lyricopera.org'
+      expect(org).not_to be_valid
+    end
+
+    it 'is valid with http:// website' do 
+      org.website = 'http://example.com'
+      expect(org).to be_valid
+    end
+
+    it 'is valid with https:// website' do 
+      org.website = 'https://www.examples.ac.uk'
+      expect(org).to be_valid
     end
   end
 end

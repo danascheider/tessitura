@@ -27,4 +27,12 @@ class Organization < Sequel::Model
   def to_json(opts={})
     to_h.to_json
   end
+
+  # An Organization object is required to have a name and a valid web site.
+
+  def validate
+    super
+    validates_presence [:name, :website]
+    validates_format /http(s?)\:\/\/\w+\..*/, :website, message: 'not a valid web site URL'
+  end
 end

@@ -5,6 +5,7 @@ FactoryGirl.define do
 
   factory :organization do 
     sequence(:name) {|n| "Organization #{n}" }
+    sequence(:website) {|n| "http://www.organization#{n}.org" }
 
     factory :organization_with_programs do 
       transient do 
