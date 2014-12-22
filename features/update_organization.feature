@@ -22,3 +22,12 @@ Feature: Update organization
       """
     Then the organization's contact_name should not be "Shelley Goldschmidt"
     And the response should indicate the request was unauthorized
+
+  Scenario: User attempts to update organization without logging in
+    Given there is an organization
+    When the client submits a PUT request to its individual endpoint with no credentials and:
+      """json
+      {"contact_name":"Shelley Goldschmidt"}
+      """
+    Then the organization's contact_name should not be "Shelley Goldschmidt"
+    And the response should indicate the request was unauthorized
