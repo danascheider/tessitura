@@ -22,4 +22,41 @@ describe Program do
       programs.each {|p| expect(Season[p.id]).to be nil }
     end
   end
+
+  describe 'instance methods' do 
+    let(:program) { FactoryGirl.create(:program) }
+
+    describe '#to_h' do 
+      let(:hash) {
+        {
+          id: program.id, 
+          organization_id: program.organization_id,
+          type: program.type,
+          country: program.country,
+          region: program.region,
+          city: program.city,
+          created_at: program.created_at
+        }
+      }
+
+      it 'returns a hash of the program\'s non-blank attributes' do 
+        expect(program.to_h).to eql hash
+      end
+
+      it 'includes any attributes that aren\'t blank' do 
+        program.update(min_age: 18)
+        expect(program.to_h).to have_key(:min_age)
+      end
+
+      it 'aliases #to_hash' do 
+        expect(program.to_h).to eql program.to_hash
+      end
+    end
+
+    describe '#to_json' do 
+      it 'converts to a hash first' do 
+        expect(program.to_json).to eql(program.to_h.to_json)
+      end
+    end
+  end
 end
