@@ -28,3 +28,9 @@ Feature: View organizations
     When the client submits a GET request to /organizations with user credentials
     Then the JSON response should include all the organizations
     And the response should return status 200
+
+  Scenario: Unregistered user attempts to view all organizations
+    Given there are 3 organizations
+    When the client submits a GET request to /organizations with no credentials
+    Then the response should not include any data
+    And the response should indicate the request was unauthorized

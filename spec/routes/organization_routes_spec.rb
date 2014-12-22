@@ -70,6 +70,23 @@ describe Canto, organizations: true do
           let(:agent) { FactoryGirl.create(:admin) }
         end
       end
+
+      context 'with user authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:user) }
+        end
+      end
+
+      context 'with invalid authorization' do 
+        it_behaves_like 'an unauthorized GET request' do
+          let(:username) { 'baduser' }
+          let(:password) { 'badpassword' }
+        end
+      end
+
+      context 'with no authorization' do 
+        it_behaves_like 'a GET request without credentials'
+      end
     end
   end
 
