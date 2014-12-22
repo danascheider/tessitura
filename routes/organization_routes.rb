@@ -4,6 +4,10 @@ module Sinatra
       module OrganizationRoutes
 
         def self.registered(app)
+          app.get '/organizations/:id' do |id|
+            Organization[id].to_json || 404
+          end
+
           app.post '/organizations' do 
             admin_only!
             return 422 unless new_org = Organization.try_rescue(:create, request_body)

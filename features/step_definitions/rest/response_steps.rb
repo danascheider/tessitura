@@ -18,6 +18,10 @@ Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile inf
   expect(last_response.body).to eql User[id].to_json
 end
 
+Then(/^the JSON response should include the organization's profile information$/) do
+  expect(last_response.body).to eql @organization.to_json
+end
+
 Then(/^the response should not include any data$/) do 
   ok_values = [nil, '', 'null', false, "Authorization Required\n"]
   expect(ok_values).to include last_response.body

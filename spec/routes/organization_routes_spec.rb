@@ -28,6 +28,19 @@ describe Canto, organizations: true do
     end
   end
 
+  describe 'GET' do 
+    context 'individual organization' do 
+      let(:path) { "/organizations/#{org.id}" }
+      let(:resource) { org }
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:admin) }
+        end
+      end
+    end
+  end
+
   describe 'PUT' do
     let(:path) { "/organizations/#{org.id}" }
     let(:resource) { org }
