@@ -7,7 +7,7 @@ require 'base64'
 
 # More information: https://github.com/danascheider/canto/issues/46
 
-describe Sinatra::AuthorizationHelper do 
+describe Sinatra::AuthorizationHelper, auth: true do 
   include Rack::Test::Methods
   include Sinatra::Helpers
   include Sinatra::AuthorizationHelper
@@ -215,6 +215,22 @@ describe Sinatra::AuthorizationHelper do
           authorize_with admin 
           put "/test/users/#{user.id}/tasks", @tasks.to_json
         end
+      end
+    end
+  end
+
+  describe '::protect_communal' do 
+    context 'authorized' do 
+      it 'returns nil' do
+        stub(:authorized?).and_return(true)
+        expect(protect_communal).to be nil
+      end
+    end
+
+    context 'unauthorized' do 
+      it 'calls ::access_denied' do 
+        expect_any_instance_of(Canto).to receive(:access_denied)
+        get "/tests/organizations/5"
       end
     end
   end
