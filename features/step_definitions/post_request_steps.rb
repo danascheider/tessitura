@@ -35,3 +35,11 @@ end
 When(/^the client submits a POST request to \/admin\/users with no credentials and:$/) do |string|
   post '/admin/users', string, 'CONTENT_TYPE' => 'application/json'
 end
+
+# Create Organization
+# ===================
+When(/^the client submits a POST request to \/organizations with admin credentials and:$/) do |string|
+  @count = Organization.count
+  authorize_with(User[1])
+  post '/organizations', string, 'CONTENT_TYPE' => 'application/json'
+end
