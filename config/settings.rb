@@ -37,9 +37,9 @@ class Canto < Sinatra::Base
   db_loggers << Logger.new(STDOUT) if ENV['LOG'] == true
   DB = Sequel.connect(database, loggers: db_loggers)
 
-  # ==================================#
-  # Sequel settings and modifications #
-  # ==================================#
+  # ================================== #
+  # Sequel settings and modifications  #
+  # ================================== #
 
   Sequel::Model.plugin :timestamps
   Sequel::Model.plugin :validation_helpers

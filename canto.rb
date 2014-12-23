@@ -53,8 +53,8 @@ class Canto < Sinatra::Base
     protect(Task)
   end
 
-  before /\organizations\/*/ do 
-    protect_communal
+  before /\/organizations\/*/ do 
+    request.get? ? protect_communal : admin_only!
   end
 
   before /\/programs\/*/ do 
