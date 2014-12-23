@@ -36,6 +36,12 @@ describe Program, programs: true do
       end
     end
 
+    describe '#owner_id' do 
+      it 'returns its organization ID' do 
+        expect(program.owner_id).to eql program.organization_id
+      end
+    end
+
     describe '#to_h' do 
       let(:hash) {
         {
