@@ -105,4 +105,24 @@ describe Canto, programs: true do
       end
     end
   end
+
+  describe 'GET' do 
+    context 'single program' do 
+      let(:path) { "/programs/#{program.id}" }
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { admin }
+          let(:resource) { program }
+        end
+      end
+
+      context 'with user authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { user }
+          let(:resource) { program }
+        end
+      end
+    end
+  end
 end

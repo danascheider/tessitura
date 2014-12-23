@@ -9,6 +9,10 @@ module Sinatra
             return 422 unless new_program = Program.try_rescue(:create, body)
             [201, new_program.to_json]
           end
+
+          app.get '/programs/:id' do |id|
+            Program[id] && Program[id].to_json || 404
+          end
         end
       end
     end

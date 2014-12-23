@@ -42,6 +42,10 @@ Before('@organizations, @programs') do
   FactoryGirl.create(:organization, id: 1)
 end
 
+Before('@programs') do 
+  FactoryGirl.create(:program, id: 1, organization: Organization[1])
+end
+
 # Expects Canto front-end to be running on webserver listening on port 80
 Before('@integration') do 
   Capybara.app_host = 'http://localhost:80'
