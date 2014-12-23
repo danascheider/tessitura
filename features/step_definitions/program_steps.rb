@@ -26,3 +26,11 @@ end
 Then(/^the new program's (.*) should be (?:"?)(.*?)(?:"?)$/) do |attr,value|
   expect(Program.last.send(attr.to_sym)).to eql value
 end
+
+Then(/^the program should not be changed$/) do
+  expect(@program.values).to eql(@program.refresh.values)
+end
+
+Then(/^the program's (.*) should be (\d+)$/) do |attr, val|
+  expect(@program.refresh.send(attr.to_sym)).to eql val
+end

@@ -10,6 +10,10 @@ module Sinatra
             return 422 unless new_program = Program.try_rescue(:create, body)
             [201, new_program.to_json]
           end
+
+          app.put '/programs/:id' do |id|
+            update_resource(request_body, Program[id])
+          end
         end
 
         def self.get_routes(app)

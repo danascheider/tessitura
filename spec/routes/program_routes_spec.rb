@@ -197,4 +197,46 @@ describe Canto, programs: true do
       end
     end
   end
+
+  describe 'PUT' do 
+    let(:path) { "/programs/#{program.id}" }
+    let(:resource) { program }
+    let(:model) { Program }
+
+    context 'with admin authorization' do 
+      it_behaves_like 'an authorized PUT request' do 
+        let(:agent) { admin }
+      end
+    end
+
+    context 'with user authorization' do 
+      it_behaves_like 'an unauthorized PUT request' do 
+        let(:agent) { user }
+      end
+    end
+
+    context 'with invalid authorization' do 
+      it 'doesn\'t update the resource' do 
+        expect_any_instance_of(Program).not_to receive(:try_rescue).with(:update, parse_json(valid_attributes))
+        authorize 'pedobear', 'iwanttoseeyourprogramsforfree'
+        put path, valid_attributes, 'CONTENT_TYPE' => 'application/json'
+      end
+
+      it 'returns status 401' do 
+        authorize 'pedobear', 'iwanttoseeyourprogramsforfree'
+        put path, valid_attributes, 'CONTENT_TYPE' => 'application/json'
+        expect(last_response.status).to eql 401
+      end
+
+      it 'doesn\'t return any data' do 
+        authorize 'pedobear', 'iwanttoseeyourprogramsforfree'
+        put path, valid_attributes, 'CONTENT_TYPE' => 'application/json'
+        expect(last_response.body).to be_in([nil, 'null', '', [], {}, "Authorization Required\n", 'Authorization Required'])
+      end
+    end
+
+    context 'with no authorization' do 
+      it_behaves_like 'a PUT request without credentials'
+    end
+  end
 end
