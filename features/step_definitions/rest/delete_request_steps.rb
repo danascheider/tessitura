@@ -16,11 +16,18 @@ end
 
 # Delete Organization
 # ===================
-
 When(/^the client submits a DELETE request to \/organizations\/(\d+) with (admin|user) credentials$/) do |id, type|
   @organization = Organization[id]
   authorize_with User[type === 'admin' ? 1 : 2]
   delete "/organizations/#{id}"
+end
+
+# Delete Program
+# ==============
+When(/^the client submits a DELETE request to \/programs\/(\d+) with admin credentials$/) do |id|
+  @program = Program[id]
+  authorize_with User[1]
+  delete "/programs/#{id}"
 end
 
 # Unauthorized

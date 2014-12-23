@@ -23,8 +23,16 @@ Then(/^no new program should be created$/) do
   expect(Program.count).to eql @count
 end
 
+Then(/^program (\d+) should not be deleted$/) do |id|
+  expect(Program[id]).to be_a Program
+end
+
 Then(/^the new program's (.*) should be (?:"?)(.*?)(?:"?)$/) do |attr,value|
   expect(Program.last.send(attr.to_sym)).to eql value
+end
+
+Then(/^the program should be deleted$/) do
+  expect(Program[@program.id]).to be nil
 end
 
 Then(/^the program should not be changed$/) do

@@ -5,6 +5,11 @@ module Sinatra
         def self.registered(app)
           Sinatra::Canto::Routing::ProgramRoutes.get_routes(app)
 
+          app.delete '/programs/:id' do |id|
+            return 404 unless program = Program[id]
+            program.try_rescue(:destroy) && 204 || 403
+          end
+
           app.post '/organizations/:id/programs' do |id|
             (body = request_body)[:organization_id] = id.to_i
             return 422 unless new_program = Program.try_rescue(:create, body)
