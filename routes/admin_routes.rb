@@ -4,8 +4,7 @@ module Sinatra
       module AdminRoutes
         def self.registered(app)
           app.post '/admin/users' do 
-            return 422 unless u = User.try_rescue(:create, request_body)
-            [201, u.to_json]
+            Sinatra::Canto::Routing.post(User, request_body)
           end
 
           app.get '/admin/users' do 

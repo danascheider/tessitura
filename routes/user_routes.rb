@@ -8,8 +8,7 @@ module Sinatra
           
           app.post '/users' do  
             access_denied if setting_admin?
-            return 422 unless new_user = User.try_rescue(:create, request_body)
-            [201, new_user.to_json]
+            Sinatra::Canto::Routing.post(User, request_body)
           end
         end
       end

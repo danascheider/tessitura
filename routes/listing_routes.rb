@@ -4,8 +4,7 @@ module Sinatra
       module ListingRoutes
         def self.registered(app)
           app.post '/listings' do 
-            return 422 unless listing = Listing.try_rescue(:create, request_body)
-            [201, listing.to_json]
+            Sinatra::Canto::Routing.post(Listing, request_body)
           end
         end
       end

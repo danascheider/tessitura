@@ -7,8 +7,7 @@ module Sinatra
           Sinatra::Canto::Routing::OrganizationRoutes.get_paths(app)
 
           app.post '/organizations' do 
-            return 422 unless new_org = Organization.try_rescue(:create, request_body)
-            [201, new_org.to_json]
+            Sinatra::Canto::Routing.post(Organization, request_body)
           end
 
           app.put '/organizations/:id' do |id|

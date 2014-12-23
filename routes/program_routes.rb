@@ -11,8 +11,7 @@ module Sinatra
 
           app.post '/organizations/:id/programs' do |id|
             (body = request_body)[:organization_id] = id.to_i
-            return 422 unless new_program = Program.try_rescue(:create, body)
-            [201, new_program.to_json]
+            Sinatra::Canto::Routing.post(Program, body)
           end
 
           app.put '/programs/:id' do |id|

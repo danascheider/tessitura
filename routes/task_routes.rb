@@ -22,9 +22,7 @@ module Sinatra
         def self.post_routes(app)
           app.post '/users/:id/tasks' do |id|
             (body = request_body)[:task_list_id] ||= User[id].default_task_list.id
-            return 422 unless new_task = Task.try_rescue(:create, body)
-
-            [201, new_task.to_json]
+            Sinatra::Canto::Routing.post(Task, body)
           end
         end
 
