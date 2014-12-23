@@ -4,6 +4,7 @@ module Sinatra
       module ProgramRoutes
         def self.registered(app)
           app.post '/organizations/:id/programs' do |id|
+            admin_only!
             (body = request_body)[:organization_id] = id.to_i
             return 422 unless new_program = Program.try_rescue(:create, body)
             [201, new_program.to_json]
