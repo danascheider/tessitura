@@ -10,6 +10,10 @@ Then(/^the JSON response should include all the (\w+)s$/) do |model|
   expect(last_response.body).to eql eval(model.capitalize).all.to_json
 end
 
+Then(/^the JSON response should include all (\d+)(?:[a-z]{2}) organization's programs$/) do |id|
+  expect(last_response.body).to eql Organization[id].programs.to_json
+end
+
 Then(/^the JSON response should include (?:only )?the (\d+)(?:[a-z]{2}) task$/) do |id|
   last_response.body.should === Task[id].to_json
 end

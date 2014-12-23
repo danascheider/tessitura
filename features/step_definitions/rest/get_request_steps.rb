@@ -67,6 +67,15 @@ When(/^the client submits a GET request to \/programs\/(\d+) with (admin|user) c
   get "/programs/#{id}"
 end
 
+# View Collection of Programs
+# ===========================
+
+When(/^the client submits a GET request to \/organizations\/(\d+)\/programs with (.*) credentials$/) do |id, type|
+  @organization = Organization[id]
+  authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
+  get "/organizations/#{id}/programs"
+end
+
 # Unauthorized
 # ============
 When(/^the client submits a GET request to (.*) with no credentials$/) do |path|

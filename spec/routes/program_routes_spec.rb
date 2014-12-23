@@ -136,5 +136,19 @@ describe Canto, programs: true do
         it_behaves_like 'a GET request without credentials'
       end
     end
+
+    context 'programs by organization' do 
+      let(:programs) { FactoryGirl.create_list(:program, 2, organization: org) }
+      let(:path) { "/organizations/#{org.id}/programs" }
+      let(:organizations) { FactoryGirl.create_list(:organization_with_everything, 3) }
+      let(:org) { organizations.first }
+      let(:resource) { org.programs }
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { admin }
+        end
+      end
+    end
   end
 end
