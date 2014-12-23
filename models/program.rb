@@ -16,6 +16,11 @@ class Program < Sequel::Model
   # The `#owner` method returns the organization that owns the program. Likewise, the
   # `#owner_id` method returns the ID of that organization. This enables
   # standardization of handlers that retrieve Canto resources.
+  #
+  # NOTE: These methods cannot be refactored using `alias_method`. Due to the internals
+  #       of the ORM, `alias_method` will be called in the Travis environment before
+  #       the attribute accessor methods from Sequel::Model are implemented, resulting
+  #       in a NoMethodError before the tests even run.
 
   def owner; organization; end
   def owner_id; organization_id; end
