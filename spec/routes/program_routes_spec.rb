@@ -109,6 +109,7 @@ describe Canto, programs: true do
   describe 'GET' do 
     context 'single program' do 
       let(:path) { "/programs/#{program.id}" }
+      let(:resource) { program }
 
       context 'with admin authorization' do 
         it_behaves_like 'an authorized GET request' do 
@@ -122,6 +123,17 @@ describe Canto, programs: true do
           let(:agent) { user }
           let(:resource) { program }
         end
+      end
+
+      context 'with invalid authorization' do 
+        it_behaves_like 'an unauthorized GET request' do 
+          let(:username) { 'badperson' }
+          let(:password) { 'malicious 666' }
+        end
+      end
+
+      context 'with no authorization' do 
+        it_behaves_like 'a GET request without credentials'
       end
     end
   end

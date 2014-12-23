@@ -61,7 +61,7 @@ end
 # View Program
 # ============
 
-When(/^the client submits a GET request to \/programs\/(\d+) with (\w+) credentials$/) do |id, type|
+When(/^the client submits a GET request to \/programs\/(\d+) with (admin|user) credentials$/) do |id, type|
   @program = Program[id]
   authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
   get "/programs/#{id}"
