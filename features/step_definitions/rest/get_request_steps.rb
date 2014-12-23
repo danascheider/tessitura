@@ -63,16 +63,22 @@ end
 
 When(/^the client submits a GET request to \/programs\/(\d+) with (admin|user) credentials$/) do |id, type|
   @program = Program[id]
-  authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
+  authorize_with User[type === 'admin' ? 1 : 2]
   get "/programs/#{id}"
 end
 
 # View Collection of Programs
 # ===========================
 
-When(/^the client submits a GET request to \/organizations\/(\d+)\/programs with (.*) credentials$/) do |id, type|
+When(/^the client submits a GET request to \/organizations\/(\d+)\/programs with (admin|user) credentials$/) do |id, type|
   @organization = Organization[id]
-  authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
+  authorize_with User[type === 'admin' ? 1 : 2]
+  get "/organizations/#{id}/programs"
+end
+
+When(/^the client submits a GET request to \/organizations\/(\d+)\/programs with invalid credentials$/) do |id|
+  @organization = Organization[id]
+  authorize 'baduser', 'malicious666'
   get "/organizations/#{id}/programs"
 end
 

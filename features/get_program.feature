@@ -33,6 +33,18 @@ Feature: View program information
       | user  |
       | admin |
 
+  Scenario Outline: Unauthorized user attempts to view organization's programs
+    Given there are 3 organizations
+    And each organization has 3 programs
+    When the client submits a GET request to /organizations/1/programs with <type> credentials
+    Then the response should not include any data
+    And the response should indicate the request was unauthorized
+
+    Examples:
+      | type     |
+      | invalid  |
+      | no       |
+
   Scenario: Organization has no programs
     Given organization 2 has no programs
     When the client submits a GET request to /organizations/2/programs with user credentials
