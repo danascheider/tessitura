@@ -45,14 +45,10 @@ class Canto < Sinatra::Base
     request.put? ? protect_collection(request_body) : protect(User)
   end
 
-  before /^\/users\/(\d+)(\/*)?/ do 
-    protect(User)
+  before /^\/(users|tasks)\/(\d+)(\/*)?/ do 
+    request.path.match(/users/) ? protect(User) : protect(Task)
   end
-
-  before /^\/tasks\/(\d+)(\/*)?/ do 
-    protect(Task)
-  end
-
+  
   before /\/(organizations|programs)\/*/ do 
     request.get? ? protect_communal : admin_only!
   end
