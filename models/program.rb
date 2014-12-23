@@ -13,6 +13,11 @@ class Program < Sequel::Model
 
   self.plugin :association_dependencies, seasons: :destroy
 
+  # The `#owner` method returns the organization that owns the program. This enables
+  # standardization of handlers that retrieve Canto resources.
+
+  alias_method :owner, :organization
+
   # The `#to_hash` or `#to_h` method returns all non-empty attributes in a hash
   # with symbol keys.
 
@@ -32,5 +37,9 @@ class Program < Sequel::Model
 
   def to_json(opts={})
     to_h.to_json
+  end
+
+  def validate
+    validates_presence [:name, :organization_id]
   end
 end

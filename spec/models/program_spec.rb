@@ -26,6 +26,16 @@ describe Program, programs: true do
   describe 'instance methods' do 
     let(:program) { FactoryGirl.create(:program) }
 
+    describe '#owner' do 
+      it 'returns an Organization object' do 
+        expect(program.owner).to be_an(Organization)
+      end
+
+      it 'returns its parent organization' do 
+        expect(program.owner).to eql program.organization
+      end
+    end
+
     describe '#to_h' do 
       let(:hash) {
         {
@@ -58,6 +68,13 @@ describe Program, programs: true do
       it 'converts to a hash first' do 
         expect(program.to_json).to eql(program.to_h.to_json)
       end
+    end
+  end
+
+  describe 'validations' do 
+    it 'is invalid without a name' do 
+      program = FactoryGirl.build(:program, name: nil)
+      expect(program).not_to be_valid
     end
   end
 end
