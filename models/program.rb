@@ -17,8 +17,8 @@ class Program < Sequel::Model
   # `#owner_id` method returns the ID of that organization. This enables
   # standardization of handlers that retrieve Canto resources.
 
-  alias_method :owner, :organization
-  alias_method :owner_id, :organization_id
+  def owner; organization; end
+  def owner_id; organization_id; end
 
   # The `#to_hash` or `#to_h` method returns all non-empty attributes in a hash
   # with symbol keys.
