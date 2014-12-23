@@ -34,7 +34,7 @@ Feature: View program information
       | admin |
 
   Scenario: Organization has no programs
-    Given organization 1 has no programs
-    When the client submits a GET request to /organizations/1/programs with user credentials
+    Given organization 2 has no programs
+    When the client submits a GET request to /organizations/2/programs with user credentials
     Then the response should include an empty JSON object
     And the response should return status 200

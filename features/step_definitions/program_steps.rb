@@ -2,6 +2,11 @@ Given(/^each organization has (\d+) programs$/) do |count|
   Organization.all.each {|org| FactoryGirl.create_list(:program, count, organization: org) }
 end
 
+Given(/^organization (\d+) has no programs$/) do |id|
+  @organization = Organization[id] || FactoryGirl.create(:organization, id: id)
+  @organization.programs === []
+end
+
 Then(/^a new program should be created$/) do 
   expect(Program.count).to eql @count + 1
 end

@@ -18,8 +18,10 @@ module Sinatra
           end
 
           app.get '/organizations/:id/programs' do |id|
-            Organization[id] && data = return_json(Organization[id].programs) || 404
-            [200, data]
+            org = Organization[id]
+            return 404 unless org
+            data = org.programs || []
+            [200, data.to_json]
           end
         end
       end

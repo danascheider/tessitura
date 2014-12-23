@@ -39,6 +39,11 @@ Then(/^the response should not include any data$/) do
   expect(ok_values).to include last_response.body
 end
 
+Then(/^the response should not include the other programs$/) do
+  other_programs = Program.exclude(organization_id: @organization.id)
+  other_programs.each {|p| expect(parse_json(last_response.body)).not_to include p.to_h }
+end
+
 Then(/^the response should include an empty JSON object$/) do 
   expect(last_response.body).to eql([].to_json)
 end
