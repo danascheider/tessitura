@@ -6,8 +6,7 @@ module Sinatra
           Sinatra::Canto::Routing::ProgramRoutes.get_routes(app)
 
           app.delete '/programs/:id' do |id|
-            return 404 unless program = Program[id]
-            program.try_rescue(:destroy) && 204 || 403
+            Sinatra::Canto::Routing.delete(Program, id)
           end
 
           app.post '/organizations/:id/programs' do |id|

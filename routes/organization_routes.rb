@@ -16,8 +16,7 @@ module Sinatra
           end
 
           app.delete '/organizations/:id' do |id|
-            return 404 unless org = Organization[id]
-            org.try_rescue(:destroy) && 204 || 403
+            Sinatra::Canto::Routing.delete(Organization, id)
           end
         end
 
