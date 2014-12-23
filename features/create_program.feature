@@ -28,5 +28,14 @@ Feature: Create a new program
       {"name":"Hello Kitty Competition for Dramatic Voices"}
       """
     Then no new program should be created
-    And the response should not return any data
+    And the response should not include any data
+    And the response should indicate the request was unauthorized
+
+  Scenario: Non-logged-in user attempts to create a new program
+    When the client submits a POST request to /organizations/1/programs with no credentials and:
+      """json
+      {"name":"Hello Kitty Competition for Operatic Excellence"}
+      """
+    Then no new program should be created
+    And the response should not include any data
     And the response should indicate the request was unauthorized

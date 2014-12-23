@@ -18,6 +18,10 @@ Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's profile inf
   expect(last_response.body).to eql User[id].to_json
 end
 
+Then(/^the JSON response should include the new program's data$/) do 
+  expect(last_response.body).to eql Program.last.to_json
+end
+
 Then(/^the JSON response should include the organization's profile information$/) do
   expect(last_response.body).to eql @organization.to_json
 end

@@ -75,5 +75,34 @@ describe Canto, programs: true do
         expect(last_response.body).to be_in([nil, 'null', '', [], {}, "Authorization Required\n", 'Authorization Required'])
       end
     end
+
+    context 'with invalid authorization' do 
+      before(:each) do 
+        authorize 'notauser', 'maliciouscarol'
+        post path, valid_attributes, 'CONTENT_TYPE' => 'application/json'
+      end
+
+      it 'doesn\'t return any data' do 
+        expect(last_response.body).to be_in([nil, 'null', '', [], {}, "Authorization Required\n", 'Authorization Required'])
+      end
+
+      it 'returns status 401' do 
+        expect(last_response.status).to eql 401
+      end
+    end
+
+    context 'with no authorization' do 
+      before(:each) do 
+        post path, valid_attributes, 'CONTENT_TYPE' => 'application/json'
+      end
+
+      it 'doesn\'t return any data' do 
+        expect(last_response.body).to be_in([nil, 'null', '', [], {}, "Authorization Required\n", 'Authorization Required'])
+      end
+
+      it 'returns status 401' do 
+        expect(last_response.status).to eql 401
+      end
+    end
   end
 end
