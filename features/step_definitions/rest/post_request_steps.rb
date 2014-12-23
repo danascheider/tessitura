@@ -59,7 +59,7 @@ end
 # ==============
 
 When(/^the client submits a POST request to \/organizations\/(\d+)\/programs with (.*) credentials and:$/) do |id, type, string|
-  @count= Organization.count
+  @count= Program.count
   authorize_with User[type === 'admin' ? 1 : 2]
   post "/organizations/#{id}/programs", string, 'CONTENT_TYPE' => 'application/json'
 end
