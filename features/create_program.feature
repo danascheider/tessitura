@@ -11,3 +11,12 @@ Feature: Create a new program
     Then a new program should be created
     And the new program's name should be "Wagner Competition"
     And the new program's organization_id should be 1
+    And the response should return status 201
+
+  Scenario: Admin attempts to create a new program with invalid attributes
+    When the client submits a POST request to /organizations/1/programs with admin credentials and:
+      """json
+      {"country":"Pakistan","region":"Waziristan"}
+      """
+    Then no new program should be created
+    And the response should return status 422
