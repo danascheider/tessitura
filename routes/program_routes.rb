@@ -20,6 +20,10 @@ module Sinatra
           app.get '/organizations/:id/programs' do |id|
             Organization[id] && (Organization[id].programs || []).to_json || 404
           end
+
+          app.get '/programs' do
+            (Program.all || []).to_json
+          end
         end
       end
     end

@@ -7,6 +7,14 @@ Given(/^organization (\d+) has no programs$/) do |id|
   @organization.programs === []
 end
 
+Given(/^program (\d+) doesn't exist$/) do |id|
+  Program[id] === nil || Program[id].destroy
+end
+
+Given(/^there are no programs$/) do 
+  Program.each {|p| p.destroy }
+end
+
 Then(/^a new program should be created$/) do 
   expect(Program.count).to eql @count + 1
 end

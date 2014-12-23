@@ -82,6 +82,16 @@ When(/^the client submits a GET request to \/organizations\/(\d+)\/programs with
   get "/organizations/#{id}/programs"
 end
 
+When(/^the client submits a GET request to \/programs with (admin|user) credentials$/) do |type|
+  authorize_with User[type === 'admin' ? 1 : 2]
+  get '/programs'
+end
+
+When(/^the client submits a GET request to \/programs with invalid credentials$/) do
+  authorize 'baduser', 'malicious666'
+  get '/programs'
+end
+
 # Unauthorized
 # ============
 When(/^the client submits a GET request to (.*) with no credentials$/) do |path|

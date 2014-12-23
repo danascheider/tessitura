@@ -167,5 +167,34 @@ describe Canto, programs: true do
         it_behaves_like 'a GET request without credentials'
       end
     end
+
+    context 'all programs' do 
+      let(:organizations) { FactoryGirl.create_list(:organization_with_everything, 3) }
+      let(:resource) { Program.all }
+      let(:path) { '/programs' }
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { admin }
+        end
+      end
+
+      context 'with user authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { user }
+        end
+      end
+
+      context 'with invalid authorization' do 
+        it_behaves_like 'an unauthorized GET request' do 
+          let(:username) { 'hamburglar21' }
+          let(:password) { 'iwanttoseeyourprogramsforfree' }
+        end
+      end
+
+      context 'with no authorization' do 
+        it_behaves_like 'a GET request without credentials'
+      end
+    end
   end
 end
