@@ -36,6 +36,28 @@ describe Canto, programs: true do
           post path, valid_attributes, 'CONTENT_TYPE' => 'application/json' 
           expect(last_response.body).to eql Program.last.to_json
         end
+
+        it 'returns status 201' do 
+          post path, valid_attributes, 'CONTENT_TYPE' => 'application/json'
+          expect(last_response.status).to eql 201
+        end
+      end
+
+      context 'invalid attributes' do 
+        it 'tries to create the program' do 
+          expect(Program).to receive(:try_rescue).with(:create, final_invalid_attrs)
+          post path, invalid_attributes, 'CONTENT_TYPE' => 'application/json'
+        end
+
+        it 'doesn\'t return program data' do 
+          post path, invalid_attributes, 'CONTENT_TYPE' => 'application/json'
+          expect(last_response.body).to be_blank
+        end
+
+        it 'returns status 422' do 
+          post path, invalid_attributes, 'CONTENT_TYPE' => 'application/json'
+          expect(last_response.status).to eql 422
+        end
       end
     end
   end
