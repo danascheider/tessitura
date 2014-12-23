@@ -9,5 +9,5 @@ Feature: Create a new program
       {"name":"Wagner Competition"}
       """
     Then a new program should be created
-    And the program's name should be "Wagner Competition"
-    And the program's organization_id should be 1
+    And the new program's name should be "Wagner Competition"
+    And the new program's organization_id should be 1

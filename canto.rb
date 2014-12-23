@@ -20,6 +20,7 @@ class Canto < Sinatra::Base
   register Sinatra::Canto::Routing::AdminRoutes
   register Sinatra::Canto::Routing::ListingRoutes
   register Sinatra::Canto::Routing::OrganizationRoutes
+  register Sinatra::Canto::Routing::ProgramRoutes
 
   not_found do 
     [404, '' ]
