@@ -38,13 +38,11 @@ Before('@position') do
   FactoryGirl.create(:task, task_list_id: list_id, position: 1, id: 16)
 end
 
-Before('@organizations, @programs') do 
-  FactoryGirl.create(:organization, id: 1)
-end
+Before('@organizations, @programs, @seasons') { FactoryGirl.create(:organization, id: 1) }
 
-Before('@programs') do 
-  FactoryGirl.create(:program, id: 1, organization: Organization[1])
-end
+Before('@programs, @seasons') { FactoryGirl.create(:program, id: 1, organization: Organization[1]) }
+
+Before('@seasons') { FactoryGirl.create(:season, id: 1, program: Program[1]) }
 
 # Expects Canto front-end to be running on webserver listening on port 80
 Before('@integration') do 
