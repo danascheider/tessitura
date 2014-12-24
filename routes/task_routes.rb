@@ -4,25 +4,34 @@ module Sinatra
       module TaskRoutes
 
         def self.registered(app)
-          Canto::Routing::TaskRoutes.post_routes(app)
-          Canto::Routing::TaskRoutes.put_routes(app)
-          Canto::Routing::TaskRoutes.get_routes(app)
+          TaskRoutes.post_routes(app)
+          TaskRoutes.put_routes(app)
+          TaskRoutes.get_routes(app)
+
+          app.delete '/tasks/:id' do |id|
+            Routing.delete(Task, id)
+          end
+
         end
 
         def self.get_routes(app)
           app.get '/users/:id/tasks' do |id|
-            return_json(@resource.tasks.where_not(:status, 'Complete')) || [].to_json
+            return_json(User[id].tasks.where_not(:status, 'Complete')) || [].to_json
           end
 
           app.get '/users/:id/tasks/all' do |id|
-            return_json(@resource.tasks)
+            return_json(User[id].tasks)
+          end
+
+          app.get '/tasks/:id' do |id|
+            Routing.get_single(Task, id)
           end
         end
 
         def self.post_routes(app)
           app.post '/users/:id/tasks' do |id|
             (body = request_body)[:task_list_id] ||= User[id].default_task_list.id
-            Sinatra::Canto::Routing.post(Task, body)
+            Routing.post(Task, body)
           end
         end
 
@@ -36,6 +45,12 @@ module Sinatra
             end
             
             tasks.each {|task| task.save } && 200
+          end
+
+          # `@resource` is defined in the authorization filters
+
+          app.put '/tasks/:id' do 
+            update_resource(request_body, @resource)
           end
         end
 

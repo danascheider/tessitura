@@ -55,6 +55,15 @@ describe Canto, organizations: true do
       context 'with no credentials' do 
         it_behaves_like 'a GET request without credentials'
       end
+
+      context 'nonexistent organization' do 
+        it 'returns status 404' do 
+          Organization[100].try(:destroy)
+          authorize_with FactoryGirl.create(:admin)
+          get '/organizations/100'
+          expect(last_response.status).to eql 404
+        end
+      end
     end
 
     context 'all organizations' do 
@@ -116,6 +125,15 @@ describe Canto, organizations: true do
 
     context 'with no authorization' do 
       it_behaves_like 'a PUT request without credentials'
+    end
+
+    context 'nonexistent organization' do 
+      it 'returns status 404' do
+        Organization[100].try(:destroy)
+        authorize_with FactoryGirl.create(:admin)
+        put '/organizations/100', valid_attributes, 'CONTENT_TYPE' => 'application/json'
+        expect(last_response.status).to eql 404
+      end
     end
   end
 

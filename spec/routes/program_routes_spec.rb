@@ -135,6 +135,15 @@ describe Canto, programs: true do
       context 'with no authorization' do 
         it_behaves_like 'a GET request without credentials'
       end
+
+      context 'nonexistent program' do 
+        it 'returns status 404' do 
+          Program[482].try(:destroy)
+          authorize_with admin 
+          get "programs/482"
+          expect(last_response.status).to eql 404
+        end
+      end
     end
 
     context 'programs by organization' do 
@@ -237,6 +246,15 @@ describe Canto, programs: true do
 
     context 'with no authorization' do 
       it_behaves_like 'a PUT request without credentials'
+    end
+
+    context 'nonexistent program' do 
+      it 'returns status 404' do 
+        Program[100].try(:destroy)
+        authorize_with admin
+        put '/programs/100', valid_attributes, 'CONTENT_TYPE' => 'application/json'
+        expect(last_response.status).to eql 404
+      end
     end
   end
 

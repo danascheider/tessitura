@@ -6,6 +6,10 @@ module Sinatra
         resource.try_rescue(:destroy) && 204 || 403
       end
 
+      def self.get_single(model, id)
+        model[id] && model[id].to_json || 404
+      end
+
       def self.post(model, body)
         return 422 unless new_resource = model.try_rescue(:create, body)
         [201, new_resource.to_json]

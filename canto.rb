@@ -27,26 +27,7 @@ class Canto < Sinatra::Base
     [404, '' ]
   end
 
-  # ------ #
-  # Routes #
-  # ------ #
-
   post '/login' do
     login
-  end
-
-  [ '/users/:id', '/tasks/:id' ].each do |route, id|
-    get route do 
-      @resource && @resource.to_json || 404
-    end
-
-    put route do 
-      update_resource(request_body, @resource)
-    end
-
-    delete route do 
-      return 404 unless @resource
-      @resource.try_rescue(:destroy) && 204 || 403
-    end
   end
 end

@@ -3,15 +3,15 @@ module Sinatra
     module Routing
       module ProgramRoutes
         def self.registered(app)
-          Sinatra::Canto::Routing::ProgramRoutes.get_routes(app)
+          ProgramRoutes.get_routes(app)
 
           app.delete '/programs/:id' do |id|
-            Sinatra::Canto::Routing.delete(Program, id)
+            Routing.delete(Program, id)
           end
 
           app.post '/organizations/:id/programs' do |id|
             (body = request_body)[:organization_id] = id.to_i
-            Sinatra::Canto::Routing.post(Program, body)
+            Routing.post(Program, body)
           end
 
           app.put '/programs/:id' do |id|
@@ -21,7 +21,7 @@ module Sinatra
 
         def self.get_routes(app)
           app.get '/programs/:id' do |id|
-            Program[id] && Program[id].to_json || 404
+            Routing.get_single(Program, id)
           end
 
           app.get '/organizations/:id/programs' do |id|
