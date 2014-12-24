@@ -9,7 +9,12 @@ module Sinatra
   module GeneralHelperMethods
     def request_body
       request.body.rewind
-      (body = parse_json(request.body.read)).each {|k,v| body[k] = v.try_rescue(:to_date) || v }
+      convert_dates(body = parse_json(request.body.read)) || body.try_rescue(:each) {|h| convert_dates(h)}
+    end
+
+    def convert_dates(hash)
+      return nil unless hash.is_a? Hash
+      hash.each {|k,v| hash[k] = v.try_rescue(:to_date) || v }
     end
     
     def return_json(obj)
