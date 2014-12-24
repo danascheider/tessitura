@@ -21,40 +21,10 @@ class Canto < Sinatra::Base
   register Sinatra::Canto::Routing::ListingRoutes
   register Sinatra::Canto::Routing::OrganizationRoutes
   register Sinatra::Canto::Routing::ProgramRoutes
+  register Sinatra::Canto::Routing::Filters
 
   not_found do 
     [404, '' ]
-  end
-
-  ##### Logging #####
-
-  before do
-    @id = request.path_info.match(/\d+/).to_s
-    log_request
-  end
-
-  after do 
-    log_response
-  end
-
-  # ------- #
-  # Filters #
-  # ------- #
-
-  before /^\/users\/(\d+)\/tasks/ do 
-    request.put? ? protect_collection(request_body) : protect(User)
-  end
-
-  before /^\/(users|tasks)\/(\d+)(\/*)?/ do 
-    request.path.match(/users/) ? protect(User) : protect(Task)
-  end
-  
-  before /\/(organizations|programs)\/*/ do 
-    request.get? ? protect_communal : admin_only!
-  end
-
-  before /\/admin\/*/ do 
-    admin_only!
   end
 
   # ------ #
