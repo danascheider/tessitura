@@ -19,6 +19,14 @@ require 'capybara/webkit'
 require 'json_spec/cucumber'
 require 'rack/test'
 require 'base64'
+require 'date'
+
+class String
+  def to_date
+    s = self.split(/\-/).map(&:to_i)
+    Date.new(s[0],s[1],s[2]) rescue nil
+  end
+end
 
 class CantoWorld
   include RSpec::Expectations

@@ -63,3 +63,11 @@ When(/^the client submits a POST request to \/organizations\/(\d+)\/programs wit
   authorize_with User[type === 'admin' ? 1 : 2]
   post "/organizations/#{id}/programs", string, 'CONTENT_TYPE' => 'application/json'
 end
+
+# Create Season
+# =============
+When(/^the client submits a POST request to \/programs\/(\d+)\/seasons with (admin|user|no) credentials and:$/) do |id, type, string|
+  @count = Season.count 
+  authorize_with User[type === 'admin' ? 1 : 2]
+  post "/programs/#{id}/seasons", string, 'CONTENT_TYPE' => 'application/json'
+end

@@ -12,13 +12,15 @@ Feature: Create season
       | start_date | program_id |
       | 2015-06-17 | 1          |
 
-  Scenario: Admin attempts to create invalid season
+  Scenario: Admin attempts to assign invalid program ID
+    Given there is a program with ID 2
     When the client submits a POST request to /programs/1/seasons with admin credentials and:
       """json
-      {"program_id":null}
+      {"program_id":2}
       """
-    Then no season should be created
-    And the response should return status 422
+    Then a new season should be created with the following attributes:
+      | program_id |
+      | 1          |
 
   Scenario Outline: Unauthorized user attempts to create a season
     When the client submits a POST request to /programs/1/seasons with <type> credentials and:

@@ -15,6 +15,10 @@ Given(/^there are no programs$/) do
   Program.each {|p| p.destroy }
 end
 
+Given(/^there is a program with ID (\d+)$/) do |id|
+  Program[id].exist? === true
+end
+
 Then(/^a new program should be created$/) do 
   expect(Program.count).to eql @count + 1
 end

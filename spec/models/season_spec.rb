@@ -24,6 +24,13 @@ describe Season, seasons: true do
     end
   end
 
+  describe 'validations' do 
+    it 'is invalid without a program_id' do 
+      season = FactoryGirl.build(:season, program_id: nil)
+      expect(season).not_to be_valid
+    end
+  end
+
   describe 'instance methods' do 
     let(:season) { FactoryGirl.create(:season) }
 

@@ -15,13 +15,14 @@ Dir['./routes/**/*'].each {|f| require f }
 
 class Canto < Sinatra::Base
 
-  register Sinatra::Canto::Routing::UserRoutes
-  register Sinatra::Canto::Routing::TaskRoutes
+  register Sinatra::Canto::Routing::Filters
   register Sinatra::Canto::Routing::AdminRoutes
   register Sinatra::Canto::Routing::ListingRoutes
   register Sinatra::Canto::Routing::OrganizationRoutes
   register Sinatra::Canto::Routing::ProgramRoutes
-  register Sinatra::Canto::Routing::Filters
+  register Sinatra::Canto::Routing::SeasonRoutes
+  register Sinatra::Canto::Routing::TaskRoutes
+  register Sinatra::Canto::Routing::UserRoutes
 
   not_found do 
     [404, '' ]

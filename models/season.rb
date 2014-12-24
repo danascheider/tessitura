@@ -24,10 +24,18 @@ class Season < Sequel::Model
   #
   # NOTE: The definition of `#to_json` has to include the optional `opts`
   #       arg, because in some of the tests, a JSON::Ext::Generator::State
-  #       object is passed to the method. I am not sure why this happens,
-  #       but including the optional arg makes it work as expected.
+  #       object is passed to the method. Including the optional argument
+  #       prevents an `ArgumentError`.
 
   def to_json(opts={})
     to_h.to_json
+  end
+
+  # Seasons are required to belong to programs and are meaningless without them, since
+  # the model is specifically intended to store time-sensitive information about a program.
+
+  def validate
+    super
+    validates_presence :program_id
   end
 end
