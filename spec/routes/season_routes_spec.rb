@@ -5,7 +5,7 @@ describe Canto, seasons: true do
   let(:season) { program.seasons.first }
   let(:responses) { [nil, 'null', "Authorization Required\n", "Authorization Required", [], {}, ''] }
   let(:valid_json) { {start_date: Date.new(2015,06,17)}.to_json }
-  let(:valid_hash) { {start_date: Date.new(2015,06,17), program_id: program.id } }
+  let(:valid_hash) { {start_date: '2015-06-17', program_id: program.id } }
   let(:invalid_json) { {program_id: nil} }
 
 
