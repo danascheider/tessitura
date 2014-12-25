@@ -92,6 +92,13 @@ When(/^the client submits a GET request to \/programs with invalid credentials$/
   get '/programs'
 end
 
+# View Single Season 
+# ==================
+When(/^the client submits a GET request to \/seasons\/(\d+) with (.*) authorization$/) do |id, type|
+  authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
+  get "/seasons/#{id}"
+end
+
 # Unauthorized
 # ============
 When(/^the client submits a GET request to (.*) with no credentials$/) do |path|

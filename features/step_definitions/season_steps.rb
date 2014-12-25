@@ -1,3 +1,8 @@
+
+Given(/^there is no season with ID (\d+)$/) do |id|
+  Season[id].try_rescue(:destroy)
+end
+
 Then(/^a new season should be created with the following attributes:$/) do |attributes|
   attributes.hashes.each do |hash|
     hash.symbolize_keys!.each do |k,v| 

@@ -7,6 +7,10 @@ module Sinatra
             (body = request_body)[:program_id] = id.to_i
             Routing.post(Season, body)
           end
+
+          app.get '/seasons/:id' do |id|
+            Routing.get_single(Season, id)
+          end
         end
       end
     end

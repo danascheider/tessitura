@@ -112,4 +112,34 @@ describe Canto, seasons: true do
       end
     end
   end
+
+  describe 'GET' do 
+    context 'single season' do 
+      let(:path) { "/seasons/#{season.id}" }
+      let(:resource) { season }
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:admin) }
+        end
+      end
+
+      context 'with user authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:user) }
+        end
+      end
+
+      context 'with invalid authorization' do 
+        it_behaves_like 'an unauthorized GET request' do
+          let(:username) { 'baddymcbadderson' }
+          let(:password) { 'mwahahahaha' }
+        end
+      end
+
+      context 'with no authorization' do 
+        it_behaves_like 'a GET request without credentials'
+      end
+    end
+  end
 end

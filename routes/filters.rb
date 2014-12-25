@@ -27,7 +27,7 @@ module Sinatra
         end
 
         def self.communal_auth_filter(app)
-          app.before /\/(organizations|programs)\/*/ do 
+          app.before /\/(organizations|programs|seasons)\/*/ do 
             request.get? ? protect_communal : admin_only!
           end
         end
