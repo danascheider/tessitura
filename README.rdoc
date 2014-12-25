@@ -165,7 +165,7 @@ reflect the functionality. These tests should be marked pending so as not to bre
 === Contributing
 While contributions are welcome and appreciated, I ask contributors to keep in mind that this app will most likely be taken closed-source in the not-so-distant future. As the app grows, I will spin off helper modules into gems as I am able, which will then be made open-source and available on https://rubygems.org. Since these will continue to be available to the community, they are where I recommend you focus if you would like to contribute.
 
-\* CodeClimate support has informed me that CodeClimate does not recognize DSLs. Consequently, the rating of the Canto class is not great and will get worse as I add more endpoints.
+\* CodeClimate support has informed me that CodeClimate does not recognize DSLs. Consequently, the rating of the Canto class may be worse than is deserved. The rating has been improved - quite appropriately - by separating routes into their own modules that are then registered on the +Canto+ class. 
 
 === Versioning
 
