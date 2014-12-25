@@ -141,5 +141,17 @@ describe Canto, seasons: true do
         it_behaves_like 'a GET request without credentials'
       end
     end
+
+    context 'single program\'s fresh seasons' do 
+      let(:program) { FactoryGirl.create(:program_with_everything) }
+      let(:resource) { Season.where(program_id: program.id).exclude(stale: true) }
+      let(:path) { "/programs/#{program.id}/seasons" }
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:admin) }
+        end
+      end
+    end
   end
 end

@@ -34,6 +34,11 @@ Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) season's data$/) d
   expect(last_response.body).to eql Season[id].to_json
 end
 
+Then(/^the JSON response should include the program's fresh seasons$/) do
+  seasons = Season.where(program_id: @program.id).exclude(stale: true)
+  expect(last_response.body).to eql seasons.to_json
+end
+
 Then(/^the JSON response should include the organization's profile information$/) do
   expect(last_response.body).to eql @organization.to_json
 end
@@ -46,6 +51,11 @@ end
 Then(/^the response should not include the other programs$/) do
   other_programs = Program.exclude(organization_id: @organization.id)
   other_programs.each {|p| expect(parse_json(last_response.body)).not_to include p.to_h }
+end
+
+Then(/^the response should not include the program's stale seasons$/) do
+  stale = @program.seasons.where_not(:stale, true)
+  expect(parse_json(last_response.body)).not_to be_superset_of(stale)
 end
 
 Then(/^the response should include an empty JSON object$/) do 

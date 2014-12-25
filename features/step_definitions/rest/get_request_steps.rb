@@ -99,6 +99,14 @@ When(/^the client submits a GET request to \/seasons\/(\d+) with (.*) authorizat
   get "/seasons/#{id}"
 end
 
+# View Multiple Seasons of One Program
+# ====================================
+When(/^the client submits a GET request to \/programs\/(\d+)\/seasons with (.*) authorization$/) do |id, type|
+  @program = Program[id]
+  authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
+  get "/programs/#{id}/seasons"
+end
+
 # Unauthorized
 # ============
 When(/^the client submits a GET request to (.*) with no credentials$/) do |path|

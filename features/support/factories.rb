@@ -43,8 +43,14 @@ FactoryGirl.define do
     end
 
     factory :program_with_everything do 
+      transient do 
+        fresh_count 1
+        stale_count 2
+      end
+
       after(:create) do |program, evaluator|
-        create(:season_with_everything, program: program)
+        create_list(:season_with_everything, evaluator.fresh_count, program: program)
+        create_list(:stale_season, evaluator.stale_count, program: program)
       end
     end
   end
@@ -53,6 +59,10 @@ FactoryGirl.define do
     program
     final_deadline Date.new(2015,8,1)
     start_date Date.new(2015,8,22)
+
+    factory :stale_season do 
+      stale true
+    end
 
     factory :season_with_listing do 
       after(:create) do |season, evaluator|

@@ -39,10 +39,9 @@ Before('@position') do
 end
 
 Before('@organizations, @programs, @seasons') { FactoryGirl.create(:organization, id: 1) }
-
 Before('@programs, @seasons') { FactoryGirl.create(:program, id: 1, organization: Organization[1]) }
-
-Before('@seasons') { FactoryGirl.create(:season, id: 1, program: Program[1]) }
+Before('@seasons', '~@bulk') { FactoryGirl.create(:season, id: 1, program: Program[1]) }
+Before('@seasons', '@bulk') { FactoryGirl.create(:program_with_everything, id: 2, organization: Organization[1]) }
 
 # Expects Canto front-end to be running on webserver listening on port 80
 Before('@integration') do 

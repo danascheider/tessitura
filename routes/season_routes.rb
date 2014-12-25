@@ -11,6 +11,11 @@ module Sinatra
           app.get '/seasons/:id' do |id|
             Routing.get_single(Season, id)
           end
+
+          app.get '/programs/:id/seasons' do |id|
+            return 404 unless Program[id]
+            (Season.where(program_id: id).exclude(stale: true) || []).to_json
+          end
         end
       end
     end
