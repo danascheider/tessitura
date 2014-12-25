@@ -47,3 +47,11 @@ When(/^the client submits a PUT request to \/programs\/(\d+) with (admin|user|no
   authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
   put "/programs/#{id}", string, 'CONTENT_TYPE' => 'application/json'
 end
+
+# Updating Seasons
+# ================
+When(/^the client submits a PUT request to \/seasons\/(\d+) with (.*) credentials and:$/) do |id, type, string|
+  @season = Season[id]
+  authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
+  put "/seasons/#{id}", string, 'CONTENT_TYPE' => 'application/json'
+end

@@ -29,3 +29,17 @@ end
 Then(/^no new season should be created$/) do
   expect(Season.count).to eql @count
 end
+
+Then(/^the season should not be updated$/) do
+  expect(@season.values).to eql @season.refresh.values
+end
+
+Then(/^the season's (.*) should be (.*)$/) do |attr, value|
+  value = Date.strptime(value, '%Y-%m-%d') if value.match(/\d{4}\-\d{2}\-\d{2}/)
+  expect(@season.refresh.send(attr.to_sym)).to eql value
+end
+
+Then(/^the season's (.*) should not be (.*)$/) do |attr, value|
+  value = Date.strptime(value, '%Y-%m-%d') if value.match(/\d{4}\-\d{2}\-\d{2}/)
+  expect(@season.refresh.send(attr.to_sym)).not_to eql value
+end

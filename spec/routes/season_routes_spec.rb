@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe Canto, seasons: true do 
+  include Sinatra::ErrorHandling
+
   let(:program) { FactoryGirl.create(:program_with_season) }
   let(:season) { program.seasons.first }
   let(:responses) { [nil, 'null', "Authorization Required\n", "Authorization Required", [], {}, ''] }
   let(:valid_json) { {start_date: Date.new(2015,06,17)}.to_json }
   let(:valid_hash) { {start_date: '2015-06-17', program_id: program.id } }
-  let(:invalid_json) { {program_id: nil} }
+  let(:invalid_json) { {program_id: nil}.to_json }
 
 
   describe 'POST' do 
@@ -168,6 +170,106 @@ describe Canto, seasons: true do
 
       context 'with no authorization' do 
         it_behaves_like 'a GET request without credentials'
+      end
+    end
+
+    context 'all seasons of a program' do 
+      let(:program) { FactoryGirl.create(:program_with_everything) }
+      let(:path) { "/programs/#{program.id}/seasons/all" }
+      let(:resource) { program.seasons }
+
+      context 'with admin authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:admin) }
+        end
+      end
+
+      context 'with user authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:user) }
+        end
+      end
+
+      context 'with invalid authorization' do 
+        it_behaves_like 'an unauthorized GET request' do 
+          let(:username) { 'baddymcbadderson' }
+          let(:password) { "I'm a baddie" }
+        end
+      end
+
+      context 'with no credentials' do 
+        it_behaves_like 'a GET request without credentials'
+      end
+    end
+  end
+
+  describe 'PUT' do 
+    let(:path) { "/seasons/#{season.id}" }
+    let(:resource) { season }
+
+    context 'with admin authorization' do 
+      context 'with valid attributes' do 
+        let(:make_request) {
+          authorize_with FactoryGirl.create(:admin)
+          put path, valid_json, 'CONTENT_TYPE' => 'application/json'
+        }
+
+        it 'updates the season' do 
+          expect_any_instance_of(Season).to receive(:update).with({start_date: '2015-06-17'})
+          make_request
+        end
+
+        it 'returns status 200' do 
+          make_request
+          expect(last_response.status).to eql 200
+        end
+      end
+
+      context 'with invalid attributes' do 
+        let(:make_request) {
+          authorize_with FactoryGirl.create(:admin)
+          put path, invalid_json, 'CONTENT_TYPE' => 'application/json'
+        }
+
+        it 'attempts to update the season' do 
+          expect_any_instance_of(Season).to receive(:update).with({program_id: nil})
+          make_request
+        end
+
+        it 'returns status 422' do 
+          make_request
+          expect(last_response.status).to eql 422
+        end
+      end
+    end
+
+    context 'with user authorization' do
+      it_behaves_like 'an unauthorized PUT request' do 
+        let(:agent) { FactoryGirl.create(:user) }
+        let(:model) { Season }
+        let(:valid_attributes) { valid_json }
+      end
+    end
+
+    context 'with invalid authorization' do 
+      it_behaves_like 'an unauthorized PUT request' do 
+        let(:agent) { FactoryGirl.build(:user, username: 'foo', password: 'bar')}
+        let(:model) { Season }
+        let(:valid_attributes) { valid_json }
+      end
+    end
+
+    context 'with no authorization' do 
+      let(:make_request) { put path, valid_json, 'CONTENT_TYPE' => 'application/json' }
+
+      it 'doesn\'t update the season' do 
+        expect_any_instance_of(Season).not_to receive(:update)
+        make_request
+      end
+
+      it 'returns status 401' do 
+        make_request
+        expect(last_response.status).to eql 401
       end
     end
   end

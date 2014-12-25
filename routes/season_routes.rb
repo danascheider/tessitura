@@ -8,6 +8,15 @@ module Sinatra
             Routing.post(Season, body)
           end
 
+          app.put '/seasons/:id' do |id|
+            return 404 unless Season[id]
+            update_resource(request_body, Season[id]) || 422
+          end
+
+          SeasonRoutes.get_routes(app)
+        end
+
+        def self.get_routes(app)
           app.get '/seasons/:id' do |id|
             Routing.get_single(Season, id)
           end
@@ -15,6 +24,11 @@ module Sinatra
           app.get '/programs/:id/seasons' do |id|
             return 404 unless Program[id]
             (Season.where(program_id: id).exclude(stale: true) || []).to_json
+          end
+
+          app.get '/programs/:id/seasons/all' do |id|
+            return 404 unless Program[id]
+            (Program[id].seasons || []).to_json
           end
         end
       end
