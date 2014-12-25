@@ -40,3 +40,9 @@ Feature: View seasons
     When the client submits a GET request to /programs/2/seasons with no authorization
     Then the response should not include any data
     And the response should indicate the request was unauthorized
+
+  @bulk
+  Scenario: Logged-in user views all seasons of a single program
+    When the client submits a GET request to /programs/2/seasons/all with user authorization
+    Then the JSON response should include all the program's season data
+    And the response should return status 200
