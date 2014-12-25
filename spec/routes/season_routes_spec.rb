@@ -152,6 +152,23 @@ describe Canto, seasons: true do
           let(:agent) { FactoryGirl.create(:admin) }
         end
       end
+
+      context 'with user authorization' do 
+        it_behaves_like 'an authorized GET request' do 
+          let(:agent) { FactoryGirl.create(:user) }
+        end
+      end
+
+      context 'with invalid authorization' do 
+        it_behaves_like 'a GET request without credentials' do 
+          let(:username) { 'baddymcbadderson' }
+          let(:password) { 'malicious666' }
+        end
+      end
+
+      context 'with no authorization' do 
+        it_behaves_like 'a GET request without credentials'
+      end
     end
   end
 end

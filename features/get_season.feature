@@ -28,13 +28,15 @@ Feature: View seasons
     And the response should not include the program's stale seasons
     And the response should return status 200
 
+  @bulk
   Scenario: Program has no fresh seasons
     Given program 3 has only stale seasons
     When the client submits a GET request to /programs/3/seasons with user authorization
     Then the response should include an empty JSON object
     And the response should return status 200
 
+  @bulk
   Scenario: Unauthorized user attempts to view fresh seasons of a single program
-    When the client submits a GET request to /programs/2/seasons with user authorization
+    When the client submits a GET request to /programs/2/seasons with no authorization
     Then the response should not include any data
     And the response should indicate the request was unauthorized
