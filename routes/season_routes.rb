@@ -13,6 +13,10 @@ module Sinatra
             update_resource(request_body, Season[id]) || 422
           end
 
+          app.delete '/seasons/:id' do |id|
+            Routing.delete(Season, id)
+          end
+
           SeasonRoutes.get_routes(app)
         end
 

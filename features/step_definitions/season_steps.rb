@@ -30,6 +30,18 @@ Then(/^no new season should be created$/) do
   expect(Season.count).to eql @count
 end
 
+Then(/^the season should be deleted$/) do
+  expect(Season[@season.id]).to be nil
+end
+
+Then(/^no season should be deleted$/) do 
+  expect(Season.count).to eql @count
+end
+
+Then(/^season (\d+) should not be deleted$/) do |id|
+  expect(Season[id]).not_to be nil
+end
+
 Then(/^the season should not be updated$/) do
   expect(@season.values).to eql @season.refresh.values
 end

@@ -30,6 +30,14 @@ When(/^the client submits a DELETE request to \/programs\/(\d+) with admin crede
   delete "/programs/#{id}"
 end
 
+# Delete Season
+# =============
+When(/^the client submits a DELETE request to \/seasons\/(\d+) with (admin|user) credentials$/) do |id, type|
+  @count, @season = Season.count, Season[id]
+  authorize_with User[type === 'admin' ? 1 : 2]
+  delete "/seasons/#{id}"
+end
+
 # Unauthorized
 # ============
 When(/^the client submits a DELETE request to (.*) with no credentials$/) do |path|

@@ -273,4 +273,33 @@ describe Canto, seasons: true do
       end
     end
   end
+
+  describe 'DELETE' do 
+    let(:path) { "/seasons/#{season.id}" }
+    let(:resource) { season }
+    let(:model) { Season }
+    let(:nonexistent_resource_path) { "/seasons/1000388328854" }
+
+    context 'with admin authorization' do 
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { FactoryGirl.create(:admin) }
+      end
+    end
+
+    context 'with user authorization' do 
+      it_behaves_like 'an unauthorized DELETE request' do 
+        let(:agent) { FactoryGirl.create(:user) }
+      end
+    end
+
+    context 'with invalid credentials' do 
+      it_behaves_like 'an unauthorized DELETE request' do 
+        let(:agent) { FactoryGirl.build(:user, username: 'foo', password: 'bar') }
+      end
+    end
+
+    context 'with no authorization' do 
+      it_behaves_like 'a DELETE request without credentials'
+    end
+  end
 end
