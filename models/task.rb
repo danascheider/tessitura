@@ -6,13 +6,23 @@ class Task < Sequel::Model
   STATUS_OPTIONS   = [ 'New', 'In Progress', 'Blocking', 'Complete' ]
   PRIORITY_OPTIONS = [ 'Urgent', 'High', 'Normal', 'Low', 'Not Important' ]
 
-  # By default, tasks are created at the top of the list
-
+  # By default, tasks are created at the top of the list. If the is being created
+  # with status 'Complete', then it is added by default as the first complete task
+  # unless a different position is specified explicitly.
+  
   def before_create
     pos = Task.incomplete.where(owner_id: self.owner_id).order(:position).last.try_rescue(:position) || 0
     self.position = self.status === 'Complete' ? pos + 1 : 1 if self.position.nil?
     super 
   end
+
+  # By default, tasks that are marked as backlogged are moved below other incomplete tasks;
+  # tasks marked complete are moved to the bottom of the list. When a task is marked as 
+  # backlogged, it is automatically moved to the position just below that of the last 
+  # "fresh" (i.e. incomplete and non-backlogged) task. When a task is marked complete -
+  # whether fresh or backlogged - the task is moved to the position just below that of
+  # the last incomplete, backlogged task (or the last incomplete task, if there are no
+  # backlogged tasks).
 
   def before_update
     condition1, condition2 = (modified?(:status) && status === 'Complete'), (modified?(:backlog) && backlog === true)
