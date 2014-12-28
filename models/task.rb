@@ -9,7 +9,8 @@ class Task < Sequel::Model
   # By default, tasks are created at the top of the list
 
   def before_create
-    self.position ||= 1
+    pos = Task.incomplete.where(owner_id: self.owner_id).order(:position).last.try_rescue(:position) || 0
+    self.position = self.status === 'Complete' ? pos + 1 : 1 if self.position.nil?
     super 
   end
 
