@@ -2,6 +2,14 @@ Given(/^tasks with the following attributes:$/) do |attributes|
   attributes.hashes.each {|hash| Task[hash.delete('id')].update(hash) }
 end
 
+Given(/^tasks (\d+) and (\d+) are complete$/) do |id1, id2|
+  [Task[id1], Task[id2]].each {|t| t.update(status: 'Complete') }
+end
+
+Given(/^tasks (\d+) and (\d+) are backlogged$/) do |id1, id2|
+  [Task[id1], Task[id2]].each {|t| t.update(backlog: true) }
+end
+
 When(/^the client requests to change the (\d+)(?:[a-z]{2}) task's position to (\d+)$/) do |id, pos|
   user = User[Task[id].owner_id]
   @positions = user.tasks.map {|t| [t.id, t.position] }
@@ -16,11 +24,26 @@ When(/^the client requests to delete task (\d+)$/) do |id|
   delete "/tasks/#{id}"
 end
 
+When(/^task (\d+) is marked complete$/) do |id|
+  (@task = Task[id]).update(status: 'Complete')
+end
+
+When(/^task (\d+) is backlogged$/) do |id|
+  (@task = Task[id]).update(backlog: true)
+end
+
 When(/^the task in position (\d+) on the (\d+)(?:[a-z]{2}) user's list is marked complete$/) do |position, id|
   user = User[id]
   @positions = user.tasks.map {|t| [t.id, t.position] }
   @task = user.tasks.find {|t| t.position === position }
   @task.update(status: 'Complete')
+end
+
+When(/^the task in position (\d+) on the (\d+)(?:[a-z]{2}) user's list is backlogged$/) do |position, id|
+  user = User[id]
+  @positions = user.tasks.map {|t| [t.id, t.position] }
+  @task = user.tasks.find {|t| t.position === position }
+  @task.update(backlog: true)
 end
 
 When(/^the task in position (\d+) on the (\d+)(?:[a-z]{2}) user's list is updated with:$/) do |position, id, attributes|

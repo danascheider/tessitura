@@ -114,6 +114,44 @@ describe Task, tasks: true do
         Task.where(status: 'Complete').each {|t| expect(Task.incomplete).not_to include(t) }
       end
     end
+
+    describe '::fresh scope' do 
+      before(:each) do 
+        FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks)
+        Task.first.update(backlog: true)
+      end
+
+      it 'doesn\'t include complete tasks' do 
+        Task.complete.each {|t| expect(Task.fresh).not_to include(t) }
+      end
+
+      it 'doesn\'t include backlogged tasks' do 
+        expect(Task.fresh).not_to include(Task.first)
+      end
+
+      it 'includes other tasks' do 
+        expect(Task.fresh.first).to be_a(Task)
+      end
+
+      it 'is a Sequel::Dataset' do 
+        expect(Task.fresh).to be_a Sequel::Dataset
+      end
+    end
+
+    describe '::stale scope' do 
+      before(:each) do 
+        FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks)
+        Task.first.update(backlog: true)
+      end
+
+      it 'is the complement of the ::fresh scope' do 
+        expect(Task.stale.all).to eql(Task.all - Task.fresh.all)
+      end
+
+      it 'is a Sequel::Dataset' do 
+        expect(Task.stale).to be_a Sequel::Dataset
+      end
+    end
   end
 
   describe 'instance methods' do 
@@ -333,6 +371,33 @@ describe Task, tasks: true do
 
         it 'honors an explicit position assignment' do 
           @task.update(status: 'Complete', position: 2)
+          expect(@task.position).to eql 2
+        end
+      end
+    end
+
+    context 'backlog set to true' do 
+      context 'tasks are all incomplete and not backlogged' do 
+        before(:each) do 
+          user.tasks.each {|t| t.update(status: 'New', backlog: nil) }
+          @lower = user.tasks.select {|t| t.position > 3 }
+          @task = @lower.pop
+        end
+
+        it 'moves the backlogged task to the bottom of the list' do 
+          @task.update(backlog: true)
+          expect(@task.position).to eql user.tasks.length
+        end
+
+        it 'moves the other tasks up' do 
+          initial = (@lower).map(&:position)
+          @task.update(backlog: true)
+          final = @lower.map {|t| t.refresh.position }
+          expect(final).to eql(initial.map {|num| num - 1 })
+        end
+
+        it 'honors an explicit position assignment' do 
+          @task.update(backlog: true, position: 2)
           expect(@task.position).to eql 2
         end
       end

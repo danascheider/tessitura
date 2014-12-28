@@ -18,6 +18,9 @@ class Task < Sequel::Model
       self.position = Task.incomplete.where(owner_id: owner_id).order_by(:position).last.position
     end
 
+    if modified?(:backlog) && backlog === true && !modified?(:position)
+      self.position = Task.fresh.where(owner_id: owner_id).order_by(:position).last.position 
+    end
     super
   end
 
@@ -60,11 +63,25 @@ class Task < Sequel::Model
     Task.where(status: 'Complete')
   end
 
+  # The `Task.fresh` scope includes all tasks that are neither complete
+  # nor backlogged
+
+  def self.fresh
+    Task.exclude(status: 'Complete').exclude(backlog: true)
+  end
+
   # The `Task.incomplete` scope includes all tasks with a status other 
   # than 'Complete'. 
 
   def self.incomplete
     Task.exclude(status: 'Complete')
+  end
+
+  # The `Task.stale` scope includes all tasks that are either complete or
+  # backlogged.
+
+  def self.stale
+    Task.where('status=? or backlog=?', 'Complete', true)
   end
 
   # The `#to_hash` or `#to_h` method returns a hash of all of the task's 

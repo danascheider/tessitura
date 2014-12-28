@@ -88,3 +88,87 @@ Feature: Update task position
       | status   | position |
       | Complete | 2        |
     Then its position should be changed to 2
+
+  Scenario: Task is backlogged
+
+    Backlogged tasks are moved lower on the list than incomplete tasks, but
+    above complete ones. When a task is backlogged, it goes on the list
+    directly below the last non-backlogged task.
+
+    When the task in position 6 on the 3rd user's list is backlogged
+    Then its position should be changed to 10
+    And the positions of tasks 10, 9, 8, and 7 should be 6, 7, 8, and 9
+    And the positions of tasks 12, 13, 14, 15, and 16 should not be changed
+
+  Scenario: Task is backlogged with other tasks also backlogged
+
+    If a task is backlogged, it should go after the last incomplete,
+    non-backlogged task, even if there are backlogged tasks with higher positions
+    (i.e., backlogged tasks to which the user has purposefully assigned a
+    different position).
+
+    Given tasks with the following attributes:
+      | id | backlog | position |
+      | 7  | true    | 3        |
+      | 8  | true    | 10       |
+      | 9  | true    | 9        |
+    When the task in position 5 on the 3rd user's list is backlogged
+    Then its position should be changed to 8
+    And the positions of tasks 12, 11, and 10 should be 5, 6, and 7
+    And the positions of tasks 16, 15, 7, 14, 8, and 9 should not be changed
+
+  Scenario: Task is backlogged with a position specified
+
+    If a task is backlogged and a position is specified for it, it 
+    should honor the position being passed instead of going with the
+    default behavior.
+
+    Given tasks with the following attributes:
+      | id | backlog   | position |
+      | 7  | true      | 3        |
+      | 8  | true      | 10       |
+      | 9  | true      | 9        |
+    When the task in position 5 on the 3rd user's list is updated with:
+      | backlog   | position |
+      | true      | 2        |
+    Then its position should be changed to 2
+
+  Scenario: Backlogged task is marked complete
+
+    Backlogged tasks are treated the same as other tasks when they are
+    marked complete.
+
+    Given tasks 7 and 8 are complete
+    And tasks 9 and 10 are backlogged
+    When task 10 is marked complete
+    Then its position should be changed to 8
+
+  Scenario: Task is backlogged when there are complete and backlogged tasks
+
+    Incomplete, backlogged tasks should go between incomplete, non-backlogged
+    tasks and complete tasks.
+
+    Given tasks with the following attributes:
+      | id | status   | backlog | position |
+      | 7  | Complete | false   | 10       |
+      | 8  | Complete | true    | 9        |
+      | 9  | Complete | false   | 8        |
+      | 10 | New      | true    | 7        |
+      | 11 | New      | true    | 6        |
+    When task 14 is backlogged
+    Then its position should be changed to 5
+
+  Scenario: Task is marked complete when there are complete and backlogged tasks
+
+    Incomplete, backlogged tasks should go between incomplete, non-backlogged
+    tasks and complete tasks.
+
+    Given tasks with the following attributes:
+      | id | status   | backlog | position |
+      | 7  | Complete | false   | 10       |
+      | 8  | Complete | true    | 9        |
+      | 9  | Complete | false   | 8        |
+      | 10 | New      | true    | 7        |
+      | 11 | New      | true    | 6        |
+    When task 14 is marked complete
+    Then its position should be changed to 7

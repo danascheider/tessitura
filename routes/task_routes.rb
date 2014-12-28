@@ -49,8 +49,8 @@ module Sinatra
 
           # `@resource` is defined in the authorization filters
 
-          app.put '/tasks/:id' do 
-            update_resource(request_body, @resource)
+          app.put '/tasks/:id' do |id|
+            update_resource(request_body, Task[id])
           end
         end
 
