@@ -15,13 +15,13 @@ class Task < Sequel::Model
   end
 
   def before_update
-    if modified?(:status) && status === 'Complete' && !modified?(:position)
-      self.position = Task.incomplete.where(owner_id: owner_id).order_by(:position).last.position
-    end
+    condition1, condition2 = (modified?(:status) && status === 'Complete'), (modified?(:backlog) && backlog === true)
 
-    if modified?(:backlog) && backlog === true && !modified?(:position)
-      self.position = Task.fresh.where(owner_id: owner_id).order_by(:position).last.position 
+    if (condition1 || condition2) && !modified?(:position)
+      scope = condition1 ? Task.incomplete : Task.fresh
+      self.position = scope.where(owner_id: owner_id).order_by(:position).last.position
     end
+    
     super
   end
 
