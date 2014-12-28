@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Canto, tasks: true do 
+describe Canto, tasks: true, routes: true do 
   include Sinatra::ErrorHandling
   include Sinatra::GeneralHelperMethods
   include Rack::Test::Methods 
@@ -9,7 +9,7 @@ describe Canto, tasks: true do
   let(:user) { FactoryGirl.create(:user_with_task_lists) }
   let(:model) { Task }
 
-  describe 'GET' do 
+  describe 'GET', type: :get do 
     describe 'main task list route' do 
       let(:path) { "/users/#{user.id}/tasks" }
       let(:resource) { user.tasks.where_not(:status, 'Complete').map {|t| t.to_hash } }
@@ -152,7 +152,7 @@ describe Canto, tasks: true do
     end
   end
 
-  describe 'POST' do 
+  describe 'POST', type: :post do 
     let(:path) { "/users/#{user.id}/tasks"}
     let(:valid_attributes) { 
       { :title => 'Water the garden', 
@@ -202,7 +202,7 @@ describe Canto, tasks: true do
     end
   end
 
-  describe 'PUT' do 
+  describe 'PUT', type: :put do 
     context 'single task route' do 
       let(:path) { "/tasks/#{user.tasks.first.id}" }
       let(:valid_attributes) { { :title => 'Fix bad RSpec expectations' }.to_json }
@@ -339,7 +339,7 @@ describe Canto, tasks: true do
     end
   end
 
-  describe 'DELETE' do 
+  describe 'DELETE', type: :delete do 
     let(:task) { user.tasks.first }
     let(:path) { "/tasks/#{task.id}" }
 

@@ -39,12 +39,7 @@ module Sinatra
           app.put '/users/:id/tasks' do |id|
             tasks = (body = request_body).map {|h| Task[h.delete(:id)] } 
 
-            body.each do |hash| 
-              (task = tasks[body.index(hash)]).set(sanitize_attributes(hash))
-              return 422 unless task.valid? && task.owner_id === id.to_i
-            end
-            
-            tasks.each {|task| task.save } && 200
+            Routing.bulk_update(tasks, body, id) && 200 rescue 422
           end
 
           # `@resource` is defined in the authorization filters
