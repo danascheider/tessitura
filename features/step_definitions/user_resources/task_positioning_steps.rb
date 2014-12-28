@@ -41,6 +41,9 @@ end
 
 When(/^the task in position (\d+) on the (\d+)(?:[a-z]{2}) user's list is backlogged$/) do |position, id|
   user = User[id]
+  puts "TASKS:"
+  tasks = Task.where(owner_id: 3).order(:position).map {|t| [t.position, t.status, t.backlog, t.id]}
+  tasks.each {|t| puts "#{t}\n"}
   @positions = user.tasks.map {|t| [t.id, t.position] }
   @task = user.tasks.find {|t| t.position === position }
   @task.update(backlog: true)
@@ -49,6 +52,7 @@ end
 When(/^the task in position (\d+) on the (\d+)(?:[a-z]{2}) user's list is updated with:$/) do |position, id, attributes|
   user = User[id]
   @task = user.tasks.find {|t| t.position === position }
+  @positions = user.tasks.map {|t| [t.id, t.position]}
   @task.update(attributes.hashes.first)
 end
 

@@ -38,11 +38,8 @@ module Sinatra
         def self.put_routes(app) 
           app.put '/users/:id/tasks' do |id|
             tasks = (body = request_body).map {|h| Task[h.delete(:id)] } 
-
             Routing.bulk_update(tasks, body, id) && 200 rescue 422
           end
-
-          # `@resource` is defined in the authorization filters
 
           app.put '/tasks/:id' do |id|
             update_resource(request_body, Task[id])
