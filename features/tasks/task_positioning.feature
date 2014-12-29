@@ -161,6 +161,7 @@ Feature: Update task position
     And tasks 9 and 10 are backlogged
     When task 10 is marked complete
     Then its position should be changed to 8
+    And the position of task 9 should be 7
 
   Scenario: Task is backlogged when there are complete and backlogged tasks
 

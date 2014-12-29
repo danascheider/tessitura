@@ -11,8 +11,7 @@ class Task < Sequel::Model
   # unless a different position is specified explicitly.
   
   def before_create
-    pos = Task.incomplete.where(owner_id: self.owner_id).order(:position).last.try_rescue(:position) || 0
-    self.position = self.status === 'Complete' ? pos + 1 : 1 if self.position.nil?
+    self.position = set_position
     super 
   end
 
@@ -93,6 +92,21 @@ class Task < Sequel::Model
 
   def self.stale
     Task.where('status=? or backlog=?', 'Complete', true)
+  end
+
+  # The `#fresh?` method returns true if the task is not backlogged and its
+  # status is anything other than 'Complete'. If a task is backlogged or 
+  # complete, `#fresh?` returns false.
+
+  def fresh?
+    incomplete? && !backlog
+  end
+
+  # The `#incomplete?` method returns true if the task's status has any value
+  # other than 'Complete'. If the task is complete, it returns false.
+
+  def incomplete?
+    status != 'Complete'
   end
 
   # The `#to_hash` or `#to_h` method returns a hash of all of the task's 
@@ -200,5 +214,27 @@ class Task < Sequel::Model
       dup = positions.find {|number| positions.count(number) > 1 }
       gap = (1..positions.last).find {|number| positions.count(number) === 0 }
       [dup, gap]
+    end
+
+    def set_position
+
+      # If the task's position has been explicitly set, then the given position 
+      # should be honored.
+
+      return self.position unless self.position.nil?
+
+      # By default, tasks are sorted by the following order:
+      #   1. Fresh tasks
+      #   2. Backlogged tasks
+      #   3. Complete tasks
+      #
+      # Because a user may override the defaults, the "zone" for each type of task is 
+      # considered to be below the last task (by position) in the given category. 
+
+      backlog_position = (Task.fresh.order_by(:position).last.try_rescue(:position) || 0) + 1 
+      complete_position = (Task.incomplete.order_by(:position).last.try_rescue(:position) || 0) + 1
+
+      position = self.fresh? ? 1 : (self.incomplete? ? backlog_position : complete_position)
+      position
     end
 end

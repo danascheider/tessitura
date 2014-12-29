@@ -158,10 +158,44 @@ describe Task, tasks: true do
     let(:task_list) { FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks) }
     let(:complete_task) { Task.where(task_list_id: task_list.id, status: 'Complete').first }
 
+    describe '#incomplete?' do 
+      context 'when the task is incomplete' do 
+        it 'returns true' do 
+          expect(task.incomplete?).to be true
+        end
+      end
+
+      context 'when the task is complete' do 
+        it 'returns false' do 
+          expect(complete_task.incomplete?).to be false
+        end
+      end
+    end
+
     describe '#destroy' do 
       it 'removes the task from the database' do 
         task = complete_task
         expect{ task.destroy }.to change(Task, :count).by(-1)
+      end
+    end
+
+    describe '#fresh?' do 
+      context 'when true' do 
+        it 'returns true' do 
+          expect(FactoryGirl.create(:task).fresh?).to be true 
+        end
+      end
+
+      context 'when the task is complete' do 
+        it 'returns false' do 
+          expect(complete_task.fresh?).to be false
+        end
+      end
+
+      context 'when the task is backlogged' do 
+        it 'returns false' do 
+          expect(FactoryGirl.create(:task, backlog: true).fresh?).to be false 
+        end
       end
     end
 
@@ -289,6 +323,18 @@ describe Task, tasks: true do
         it 'is instantiated below the last incomplete task' do 
           pos = Task.incomplete.order(:position).last.position + 1
           new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id, status: 'Complete')
+          expect(new_task.position).to eql pos
+        end
+      end
+
+      context 'created backlogged' do 
+        before(:each) do 
+          user
+        end
+
+        it 'is instantiated below the last incomplete, non-backlogged task' do 
+          pos = Task.fresh.order(:position).last.position + 1
+          new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id, backlog: true)
           expect(new_task.position).to eql pos
         end
       end

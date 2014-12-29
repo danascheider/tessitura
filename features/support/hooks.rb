@@ -13,9 +13,9 @@ Before('@tasks') do |scenario|
   list_id_2 = User[2].default_task_list.id
   list_id_3 = User[3].default_task_list.id
 
-  FactoryGirl.create(:task, task_list_id: list_id_1, id: 1)
-  FactoryGirl.create(:task, task_list_id: list_id_1, id: 2)
-  FactoryGirl.create(:task, task_list_id: list_id_1, id: 3)
+  FactoryGirl.create(:task, task_list_id: list_id_1, id: 1, position: 3)
+  FactoryGirl.create(:task, task_list_id: list_id_1, id: 2, position: 2)
+  FactoryGirl.create(:task, task_list_id: list_id_1, id: 3, position: 1)
 
   FactoryGirl.create(:task, task_list_id: list_id_2, id: 4)
   FactoryGirl.create(:task, task_list_id: list_id_2, id: 5)
