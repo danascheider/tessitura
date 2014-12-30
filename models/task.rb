@@ -31,6 +31,8 @@ class Task < Sequel::Model
     if (marked_complete? || added_to_backlog?) && !modified?(:position)
       scope = marked_complete? ? Task.incomplete : Task.fresh
       self.position = scope.where(owner_id: owner_id).order_by(:position).last.position
+    elsif marked_incomplete? && !modified?(:position)
+      self.position = 1
     end
     
     super

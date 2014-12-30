@@ -192,3 +192,16 @@ Feature: Update task position
       | 11 | New      | true    | 6        |
     When task 14 is marked complete
     Then its position should be changed to 7
+
+  Scenario: Complete task status is changed
+
+    If a task is complete and its status is changed to something else, it should be
+    moved to the top of the list.
+
+    Given tasks 7 and 8 are complete
+    When the client submits a PUT request to /tasks/7 with the 1st user's credentials and:
+      """json
+      {"status":"In Progress"}
+      """
+    Then the position of task 7 should be 1
+    And the 3rd user's other tasks should have their positions incremented

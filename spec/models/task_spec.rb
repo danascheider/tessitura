@@ -413,7 +413,7 @@ describe Task, tasks: true do
       context 'other tasks are all incomplete' do 
         before(:each) do 
           user.tasks.each {|t| t.update(status: 'New') }
-          @lower = user.tasks.select {|t| t.position > 3 }
+          @lower = user.tasks.select {|t| t.refresh.position > 3 }
           @task = Task.find(position: 3)
         end
 
@@ -423,10 +423,10 @@ describe Task, tasks: true do
         end
 
         it 'moves the other tasks up' do 
-          initial = (@lower).map(&:position)
+          expected = (@lower).map {|t| t.position - 1}
           @task.update(status: 'Complete')
-          final = @lower.map {|t| t.refresh.position }
-          expect(final).to eql(initial.map {|num| num - 1 })
+          actual = @lower.map {|t| t.refresh.position }
+          expect(actual).to eql(expected)
         end
 
         it 'honors an explicit position assignment' do 
@@ -462,11 +462,33 @@ describe Task, tasks: true do
       end
     end
 
+    context 'status changed from \'Complete\'' do 
+      context 'without position being set explicitly' do 
+        before(:each) do 
+          user
+          @task = Task.complete.first
+          @higher = user.tasks.select {|t| t.position < @task.position }
+        end
+
+        it 'is moved to position 1' do 
+          @task.update(status: 'In Progress')
+          expect(@task.refresh.position).to eql 1
+        end
+
+        it 'moves the other tasks down' do 
+          expected = @higher.map {|t| t.position + 1}
+          @task.update(status: 'In Progress')
+          actual = @higher.map {|t| t.refresh.position }
+          expect(actual).to eql(expected)
+        end
+      end
+    end
+
     context 'backlog set to true' do 
       context 'tasks are all incomplete and not backlogged' do 
         before(:each) do 
           user.tasks.each {|t| t.update(status: 'New', backlog: nil) }
-          @lower = user.tasks.select {|t| t.position > 3 }
+          @lower = user.tasks.select {|t| t.refresh.position > 3 }
           @task = Task.find(position: 3)
         end
 
