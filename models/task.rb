@@ -28,9 +28,7 @@ class Task < Sequel::Model
   # backlogged tasks).
 
   def before_update
-    condition2 = (modified?(:backlog) && backlog === true)
-
-    if (marked_complete? || condition2) && !modified?(:position)
+    if (marked_complete? || added_to_backlog?) && !modified?(:position)
       scope = marked_complete? ? Task.incomplete : Task.fresh
       self.position = scope.where(owner_id: owner_id).order_by(:position).last.position
     end
