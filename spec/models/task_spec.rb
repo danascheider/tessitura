@@ -215,8 +215,7 @@ describe Task, tasks: true do
           title: task.title,
           priority: task.priority,
           status: task.status,
-          created_at: task.created_at,
-          updated_at: task.updated_at
+          created_at: task.created_at
         }
       }
 
@@ -467,7 +466,7 @@ describe Task, tasks: true do
         before(:each) do 
           user
           @task = Task.complete.first
-          @higher = user.tasks.select {|t| t.position < @task.position }
+          @higher = user.tasks.select {|t| t.refresh.position < @task.position }
         end
 
         it 'is moved to position 1' do 
@@ -480,6 +479,19 @@ describe Task, tasks: true do
           @task.update(status: 'In Progress')
           actual = @higher.map {|t| t.refresh.position }
           expect(actual).to eql(expected)
+        end
+      end
+
+      context 'with backlog true' do 
+        before(:each) do 
+          user
+          @task = Task.complete.first
+          @task.update(backlog: true)
+        end
+
+        it 'becomes the first backlogged task' do 
+          @task.update(status: 'Blocking')
+          expect(@task.refresh.position).to eql(Task.fresh.order(:position).last.position + 1)
         end
       end
     end

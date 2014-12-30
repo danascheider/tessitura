@@ -205,3 +205,16 @@ Feature: Update task position
       """
     Then the position of task 7 should be 1
     And the 3rd user's other tasks should have their positions incremented
+
+  Scenario: Task removed from the backlog
+
+    If an incomplete, backlogged task is removed from the backlog, its position should be
+    changed to 1.
+
+    Given tasks 7 and 8 are backlogged
+    When the client submits a PUT request to /tasks/7 with the 1st user's credentials and:
+      """json
+      {"backlog":null}
+      """
+    Then the position of task 7 should be 1
+    And the 3rd user's other tasks should have their positions incremented

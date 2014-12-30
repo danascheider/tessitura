@@ -28,13 +28,16 @@ class Task < Sequel::Model
   # backlogged tasks).
 
   def before_update
-    if (marked_complete? || added_to_backlog?) && !modified?(:position)
-      scope = marked_complete? ? Task.incomplete : Task.fresh
-      self.position = scope.where(owner_id: owner_id).order_by(:position).last.position
-    elsif marked_incomplete? && !modified?(:position)
-      self.position = 1
+    return unless needs_positioning? 
+
+    self.position = if fresh?
+      1
+    elsif complete?
+      Task.incomplete.order(:position).last.position
+    elsif self.backlog 
+      Task.fresh.order(:position).last.position
     end
-    
+
     super
   end
 
@@ -96,6 +99,13 @@ class Task < Sequel::Model
 
   def self.stale
     Task.where('status=? or backlog=?', 'Complete', true)
+  end
+
+  # The `#complete?` method returns true if the task's status attribute is 
+  # set to 'Complete' and false otherwise.
+
+  def complete?
+    !incomplete?
   end
 
   # The `#fresh?` method returns true if the task is not backlogged and its
@@ -224,12 +234,20 @@ class Task < Sequel::Model
       modified?(:backlog) && backlog === true
     end
 
+    def completion_status_changed?
+      marked_complete? || marked_incomplete?
+    end
+
     def marked_complete?
       modified?(:status) && initial_value(:status) != 'Complete' && status === 'Complete'
     end
 
     def marked_incomplete?
       modified?(:status) && initial_value(:status) === 'Complete' && status != 'Complete'
+    end
+
+    def needs_positioning?
+      (completion_status_changed? || column_changed?(:backlog)) && !modified?(:position)
     end
 
     def removed_from_backlog?
