@@ -216,6 +216,22 @@ class Task < Sequel::Model
       [dup, gap]
     end
 
+    def added_to_backlog?
+      modified?(:backlog) && backlog === true
+    end
+
+    def marked_complete?
+      modified?(:status) && initial_value(:status) != 'Complete' && status === 'Complete'
+    end
+
+    def marked_incomplete?
+      modified?(:status) && initial_value(:status) === 'Complete' && status != 'Complete'
+    end
+
+    def removed_from_backlog?
+      modified?(:backlog) && !backlog
+    end
+
     def set_position
 
       # If the task's position has been explicitly set, then the given position 
