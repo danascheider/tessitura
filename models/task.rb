@@ -1,6 +1,10 @@
 class Task < Sequel::Model
   many_to_one :task_list
 
+  # The `dirty` plugin makes old attribute values available to hooks
+
+  self.plugin :dirty
+
   # Possible values for task status and priority, enforced on validation
 
   STATUS_OPTIONS   = [ 'New', 'In Progress', 'Blocking', 'Complete' ]
@@ -24,10 +28,10 @@ class Task < Sequel::Model
   # backlogged tasks).
 
   def before_update
-    condition1, condition2 = (modified?(:status) && status === 'Complete'), (modified?(:backlog) && backlog === true)
+    condition2 = (modified?(:backlog) && backlog === true)
 
-    if (condition1 || condition2) && !modified?(:position)
-      scope = condition1 ? Task.incomplete : Task.fresh
+    if (marked_complete? || condition2) && !modified?(:position)
+      scope = marked_complete? ? Task.incomplete : Task.fresh
       self.position = scope.where(owner_id: owner_id).order_by(:position).last.position
     end
     
