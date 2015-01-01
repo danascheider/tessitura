@@ -101,7 +101,7 @@ class Task < Sequel::Model
   def incomplete?
     status != 'Complete'
   end
-  
+
   # The `#to_hash` or `#to_h` method returns a hash of all of the task's 
   # non-empty attributes. Keys for blank attributes are removed from the
   # hash, so not all columns will necessarily be represented in the hash.
@@ -208,8 +208,6 @@ class Task < Sequel::Model
       gap = (1..positions.last).find {|number| positions.count(number) === 0 }
       [dup, gap]
     end
-<<<<<<< Updated upstream
-=======
 
     def added_to_backlog?
       modified?(:backlog) && backlog === true
@@ -256,5 +254,4 @@ class Task < Sequel::Model
       position = self.fresh? ? 1 : (self.incomplete? ? backlog_position : complete_position)
       position
     end
->>>>>>> Stashed changes
 end
