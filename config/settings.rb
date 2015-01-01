@@ -1,16 +1,19 @@
 require 'slogger'
+require 'yaml'
+Dir['./config/**/*.rb'].each {|f| require f }
 Dir['./helpers/**/*'].each {|f| require f }
+
+DB_YAML_FILE ||= File.expand_path('config/database.yml')
+DB_CONFIG_INFO = DatabaseTaskHelper.get_yaml(DB_YAML_FILE)
 
 class Canto < Sinatra::Base
 
   ENV['RACK_ENV'] ||= 'development'
-  DB_PASSWORD = 'hunter2'
-  db = "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENV['RACK_ENV']}"
-  db_travis = 'mysql2://travis@127.0.0.1:3306/test'
+  db_location = ENV['TRAVIS'] ? 'mysql2://travis@127.0.0.1:3306/test' : DatabaseTaskHelper.get_string(DB_CONFIG_INFO[ENV['RACK_ENV']], ENV['RACK_ENV'])
 
   set :root, File.dirname(__FILE__)
   set :app_file, __FILE__
-  set :database, ENV['TRAVIS'] ? db_travis : db
+  set :database,db_location
   set :data, ''
 
   # =======================================#
