@@ -1,22 +1,35 @@
 class Task < Sequel::Model
   many_to_one :task_list
 
+  # The `dirty` plugin makes old attribute values available to hooks
+
+  self.plugin :dirty
+
   # Possible values for task status and priority, enforced on validation
 
   STATUS_OPTIONS   = [ 'New', 'In Progress', 'Blocking', 'Complete' ]
   PRIORITY_OPTIONS = [ 'Urgent', 'High', 'Normal', 'Low', 'Not Important' ]
 
-  # By default, tasks are created at the top of the list
-
+  # By default, tasks are created at the top of the list. If the is being created
+  # with status 'Complete', then it is added by default as the first complete task
+  # unless a different position is specified explicitly.
+  
   def before_create
-    self.position ||= 1
+    self.position = set_position
     super 
   end
+
+  # By default, tasks that are marked as backlogged are moved below other incomplete tasks;
+  # tasks marked complete are moved to the bottom of the list. When a task is marked as 
+  # backlogged, it is automatically moved to the position just below that of the last 
+  # "fresh" (i.e. incomplete and non-backlogged) task. When a task is marked complete -
+  # whether fresh or backlogged - the task is moved to the position just below that of
+  # the last incomplete, backlogged task (or the last incomplete task, if there are no
+  # backlogged tasks).
 
   def before_update
     return unless needs_positioning? 
     scope = marked_complete? ? :incomplete : :fresh
-
     self.position = Task.highest_position(self.owner_id, scope) unless fresh?
     # self.position += 1 if self.backlog && marked_incomplete?
     self.position = 1 if fresh?
@@ -60,6 +73,13 @@ class Task < Sequel::Model
 
   def self.complete
     Task.where(status: 'Complete')
+  end
+
+  # The `Task.fresh` scope includes all tasks that are neither complete
+  # nor backlogged
+
+  def self.fresh
+    Task.exclude(status: 'Complete').exclude(backlog: true)
   end
 
   # The `Task.incomplete` scope includes all tasks with a status other 
@@ -250,7 +270,6 @@ class Task < Sequel::Model
 
       backlog_position = (Task.fresh.map(&:position).try_rescue(:max) || 0) + 1 
       complete_position = (Task.incomplete.map(&:position).try_rescue(:max) || 0) + 1
-
       position = self.fresh? ? 1 : (self.incomplete? ? backlog_position : complete_position)
       position
     end

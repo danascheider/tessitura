@@ -114,16 +114,88 @@ describe Task, tasks: true do
         Task.where(status: 'Complete').each {|t| expect(Task.incomplete).not_to include(t) }
       end
     end
+
+    describe '::fresh scope' do 
+      before(:each) do 
+        FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks)
+        Task.first.update(backlog: true)
+      end
+
+      it 'doesn\'t include complete tasks' do 
+        Task.complete.each {|t| expect(Task.fresh).not_to include(t) }
+      end
+
+      it 'doesn\'t include backlogged tasks' do 
+        expect(Task.fresh).not_to include(Task.first)
+      end
+
+      it 'includes other tasks' do 
+        expect(Task.fresh.first).to be_a(Task)
+      end
+
+      it 'is a Sequel::Dataset' do 
+        expect(Task.fresh).to be_a Sequel::Dataset
+      end
+    end
+
+    describe '::stale scope' do 
+      before(:each) do 
+        FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks)
+        Task.first.update(backlog: true)
+      end
+
+      it 'is the complement of the ::fresh scope' do 
+        expect(Task.stale.all).to eql(Task.all - Task.fresh.all)
+      end
+
+      it 'is a Sequel::Dataset' do 
+        expect(Task.stale).to be_a Sequel::Dataset
+      end
+    end
   end
 
   describe 'instance methods' do 
     let(:task_list) { FactoryGirl.create(:task_list_with_complete_and_incomplete_tasks) }
     let(:complete_task) { Task.where(task_list_id: task_list.id, status: 'Complete').first }
 
+    describe '#incomplete?' do 
+      context 'when the task is incomplete' do 
+        it 'returns true' do 
+          expect(task.incomplete?).to be true
+        end
+      end
+
+      context 'when the task is complete' do 
+        it 'returns false' do 
+          expect(complete_task.incomplete?).to be false
+        end
+      end
+    end
+
     describe '#destroy' do 
       it 'removes the task from the database' do 
         task = complete_task
         expect{ task.destroy }.to change(Task, :count).by(-1)
+      end
+    end
+
+    describe '#fresh?' do 
+      context 'when true' do 
+        it 'returns true' do 
+          expect(FactoryGirl.create(:task).fresh?).to be true 
+        end
+      end
+
+      context 'when the task is complete' do 
+        it 'returns false' do 
+          expect(complete_task.fresh?).to be false
+        end
+      end
+
+      context 'when the task is backlogged' do 
+        it 'returns false' do 
+          expect(FactoryGirl.create(:task, backlog: true).fresh?).to be false 
+        end
       end
     end
 
@@ -143,8 +215,7 @@ describe Task, tasks: true do
           title: task.title,
           priority: task.priority,
           status: task.status,
-          created_at: task.created_at,
-          updated_at: task.updated_at
+          created_at: task.created_at
         }
       }
 
@@ -226,19 +297,45 @@ describe Task, tasks: true do
     let(:user) { FactoryGirl.create(:user_with_task_lists) }
 
     context 'on create' do 
-      it 'is instantiated at position 1' do 
-        new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id)
-        expect(new_task.position).to eql 1
+      context 'normal' do
+        it 'is instantiated at position 1' do 
+          new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id)
+          expect(new_task.position).to eql 1
+        end
+
+        it 'changes the position of the other tasks' do 
+          new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id)
+          positions = (user.tasks - [new_task]).map(&:position).sort.reverse
+
+          # Expected outcome is [n, ..., 3, 2] because earlier tasks have 
+          # higher positions.
+
+          expect(positions).to eql((2..user.tasks.length).to_a.reverse)
+        end
       end
 
-      it 'changes the position of the other tasks' do 
-        new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id)
-        positions = (user.tasks - [new_task]).map(&:position)
+      context 'created complete' do 
+        before(:each) do 
+          user 
+        end
 
-        # Expected outcome is [n, ..., 3, 2] because earlier tasks have 
-        # higher positions.
+        it 'is instantiated below the last incomplete task' do 
+          pos = Task.incomplete.order(:position).last.position + 1
+          new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id, status: 'Complete')
+          expect(new_task.position).to eql pos
+        end
+      end
 
-        expect(positions).to eql((2..user.tasks.length).to_a.reverse)
+      context 'created backlogged' do 
+        before(:each) do 
+          user
+        end
+
+        it 'is instantiated below the last incomplete, non-backlogged task' do 
+          pos = Task.fresh.order(:position).last.position + 1
+          new_task = FactoryGirl.create(:task, task_list_id: user.default_task_list.id, backlog: true)
+          expect(new_task.position).to eql pos
+        end
       end
     end
 
@@ -315,8 +412,8 @@ describe Task, tasks: true do
       context 'other tasks are all incomplete' do 
         before(:each) do 
           user.tasks.each {|t| t.update(status: 'New') }
-          @lower = user.tasks.select {|t| t.position > 3 }
-          @task = @lower.pop
+          @lower = user.tasks.select {|t| t.refresh.position > 3 }
+          @task = Task.find(position: 3)
         end
 
         it 'moves the complete task to the bottom of the list' do 
@@ -415,13 +512,128 @@ describe Task, tasks: true do
         it 'moves the other tasks up' do 
           initial = (@lower).map(&:position)
           @task.update(status: 'Complete')
-          final = @lower.map {|t| t.refresh.position }
-          expect(final).to eql(initial.map {|num| num - 1 })
+          actual = @lower.map {|t| t.refresh.position }
+          expect(actual).to eql(expected)
         end
 
         it 'honors an explicit position assignment' do 
           @task.update(status: 'Complete', position: 2)
           expect(@task.position).to eql 2
+        end
+      end
+
+      context 'some other tasks are also complete' do 
+        before(:each) do 
+          user # has to be invoked to create FactoryGirl object
+          @task = Task.find(position: 1)
+        end
+
+        it 'moves the complete task under the last incomplete task' do 
+          position = Task.incomplete.where(owner_id: user.id).order(:position).last.position
+          @task.update(status: 'Complete')
+          expect(@task.position).to eql position
+        end
+      end
+
+      context 'some other tasks are complete and some are backlogged' do 
+        before(:each) do 
+          user.tasks.where_not(:status, 'Complete').last(2).each {|t| t.update(backlog: true) }
+          @task = Task.find(position: 1)
+        end
+
+        it 'moves the complete task under the last backlogged task' do 
+          position = Task.where(backlog: true).order(:position).last.position
+          @task.update(status: 'Complete')
+          expect(@task.position).to eql position
+        end
+      end
+    end
+
+    context 'status changed from \'Complete\'' do 
+      context 'without position being set explicitly' do 
+        before(:each) do 
+          user
+          @task = Task.complete.first
+          @higher = user.tasks.select {|t| t.refresh.position < @task.position }
+        end
+
+        it 'is moved to position 1' do 
+          @task.update(status: 'In Progress')
+          expect(@task.refresh.position).to eql 1
+        end
+
+        it 'moves the other tasks down' do 
+          expected = @higher.map {|t| t.position + 1}
+          @task.update(status: 'In Progress')
+          actual = @higher.map {|t| t.refresh.position }
+          expect(actual).to eql(expected)
+        end
+      end
+
+      context 'with backlog true' do 
+        before(:each) do 
+          user
+          @task = Task.complete.first
+          @task.update(backlog: true)
+        end
+
+        it 'becomes the first backlogged task' do 
+          @task.update(status: 'Blocking')
+          expect(@task.refresh.position).to eql(Task.fresh.order(:position).last.position + 1)
+        end
+      end
+    end
+
+    context 'backlog set to true' do 
+      context 'tasks are all incomplete and not backlogged' do 
+        before(:each) do 
+          user.tasks.each {|t| t.update(status: 'New', backlog: nil) }
+          @lower = user.tasks.select {|t| t.refresh.position > 3 }
+          @task = Task.find(position: 3)
+        end
+
+        it 'moves the backlogged task to the bottom of the list' do 
+          @task.update(backlog: true)
+          expect(@task.position).to eql user.tasks.length
+        end
+
+        it 'moves the other tasks up' do 
+          initial = (@lower).map(&:position)
+          @task.update(backlog: true)
+          final = @lower.map {|t| t.refresh.position }
+          expect(final).to eql(initial.map {|num| num - 1 })
+        end
+
+        it 'honors an explicit position assignment' do 
+          @task.update(backlog: true, position: 2)
+          expect(@task.position).to eql 2
+        end
+      end
+
+      context 'there are other backlogged tasks' do 
+        before(:each) do 
+          user.tasks.scope(:status, 'Complete').each {|t| t.update(status: 'New', backlog: true) }
+          @task = Task.find(position: 1)
+        end
+
+        it 'moves the task below the last non-backlogged task' do 
+          position = Task.exclude(backlog: true).order(:position).last.position
+          @task.update(backlog: true)
+          expect(@task.position).to eql position
+        end
+      end
+
+      context 'there are complete and backlogged tasks' do 
+        before(:each) do 
+          user # instantiate FactoryGirl object
+          Task.incomplete.order(:position).last(2).each {|t| t.update(backlog: true) }
+          @task = Task.find(position: 1)
+        end
+
+        it 'moves the task below the last non-backlogged task' do 
+          position = Task.fresh.order(:position).last.position 
+          @task.update(backlog: true)
+          expect(@task.position).to eql position
         end
       end
     end

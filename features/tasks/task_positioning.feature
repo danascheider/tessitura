@@ -19,6 +19,17 @@ Feature: Update task position
     Then the position of the new task should be 1
     And the 1st user's other tasks should have their positions incremented
 
+  Scenario: New task is created with status complete
+
+    If a new task is created with status set to 'Complete', then it should be treated
+    just like any other complete task.
+
+    When the client submits a POST request to /users/3/tasks with the 3rd user's credentials and:
+      """json
+      {"title":"Buy deodorant","status":"Complete"}
+      """
+    Then the position of the new task should be 11
+
   Scenario Outline: Task position is changed
 
     Moving a task with position n0 to position n1, where "n1 < n0", should cause 

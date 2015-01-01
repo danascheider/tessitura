@@ -1,6 +1,15 @@
 module Sinatra
   module Canto
     module Routing
+      def self.bulk_update(models, hashes, owner_id)
+        hashes.each do |hash|
+          (model = models[hashes.index(hash)]).set(hash.clean(:id, :created_at, :updated_at, :owner_id))
+          raise Sequel::ValidationError unless model.valid? && model.owner_id === owner_id.to_i
+        end
+
+        models.each {|model| model.save }
+      end
+
       def self.delete(model, id)
         return 404 unless resource = model[id]
         resource.try_rescue(:destroy) && 204 || 403
