@@ -10,7 +10,7 @@ describe 'test helper methods' do
       User.all.each do |user|
         hash = user.to_hash
         hash[:username], hash[:password] = user.username, user.password
-        @output << "#{hash}\n"
+        @output << "#{hash.reject {|k,v| k.in? [:created_at, :updated_at]}}\n"
       end
     end
 
@@ -23,7 +23,7 @@ describe 'test helper methods' do
     before(:each) do 
       FactoryGirl.create_list(:task, 3)
       @output = "TASKS:\n"
-      Task.all.each {|task| @output << "#{task.to_hash}\n" }
+      Task.all.each {|task| @output << "#{task.to_hash.reject {|k,v| k.in? [:created_at, :updated_at]}}\n" }
     end
 
     it 'lists all the task data' do 
@@ -35,7 +35,7 @@ describe 'test helper methods' do
     before(:each) do 
       @user = FactoryGirl.create(:user_with_task_lists)
       @output = "USER #{@user.id}'S TASKS:\n"
-      @user.tasks.flatten.each {|task| @output << "#{task.to_hash}\n" }
+      @user.tasks.flatten.each {|task| @output << "#{task.to_hash.reject {|k,v| k.in? [:created_at, :updated_at]}}\n" }
     end
 
     it 'lists data about the user\'s tasks' do 

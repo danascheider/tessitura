@@ -38,6 +38,7 @@ Then(/^the position of the new task should be (\d+)$/) do |position|
 end
 
 Then(/^the position of task (\d+) should be (\d+)$/) do |id, position|
+  dump_user_tasks(3)
   expect(Task[id].position).to eql position.to_i
 end
 

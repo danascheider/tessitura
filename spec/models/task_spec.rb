@@ -325,6 +325,94 @@ describe Task, tasks: true do
         end
 
         it 'moves the other tasks up' do 
+          expected = (@lower).map {|t| t.position - 1}
+          @task.update(status: 'Complete')
+          actual = @lower.map {|t| t.refresh.position }
+          expect(actual).to eql(expected)
+        end
+
+        it 'honors an explicit position assignment' do 
+          @task.update(status: 'Complete', position: 2)
+          expect(@task.position).to eql 2
+        end
+      end
+
+      context 'some other tasks are also complete' do 
+        before(:each) do 
+          user # has to be invoked to create FactoryGirl object
+          @task = Task.find(position: 1)
+        end
+
+        it 'moves the complete task under the last incomplete task' do 
+          position = Task.incomplete.where(owner_id: user.id).order(:position).last.position
+          @task.update(status: 'Complete')
+          expect(@task.position).to eql position
+        end
+      end
+
+      context 'some other tasks are complete and some are backlogged' do 
+        before(:each) do 
+          user.tasks.where_not(:status, 'Complete').last(2).each {|t| t.update(backlog: true) }
+          @task = Task.find(position: 1)
+        end
+
+        it 'moves the complete task under the last backlogged task' do 
+          position = Task.where(backlog: true).order(:position).last.position
+          @task.update(status: 'Complete')
+          expect(@task.position).to eql position
+        end
+      end
+    end
+
+    context 'status changed from \'Complete\'' do 
+      context 'without position being set explicitly' do 
+        before(:each) do 
+          user
+          @task = Task.complete.first
+          @higher = user.tasks.select {|t| t.refresh.position < @task.position }
+        end
+
+        it 'is moved to position 1' do 
+          @task.update(status: 'In Progress')
+          expect(@task.refresh.position).to eql 1
+        end
+
+        it 'moves the other tasks down' do 
+          expected = @higher.map {|t| t.position + 1}
+          @task.update(status: 'In Progress')
+          actual = @higher.map {|t| t.refresh.position }
+          expect(actual).to eql(expected)
+        end
+      end
+
+      context 'with backlog true' do 
+        before(:each) do 
+          user
+          @task = Task.complete.first
+          @task.update(backlog: true)
+        end
+
+        it 'becomes the first backlogged task' do 
+          @task.update(status: 'Blocking')
+          expect(@task.refresh.position).to eql(Task.fresh.map(&:position).max + 1)
+        end
+      end
+    end
+
+    context 'backlog set to true' do 
+      context 'tasks are all incomplete and not backlogged' do 
+        before(:each) do 
+          user.tasks.each {|t| t.update(status: 'New', backlog: nil) }
+          @lower = user.tasks.select {|t| t.refresh.position > 3 }
+          @task = Task.find(position: 3)
+        end
+
+        it 'moves the backlogged task to the bottom of the list' do 
+          @task.update(backlog: true)
+          expect(@task.position).to eql user.tasks.length
+        end
+
+        it 'moves the other tasks up' do 
           initial = (@lower).map(&:position)
           @task.update(status: 'Complete')
           final = @lower.map {|t| t.refresh.position }

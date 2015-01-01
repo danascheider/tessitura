@@ -14,10 +14,12 @@ class Task < Sequel::Model
   end
 
   def before_update
-    if modified?(:status) && status === 'Complete' && !modified?(:position)
-      self.position = Task.incomplete.where(owner_id: owner_id).order_by(:position).last.position
-    end
+    return unless needs_positioning? 
+    scope = marked_complete? ? :incomplete : :fresh
 
+    self.position = Task.highest_position(self.owner_id, scope) unless fresh?
+    # self.position += 1 if self.backlog && marked_incomplete?
+    self.position = 1 if fresh?
     super
   end
 
@@ -67,6 +69,42 @@ class Task < Sequel::Model
     Task.exclude(status: 'Complete')
   end
 
+<<<<<<< Updated upstream
+=======
+  def self.highest_position(owner_id, scope=:all)
+    Task.send(scope).where(owner_id: owner_id).map(&:position).max
+  end
+
+  # The `Task.stale` scope includes all tasks that are either complete or
+  # backlogged.
+
+  def self.stale
+    Task.where('status=? or backlog=?', 'Complete', true)
+  end
+
+  # The `#complete?` method returns true if the task's status attribute is 
+  # set to 'Complete' and false otherwise.
+
+  def complete?
+    !incomplete?
+  end
+
+  # The `#fresh?` method returns true if the task is not backlogged and its
+  # status is anything other than 'Complete'. If a task is backlogged or 
+  # complete, `#fresh?` returns false.
+
+  def fresh?
+    incomplete? && !backlog
+  end
+
+  # The `#incomplete?` method returns true if the task's status has any value
+  # other than 'Complete'. If the task is complete, it returns false.
+
+  def incomplete?
+    status != 'Complete'
+  end
+
+>>>>>>> Stashed changes
   # The `#to_hash` or `#to_h` method returns a hash of all of the task's 
   # non-empty attributes. Keys for blank attributes are removed from the
   # hash, so not all columns will necessarily be represented in the hash.
@@ -173,4 +211,53 @@ class Task < Sequel::Model
       gap = (1..positions.last).find {|number| positions.count(number) === 0 }
       [dup, gap]
     end
+<<<<<<< Updated upstream
+=======
+
+    def added_to_backlog?
+      modified?(:backlog) && backlog === true
+    end
+
+    def completion_status_changed?
+      marked_complete? || marked_incomplete?
+    end
+
+    def marked_complete?
+      modified?(:status) && initial_value(:status) != 'Complete' && status === 'Complete'
+    end
+
+    def marked_incomplete?
+      modified?(:status) && initial_value(:status) === 'Complete' && status != 'Complete'
+    end
+
+    def needs_positioning?
+      (completion_status_changed? || column_changed?(:backlog)) && !modified?(:position)
+    end
+
+    def removed_from_backlog?
+      modified?(:backlog) && !backlog
+    end
+
+    def set_position
+
+      # If the task's position has been explicitly set, then the given position 
+      # should be honored.
+
+      return self.position unless self.position.nil?
+
+      # By default, tasks are sorted by the following order:
+      #   1. Fresh tasks
+      #   2. Backlogged tasks
+      #   3. Complete tasks
+      #
+      # Because a user may override the defaults, the "zone" for each type of task is 
+      # considered to be below the last task (by position) in the given category. 
+
+      backlog_position = (Task.fresh.map(&:position).try_rescue(:max) || 0) + 1 
+      complete_position = (Task.incomplete.map(&:position).try_rescue(:max) || 0) + 1
+
+      position = self.fresh? ? 1 : (self.incomplete? ? backlog_position : complete_position)
+      position
+    end
+>>>>>>> Stashed changes
 end
