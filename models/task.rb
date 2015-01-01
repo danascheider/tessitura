@@ -69,8 +69,6 @@ class Task < Sequel::Model
     Task.exclude(status: 'Complete')
   end
 
-<<<<<<< Updated upstream
-=======
   def self.highest_position(owner_id, scope=:all)
     Task.send(scope).where(owner_id: owner_id).map(&:position).max
   end
@@ -103,8 +101,7 @@ class Task < Sequel::Model
   def incomplete?
     status != 'Complete'
   end
-
->>>>>>> Stashed changes
+  
   # The `#to_hash` or `#to_h` method returns a hash of all of the task's 
   # non-empty attributes. Keys for blank attributes are removed from the
   # hash, so not all columns will necessarily be represented in the hash.
