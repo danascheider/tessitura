@@ -70,6 +70,18 @@ describe 'factories', infrastructure: true do
       it 'is a User' do 
         expect(user).to be_a User
       end
+
+      it 'has two task lists' do 
+        expect(user.task_lists.count).to eql 2
+      end
+
+      it 'has some incomplete tasks' do 
+        expect(Task.incomplete.where(owner_id: user.id)).not_to be_empty
+      end
+
+      it 'has some complete tasks' do 
+        expect(Task.complete.where(owner_id: user.id)).not_to be_empty
+      end
     end
   end
 end
