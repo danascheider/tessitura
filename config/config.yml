@@ -1,0 +1,2 @@
+db_loggers: 
+  - /home/dana/Development/canto/log/db.log
