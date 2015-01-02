@@ -26,7 +26,7 @@ class Canto < Sinatra::Base
 
   use Rack::Cors do 
     allow do 
-      origins (CONFIG_INFO[:cors_allowed_origins] || ['null', /localhost(.*)/])
+      origins 'null', /localhost(.*)/
       resource '/*', methods: [:get, :put, :post, :delete, :options], headers: :any
     end
   end
