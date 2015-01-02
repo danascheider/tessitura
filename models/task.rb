@@ -30,7 +30,6 @@ class Task < Sequel::Model
   def before_update
     return unless needs_positioning? 
     scope = marked_complete? ? :incomplete : :fresh
-    self.backlog = false if self.status === 'Complete'
     self.position = Task.highest_position(self.owner_id, scope) unless fresh?
     self.position += 1 if self.backlog && marked_incomplete?
     self.position = 1 if fresh?
@@ -68,6 +67,7 @@ class Task < Sequel::Model
     self.owner_id ||= task_list.user_id rescue false
     self.status   = 'New' unless status.in? STATUS_OPTIONS
     self.priority = 'Normal' unless priority.in? PRIORITY_OPTIONS
+    self.backlog = nil if self.status === 'Complete'
   end
 
   # The `Task.complete` scope returns all tasks whose status is 'Complete'

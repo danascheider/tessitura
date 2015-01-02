@@ -253,6 +253,12 @@ describe Task, tasks: true do
         it 'doesn\'t change other attributes' do 
           expect(complete_task.status).to eql 'Complete'
         end
+
+        it 'changes backlog to false if the task is marked complete' do 
+          task.update(backlog: true)
+          task.update(status: 'Complete')
+          expect(task.backlog).to be nil
+        end
       end
 
       context 'without valid attributes' do 
