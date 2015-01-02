@@ -10,7 +10,7 @@ module Sinatra
     end
 
     def log_response
-      filename = FILE.expand_path(CONFIG_INFO[:response_log])
+      filename = File.expand_path(CONFIG_INFO[:response_log])
       File.open(filename, 'a+') {|file| file.puts response_log_entry }
     end
 
