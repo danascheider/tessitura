@@ -1,2 +1,4 @@
 db_loggers: 
   - /home/dana/Development/canto/log/db.log
+request_log: /home/dana/Development/canto/log/requests.log
+response_log: /home/dana/Development/canto/log/responses.log
