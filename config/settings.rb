@@ -1,17 +1,24 @@
 require 'slogger'
+require 'yaml'
+require 'reactive_support/core_ext/hash'
+Dir['./config/**/*.rb'].each {|f| require f }
 Dir['./helpers/**/*'].each {|f| require f }
+
+DB_YAML_FILE = ENV['DB_YAML_FILE'] || File.expand_path('config/database.yml')
+CONFIG_FILE = ENV['CONFIG_FILE'] || File.expand_path('config/config.yml')
+
+DB_CONFIG_INFO = DatabaseTaskHelper.get_yaml(DB_YAML_FILE)
+CONFIG_INFO = (File.open(CONFIG_FILE, 'r+') {|file| YAML.load(file) }).symbolize_keys!
 
 class Canto < Sinatra::Base
 
   ENV['RACK_ENV'] ||= 'development'
-  DB_PASSWORD = 'hunter2'
-  db = "mysql2://canto:#{DB_PASSWORD}@127.0.0.1:3306/#{ENV['RACK_ENV']}"
-  db_travis = 'mysql2://travis@127.0.0.1:3306/test'
+  db_location = ENV['TRAVIS'] ? 'mysql2://travis@127.0.0.1:3306/test' : DatabaseTaskHelper.get_string(DB_CONFIG_INFO[ENV['RACK_ENV']], ENV['RACK_ENV'])
 
-  set :root, File.dirname(__FILE__)
-  set :app_file, __FILE__
-  set :database, ENV['TRAVIS'] ? db_travis : db
-  set :data, ''
+  set :root, (CONFIG_INFO[:root] || File.dirname(__FILE__))
+  set :app_file, (CONFIG_INFO[:app_file] || __FILE__)
+  set :database, db_location
+  set :data, CONFIG_INFO[:data] || ''
 
   # =======================================#
   # Rack::Cors manages cross-origin issues #
@@ -19,7 +26,7 @@ class Canto < Sinatra::Base
 
   use Rack::Cors do 
     allow do 
-      origins 'null', /localhost(.*)/
+      origins (CONFIG_INFO[:cors_allowed_origins] || ['null', /localhost(.*)/])
       resource '/*', methods: [:get, :put, :post, :delete, :options], headers: :any
     end
   end
@@ -33,8 +40,8 @@ class Canto < Sinatra::Base
   slogger = Slogger::Logger.new 'canto', :info, :local0
   use Slogger::Rack::RequestLogger, slogger
 
-  db_loggers = [Logger.new(File.expand_path('../../log/db.log', __FILE__))]
-  db_loggers << Logger.new(STDOUT) if ENV['LOG'] == true
+  db_loggers = CONFIG_INFO[:db_loggers].map {|filename| Logger.new(File.expand_path(filename)) }
+  db_loggers << Logger.new(STDOUT) if ENV['LOG'] === true
   DB = Sequel.connect(database, loggers: db_loggers)
 
   # ================================== #

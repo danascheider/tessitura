@@ -4,7 +4,7 @@ rvm:
 env: COVERAGE=true
 install: 'bundle install'
 before_install: 
-  - mkdir log; touch log/canto.log
+  - mkdir log; touch log/requests.log log/responses.log
   - rm tasks/database_tasks.rake
   - mysql -e 'create database test;' -u travis
 script:
