@@ -40,7 +40,7 @@ class Canto < Sinatra::Base
   slogger = Slogger::Logger.new 'canto', :info, :local0
   use Slogger::Rack::RequestLogger, slogger
 
-  db_loggers = CONFIG_INFO[:db_loggers].map {|filename| Logger.new(filename) }
+  db_loggers = CONFIG_INFO[:db_loggers].map {|filename| Logger.new(File.expand_path(filename)) }
   db_loggers << Logger.new(STDOUT) if ENV['LOG'] === true
   DB = Sequel.connect(database, loggers: db_loggers)
 

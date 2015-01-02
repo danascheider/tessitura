@@ -5,12 +5,12 @@ module Sinatra
     CONFIG_INFO = (File.open(File.expand_path('config/config.yml'), 'r+') {|f| YAML.load(f)}).symbolize_keys!
 
     def log_request
-      filename = CONFIG_INFO[:request_log]
+      filename = File.expand_path(CONFIG_INFO[:request_log])
       File.open(filename, 'a+') {|file| file.puts request_log_entry }
     end
 
     def log_response
-      filename = CONFIG_INFO[:response_log]
+      filename = FILE.expand_path(CONFIG_INFO[:response_log])
       File.open(filename, 'a+') {|file| file.puts response_log_entry }
     end
 
