@@ -14,11 +14,6 @@ end
 # Updating Tasks
 # ==============
 When(/^the client submits a PUT request to \/tasks\/(\d+) with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |task_id, uid, string|
-  File.open('log/app.log', 'w+') do |file|
-    Task.where(owner_id: 3).order(:position).each {|task| file.puts "#{task.to_h}\n"}
-    file.puts "\n"
-  end
-
   @task = Task[task_id]
   @current = User[uid]
   authorize_with @current

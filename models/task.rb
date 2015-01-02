@@ -30,8 +30,9 @@ class Task < Sequel::Model
   def before_update
     return unless needs_positioning? 
     scope = marked_complete? ? :incomplete : :fresh
+    self.backlog = false if self.status === 'Complete'
     self.position = Task.highest_position(self.owner_id, scope) unless fresh?
-    # self.position += 1 if self.backlog && marked_incomplete?
+    self.position += 1 if self.backlog && marked_incomplete?
     self.position = 1 if fresh?
     super
   end

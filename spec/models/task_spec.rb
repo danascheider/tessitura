@@ -482,16 +482,15 @@ describe Task, tasks: true do
         end
       end
 
-      context 'with backlog true' do 
+      context 'position set explicitly' do 
         before(:each) do 
           user
-          @task = Task.complete.first
-          @task.update(backlog: true)
+          @task = Task.complete.last
         end
 
-        it 'becomes the first backlogged task' do 
-          @task.update(status: 'Blocking')
-          expect(@task.refresh.position).to eql(Task.fresh.map(&:position).max + 1)
+        it 'honors the explicit position assignment' do 
+          @task.update(status: 'Blocking', position: 10)
+          expect(@task.refresh.position).to eql 10
         end
       end
     end
@@ -510,7 +509,7 @@ describe Task, tasks: true do
         end
 
         it 'moves the other tasks up' do 
-          initial = (@lower).map(&:position)
+          expected = (@lower).map {|t| t.position - 1}
           @task.update(status: 'Complete')
           actual = @lower.map {|t| t.refresh.position }
           expect(actual).to eql(expected)
@@ -570,16 +569,15 @@ describe Task, tasks: true do
         end
       end
 
-      context 'with backlog true' do 
+      context 'with position set explicitly' do 
         before(:each) do 
-          user
+          user 
           @task = Task.complete.first
-          @task.update(backlog: true)
         end
 
-        it 'becomes the first backlogged task' do 
-          @task.update(status: 'Blocking')
-          expect(@task.refresh.position).to eql(Task.fresh.order(:position).last.position + 1)
+        it 'honors the requested position' do 
+          @task.update(status: 'Blocking', position: 2)
+          expect(@task.refresh.position).to eql 2
         end
       end
     end

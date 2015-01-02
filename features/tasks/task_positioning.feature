@@ -171,7 +171,7 @@ Feature: Update task position
     Given tasks with the following attributes:
       | id | status   | backlog | position |
       | 7  | Complete | false   | 10       |
-      | 8  | Complete | true    | 9        |
+      | 8  | Complete | false   | 9        |
       | 9  | Complete | false   | 8        |
       | 10 | New      | true    | 7        |
       | 11 | New      | true    | 6        |
@@ -180,13 +180,13 @@ Feature: Update task position
 
   Scenario: Task is marked complete when there are complete and backlogged tasks
 
-    Incomplete, backlogged tasks should go between incomplete, non-backlogged
+    Backlogged tasks should go between incomplete, non-backlogged
     tasks and complete tasks.
 
     Given tasks with the following attributes:
       | id | status   | backlog | position |
       | 7  | Complete | false   | 10       |
-      | 8  | Complete | true    | 9        |
+      | 8  | Complete | false   | 9        |
       | 9  | Complete | false   | 8        |
       | 10 | New      | true    | 7        |
       | 11 | New      | true    | 6        |
@@ -218,15 +218,3 @@ Feature: Update task position
       """
     Then the position of task 7 should be 1
     And the 3rd user's other tasks should have their positions incremented
-
-  Scenario: Status changed when task is complete and backlogged
-    Given tasks with the following attributes:
-      | id | status   | backlog |
-      | 7  | Complete | true    |
-      | 8  | Complete | false   |
-    When the client submits a PUT request to /tasks/7 with the 3rd user's credentials and:
-      """json
-      {"status":"New"}
-      """
-    Then the position of task 7 should be 9
-    And the position of task 8 should be 10
