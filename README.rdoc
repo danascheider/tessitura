@@ -158,7 +158,7 @@ This is the branch where passing code gets refactored. Non-passing code should n
 ==== master
 When code passes, it gets merged to +master+. Non-passing code should not be merged.\*
 
-\* At this point in development, it should be noted that Cucumber tests marked +@integration+ are 
+\* At this point in development, it should be noted that Cucumber tests marked `@integration` are 
 permitted and expected to fail due to problems with the test configuration that don't appear to 
 reflect the functionality. These tests should be marked pending so as not to break Travis builds.
 
