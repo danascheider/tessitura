@@ -15,8 +15,8 @@ class Canto < Sinatra::Base
   ENV['RACK_ENV'] ||= 'development'
   db_location = ENV['TRAVIS'] ? 'mysql2://travis@127.0.0.1:3306/test' : DatabaseTaskHelper.get_string(DB_CONFIG_INFO[ENV['RACK_ENV']], ENV['RACK_ENV'])
 
-  set :root, (CONFIG_INFO[:root] || File.dirname(__FILE__))
-  set :app_file, (CONFIG_INFO[:app_file] || __FILE__)
+  set :app_file, File.expand_path(CONFIG_INFO[:app_file])
+  set :root, File.dirname(app_file)
   set :database, db_location
   set :data, CONFIG_INFO[:data] || ''
 
