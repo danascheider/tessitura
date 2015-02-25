@@ -1,3 +1,18 @@
+# The Task model is owned by the TaskList (although this is likely to change
+# in the near future). It has the following attributes:
+#   * id (primary key, integer)
+#   * task_list_id (foreign key, integer)
+#   * title (string)
+#   * status (string)
+#   * priority (string)
+#   * deadline (datetime)
+#   * description (text)
+#   * owner_id (integer)
+#   * created_at (timestamp)
+#   * updated_at (timestamp)
+#   * backlog (boolean)
+#   * position (integer)
+
 class Task < Sequel::Model
   many_to_one :task_list
 
