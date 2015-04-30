@@ -57,6 +57,9 @@ module Sinatra
       (current_user.id == user_id && !setting_admin?) || current_user.admin?
     end
 
+    # The ++current_user++ method checks the ++@auth++ object's ++credentials++
+    # and returns the user whose username is included in the credentials.
+
     def current_user
       User.find(username: @auth.credentials.first)
     end
