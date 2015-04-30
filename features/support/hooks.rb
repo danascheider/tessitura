@@ -42,9 +42,3 @@ Before('@organizations, @programs, @seasons') { FactoryGirl.create(:organization
 Before('@programs, @seasons') { FactoryGirl.create(:program, id: 1, organization: Organization[1]) }
 Before('@seasons', '~@bulk') { FactoryGirl.create(:season, id: 1, program: Program[1]) }
 Before('@seasons', '@bulk') { FactoryGirl.create(:program_with_everything, id: 2, organization: Organization[1]) }
-
-# Expects Canto front-end to be running on webserver listening on port 80
-Before('@integration') do 
-  Capybara.app_host = 'http://localhost:80'
-  Capybara.run_server = false
-end

@@ -45,6 +45,19 @@ Feature: Update task
     Then the task's title should not be changed
     And the response should indicate the task was not updated successfully
 
+  Scenario: Change backlogged task status to 'Complete'
+
+    Complete tasks can not be backlogged. If a task is backlogged and then marked complete,
+    it should have its backlog status automatically changed to false.
+
+    Given the 1st task is incomplete
+    And the 1st task is backlogged
+    When the client submits a PUT request to /tasks/1 with the 1st user's credentials and:
+      """json
+      { "status":"Complete" }
+      """
+    Then the 1st task should not be backlogged
+
   Scenario Outline: Authorized mass update
     When the client submits a PUT request to /users/2/tasks with the <id> user's credentials and:
       """json

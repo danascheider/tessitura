@@ -286,6 +286,7 @@ class Task < Sequel::Model
 
       backlog_position = (Task.fresh.map(&:position).try_rescue(:max) || 0) + 1 
       complete_position = (Task.incomplete.map(&:position).try_rescue(:max) || 0) + 1
+
       position = self.fresh? ? 1 : (self.incomplete? ? backlog_position : complete_position)
       position
     end

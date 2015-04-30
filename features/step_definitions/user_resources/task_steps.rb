@@ -1,6 +1,14 @@
 Transform(/^\d+$/) {|number| number.to_i }
 Transform(/^(\d+)([a-z]{2})$/) {|num, ordinal| num.to_s.to_i }
 
+Given(/^the (\d+)(?:[a-z]{2}) task is incomplete$/) do |id|
+  Task[id].update({status: 'In Progress'})
+end
+
+Given(/^the (\d+)(?:[a-z]{2}) task is backlogged$/) do |id|
+  Task[id].update({backlog: true})
+end
+
 Then(/^no task should be created$/) do
   expect(User[@user.id].tasks.count).to eql @user_task_count
 end
@@ -10,6 +18,11 @@ Then(/^the existent tasks should not be updated$/) do
   [1, 2].each do |id|
     expect(Task[id].title).not_to eql(@tasks[id - 1]['title'])
   end
+end
+
+Then(/^the (\d+)(?:[a-z]{2}) task should not be backlogged$/) do |id|
+  puts Task[id].to_h
+  expect(Task[id].backlog).to be_falsey
 end
 
 Then(/^the new task should have the following attributes:$/) do |attributes|
