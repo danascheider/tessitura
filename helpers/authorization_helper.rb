@@ -11,7 +11,7 @@ module Sinatra
     end
 
     def authorized?
-      @auth ||= Rack::Auth::Basic::Request.new(request.env)
+      @auth ||= Rack::Auth::Basic::Request.new(request.env)      
       @auth.provided? && @auth.basic? && valid_credentials?
     end
 
@@ -24,7 +24,7 @@ module Sinatra
     end
 
     def login
-      return {user: current_user}.to_json if authorized?
+      return current_user.to_json if authorized?
       access_denied
     end
 
