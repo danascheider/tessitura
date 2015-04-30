@@ -58,7 +58,9 @@ module Sinatra
     end
 
     # The ++current_user++ method checks the ++@auth++ object's ++credentials++
-    # and returns the user whose username is included in the credentials.
+    # and returns the user whose username is included in the credentials. If no
+    # credentials are given, the request will not have gotten this far, because
+    # it will have been already stopped before this even gets called.
 
     def current_user
       User.find(username: @auth.credentials.first)
