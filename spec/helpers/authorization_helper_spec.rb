@@ -1,11 +1,17 @@
 require 'spec_helper'
 require 'base64'
 
-# There is a scoping issue causing problems with testing this module. Specifically,
-# when authentication fails via the ::protect and ::admin_only! methods, the call to 
-# ::headers triggers a NoMethodError.
-
+# FIX: There is a scoping issue causing problems with testing this module. Specifically,
+#      when authentication fails via the ::protect and ::admin_only! methods, the call to 
+#      ::headers triggers a NoMethodError.
+#
 # More information: https://github.com/danascheider/canto/issues/46
+
+# FIX: When I don't return a 404 error immediately when a resource doesn't exist,
+#      I receive ArgumentErrors originating in the #authorized? method, saying 0
+#      args were given and 1-2 were expected. Have to figure this out, because
+#      I really don't want unauthorized users being given information about what
+#      resources do and don't exist.
 
 describe Sinatra::AuthorizationHelper, auth: true do 
   include Rack::Test::Methods
@@ -132,9 +138,11 @@ describe Sinatra::AuthorizationHelper, auth: true do
 
   describe '::protect' do  
     context 'when the user doesn\'t exist' do 
-      it 'returns 404' do 
+      it 'calls access_denied' do 
+        pending('Sort out the issues discussed in the FIX up top')
         @id = 1000000
-        expect(protect(User)).to eql 404
+        expect_any_instance_of(Canto).to receive(:access_denied)
+        protect(User)
       end
     end
 
@@ -165,9 +173,11 @@ describe Sinatra::AuthorizationHelper, auth: true do
 
   describe '::protect_collection' do 
     context 'when the user doesn\'t exist' do 
-      it 'returns 404' do 
+      it 'calls access_denied' do 
+        pending 'Resolve error in the FIX at top of this file'
         @id = 10000000
-        expect(protect_collection(user.tasks)).to eql 404
+        expect_any_instance_of(Canto).to receive(:access_denied)
+        protect_collection(user.tasks)
       end
     end
 

@@ -87,8 +87,10 @@ module Sinatra
     # The ++protect++ method returns ++nil++ if authentication is successful.
 
     def protect(klass)
-      return 404 unless (@resource = klass[@id])
-      access_denied unless authorized? && authorized_for_resource?(@resource.owner_id)
+      @resource = klass[@id]
+      allowed = @resource.owner_id rescue false
+      access_denied unless authorized? && authorized_for_resource?(allowed)
+      return 404 unless @resource
     end
 
     # The ++protect_collection++ method is used for the mass update of tasks. The 
@@ -102,16 +104,11 @@ module Sinatra
     #      ++access_denied++.
     #   3. If the requesting user is an admin, they get access to anything they want.
     #
-    # FIX: This should check for authorization before it returns a 404 error. Malicious
-    #      users should not be able to determine the existence of a resource by the 
-    #      presence or absence of the ++404++ status.
-    #
     # FIX: Double-check that this is even used in the front end. I'm not sure it is.
 
     def protect_collection(body)
-      return 404 unless (owner = User[@id])
       allowed = body.select {|hash| Task[hash[:id]].try_rescue(:owner_id) === @id.to_i}
-      access_denied unless authorized? && (body === allowed || current_user.admin?)
+      access_denied unless User[@id] && authorized? && (body === allowed || current_user.admin?)
     end
 
     # The ++protect_communal++ method controls access to resources accessible by any
