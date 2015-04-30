@@ -66,6 +66,13 @@ module Sinatra
       User.find(username: @auth.credentials.first)
     end
 
+    # The ++login++ method is called when the client submits a request to the 
+    # ++/login++ route. Since the API is stateless, it does not store session 
+    # information, but simply checks if the requesting user is authorized and, 
+    # if so, returns that user's profile information in JSON format. If the 
+    # user is found to be unauthorized, ++login++ calls ++access_denied++ to 
+    # halt the request with status +401+.
+
     def login
       return current_user.to_json if authorized?
       access_denied
