@@ -78,10 +78,35 @@ module Sinatra
       access_denied
     end
 
+    # The ++protect++ method takes as an argument the ++klass++ of the resource being
+    # requested (i.e., ++User++, ++Task++, ++Program++, etc.). It then verifies that the
+    # requested resource exists, using the reslource ++@id++ set in the before filter
+    # (which is taken from the request's ++path_info++). If the resource does not exist,
+    # it returns a ++404++ status code. Otherwise, it verifies that the requesting user
+    # is authorized to access the resource requested and, if not, calls ++access_denied++.
+    # The ++protect++ method returns ++nil++ if authentication is successful.
+
     def protect(klass)
       return 404 unless (@resource = klass[@id])
       access_denied unless authorized? && authorized_for_resource?(@resource.owner_id)
     end
+
+    # The ++protect_collection++ method is used for the mass update of tasks. The 
+    # mass update route, ++/users/:id/tasks/all++, receives requests with an entire
+    # collection of tasks, which all need to be updated. ++protect_collection++ 
+    # takes as an argument the request ++body++, and makes its judgment as follows:
+    #   1. If the request has been sent with an :id parameter not corresponding to 
+    #      a registered user, the method returns status ++404++.
+    #   2. If the requesting user is not an admin, they must be the owner of every
+    #      task in the collection. If they are not, ++protect_collection++ calls
+    #      ++access_denied++.
+    #   3. If the requesting user is an admin, they get access to anything they want.
+    #
+    # FIX: This should check for authorization before it returns a 404 error. Malicious
+    #      users should not be able to determine the existence of a resource by the 
+    #      presence or absence of the ++404++ status.
+    #
+    # FIX: Double-check that this is even used in the front end. I'm not sure it is.
 
     def protect_collection(body)
       return 404 unless (owner = User[@id])
@@ -89,13 +114,34 @@ module Sinatra
       access_denied unless authorized? && (body === allowed || current_user.admin?)
     end
 
+    # The ++protect_communal++ method controls access to resources accessible by any
+    # registered user, such as programs and listings. It returns ++nil++ if the user
+    # has included a valid ++Authorization++ header; if not, it calls ++access_denied++.
+
     def protect_communal
       access_denied unless authorized?
     end
 
+    # The ++setting_admin?++ method checks whether the ++request_body++ object includes
+    # the key ++:admin++ anywhere. If the key ++admin++ occurs in the request body,
+    # it returns ++true++; if not, it returns ++false++.
+    #
+    # FIX: This should do a deep search for an ++:admin++ key, so a nested object can't
+    #      contain such a key either.
+
     def setting_admin?
       request_body.try(:respond_to?, :has_key?) && (request_body.try(:has_key?, :admin) || request_body.try(:has_key?, 'admin'))
     end
+
+    # The ++valid_credentials?++ method verifies that the password provided to the 
+    # ++@auth++ object are the proper credentials for an actual user. It returns 
+    # ++false++ if:
+    # 
+    #   * No credentials are provided
+    #   * No user with the given username exists
+    #   * The password does not match that of the user whose username is included
+    #
+    # Otherwise, ++valid_credentials?++ returns true.
 
     def valid_credentials?
       begin
