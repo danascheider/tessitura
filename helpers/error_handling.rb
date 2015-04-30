@@ -1,5 +1,9 @@
 module Sinatra
   module ErrorHandling
+
+    # The ++parse_json++ method wraps the ++JSON::parse++ method, rescuing parser
+    # errors to prevent exceptions. 
+
     def parse_json(object)
       begin
         JSON.parse(object, symbolize_names: true)
