@@ -88,7 +88,7 @@ module Sinatra
 
     def protect(klass)
       @resource = klass[@id]
-      allowed = @resource.owner_id rescue false
+      allowed = @resource.owner_id rescue nil
       access_denied unless authorized? && authorized_for_resource?(allowed)
       return 404 unless @resource
     end
