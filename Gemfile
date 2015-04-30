@@ -28,7 +28,7 @@ group :test do
   gem 'coveralls',          '>= 0.8.1'
   gem 'json_spec',          '~> 1.1.2'
   gem 'cucumber-sinatra',   '~> 0.5.0'
-  gem 'cucumber',           '~> 1.3.16'
+  gem 'cucumber',           '~> 2.0.0'
   gem 'capybara',           '~> 2.4.4'
   gem 'capybara-webkit',    '~> 1.5.1'
   gem 'rspec',              '~> 3.0'
