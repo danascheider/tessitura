@@ -1,0 +1,113 @@
+organization: 'Lyric Opera of Chicago'
+title: 'Patrick G. and Shirley W. Ryan Opera Center Ensemble Auditions'
+type: 'Young Artist Program'
+web_site: 'http://lyricopera.org/RyanCenter'
+country: 'USA'
+region: 'Illinois'
+city: 'Chicago'
+program_start_date: 2016-04-15
+program_end_date: 2017-04-15
+application_url: 'http://lyricopera.org/about/ryanopera.aspx'
+application_fee: 0
+payment: 42000
+charges: 0
+
+organization: 'Associated Music Teachers League'
+title: 'Young Musicians Concert'
+type: 'Soloist'
+web_site: 'http://amtl.org/?page_id=46'
+application_url: 'http://www.northeastorchestra.org/forms/NEO-young-artist-competition-guidelines-and-application.pdf'
+country: 'USA'
+region: 'New York'
+city: 'New York City'
+program_start_date: 2015-05-10
+program_end_date: 2015-05-10
+min_age: 17
+max_age: 27
+application_fee: 110
+charges: 60
+
+# NOTE: This opportunity has the following restrictions:
+#       - Applicant must be resident of Tarrant County, TX
+#       - Applicant must be in grades 9-12
+#
+#       This opportunity does not provide a pianist for
+#       the final competition.
+#
+#       This opportunity has a deadline of 2015-02-23 (postmarked)
+
+organization: 'Northeast Orchestra'
+title: 'Northeast Orchestra Young Artist Competition'
+type: 'Competition'
+web_site: 'http://northeastorchestra.org/young-artist-competition'
+application_url: 'http://www.northeastorchestra.org/forms/NEO-young-artist-competition-guidelines-and-application.pdf'
+country: 'USA'
+region: 'Texas'
+city: 'Hurst'
+program_start_date: 2015-03-14
+program_end_date: 2015-03-14
+min_age: 14
+max_age: 18
+application_fee: 25
+payment: 500
+
+# NOTE: This opportunity has the following restrictions:
+#       - Applicant must be resident of the Sunshine Coast of British Columbia
+#       - Applicant must wish to further their classical music education
+#       
+#       This opportunity has a deadline of 2015-02-28 (postmarked)
+
+organization: 'Coast Recital Society'
+title: 'Scholarships and the Allan Crane Award'
+type: 'Competition'
+web_site: 'http://coastrecitalsociety.ca/outreach/001.html'
+application_url: 'http://coastrecitalsociety.ca/scholarships/application.pdf'
+country: 'Canada'
+region: 'British Columbia'
+city: 'Roberts Creek'
+program_start_date: 2015-03-27
+program_end_date: 2015-03-28
+max_age: 25
+application_fee: 0
+charges: 0
+
+# NOTE: This opportunity has an early-bird deadline of 2015-05-18 (received)
+#       The regular deadline is 2015-06-01
+#       Tuition is 'TBA'
+#       Peripherals are optional
+#       There is apparently no live audition
+#       Restricted to enrolled NYU students as well as high school seniors/grads
+
+organization: 'NYU Steinhard'
+title: 'NYU Steinhard Classical Voice Intensive'
+web_site: 'http://steinhardt.nyu.edu/music/voice/programs/summerintensive'
+application_url: 'http://steinhardt.nyu.edu/music/summer/apply/'
+country: 'USA'
+region: 'New York'
+city: 'New York City'
+program_start_date: 2015-07-19
+program_end_date: 2015-08-06
+min_age: 16
+application_fee: 50
+peripherals: 1143
+
+# NOTE: This opportunity is open to college-bound high school students
+#       It is limited to those with GPA >= 3.00
+#       It is limited to applicants in Arkansas
+#       It is limited to applicants pursuing a performing arts major
+#       Financial need is considered
+#       This opportunity appears to have no audition
+#       Deadline is 2015-07-15 (postmarked)
+
+organization: 'Arkansas Repertory Theater'
+title: 'Victorya Van-Pelt Scholarship Trust'
+web_site: 'http://www.therep.org/learn/education/youngartistprogram.aspx'
+application_url: 'http://www.therep.org/%21userfiles/Victorya%20VanPelt%20Scholarship.pdf'
+country: 'USA'
+region: 'Arkansas'
+city: 'Little Rock'
+program_start_date: 2015-07-15
+max_age: 18
+application_fee: 0
+payment: 1000
+

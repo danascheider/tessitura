@@ -1,0 +1,45 @@
+# ======================================== #
+# Lyric Opera of Chicago Ryan Opera Center #
+# ======================================== #
+
+country: 'USA'
+region: 'New York'
+city: 'New York City'
+date: 2015-03-03
+fee: 30
+deadline: 2015-01-15
+pianist_provided: true
+can_bring_own_pianist: true
+pianist_fee: 0
+
+country: 'USA'
+region: 'Illinois'
+city: 'Chicago'
+date: 2015-05-18
+fee: 30
+deadline: 2015-03-15
+pianist_provided: true 
+can_bring_own_pianist: true
+pianist_fee: 0
+
+country: 'USA'
+region: 'Illinois'
+city: 'Chicago'
+date: 2015-07-18
+fee: 30
+deadline: 2015-03-15
+pianist_provided: true 
+can_bring_own_pianist: true 
+pianist_fee: 0
+
+# =============================================================== #
+# Associated Music Teachers League, Inc. Young Musicians' Concert #
+# =============================================================== #
+
+country: 'USA'
+region: 'New York'
+city: 'New York City'
+date: 2015-04-12
+deadline: 2015-03-16
+pianist_provided: false
+can_bring_own_pianist: true
