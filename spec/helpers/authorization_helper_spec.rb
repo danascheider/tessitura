@@ -11,7 +11,8 @@ require 'base64'
 #      I receive ArgumentErrors originating in the #authorized? method, saying 0
 #      args were given and 1-2 were expected. Have to figure this out, because
 #      I really don't want unauthorized users being given information about what
-#      resources do and don't exist.
+#      resources do and don't exist, especially when the resource in question is
+#      a user profile.
 
 describe Sinatra::AuthorizationHelper, auth: true do 
   include Rack::Test::Methods
