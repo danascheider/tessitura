@@ -1,4 +1,4 @@
-module CantoGem
+module CantoPackage
   def self.gem_version
     Gem::Version.new Version::STRING
   end
