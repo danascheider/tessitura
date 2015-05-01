@@ -7,12 +7,12 @@ Gem::Specification.new do |s|
   s.required_ruby_version     = '>= 2.2.2'
 
   s.name                      = 'canto'
-  s.version                   = Canto.gem_version
+  s.version                   = CantoPackage.gem_version
   s.date                      = '2014-11-30'
   s.summary                   = 'Canto task management for opera singers'
   s.authors                   = ['Dana Scheider']
 
-  s.files                     = Canto.files
+  s.files                     = CantoPackage.files
   s.require_paths             = ['config', 'db', 'lib', 'script', 'tasks']
   s.test_files                = s.files.select {|path| path =~ /^(spec|features)\/.*\.(rb|feature)/ }
   s.extra_rdoc_files          = %w(README.rdoc)

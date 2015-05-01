@@ -1,6 +1,4 @@
-require 'sinatra/base'
-
-class Canto < Sinatra::Base
+class CantoPackage
   def self.files
     Files::FILES
   end

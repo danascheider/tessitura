@@ -1,6 +1,4 @@
-require 'sinatra'
-
-class Canto < Sinatra::Base
+module CantoGem
   def self.gem_version
     Gem::Version.new Version::STRING
   end
