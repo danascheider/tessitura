@@ -87,10 +87,8 @@ module Sinatra
     # The ++protect++ method returns ++nil++ if authentication is successful.
 
     def protect(klass)
-      @resource = klass[@id]
-      allowed = @resource.owner_id rescue nil
-      access_denied unless authorized? && authorized_for_resource?(allowed)
-      return 404 unless @resource
+      return 404 unless @resource = klass[@id]
+      access_denied unless authorized? && authorized_for_resource?(@resource.owner_id)
     end
 
     # The ++protect_collection++ method is used for the mass update of tasks. The 
