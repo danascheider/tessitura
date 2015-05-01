@@ -1,3 +1,17 @@
+PATH
+  remote: .
+  specs:
+    canto (0.0.1.alpha1)
+      json (~> 1.8.1)
+      mysql2 (~> 0.3, >= 0.3.16)
+      rack-cors (~> 0.4)
+      reactive_extensions (~> 0.5.0)
+      reactive_support (~> 0.5.0)
+      sequel (~> 4.21)
+      sinatra (~> 1.4.6)
+      slogger (~> 0.0.11)
+      thin (~> 1.6.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -70,7 +84,7 @@ GEM
     rack-test (0.6.3)
       rack (>= 1.0)
     rake (10.4.2)
-    reactive_extensions (0.5.0)
+    reactive_extensions (0.5.1)
       reactive_support (>= 0.5.0.beta)
     reactive_support (0.5.0)
     rest-client (1.8.0)
@@ -90,7 +104,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
-    sequel (4.21.0)
+    sequel (4.22.0)
     simplecov (0.10.0)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -127,24 +141,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler (~> 1.7)
+  canto!
   capybara (~> 2.4.4)
   capybara-webkit (~> 1.5.1)
-  colorize (~> 0.7.7)
-  coveralls (>= 0.8.1)
-  cucumber (~> 2.0.0)
+  colorize (= 0.7.7)
+  coveralls (~> 0.7, >= 0.7.2)
+  cucumber (~> 2.0)
   cucumber-sinatra (~> 0.5.0)
-  factory_girl (~> 4.4)
-  json (~> 1.8.1)
-  json_spec (~> 1.1.2)
-  mysql2 (~> 0.3, >= 0.3.16)
-  rack-cors (~> 0.4)
-  rack-test (~> 0.6.2)
+  factory_girl (~> 4.5)
+  json_spec (~> 1.1)
+  rack-test (~> 0.6.3)
   rake (~> 10.4)
-  reactive_extensions (~> 0.5.0)
-  reactive_support (~> 0.5.0)
-  rspec (~> 3.0)
-  sequel (~> 4.21)
-  simplecov (>= 0.10.0)
-  sinatra (~> 1.4.5)
-  slogger (~> 0.0, >= 0.0.10)
-  thin (~> 1.6.2)
+  rspec (~> 3.2)
+  simplecov (~> 0.10)
