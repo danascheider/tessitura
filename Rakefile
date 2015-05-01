@@ -2,7 +2,7 @@ require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 require 'colorize'
 require './config/database_task_helper'
-require './canto'
+require './lib/canto'
 
 MIGRATION_PATH = File.expand_path('../db/migrate', __FILE__)
 SCHEMA_PATH    = File.expand_path('../db/schema_migrations', __FILE__)

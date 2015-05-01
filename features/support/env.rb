@@ -11,7 +11,7 @@ SimpleCov.start if ENV["COVERAGE"]
 
 ENV['RACK_ENV'] = 'test'
 
-require File.join(File.dirname(__FILE__), '..', '..', './canto.rb')
+require File.expand_path('../../../lib/canto.rb', __FILE__)
 
 require 'rspec'
 require 'capybara/cucumber'

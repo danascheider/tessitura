@@ -17,7 +17,7 @@ require          'rack/test'
 require          'mysql2'
 require          'rspec/core/rake_task'
 require          'colorize'
-require_relative '../canto'
+require_relative '../lib/canto'
 require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
 
