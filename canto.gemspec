@@ -9,12 +9,13 @@ Gem::Specification.new do |s|
   s.name                      = 'canto'
   s.version                   = Canto.gem_version
   s.date                      = '2014-11-30'
+  s.summary                   = 'Canto task management for opera singers'
+  s.authors                   = ['Dana Scheider']
 
   s.files                     = Canto.files
   s.require_paths             = ['config', 'db', 'lib', 'script', 'tasks']
   s.test_files                = s.files.select {|path| path =~ /^(spec|features)\/.*\.(rb|feature)/ }
-  s.licenses                  = 'MIT'
-  s.extra_rdoc_files          = %w(README.rdoc LICENSE)
+  s.extra_rdoc_files          = %w(README.rdoc)
 
   s.add_runtime_dependency     'json', '~> 1.8.1'
   s.add_runtime_dependency     'mysql2', '~> 0.3', '>= 0.3.16'
