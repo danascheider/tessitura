@@ -1,4 +1,4 @@
-require 'sinatra/base'
+require 'sinatra'
 
 class Canto < Sinatra::Base
   def self.gem_version
