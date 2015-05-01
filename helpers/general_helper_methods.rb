@@ -15,7 +15,7 @@ module Sinatra
     # case, it returns ++nil++.
     
     def return_json(object)
-      obj.to_json unless object.blank?
+      object.to_json unless object.blank?
     end
 
     # The ++santize_attributes++ method takes a ++hash++ as an argument and returns
