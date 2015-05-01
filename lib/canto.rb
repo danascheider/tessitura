@@ -9,7 +9,8 @@ require 'json'
 require File.expand_path('../../config/settings', __FILE__)
 
 require_relative 'models/user.rb'
-Dir['models/**/*.rb'].each {|f| require f }
+
+Dir['./lib/models/*.rb'].each {|f|   require f }
 Dir['helpers/**/*'].each {|f| require f }
 Dir['./routes/**/*'].each {|f| require f }
 

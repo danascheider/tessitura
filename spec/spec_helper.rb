@@ -10,7 +10,6 @@ SimpleCov.start if ENV["COVERAGE"]
 ENV['RACK_ENV'] = 'test'
 
 support_path = File.expand_path('../../features/support', __FILE__)
-app_path = File.expand_path('../..', __FILE__)
 
 require          'factory_girl'
 require          'rack/test'

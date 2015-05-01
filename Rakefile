@@ -8,7 +8,7 @@ MIGRATION_PATH = File.expand_path('../db/migrate', __FILE__)
 SCHEMA_PATH    = File.expand_path('../db/schema_migrations', __FILE__)
 YAML_DATA      = DatabaseTaskHelper.get_yaml(File.expand_path('config/database.yml'))
 
-Dir.glob('tasks/*.rake').each {|file| load file }
+Dir['tasks/*.rake'].each {|file| load file }
 
 Cucumber::Rake::Task.new
 RSpec::Core::RakeTask.new
