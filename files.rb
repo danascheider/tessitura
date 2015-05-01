@@ -1,4 +1,4 @@
-class CantoPackage
+module CantoPackage
   def self.files
     Files::FILES
   end
