@@ -2,7 +2,8 @@ require 'slogger'
 require 'yaml'
 require 'reactive_support/core_ext/hash'
 Dir['./config/**/*.rb'].each {|f| require f }
-Dir['./lib/**/*.rb'].each {|f| require f }
+Dir['./lib/*.rb'].each {|f| require f }
+Dir['./lib/helpers/**/*.rb'].each {|f| require f }
 
 DB_YAML_FILE = ENV['DB_YAML_FILE'] || File.expand_path('config/database.yml')
 CONFIG_FILE = ENV['CONFIG_FILE'] || File.expand_path('config/config.yml')

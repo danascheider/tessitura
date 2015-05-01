@@ -1,4 +1,4 @@
-app_file: canto.rb
+app_file: lib/canto.rb
 db_loggers: 
   - log/db.log
 request_log: log/requests.log

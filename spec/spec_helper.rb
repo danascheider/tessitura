@@ -21,7 +21,7 @@ require_relative '../lib/canto'
 require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
 
-Dir["./spec/support/**/*.rb"].sort.each {|f| require f }
+Dir["./spec/support/**/*.rb"].each {|f| require f }
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods

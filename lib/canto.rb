@@ -6,11 +6,11 @@ require 'reactive_extensions/object'
 require 'reactive_extensions/hash'
 require 'reactive_extensions/array'
 require 'json'
-
 require File.expand_path('../../config/settings', __FILE__)
 
-Dir['./models/**'].each {|f| require f }
-Dir['../helpers/**/*'].each {|f| require f }
+require_relative 'models/user.rb'
+Dir['models/**/*.rb'].each {|f| require f }
+Dir['helpers/**/*'].each {|f| require f }
 Dir['./routes/**/*'].each {|f| require f }
 
 class Canto < Sinatra::Base
