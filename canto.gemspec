@@ -7,15 +7,18 @@ Gem::Specification.new do |s|
   s.required_ruby_version     = '>= 2.2.2'
 
   s.name                      = 'canto'
-  s.version                   = CantoPackage.gem_version
+  s.version                   = CantoPackage::Version::STRING
   s.date                      = '2014-11-30'
   s.summary                   = 'Canto task management for opera singers'
   s.authors                   = ['Dana Scheider']
 
-  s.files                     = CantoPackage.files
-  s.require_paths             = ['config', 'db', 'lib', 'script', 'tasks']
+  s.files                     = CantoPackage::Files::FILES
+  s.require_paths             = ['config', 'bin', 'db', 'lib', 'script', 'tasks']
   s.test_files                = s.files.select {|path| path =~ /^(spec|features)\/.*\.(rb|feature)/ }
   s.extra_rdoc_files          = %w(README.rdoc)
+
+  s.executables               = ['canto']
+  s.default_executable        = 'canto'
 
   s.add_runtime_dependency     'json', '~> 1.8.1'
   s.add_runtime_dependency     'mysql2', '~> 0.3', '>= 0.3.16'

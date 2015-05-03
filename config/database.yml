@@ -3,21 +3,6 @@ defaults: &defaults
   host: 127.0.0.1
   port: 3306
   username: canto 
-  password: hunter2
+  password: C*iEpr3ePrO@CRI7xoUX
   pool: 5
   timeout: 5000
-
-development:
-  database: development
-  <<: *defaults
-
-test: &test
-  database: test
-  <<: *defaults
-
-production: 
-  database: production
-  <<: *defaults
-
-cucumber:
-  <<: *test

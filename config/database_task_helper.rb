@@ -5,10 +5,8 @@ module DatabaseTaskHelper
   def self.get_yaml(file)
     yaml = File.open(file, 'r+') {|file| YAML.load(file) }
 
-    [yaml['development'], yaml['test'], yaml['production']].each do |hash|
-      hash.keys.each do |key|
-        hash[(key.to_sym rescue key) || key] = hash.delete(key)
-      end
+    yaml['defaults'].keys.each do |key|
+      yaml['defaults'][(key.to_sym rescue key) || key] = hash.delete(key)
     end
 
     yaml

@@ -18,6 +18,8 @@ Dir['./lib/routes/*.rb'].each {|f| require f }
 
 class Canto < Sinatra::Base
 
+  set :static, true
+
   register Sinatra::Canto::Routing::Filters
   register Sinatra::Canto::Routing::AdminRoutes
   register Sinatra::Canto::Routing::ListingRoutes

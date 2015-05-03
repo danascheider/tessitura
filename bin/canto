@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'rack'
+
+begin
+  require File.expand_path '../../lib/canto.rb', __FILE__
+  use Rack::Reloader
+  Canto.run
+rescue LoadError => e
+  require 'rubygems'
+  path = File.expand_path('../../')
+  $:.unshift(path) if File.directory?(path) && !$:.include?(path)
+  require File.expand_path '../../lib/canto.rb', __FILE__
+  use Rack::Reloader
+  Canto.run
+end
