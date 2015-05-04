@@ -3,7 +3,7 @@ require 'yaml'
 module DatabaseTaskHelper
   
   def self.get_yaml(file)
-    yaml = File.open(file, 'r+') {|file| YAML.load_file(file) }
+    yaml = (File.open(file, 'r+') {|file| YAML.load_file(file) }).to_h
     yaml['defaults'] = yaml['defaults'].to_h
 
     yaml['defaults'].each do |key, value|
