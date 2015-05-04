@@ -13,7 +13,7 @@ CONFIG_INFO = (File.open(CONFIG_FILE, 'r+') {|file| YAML.load(file) }).symbolize
 
 class Canto < Sinatra::Base
 
-  ENV['RACK_ENV'] ||= 'development'
+  ENV['RACK_ENV'] = 'defaults'
   db_location = ENV['TRAVIS'] ? 'mysql2://travis@127.0.0.1:3306/test' : DatabaseTaskHelper.get_string(DB_CONFIG_INFO[ENV['RACK_ENV']], ENV['RACK_ENV'])
 
   set :app_file, File.expand_path(CONFIG_INFO[:app_file])
