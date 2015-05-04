@@ -6,7 +6,7 @@ module DatabaseTaskHelper
     yaml = File.open(file, 'r+') {|file| YAML.load(file) }
 
     yaml['defaults'].keys.each do |key|
-      yaml['defaults'][(key.to_sym rescue key) || key] = yaml[defaults].delete(key)
+      yaml['defaults'][(key.to_sym rescue key) || key] = yaml['defaults'].delete(key)
     end
 
     yaml
