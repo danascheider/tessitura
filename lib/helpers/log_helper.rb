@@ -13,7 +13,7 @@ module Sinatra
     # ++request_log_entry++ (see below).
 
     def log_request
-      filename = File.expand_path(CantoConfig.config_info[:request_log], __FILE__)
+      filename = CantoConfig.config_info[:request_log]
       File.open(filename, 'a+') {|file| file.puts request_log_entry }
     end
 
@@ -22,7 +22,7 @@ module Sinatra
     # the formatted ++response_log_entry++ (see below).
 
     def log_response
-      filename = File.expand_path(CantoConfig.config_info[:response_log], __FILE__)
+      filename = CantoConfig.config_info[:response_log]
       File.open(filename, 'a+') {|file| file.puts response_log_entry }
     end
 
