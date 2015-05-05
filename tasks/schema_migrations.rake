@@ -1,7 +1,7 @@
 require 'mysql2'
 require 'sequel'
 
-DB        = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['defaults'], ''))
+DB ||= Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['defaults'], 'defaults'))
 
 namespace :db do 
   desc 'Create new migration, required arg NAME, default PATH /db/migrate'

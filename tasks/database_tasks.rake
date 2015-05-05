@@ -32,10 +32,10 @@ namespace :db do
   end
 
   desc 'Migrate the database'
-  task :migrate, [:PATH] => ['db:development:create'] do |t, args|
+  task :migrate, [:PATH] => ['db:create'] do |t, args|
     path = args[:path] || MIGRATION_PATH
     Sequel::Migrator.run(DB, path)
-    STDOUT.puts 'Development database migrated successfully.'.green
+    STDOUT.puts 'Database \'defaults\' migrated successfully.'.green
   end
 
   desc 'Reset the test database' 
