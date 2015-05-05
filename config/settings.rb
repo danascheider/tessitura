@@ -4,11 +4,12 @@ require 'reactive_support/core_ext/hash'
 
 require File.expand_path '../database_task_helper.rb', __FILE__
 require File.expand_path '../../lib/helpers/authorization_helper.rb', __FILE__
+require File.expand_path '../../lib/helpers/error_handling.rb', __FILE__
+require File.expand_path '../../lib/helpers/general_helper_methods.rb', __FILE__
+require File.expand_path '../../lib/helpers/log_helper.rb', __FILE__
 
 Dir['./config/**/*.rb'].each {|f| require f }
 Dir['./lib/*.rb'].each {|f| require f }
-Dir['./lib/helpers/*.rb'].each {|f| require f }
-
 
 DB_YAML_FILE = ENV['DB_YAML_FILE'] || File.expand_path('../database.yml', __FILE__)
 CONFIG_FILE = ENV['CONFIG_FILE'] || File.expand_path('../config.yml', __FILE__)
