@@ -23,6 +23,7 @@ module Sinatra
 
             seeds = JSON.parse(File.read(File.expand_path('../../../db/seeds.json', __FILE__)), symbolize_names: true)
             seeds.to_h
+
             # user = User.try_rescue(:create, seeds[:user])
 
             # seeds[:tasks].each do |data|
