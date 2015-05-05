@@ -1,4 +1,4 @@
-require 'yaml'
+require File.expand_path '../../../config/config.rb', __FILE__
 
 module Sinatra
 
@@ -8,26 +8,21 @@ module Sinatra
 
   module LogHelper
 
-    # The ++CONFIG_INFO++ hash provides information about the location of the app file and 
-    # log files.
-
-    CONFIG_INFO = (File.open(File.expand_path('../../../config/config.yml', __FILE__), 'r+') {|f| YAML.load(f)}).symbolize_keys!
-
     # The ++log_request++ method opens the request log file, identified by the ++:request_log++
-    # key in the ++CONFIG_INFO++ hash. It opens the file and appends the formatted
+    # key in the ++CantoConfig.config_info++ hash. It opens the file and appends the formatted
     # ++request_log_entry++ (see below).
 
     def log_request
-      filename = File.expand_path(CONFIG_INFO[:request_log], __FILE__)
+      filename = File.expand_path(CantoConfig.config_info[:request_log], __FILE__)
       File.open(filename, 'a+') {|file| file.puts request_log_entry }
     end
 
     # The ++log_response++ method opens the response log file, identified by the 
-    # ++:response_log++ key in the ++CONFIG_INFO++ hash. It opens the file and appends 
+    # ++:response_log++ key in the ++CantoConfig.config_info++ hash. It opens the file and appends 
     # the formatted ++response_log_entry++ (see below).
 
     def log_response
-      filename = File.expand_path(CONFIG_INFO[:response_log], __FILE__)
+      filename = File.expand_path(CantoConfig.config_info[:response_log], __FILE__)
       File.open(filename, 'a+') {|file| file.puts response_log_entry }
     end
 
