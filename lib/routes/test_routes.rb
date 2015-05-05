@@ -21,7 +21,7 @@ module Sinatra
             client.query('TRUNCATE TABLE listings')
             client.query('SET FOREIGN_KEY_CHECKS = 1')
 
-            seeds = JSON.parse(File.read(File.expand_path('../../../db/seeds.json')))
+            seeds = JSON.parse(File.read(File.expand_path('../../../db/seeds.json', __FILE__)))
 
             user = User.create(seeds[:user])
 
