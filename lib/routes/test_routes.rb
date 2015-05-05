@@ -33,6 +33,8 @@ module Sinatra
               obj[:owner_id] = user.id
               Task.create(obj)
             end
+
+            [204]
           end
         end
       end
