@@ -23,11 +23,11 @@ module Sinatra
 
             seeds = JSON.parse(File.read(File.expand_path('../../../db/seeds.json', __FILE__)))
 
-            user = User.create(seeds[:user])
+            user = User.try_rescue(:create, seeds[:user])
 
             seeds.tasks.each do |data|
               data[task_list_id: user.default_task_list]
-              Task.create(data)
+              Task.try_rescue(:create, data)
             end 
           end
         end
