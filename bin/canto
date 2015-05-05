@@ -3,10 +3,10 @@
 require 'rack'
 
 begin
-  system 'thin start config.ru'
+  system 'thin start -R config.ru'
 rescue LoadError => e
   require 'rubygems'
   path = File.expand_path('../../')
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
-  system 'thin start config.ru'
+  system 'thin start -R config.ru'
 end
