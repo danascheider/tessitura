@@ -31,7 +31,7 @@ module Sinatra
       File.open(filename, 'a+') {|file| file.puts response_log_entry }
     end
 
-    # The ++ request_log_entry++ method lists each key in the ++request.env++ hash
+    # The ++request_log_entry++ method lists each key in the ++request.env++ hash
     # on a single line in all caps, adding the request body at the end. It rewinds
     # the request body before returning the formatted log entry.
 
@@ -42,6 +42,10 @@ module Sinatra
       entry << "BODY: #{parse_json(request.body.read)}"
       "\n" + entry.join("\n")
     end
+
+    # The ++response_log_entry++ method lists the time of the response, the path and
+    # method of the request, and the response that was sent. It returns the formatted
+    # log entry.
 
     def response_log_entry
       [
