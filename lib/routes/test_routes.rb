@@ -7,7 +7,7 @@ module Sinatra
             require 'mysql2'
             require 'json'
 
-            yaml_data = DatabaseTaskHelper.get_yaml(File.expand_path('config/database.yml'))
+            yaml_data = DatabaseTaskHelper.get_yaml(File.expand_path('../../../config/database.yml', __FILE__))
             client = Mysql2::Client.new(yaml_data)
 
             client.query('SET FOREIGN_KEY_CHECKS = 0')
