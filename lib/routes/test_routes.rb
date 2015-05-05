@@ -28,10 +28,7 @@ module Sinatra
 
             user = User.create(user_attributes)
 
-            tasks.each do |data|
-              data[:task_list_id] = user.default_task_list.id
-              Task.create(data)
-            end
+            tasks.first
           end
         end
       end
