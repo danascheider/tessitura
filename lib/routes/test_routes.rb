@@ -28,7 +28,7 @@ module Sinatra
 
             user = User.create(user_attributes)
 
-            seeds.to_a.last
+            File.read(File.expand_path('../../../db/seeds.json', __FILE__))
           end
         end
       end
