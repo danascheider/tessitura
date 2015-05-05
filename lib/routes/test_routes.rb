@@ -29,6 +29,7 @@ module Sinatra
             user = User.create(user_attributes)
 
             tasks.each do |obj|
+              obj[:owner_id] = user.id
               Task.create(obj)
             end
           end
