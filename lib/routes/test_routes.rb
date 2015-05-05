@@ -28,7 +28,9 @@ module Sinatra
 
             user = User.create(user_attributes)
 
-            tasks.first
+            tasks.each do |obj|
+              Task.create(obj)
+            end
           end
         end
       end
