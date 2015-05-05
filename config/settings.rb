@@ -7,8 +7,8 @@ Dir['./config/**/*.rb'].each {|f| require f }
 Dir['./lib/*.rb'].each {|f| require f }
 Dir['./lib/helpers/**/*.rb'].each {|f| require f }
 
-DB_YAML_FILE = ENV['DB_YAML_FILE'] || File.expand_path('config/database.yml')
-CONFIG_FILE = ENV['CONFIG_FILE'] || File.expand_path('config/config.yml')
+DB_YAML_FILE = ENV['DB_YAML_FILE'] || File.expand_path '../database.yml', __FILE__
+CONFIG_FILE = ENV['CONFIG_FILE'] || File.expand_path '../config.yml', __FILE__
 
 DB_CONFIG_INFO = DatabaseTaskHelper.get_yaml(DB_YAML_FILE)
 CONFIG_INFO = (File.open(CONFIG_FILE, 'r+') {|file| YAML.load(file) }).symbolize_keys!
