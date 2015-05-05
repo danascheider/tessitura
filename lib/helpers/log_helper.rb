@@ -18,7 +18,7 @@ module Sinatra
     # ++request_log_entry++ (see below).
 
     def log_request
-      filename = File.expand_path(CONFIG_INFO[:request_log])
+      filename = File.expand_path(CONFIG_INFO[:request_log], __FILE__)
       File.open(filename, 'a+') {|file| file.puts request_log_entry }
     end
 
@@ -27,7 +27,7 @@ module Sinatra
     # the formatted ++response_log_entry++ (see below).
 
     def log_response
-      filename = File.expand_path(CONFIG_INFO[:response_log])
+      filename = File.expand_path(CONFIG_INFO[:response_log], __FILE__)
       File.open(filename, 'a+') {|file| file.puts response_log_entry }
     end
 
