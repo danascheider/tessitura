@@ -1,6 +1,8 @@
 require 'slogger'
 require 'yaml'
 require 'reactive_support/core_ext/hash'
+
+require File.expand_path '../database_task_helper.rb', __FILE__
 Dir['./config/**/*.rb'].each {|f| require f }
 Dir['./lib/*.rb'].each {|f| require f }
 Dir['./lib/helpers/**/*.rb'].each {|f| require f }
