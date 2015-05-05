@@ -22,7 +22,7 @@ module Sinatra
             client.query('SET FOREIGN_KEY_CHECKS = 1')
 
             seeds = JSON.parse(File.read(File.expand_path('../../../db/seeds.json', __FILE__)))
-            seeds
+            seeds.to_h
             # user = User.try_rescue(:create, seeds[:user])
 
             # seeds[:tasks].each do |data|
