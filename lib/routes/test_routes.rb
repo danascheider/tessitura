@@ -28,7 +28,7 @@ module Sinatra
 
             user = User.create(user_attributes)
 
-            tasks.first
+            seeds
           end
         end
       end
