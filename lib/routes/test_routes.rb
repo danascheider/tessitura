@@ -23,8 +23,8 @@ module Sinatra
 
             seeds = JSON.parse(File.read(File.expand_path('../../../db/seeds.json', __FILE__)), symbolize_names: true)
 
-            user_attributes = seeds.first
-            tasks = (seeds.select {|key,val| val.include? :tasks })
+            user_attributes = seeds[:user]
+            tasks = seeds[:tasks]
 
             {:user_attributes => user_attributes, :tasks => tasks}
             # user = User.create(user_attributes)
