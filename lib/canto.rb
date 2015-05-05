@@ -20,6 +20,7 @@ require File.expand_path '../models/user.rb', __FILE__
 
 require File.expand_path '../routes/routing.rb', __FILE__
 require File.expand_path '../routes/filters.rb', __FILE__
+require File.expand_path '../routes/test_routes.rb', __FILE__
 require File.expand_path '../routes/admin_routes.rb', __FILE__
 require File.expand_path '../routes/listing_routes.rb', __FILE__
 require File.expand_path '../routes/organization_routes.rb', __FILE__
@@ -40,6 +41,7 @@ class Canto < Sinatra::Base
   register Sinatra::Canto::Routing::SeasonRoutes
   register Sinatra::Canto::Routing::TaskRoutes
   register Sinatra::Canto::Routing::UserRoutes
+  register Sinatra::Canto::Routing::TestRoutes # Nukes the database, not to be used in production
 
   not_found do 
     [404, '' ]
