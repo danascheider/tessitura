@@ -11,7 +11,7 @@ module Sinatra
     # The ++CONFIG_INFO++ hash provides information about the location of the app file and 
     # log files.
 
-    CONFIG_INFO = (File.open(File.expand_path('config/config.yml'), 'r+') {|f| YAML.load(f)}).symbolize_keys!
+    CONFIG_INFO = (File.open(File.expand_path('../../../config/config.yml', __FILE__), 'r+') {|f| YAML.load(f)}).symbolize_keys!
 
     # The ++log_request++ method opens the request log file, identified by the ++:request_log++
     # key in the ++CONFIG_INFO++ hash. It opens the file and appends the formatted

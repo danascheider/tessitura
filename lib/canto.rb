@@ -8,13 +8,17 @@ require 'reactive_extensions/array'
 require 'json'
 require File.expand_path('../../config/settings', __FILE__)
 
-require_relative './routes/routing.rb'
-require_relative './routes/filters.rb'
-require_relative './routes/admin_routes.rb'
-require_relative './routes/listing_routes.rb'
+require File.expand_path '../routes/routing.rb', __FILE__
+require File.expand_path '../routes/filters.rb', __FILE__
+require File.expand_path '../routes/admin_routes.rb', __FILE__
+require File.expand_path '../routes/listing_routes.rb', __FILE__
+require File.expand_path '../routes/organization_routes.rb', __FILE__
+require File.expand_path '../routes/program_routes.rb', __FILE__
+require File.expand_path '../routes/season_routes.rb', __FILE__
+require File.expand_path '../routes/task_routes.rb', __FILE__
+require File.expand_path '../routes/user_routes.rb', __FILE__
 
 Dir['./lib/models/*.rb'].each {|f| require f }
-Dir['./lib/routes/*.rb'].each {|f| require f }
 
 class Canto < Sinatra::Base
 
