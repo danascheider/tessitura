@@ -9,7 +9,14 @@ require 'json'
 
 require File.expand_path('../../config/settings', __FILE__)
 
-Dir['./lib/models/*.rb'].each {|f| require f }
+require File.expand_path '../models/audition.rb', __FILE__
+require File.expand_path '../models/listing.rb', __FILE__
+require File.expand_path '../models/organization.rb', __FILE__
+require File.expand_path '../models/program.rb', __FILE__
+require File.expand_path '../models/season.rb', __FILE__
+require File.expand_path '../models/task.rb', __FILE__
+require File.expand_path '../models/task_list.rb', __FILE__
+require File.expand_path '../models/user.rb', __FILE__
 
 require File.expand_path '../routes/routing.rb', __FILE__
 require File.expand_path '../routes/filters.rb', __FILE__
