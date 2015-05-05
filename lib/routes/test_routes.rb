@@ -28,7 +28,7 @@ module Sinatra
 
             user = User.create(user_attributes)
 
-            seeds
+            seeds.to_a.last
           end
         end
       end
