@@ -25,7 +25,7 @@ module Sinatra
 
             user = User.try_rescue(:create, seeds[:user])
 
-            seeds.tasks.each do |data|
+            seeds[:tasks].each do |data|
               data[task_list_id: user.default_task_list]
               Task.try_rescue(:create, data)
             end 
