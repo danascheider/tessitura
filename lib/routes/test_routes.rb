@@ -26,12 +26,13 @@ module Sinatra
             user_attributes = (seeds.select {|val| val[0] === :user })[1]
             tasks = (seeds.select {|val| val[0] === :tasks })[1]
 
-            user = User.create(user_attributes)
+            {:user_attributes => user_attributes, :tasks => tasks}
+            # user = User.create(user_attributes)
 
-            tasks.each do |data|
-              data[:task_list_id] = user.default_task_list.id
-              Task.create(data)
-            end
+            # tasks.each do |data|
+            #   data[:task_list_id] = user.default_task_list.id
+            #   Task.create(data)
+            # end
           end
         end
       end
