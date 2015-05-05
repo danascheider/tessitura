@@ -15,7 +15,7 @@ RSpec::Core::RakeTask.new
 
 task 'suite:run' do 
   Rake::Task[:spec].invoke 
-  Rake::Task['db:test:prepare'].invoke 
+  Rake::Task['db:prepare'].invoke 
   Rake::Task[:cucumber].invoke
 end
 
