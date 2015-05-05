@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    canto (0.0.1.alpha1)
+    canto (0.0.1.alpha2)
       json (~> 1.8.1)
       mysql2 (~> 0.3, >= 0.3.16)
       rack-cors (~> 0.4)
