@@ -8,7 +8,7 @@ module Sinatra
             require 'json'
 
             yaml_data = DatabaseTaskHelper.get_yaml(File.expand_path('../../../config/database.yml', __FILE__))
-            client = Mysql2::Client.new(yaml_data)
+            client = Mysql2::Client.new(yaml_data['defaults'])
 
             client.query('SET FOREIGN_KEY_CHECKS = 0')
             client.query('TRUNCATE TABLE tasks')
