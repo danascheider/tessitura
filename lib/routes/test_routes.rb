@@ -28,7 +28,7 @@ module Sinatra
 
             user = User.create(user_attributes)
 
-            File.read(File.expand_path('../../../db/seeds.json', __FILE__))
+            tasks.first
           end
         end
       end
