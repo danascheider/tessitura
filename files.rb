@@ -10,7 +10,7 @@ module CantoPackage
     BIN_FILES = Dir.glob('./bin/**/*').sort
     TASK_FILES = ['Rakefile', Dir.glob('./tasks/**/*.rake')].flatten.sort
     TEST_FILES = [Dir.glob('./spec/**/*.rb'), Dir.glob('./features/**/*')].flatten.sort
-    BASE_FILES = %w(files.rb .rspec Gemfile Vagrantfile config.ru canto.gemspec README.rdoc version.rb)
+    BASE_FILES = %w(files.rb Gemfile Vagrantfile config.ru canto.gemspec README.rdoc version.rb)
 
     FILES = [LIB_FILES, CONFIG_FILES, SCRIPT_FILES, BIN_FILES, TASK_FILES, TEST_FILES, BASE_FILES].flatten
   end

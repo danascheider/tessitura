@@ -7,7 +7,7 @@ module CantoPackage
     MAJOR = '0'
     MINOR = '0'
     PATCH = '1'
-    PRE   = 'alpha1'
+    PRE   = 'alpha2'
 
     STRING = [MAJOR, MINOR, PATCH, PRE].join('.').chomp('.')
   end
