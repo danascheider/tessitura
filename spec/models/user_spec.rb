@@ -18,7 +18,7 @@ describe User, users: true do
   describe 'class methods' do 
     describe '#create' do 
       context 'with valid attributes' do 
-        let(:attributes) { { username: 'usernumber1', password: 'usernumber1', email: 'u1@a.com' } }
+        let(:attributes) { { username: 'usernumber1', password: 'usernumber1', email: 'u1@a.com', first_name: 'User' } }
 
         it 'creates the user' do 
           expect{ User.create(attributes) }.to change(User, :count).by(1)

@@ -120,7 +120,7 @@ class User < Sequel::Model(:users)
 
   def validate
     super
-    validates_presence [:username, :password, :email]
+    validates_presence [:username, :password, :email, :first_name]
     validates_unique(:username, :email)
     validates_format /@/, :email, message: 'is not a valid e-mail address'
     validates_min_length 8, :username

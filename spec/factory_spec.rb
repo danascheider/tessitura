@@ -45,7 +45,7 @@ describe 'factories', infrastructure: true do
       end
 
       it 'has no other defined attributes on creation' do 
-        nil_columns = user.columns - [:id, :username, :password, :email, :country, :admin, :created_at]
+        nil_columns = user.columns - [:id, :username, :password, :email, :country, :admin, :first_name, :created_at]
         nil_columns.each {|col| expect(user.send(col)).to be_nil }
       end
 
