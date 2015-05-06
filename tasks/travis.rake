@@ -4,7 +4,7 @@ require 'sequel'
 Sequel.extension :migration
 
 DATABASE       = 'mysql2://travis@127.0.0.1:3306/test'
-DB ||= Sequel.connect(DATABASE)
+DB             = Sequel.connect(DATABASE)
 
 namespace :travis do 
   Cucumber::Rake::Task.new do |task|
