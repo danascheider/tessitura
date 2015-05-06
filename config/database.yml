@@ -1,9 +1,23 @@
 defaults: &defaults 
   adapter: mysql2
-  host: localhost
+  host: 127.0.0.1
   port: 3306
   username: canto 
-  database: defaults
-  password: CiEpr3ePrOCRI7xoUX
+  password: hunter2
   pool: 5
   timeout: 5000
+
+development:
+  database: development
+  <<: *defaults
+
+test: &test
+  database: test
+  <<: *defaults
+
+production: 
+  database: production
+  <<: *defaults
+
+cucumber:
+  <<: *test
