@@ -18,7 +18,7 @@ DB_CONFIG_INFO = DatabaseTaskHelper.get_yaml(DB_YAML_FILE)
 
 class Canto < Sinatra::Base
 
-  ENV['RACK_ENV'] = 'defaults'
+  ENV['RACK_ENV'] ||= 'development'
   db_location = ENV['TRAVIS'] ? 'mysql2://travis@127.0.0.1:3306/test' : DatabaseTaskHelper.get_string(DB_CONFIG_INFO[ENV['RACK_ENV']], ENV['RACK_ENV'])
 
   set :app_file, CantoConfig.config_info[:app_file]
