@@ -13,6 +13,7 @@ describe Canto, users: true do
                              { :email      => 'user@example.com', 
                                :username   => 'justine7', 
                                :first_name => 'Justine',
+                               :last_name  => 'Kellner',
                                :password   => 'validpassword666'
                              } 
                            }
@@ -48,7 +49,8 @@ describe Canto, users: true do
           :username   => 'someuser', 
           :password   => 'someuserpasswd', 
           :email      => 'peterpiper@example.com',
-          :first_name => 'Frank',
+          :first_name => 'Peter',
+          :last_name  => 'Piper',
           :admin      => true
          }
       }
