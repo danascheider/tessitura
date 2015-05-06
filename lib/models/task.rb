@@ -175,6 +175,13 @@ class Task < Sequel::Model
   end
   alias_method :owner, :user
 
+  # The ++validate++ method verifies that the task has a ++:name++
+  # and that its ++:status++ and ++:priority++ are drawn from the set of 
+  # allowed values for those attributes, returning a ++Sequel::ValidationError++ 
+  # if these conditions are not met. It also calls the ++validate++ method 
+  # inherited from the ++Sequel::Model++ instance, which is made available by 
+  # the ++:validation_helpers++ plugin.
+
   def validate
     super
     validates_presence [:title, :task_list_id, :owner_id]
