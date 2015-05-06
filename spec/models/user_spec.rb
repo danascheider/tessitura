@@ -18,7 +18,7 @@ describe User, users: true do
   describe 'class methods' do 
     describe '#create' do 
       context 'with valid attributes' do 
-        let(:attributes) { { username: 'usernumber1', password: 'usernumber1', email: 'u1@a.com' } }
+        let(:attributes) { { username: 'usernumber1', password: 'usernumber1', email: 'u1@a.com', first_name: 'Test', last_name: 'User' } }
 
         it 'creates the user' do 
           expect{ User.create(attributes) }.to change(User, :count).by(1)
@@ -86,6 +86,18 @@ describe User, users: true do
 
           it 'is invalid with an improper e-mail format' do 
             user.email = 'hello_world.com'
+            expect(user).not_to be_valid
+          end
+        end
+
+        context 'name validations' do 
+          it 'is invalid without a first_name' do 
+            user.first_name = nil
+            expect(user).not_to be_valid
+          end
+
+          it 'is invalid without a last_name' do 
+            user.last_name = nil 
             expect(user).not_to be_valid
           end
         end

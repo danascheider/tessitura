@@ -10,9 +10,11 @@ describe Canto, users: true do
   describe 'POST' do 
     let(:path) { '/users' }
     let(:valid_attributes) { 
-                             { :email => 'user@example.com', 
-                               :username => 'justine7', 
-                               :password => 'validpassword666'
+                             { :email      => 'user@example.com', 
+                               :username   => 'justine7', 
+                               :first_name => 'Justine',
+                               :last_name  => 'Kellner',
+                               :password   => 'validpassword666'
                              } 
                            }
     let(:invalid_attributes) { { :first_name => 'Frank' } }
@@ -44,10 +46,12 @@ describe Canto, users: true do
     context 'attempting to create an admin' do
       let(:admin_attributes) { 
         { 
-          :username => 'someuser', 
-          :password => 'someuserpasswd', 
-          :email    => 'peterpiper@example.com',
-          :admin    => true
+          :username   => 'someuser', 
+          :password   => 'someuserpasswd', 
+          :email      => 'peterpiper@example.com',
+          :first_name => 'Peter',
+          :last_name  => 'Piper',
+          :admin      => true
          }
       }
 

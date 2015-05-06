@@ -152,6 +152,9 @@ FactoryGirl.define do
     sequence(:email) {|n| "user#{n}@example.com"}
     sequence(:username) {|n| "user-25#{n}"}
     sequence(:password) {|n| "p4ssw0rd#{n}"}
+
+    first_name 'Test'
+    last_name 'User'
     country 'USA'
 
     factory :admin do 

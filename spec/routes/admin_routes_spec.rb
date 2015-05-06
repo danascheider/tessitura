@@ -35,6 +35,8 @@ describe Canto, admins: true do
       { :username => 'abcd1234', 
         :password => 'abcde12345', 
         :email => 'a@example.com', 
+        :first_name => 'John',
+        :last_name => 'Smith',
         :admin => true 
       }.to_json
     }

@@ -31,8 +31,10 @@ class Season < Sequel::Model
     to_h.to_json
   end
 
-  # Seasons are required to belong to programs and are meaningless without them, since
-  # the model is specifically intended to store time-sensitive information about a program.
+  # The ++validate++ method verifies that the organization has a ++:program_id++, returning a
+  # ++Sequel::ValidationError++ if these conditions are not met. It also calls the ++validate++
+  # method inherited from the ++Sequel::Model++ instance, which is made available by the
+  # ++:validation_helpers++ plugin.
 
   def validate
     super

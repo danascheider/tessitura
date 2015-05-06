@@ -4,11 +4,11 @@ Feature: Admin users
   Scenario Outline: Creating an admin user
     When the client submits a POST request to <url> with <type> credentials and:
       """json
-      { "username":"defg4567", "password":"defgh45678", "email":"user4@example.com", "admin":"true" }
+      { "username":"defg4567", "password":"defgh45678", "email":"user4@example.com", "first_name":"John", "last_name":"Doe", "admin":"true" }
       """
     Then <article> new user should be created with the following attributes:
-      | username   | password   | email             | admin |
-      | defg4567   | defgh45678 | user4@example.com | true  |
+      | username   | password   | email             | first_name | admin |
+      | defg4567   | defgh45678 | user4@example.com | John       | true  |
     And the response should return status <status>
 
     Examples:

@@ -7,7 +7,7 @@ class Organization < Sequel::Model
   one_to_many :programs
   self.plugin :association_dependencies, programs: :destroy
 
-  # The `#to_hash` or `#to_h` method returns all non-empty attributes in a hash
+  # The ++#to_hash++ or ++#to_h++ method returns all non-empty attributes in a hash
   # with symbol keys.
 
   def to_hash
@@ -16,10 +16,10 @@ class Organization < Sequel::Model
 
   alias_method :to_h, :to_hash
 
-  # The `#to_json` method converts the output of `#to_hash` to JSON format, preventing
-  # inscrutable JSON objects like `"\"#<Organization:0x00000004b050c8>\""`.
+  # The ++#to_json++ method converts the output of ++#to_hash++ to JSON format, preventing
+  # inscrutable JSON objects like ++"\"#<Organization:0x00000004b050c8>\""++.
   #
-  # NOTE: The definition of `#to_json` has to include the optional `opts`
+  # NOTE: The definition of ++#to_json++ has to include the optional ++opts++
   #       arg, because in some of the tests, a JSON::Ext::Generator::State
   #       object is passed to the method. I am not sure why this happens,
   #       but including the optional arg makes it work as expected.
@@ -28,7 +28,11 @@ class Organization < Sequel::Model
     to_h.to_json
   end
 
-  # An Organization object is required to have a name and a valid web site.
+  # The ++validate++ method verifies that the organization has a ++:name++ and a +:website++,
+  # and that the ++:website++ attribute is a string of a valid URL, returning a
+  # ++Sequel::ValidationError++ if these conditions are not met. It also calls the ++validate++
+  # method inherited from the ++Sequel::Model++ instance, which is made available by the
+  # ++:validation_helpers++ plugin.
 
   def validate
     super

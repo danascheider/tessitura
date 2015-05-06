@@ -1,22 +1,22 @@
-class User < Sequel::Model(:users)
+class User < Sequel::Model
   one_to_many :task_lists
   many_to_many :programs, left_key: :user_id, right_key: :program_id, join_table: :programs_users
 
-  # The `#owner_id` method returns the user's `:id` attribute, since the 
+  # The ++#owner_id++ method returns the user's ++:id++ attribute, since the 
   # user table has no foreign keys. This method allows all of Canto's 
   # resources to be treated more uniformly, reducing the need for 
   # code duplication.
 
   alias_method :owner_id, :id
 
-  # The `#admin?` method aliases the `#admin` attribute - a boolean returning
+  # The ++#admin?++ method aliases the ++#admin++ attribute - a boolean returning
   # true if the user is an admin.
 
   def admin?
     admin
   end
 
-  # The `User.admin` scope returns all users who are admins
+  # The ++User.admin++ scope returns all users who are admins
 
   def self.admin 
     User.where(admin: true)
@@ -26,7 +26,7 @@ class User < Sequel::Model(:users)
     raise NoMethodError, '#add_task_list has been overridden in the User model (see documentation)'
   end
 
-  # The `before_destroy` hook prevents the last admin user from being deleted.
+  # The ++before_destroy++ hook prevents the last admin user from being deleted.
   # It also deletes all of the user's task lists recursively, preventing 
   # foreign key errors from the database.
 
@@ -60,14 +60,14 @@ class User < Sequel::Model(:users)
     reload # to prevent list from being cached
   end
 
-  # The `#tasks` method returns an array of all the tasks the user owns,
+  # The ++#tasks++ method returns an array of all the tasks the user owns,
   # regardless of which task list they belong to.
 
   def tasks
     (task_lists.map {|list| list.tasks.flatten }).flatten
   end
 
-  # The `#to_hash` or `:to_h` method returns a hash of all the user's non-empty
+  # The ++#to_hash++ or ++:to_h++ method returns a hash of all the user's non-empty
   # attributes, including an array of the IDs of any task lists belonging to 
   # the user. Attributes that are empty or nil are not included in the hash,
   # so not all columns will be present in every hash.
@@ -80,10 +80,10 @@ class User < Sequel::Model(:users)
 
   alias_method :to_h, :to_hash
 
-  # Override the `#to_json` method so the JSON object is created from the 
+  # Override the ++#to_json++ method so the JSON object is created from the 
   # hash of the user's attributes instead of from the user object itself
   #
-  # NOTE: The definition of `#to_json` has to include the optional `opts`
+  # NOTE: The definition of ++#to_json++ has to include the optional ++opts++
   #       arg, because in some of the tests, a JSON::Ext::Generator::State
   #       object is passed to the method. I am not sure why this happens,
   #       but including the optional arg makes it work as expected.
@@ -92,15 +92,35 @@ class User < Sequel::Model(:users)
     to_h.to_json
   end
 
-  # Users must provide a valid username, password, and e-mail address. The
-  # username and e-mail must be unique. Username and password must each be
-  # 8 characters long or longer.
+  # The ++validate++ method verifies that the user profile information is
+  # valid, returning a ++Sequel::ValidationError++ if any of the conditions
+  # are not met. The criteria are as follows:
+  #
+  # Required information:
+  #   * ++:username++
+  #   * ++:password++
+  #   * ++:email++
+  #   * ++:first_name++
+  #   * ++:last_name++
+  #
+  # Required formatting:
+  #   * ++:email++ must be of a valid e-mail format, which is to say it must 
+  #     include ++@++ with some number of characters on either side (limited 
+  #     to this test to accommodate edge cases)
+  #   * ++:username++ must be at least 8 characters long
+  #   * ++:password++ must be at least 8 characters long
+  #
+  # Additional requirements:
+  #   * ++:username++ must be unique
+  #   * ++:email++ must be unique
   #
   # FIX: Might be good to allow shorter usernames. Think about it.
+  #
+  # FIX: Add data standardization - capitalization of names and whatnot
 
   def validate
     super
-    validates_presence [:username, :password, :email]
+    validates_presence [:username, :password, :email, :first_name, :last_name]
     validates_unique(:username, :email)
     validates_format /@/, :email, message: 'is not a valid e-mail address'
     validates_min_length 8, :username
