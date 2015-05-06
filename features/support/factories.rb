@@ -154,6 +154,7 @@ FactoryGirl.define do
     sequence(:password) {|n| "p4ssw0rd#{n}"}
 
     first_name 'Test'
+    last_name 'User'
     country 'USA'
 
     factory :admin do 

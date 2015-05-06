@@ -30,6 +30,14 @@ describe 'factories', infrastructure: true do
         expect(user.password).to match(/(.*){8,}/)
       end
 
+      it 'has first_name \'Test\'' do 
+        expect(user.first_name).to eql 'Test'
+      end
+
+      it 'has last_name \'User\'' do 
+        expect(user.last_name).to eql 'User'
+      end
+
       it 'is not an admin' do 
         expect(user.admin).to be false
       end
@@ -38,14 +46,14 @@ describe 'factories', infrastructure: true do
         expect(user).to be_a User
       end
 
-      it 'has a, ID, username, password, email, country, and created_at by default' do 
-        [:id, :username, :password, :email, :country, :admin, :created_at].each do |attribute|
+      it 'has a, ID, username, password, email, country, first_name, last_name, and created_at by default' do 
+        [:id, :username, :password, :email, :first_name, :last_name, :country, :admin, :created_at].each do |attribute|
           expect(user.send(attribute)).not_to be_nil
         end
       end
 
       it 'has no other defined attributes on creation' do 
-        nil_columns = user.columns - [:id, :username, :password, :email, :country, :admin, :first_name, :created_at]
+        nil_columns = user.columns - [:id, :username, :password, :email, :country, :admin, :first_name, :last_name, :created_at]
         nil_columns.each {|col| expect(user.send(col)).to be_nil }
       end
 
