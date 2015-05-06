@@ -1,5 +1,5 @@
 class { '::mysql::server':
-  root_password    => '?ia5luylUD1?uvi5_r4e',
+  root_password    => 'hunter2',
   override_options => { 
     'mysqld' => { 
       'bind-address' => '0.0.0.0' 
@@ -7,9 +7,21 @@ class { '::mysql::server':
   }
 }
 
-mysql::db { 'defaults':
+mysql::db { 'development':
   user     => 'canto',
-  password => 'C*iEpr3ePrO@CRI7xoUX',
+  password => 'hunter2',
+  host     => '%',
+  grant    => ['ALL'],
+}
+mysql::db { 'test':
+  user     => 'canto',
+  password => 'hunter2',
+  host     => '%',
+  grant    => ['ALL'],
+}
+mysql::db { 'production':
+  user     => 'canto',
+  password => 'hunter2',
   host     => '%',
   grant    => ['ALL'],
 }
