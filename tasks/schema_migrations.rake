@@ -1,9 +1,7 @@
 require 'mysql2'
 require 'sequel'
 
-DEV        = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['development'], 'development'))
-TEST       = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['test'], 'test'))
-PRODUCTION = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['production'], 'production'))
+DB ||= Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['defaults'], 'defaults'))
 
 namespace :db do 
   desc 'Create new migration, required arg NAME, default PATH /db/migrate'
@@ -28,24 +26,19 @@ EOF
   namespace :schema do
     desc 'Load schema into database'
     task :load, :PATH do |t, args|
-
-      [DEV, TEST, PRODUCTION].each {|db| db.extension :schema_caching }
-
+      DB.extension :schema_caching
       path = args[:path] || SCHEMA_PATH
-
-      Rake::Task["db:development:migrate"].invoke(path)
-      Rake::Task["db:test:migrate"].invoke(path)
-      Rake::Task["db:production:migrate"].invoke(path)
+      Rake::Task["db:migrate"].invoke(path)
       puts 'Success!'.green
     end
 
     desc 'Dump schema to a schema file'
-    task :dump, [:PATH] => ['db:development:create'] do |t, args|
+    task :dump, [:PATH] => ['db:create'] do |t, args|
       timestamp = Time.now.getutc.to_s.gsub(/\D/, '')
       path      = args[:path] || SCHEMA_PATH
 
-      DEV.extension :schema_dumper
-      schema = DEV.dump_schema_migration
+      DB.extension :schema_dumper
+      schema = DB.dump_schema_migration
       bad    = /\s*create_table\(:schema(.*) do\s+\w+(.*)\s+(primary_key(.*))?\s+end/
       schema.gsub!(bad, '')
 

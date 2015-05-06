@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
 
   s.name                      = 'canto'
   s.version                   = CantoPackage::Version::STRING
-  s.date                      = '2015-05-05'
+  s.date                      = '2015-05-06'
   s.summary                   = 'Canto task management for opera singers'
   s.authors                   = ['Dana Scheider']
 
