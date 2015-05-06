@@ -89,6 +89,13 @@ describe User, users: true do
             expect(user).not_to be_valid
           end
         end
+
+        context 'name validations' do 
+          it 'is invalid without a first_name' do 
+            user.first_name = nil
+            expect(user).not_to be_valid
+          end
+        end
       end
     end
   end
