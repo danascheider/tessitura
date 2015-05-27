@@ -1,4 +1,4 @@
-class Canto < Sinatra::Base
+class Tessitura < Sinatra::Base
   before /\/test\/(.*)/ do
     # FIX: It is possible that this filter is the reason for the problems
     #      I'm having elsewhere with instance variables set in filters

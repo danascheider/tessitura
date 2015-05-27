@@ -2,7 +2,7 @@
 Feature: Update organization
   
   Since organizations often change addresses, staff, and even names, as a
-  Canto admin, in order to maintain my customer base, I need functionality
+  Tessitura admin, in order to maintain my customer base, I need functionality
   to update organization information.
 
   Scenario: Admin updates organization

@@ -15,7 +15,7 @@ class Program < Sequel::Model
 
   # The ++#owner++ method returns the organization that owns the program. Likewise, the
   # ++#owner_id++ method returns the ID of that organization. This enables
-  # standardization of handlers that retrieve Canto resources.
+  # standardization of handlers that retrieve Tessitura resources.
   #
   # NOTE: These methods cannot be refactored using ++alias_method++. Due to the internals
   #       of the ORM, ++alias_method++ will be called in the Travis environment before

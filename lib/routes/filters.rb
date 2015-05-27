@@ -1,12 +1,12 @@
 module Sinatra
-  module Canto
+  module Tessitura
     module Routing
       module Filters
         def self.registered(app)
-          Sinatra::Canto::Routing::Filters.logging_filters(app)
-          Sinatra::Canto::Routing::Filters.admin_auth_filter(app)
-          Sinatra::Canto::Routing::Filters.proprietary_auth_filters(app)
-          Sinatra::Canto::Routing::Filters.communal_auth_filter(app)
+          Sinatra::Tessitura::Routing::Filters.logging_filters(app)
+          Sinatra::Tessitura::Routing::Filters.admin_auth_filter(app)
+          Sinatra::Tessitura::Routing::Filters.proprietary_auth_filters(app)
+          Sinatra::Tessitura::Routing::Filters.communal_auth_filter(app)
         end
 
         def self.logging_filters(app)
@@ -33,7 +33,7 @@ module Sinatra
         end
 
         def self.proprietary_auth_filters(app)
-          app.before /^\/users\/(\d+)\/tasks/ do 
+          app.before /^\/users\/(\d+)\/tasks(\/)?/ do 
             request.put? ? protect_collection(request_body) : protect(User)
           end
 

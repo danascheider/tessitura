@@ -3,7 +3,7 @@ class User < Sequel::Model
   many_to_many :programs, left_key: :user_id, right_key: :program_id, join_table: :programs_users
 
   # The ++#owner_id++ method returns the user's ++:id++ attribute, since the 
-  # user table has no foreign keys. This method allows all of Canto's 
+  # user table has no foreign keys. This method allows all of Tessitura's 
   # resources to be treated more uniformly, reducing the need for 
   # code duplication.
 

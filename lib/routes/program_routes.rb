@@ -1,5 +1,5 @@
 module Sinatra
-  module Canto
+  module Tessitura
     module Routing
       module ProgramRoutes
         def self.registered(app)

@@ -8,7 +8,7 @@ class { '::mysql::server':
 }
 
 mysql::db { 'defaults':
-  user     => 'canto',
+  user     => 'tessitura',
   password => 'C*iEpr3ePrO@CRI7xoUX',
   host     => '%',
   grant    => ['ALL'],

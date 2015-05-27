@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Canto, seasons: true do 
+describe Tessitura, seasons: true do 
   include Sinatra::ErrorHandling
 
   let(:program) { FactoryGirl.create(:program_with_season) }

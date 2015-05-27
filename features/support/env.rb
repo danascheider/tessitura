@@ -11,7 +11,7 @@ SimpleCov.start if ENV["COVERAGE"]
 
 ENV['RACK_ENV'] = 'test'
 
-require File.expand_path('../../../lib/canto.rb', __FILE__)
+require File.expand_path('../../../lib/tessitura.rb', __FILE__)
 
 require 'rspec'
 require 'capybara/cucumber'
@@ -28,7 +28,7 @@ class String
   end
 end
 
-class CantoWorld
+class TessituraWorld
   include RSpec::Expectations
   include RSpec::Matchers
   include RSpec::Mocks
@@ -36,17 +36,17 @@ class CantoWorld
   include JsonSpec
 
   def app
-    Canto.new
+    Tessitura.new
   end
 
   def last_json
     page.source
   end
 
-  Capybara.app = Canto.new
+  Capybara.app = Tessitura.new
   Capybara.javascript_driver = :webkit
 end
 
 World do
-  CantoWorld.new
+  TessituraWorld.new
 end

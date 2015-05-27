@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Canto, admins: true do 
+describe Tessitura, admins: true do 
   include Rack::Test::Methods
   include Sinatra::ErrorHandling
 

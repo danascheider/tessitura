@@ -25,7 +25,13 @@ describe Sinatra::GeneralHelperMethods do
   end
 
   describe '::request_body' do 
-    it 'indicates request_body is a hash' do
+    it 'returns the request body as a hash' do
+
+      # The ++ /test/request-body++ route calls the ++request_body++ method and
+      # returns the class name of the output as a string. This test is implemented
+      # in this way because there is no request hash here, so the test route has 
+      # been set up so it can check what happens when there is one.
+
       post '/test/request-body', {foo: 'bar'}.to_json
       expect(last_response.body).to eql('Hash')
     end

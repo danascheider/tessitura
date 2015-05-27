@@ -1,5 +1,5 @@
 module Sinatra
-  module Canto
+  module Tessitura
     module Routing
       def self.bulk_update(models, hashes, owner_id)
         hashes.each do |hash|

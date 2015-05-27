@@ -16,7 +16,7 @@ require          'rack/test'
 require          'mysql2'
 require          'rspec/core/rake_task'
 require          'colorize'
-require_relative '../lib/canto'
+require_relative '../lib/tessitura'
 require_relative support_path + '/factories'
 require_relative support_path + '/helpers'
 
@@ -46,5 +46,5 @@ RSpec.configure do |config|
 end
 
 def app
-  Canto
+  Tessitura
 end

@@ -1,4 +1,4 @@
-module CantoPackage
+module TessituraPackage
   def self.files
     Files::FILES
   end
@@ -12,7 +12,7 @@ module CantoPackage
     DB_FILES = Dir.glob('./db/**/*.rb').sort
     TASK_FILES = ['Rakefile', Dir.glob('./tasks/**/*.rake')].flatten.sort
     TEST_FILES = [Dir.glob('./spec/**/*.rb'), Dir.glob('./features/**/*')].flatten.sort
-    BASE_FILES = %w(files.rb Gemfile Vagrantfile config.ru canto.gemspec README.rdoc version.rb)
+    BASE_FILES = %w(files.rb Gemfile Vagrantfile config.ru tessitura.gemspec README.rdoc version.rb)
 
     FILES = [LIB_FILES, CONFIG_FILES, SCRIPT_FILES, BIN_FILES, DB_FILES, TASK_FILES, LOG_FILES, TEST_FILES, BASE_FILES].flatten
   end

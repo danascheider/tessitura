@@ -1,4 +1,4 @@
-module CantoPackage
+module TessituraPackage
   def self.gem_version
     Gem::Version.new Version::STRING
   end

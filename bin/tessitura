@@ -4,10 +4,10 @@ require 'rack'
 
 begin
   path = File.expand_path('../../config.ru', __FILE__)
-  system "thin -R #{path} -P tmp/pids/thin.pid -d start"
+  system "thin start -R #{path}"
 rescue LoadError => e
   require 'rubygems'
   path = File.expand_path('../../', __FILE__)
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
-  system "thin -R #{path} -P tmp/pids/thin.pid -d start"
+  system "thin start -R #{path}/config.ru"
 end

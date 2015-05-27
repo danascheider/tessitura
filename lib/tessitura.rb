@@ -28,18 +28,18 @@ require File.expand_path '../routes/season_routes.rb', __FILE__
 require File.expand_path '../routes/task_routes.rb', __FILE__
 require File.expand_path '../routes/user_routes.rb', __FILE__
 
-class Canto < Sinatra::Base
+class Tessitura < Sinatra::Base
 
   set :static, true
 
-  register Sinatra::Canto::Routing::Filters
-  register Sinatra::Canto::Routing::AdminRoutes
-  register Sinatra::Canto::Routing::ListingRoutes
-  register Sinatra::Canto::Routing::OrganizationRoutes
-  register Sinatra::Canto::Routing::ProgramRoutes
-  register Sinatra::Canto::Routing::SeasonRoutes
-  register Sinatra::Canto::Routing::TaskRoutes
-  register Sinatra::Canto::Routing::UserRoutes
+  register Sinatra::Tessitura::Routing::Filters
+  register Sinatra::Tessitura::Routing::AdminRoutes
+  register Sinatra::Tessitura::Routing::ListingRoutes
+  register Sinatra::Tessitura::Routing::OrganizationRoutes
+  register Sinatra::Tessitura::Routing::ProgramRoutes
+  register Sinatra::Tessitura::Routing::SeasonRoutes
+  register Sinatra::Tessitura::Routing::TaskRoutes
+  register Sinatra::Tessitura::Routing::UserRoutes
 
   not_found do 
     [404, '' ]

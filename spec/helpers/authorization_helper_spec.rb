@@ -5,7 +5,7 @@ require 'base64'
 #      when authentication fails via the ::protect and ::admin_only! methods, the call to 
 #      ::headers triggers a NoMethodError.
 #
-# More information: https://github.com/danascheider/canto/issues/46
+# More information: https://github.com/danascheider/tessitura/issues/46
 
 # FIX: When I don't return a 404 error immediately when a resource doesn't exist,
 #      I receive ArgumentErrors originating in the #authorized? method, saying 0
@@ -142,14 +142,14 @@ describe Sinatra::AuthorizationHelper, auth: true do
       it 'calls access_denied' do 
         pending('Sort out the issues discussed in the FIX up top')
         @id = 1000000
-        expect_any_instance_of(Canto).to receive(:access_denied)
+        expect_any_instance_of(Tessitura).to receive(:access_denied)
         protect(User)
       end
     end
 
     context 'when the user doesn\'t have access' do 
       before(:each) do 
-        allow_any_instance_of(Canto).to receive(:authorized?).and_return(false)
+        allow_any_instance_of(Tessitura).to receive(:authorized?).and_return(false)
       end
 
       it 'returns 401' do 
@@ -158,7 +158,7 @@ describe Sinatra::AuthorizationHelper, auth: true do
       end
 
       it 'calls ::access_denied' do 
-        expect_any_instance_of(Canto).to receive(:access_denied)
+        expect_any_instance_of(Tessitura).to receive(:access_denied)
         get "/test/users/#{admin.id}"
       end
     end
@@ -177,14 +177,14 @@ describe Sinatra::AuthorizationHelper, auth: true do
       it 'calls access_denied' do 
         pending 'Resolve error in the FIX at top of this file'
         @id = 10000000
-        expect_any_instance_of(Canto).to receive(:access_denied)
+        expect_any_instance_of(Tessitura).to receive(:access_denied)
         protect_collection(user.tasks)
       end
     end
 
     context 'when the user doesn\'t have access' do 
       before(:each) do 
-        allow_any_instance_of(Canto).to receive(:authorized?).and_return(false)
+        allow_any_instance_of(Tessitura).to receive(:authorized?).and_return(false)
       end
 
       it 'returns 401' do 
@@ -193,7 +193,7 @@ describe Sinatra::AuthorizationHelper, auth: true do
       end
 
       it 'calls ::access_denied' do 
-        expect_any_instance_of(Canto).to receive(:access_denied)
+        expect_any_instance_of(Tessitura).to receive(:access_denied)
         put "/test/users/#{user.id}/tasks", user.tasks.to_json
       end
     end
@@ -214,7 +214,7 @@ describe Sinatra::AuthorizationHelper, auth: true do
 
       context 'owner authorization' do 
         it 'calls access denied' do 
-          expect_any_instance_of(Canto).to receive(:access_denied)
+          expect_any_instance_of(Tessitura).to receive(:access_denied)
           authorize_with user
           put "/test/users/#{user.id}/tasks", @tasks.to_json
         end
@@ -222,7 +222,7 @@ describe Sinatra::AuthorizationHelper, auth: true do
 
       context 'admin authorization' do 
         it 'does not call access denied' do 
-          expect_any_instance_of(Canto).not_to receive(:access_denied)
+          expect_any_instance_of(Tessitura).not_to receive(:access_denied)
           authorize_with admin 
           put "/test/users/#{user.id}/tasks", @tasks.to_json
         end
@@ -240,7 +240,7 @@ describe Sinatra::AuthorizationHelper, auth: true do
 
     context 'unauthorized' do 
       it 'calls ::access_denied' do 
-        expect_any_instance_of(Canto).to receive(:access_denied)
+        expect_any_instance_of(Tessitura).to receive(:access_denied)
         get "/tests/organizations/5"
       end
     end

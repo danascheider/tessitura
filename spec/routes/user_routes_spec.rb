@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Canto, users: true do 
+describe Tessitura, users: true do 
   include Sinatra::ErrorHandling
 
   let(:admin) { FactoryGirl.create(:admin) }

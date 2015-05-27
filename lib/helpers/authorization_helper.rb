@@ -101,8 +101,6 @@ module Sinatra
     #      task in the collection. If they are not, ++protect_collection++ calls
     #      ++access_denied++.
     #   3. If the requesting user is an admin, they get access to anything they want.
-    #
-    # FIX: Double-check that this is even used in the front end. I'm not sure it is.
 
     def protect_collection(body)
       allowed = body.select {|hash| Task[hash[:id]].try_rescue(:owner_id) === @id.to_i}
