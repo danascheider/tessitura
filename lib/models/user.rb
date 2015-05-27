@@ -1,4 +1,4 @@
-class User < Sequel::Model(:users)
+class User < Sequel::Model
   one_to_many :task_lists
   many_to_many :programs, left_key: :user_id, right_key: :program_id, join_table: :programs_users
 

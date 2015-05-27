@@ -3,12 +3,11 @@ require 'yaml'
 module DatabaseTaskHelper
   
   def self.get_yaml(file)
-    yaml = File.open(file, 'r+') {|file| YAML.load(file) }
+    yaml = (File.open(file, 'r+') {|file| YAML.load_file(file) }).to_h
+    yaml['defaults'] = yaml['defaults'].to_h
 
-    [yaml['development'], yaml['test'], yaml['production']].each do |hash|
-      hash.keys.each do |key|
-        hash[(key.to_sym rescue key) || key] = hash.delete(key)
-      end
+    yaml['defaults'].keys.each do |key|
+      yaml['defaults'][(key.to_sym rescue key) || key] = yaml['defaults'].delete(key)
     end
 
     yaml

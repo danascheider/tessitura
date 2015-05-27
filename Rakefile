@@ -1,7 +1,6 @@
 require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 require 'colorize'
-
 require File.expand_path '../config/database_task_helper', __FILE__
 require File.expand_path '../lib/canto', __FILE__
 
@@ -16,7 +15,7 @@ RSpec::Core::RakeTask.new
 
 task 'suite:run' do 
   Rake::Task[:spec].invoke 
-  Rake::Task['db:test:prepare'].invoke 
+  Rake::Task['db:prepare'].invoke 
   Rake::Task[:cucumber].invoke
 end
 
