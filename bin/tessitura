@@ -1,6 +1,20 @@
 #!/usr/bin/env ruby
 
 require 'rack'
+require 'optparse'
+
+# By default, the port is 3000. It gets overridden by the option parser if the
+# user specifies a port using the -p or --port option.
+
+options = {port: 3000}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: tessitura [options]"
+
+  opts.on('-p', '--port', 'Specify the port to bind Tessitura (default 3000)') do |p|
+    options[:port] = p
+  end
+end
 
 begin
   path = File.expand_path('../../config.ru', __FILE__)
