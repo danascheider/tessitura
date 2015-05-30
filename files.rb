@@ -4,12 +4,12 @@ module TessituraPackage
   end
 
   module Files
-    LIB_FILES = Dir.glob('./lib/**/*.rb').sort
+    LIB_FILES  = Dir.glob('./lib/**/*.rb').sort
     CONFIG_FILES = Dir.glob('./config/*').sort
     SCRIPT_FILES = Dir.glob('./script/**/*').sort
-    LOG_FILES = Dir.glob('./log/**/*').sort
-    BIN_FILES = Dir.glob('./bin/**/*').sort
-    DB_FILES = [Dir.glob('./db/schema_migrations/*.rb').sort, Dir.glob('./db/*.rb').sort]
+    LOG_FILES  = Dir.glob('./log/**/*').sort
+    BIN_FILES  = Dir.glob('./bin/**/*').sort
+    DB_FILES   = Dir.glob('./db/**/*.rb').sort
     TASK_FILES = ['Rakefile', Dir.glob('./tasks/**/*.rake')].flatten.sort
     TEST_FILES = [Dir.glob('./spec/**/*.rb'), Dir.glob('./features/**/*')].flatten.sort
     BASE_FILES = %w(files.rb Gemfile Vagrantfile config.ru tessitura.gemspec README.rdoc version.rb)
