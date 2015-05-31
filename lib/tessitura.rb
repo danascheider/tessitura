@@ -33,15 +33,15 @@ class Tessitura < Sinatra::Base
 
   set :static, true
 
-  register Sinatra::Canto::Routing::Filters
-  register Sinatra::Canto::Routing::AdminRoutes
-  register Sinatra::Canto::Routing::ListingRoutes
-  register Sinatra::Canto::Routing::OrganizationRoutes
-  register Sinatra::Canto::Routing::ProgramRoutes
-  register Sinatra::Canto::Routing::SeasonRoutes
-  register Sinatra::Canto::Routing::TaskRoutes
-  register Sinatra::Canto::Routing::UserRoutes
-  register Sinatra::Canto::Routing::TestRoutes # Nukes the database, not to be used in production
+  register Sinatra::Tessitura::Routing::Filters
+  register Sinatra::Tessitura::Routing::AdminRoutes
+  register Sinatra::Tessitura::Routing::ListingRoutes
+  register Sinatra::Tessitura::Routing::OrganizationRoutes
+  register Sinatra::Tessitura::Routing::ProgramRoutes
+  register Sinatra::Tessitura::Routing::SeasonRoutes
+  register Sinatra::Tessitura::Routing::TaskRoutes
+  register Sinatra::Tessitura::Routing::UserRoutes
+  register Sinatra::Tessitura::Routing::TestRoutes # Nukes the database, not to be used in production
 
   not_found do 
     [404, '' ]
