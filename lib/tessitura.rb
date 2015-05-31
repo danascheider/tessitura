@@ -29,7 +29,7 @@ require File.expand_path '../routes/season_routes.rb', __FILE__
 require File.expand_path '../routes/task_routes.rb', __FILE__
 require File.expand_path '../routes/user_routes.rb', __FILE__
 
-class Canto < Sinatra::Base
+class Tessitura < Sinatra::Base
 
   set :static, true
 

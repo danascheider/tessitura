@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Canto, programs: true do 
+describe Tessitura, programs: true do 
   include Sinatra::ErrorHandling
 
   let(:program) { FactoryGirl.create(:program) }

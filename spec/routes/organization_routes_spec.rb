@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Canto, organizations: true do 
+describe Tessitura, organizations: true do 
   include Sinatra::ErrorHandling
   
   let(:org) { FactoryGirl.create(:organization) }

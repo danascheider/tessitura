@@ -1,6 +1,6 @@
-module CantoConfig
+module TessituraConfig
   FILES = {
-    app_file: File.expand_path('../../lib/canto.rb', __FILE__),
+    app_file: File.expand_path('../../lib/tessitura.rb', __FILE__),
     db_loggers: [File.expand_path('../../log/db.log', __FILE__)],
     request_log: File.expand_path('../../log/requests.log', __FILE__),
     response_log: File.expand_path('../../log/responses.log', __FILE__)

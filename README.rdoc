@@ -1,6 +1,6 @@
-== Canto {<img src="https://travis-ci.org/danascheider/canto.svg?branch=pure-sinatra" alt="Build Status" />}[https://travis-ci.org/danascheider/canto] {<img src="https://codeclimate.com/github/danascheider/canto.png" />}[https://codeclimate.com/github/danascheider/canto] {<img src="https://coveralls.io/repos/danascheider/canto/badge.png?branch=master" />}[https://coveralls.io/r/danascheider/canto] {<img src="https://gemnasium.com/danascheider/canto.svg" alt="Dependency Status" />}[https://gemnasium.com/danascheider/canto] 
+== Tessitura {<img src="https://travis-ci.org/danascheider/tessitura.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/danascheider/tessitura] {<img src="https://codeclimate.com/github/danascheider/canto.png" />}[https://codeclimate.com/github/danascheider/canto] {<img src="https://coveralls.io/repos/danascheider/tessitura/badge.png?branch=master" />}[https://coveralls.io/r/danascheider/tessitura] {<img src="https://gemnasium.com/danascheider/canto.svg" alt="Dependency Status" />}[https://gemnasium.com/danascheider/canto] 
 
-Canto is a web-based career management app for classical singers. It provides a variety of functionality tailored to the specific needs of opera singers. This repo contains the code for the back-end Sinatra API. The API uses MySQL with the Mysql2 adapter and with the Sequel gem handling ORM functions. The [front end](https://github.com/danascheider/canto-front-end) is being developed in another repo using Backbone.js. 
+Tessitura is a web-based career management app for classical singers. It provides a variety of functionality tailored to the specific needs of opera singers. This repo contains the code for the back-end Sinatra API. The API uses MySQL with the Mysql2 adapter and with the Sequel gem handling ORM functions. The front end is being developed in [another repo](https://github.com/danascheider/tessitura-front-end) using Backbone.js. 
 
 === Models
 For the most up-to-date information about models and their attributes, see the most recent schema file in the +/db/schema_migrations+ directory. 
@@ -56,7 +56,7 @@ Tasks belong to TaskLists, which are owned by a User. Users can have multiple li
 
 ==== Organizations
 
-An organization is any organization offering programs of interest to Canto subscribers. They may be, among other things, opera companies, churches, government agencies, universities, and foundations. Each organization can own multiple programs. Organizations have the following attributes:
+An organization is any organization offering programs of interest to Tessitura subscribers. They may be, among other things, opera companies, churches, government agencies, universities, and foundations. Each organization can own multiple programs. Organizations have the following attributes:
 * ID
 * Name
 * Address 1
@@ -79,7 +79,7 @@ When an organization is destroyed, all the programs it owns are destroyed with i
 
 ==== Programs
 
-Programs are any of a variety of types of events or activities of interest to Canto subscribers. The Program model stores data about a program that remains consistent from year to year (e.g., geographic region, age restrictions, etc.). Each program is owned by an Organization and associated with many Users who have been matched with the Program by an algorithm handling recommendations (not implemented yet). The association between Users and Programs is coordinated through the programs_users join table. 
+Programs are any of a variety of types of events or activities of interest to Tessitura subscribers. The Program model stores data about a program that remains consistent from year to year (e.g., geographic region, age restrictions, etc.). Each program is owned by an Organization and associated with many Users who have been matched with the Program by an algorithm handling recommendations (not implemented yet). The association between Users and Programs is coordinated through the programs_users join table. 
 
 Programs are typically cyclical in nature, revolving around semesters, seasons, fiscal years, or some other recurring period of time. Data specific to a particular cycle is stored in the Seasons table. Each program can have many seasons.
 
@@ -146,7 +146,7 @@ Auditions are representations of physical audition times and places. They also s
 
 === Development Approach
 
-This app is being developed using a rigorous behavior-driven approach, meaning test-first, agile work-flows. I aim for 100% test coverage and Code Climate rating >= 3.8 for classes and modules other than Canto itself\*. Refactoring both app code and tests is a major part of the workflow on this project. Everything should stay as DRY as possible.
+This app is being developed using a rigorous behavior-driven approach, meaning test-first, agile work-flows. I aim for 100% test coverage and Code Climate rating >= 3.8 for classes and modules other than Tessitura itself\*. Refactoring both app code and tests is a major part of the workflow on this project. Everything should stay as DRY as possible.
 
 At this point, development is happening on the following git branches:
 ==== not_passing
@@ -165,8 +165,8 @@ reflect the functionality. These tests should be marked pending so as not to bre
 === Contributing
 While contributions are welcome and appreciated, I ask contributors to keep in mind that this app will most likely be taken closed-source in the not-so-distant future. As the app grows, I will spin off helper modules into gems as I am able, which will then be made open-source and available on https://rubygems.org. Since these will continue to be available to the community, they are where I recommend you focus if you would like to contribute.
 
-\* CodeClimate support has informed me that CodeClimate does not recognize DSLs. Consequently, the rating of the Canto class may be worse than is deserved. The rating has been improved - quite appropriately - by separating routes into their own modules that are then registered on the +Canto+ class. 
+\* CodeClimate support has informed me that CodeClimate does not recognize DSLs. Consequently, the rating of the Tessitura class may be worse than is deserved. The rating has been improved - quite appropriately - by separating routes into their own modules that are then registered on the +Tessitura+ class. 
 
 === Versioning
 
-Version 0.0.0; no stable release available.
+Version 0.0.1.alpha5; no stable release available.

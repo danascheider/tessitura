@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Canto, tasks: true, routes: true do 
+describe Tessitura, tasks: true, routes: true do 
   include Sinatra::ErrorHandling
   include Sinatra::GeneralHelperMethods
   include Rack::Test::Methods 
@@ -144,7 +144,7 @@ describe Canto, tasks: true, routes: true do
 
       context 'when the task doesn\'t exist' do 
         it 'returns status 404' do 
-          # allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
+          # allow_any_instance_of(Tessitura).to receive(:protect).with(Task).and_return(nil)
           get '/tasks/1000000'
           expect(last_response.status).to eql 404
         end
@@ -235,7 +235,7 @@ describe Canto, tasks: true, routes: true do
 
       context 'when the task doesn\'t exist' do 
         it 'returns status 404' do 
-          allow_any_instance_of(Canto).to receive(:protect).with(Task).and_return(nil)
+          allow_any_instance_of(Tessitura).to receive(:protect).with(Task).and_return(nil)
           put '/tasks/1000000', { :status => 'Blocking' }.to_json, 'CONTENT_TYPE' => 'application/json'
           expect(last_response.status).to eql 404
         end
@@ -279,7 +279,7 @@ describe Canto, tasks: true, routes: true do
       }
 
       it 'calls ::protect_collection' do 
-        expect_any_instance_of(Canto).to receive(:protect_collection).with(valid_attributes)
+        expect_any_instance_of(Tessitura).to receive(:protect_collection).with(valid_attributes)
         put path, valid_attributes.to_json, 'CONTENT_TYPE' => 'application/json'
       end
 

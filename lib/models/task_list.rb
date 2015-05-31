@@ -12,7 +12,7 @@ class TaskList < Sequel::Model
     tasks.each(&:destroy)
   end
 
-  # The ++#owner_id++ method is standard for Canto models that can be said to have
+  # The ++#owner_id++ method is standard for Tessitura models that can be said to have
   # a single owner (i.e., models that would use ++belongs_to++ syntax in ActiveRecord).
   # The ++#owner_id++ points to the single owner of the resource.
 

@@ -1,5 +1,5 @@
 module Sinatra
-  module Canto
+  module Tessitura
     module Routing
       module TaskRoutes
 
@@ -37,6 +37,7 @@ module Sinatra
 
         def self.put_routes(app) 
           app.put '/users/:id/tasks' do |id|
+            protect_collection(request_body);
             tasks = (body = request_body).map {|h| Task[h.delete(:id)] } 
             Routing.bulk_update(tasks, body, id) && 200 rescue 422
           end

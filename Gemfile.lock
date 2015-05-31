@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    canto (0.0.1.alpha5)
+    tessitura (0.0.1.alpha6)
       json (~> 1.8.1)
       mysql2 (~> 0.3, >= 0.3.16)
       rack-cors (~> 0.4)
@@ -142,7 +142,6 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.7)
-  canto!
   capybara (~> 2.4.4)
   capybara-webkit (~> 1.5.1)
   colorize (= 0.7.7)
@@ -155,3 +154,4 @@ DEPENDENCIES
   rake (~> 10.4)
   rspec (~> 3.2)
   simplecov (~> 0.10)
+  tessitura!

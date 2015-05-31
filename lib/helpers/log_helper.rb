@@ -9,20 +9,20 @@ module Sinatra
   module LogHelper
 
     # The ++log_request++ method opens the request log file, identified by the ++:request_log++
-    # key in the ++CantoConfig.config_info++ hash. It opens the file and appends the formatted
+    # key in the ++TessituraConfig.config_info++ hash. It opens the file and appends the formatted
     # ++request_log_entry++ (see below).
 
     def log_request
-      filename = CantoConfig.config_info[:request_log]
+      filename = TessituraConfig.config_info[:request_log]
       File.open(filename, 'a+') {|file| file.puts request_log_entry }
     end
 
     # The ++log_response++ method opens the response log file, identified by the 
-    # ++:response_log++ key in the ++CantoConfig.config_info++ hash. It opens the file and appends 
+    # ++:response_log++ key in the ++TessituraConfig.config_info++ hash. It opens the file and appends 
     # the formatted ++response_log_entry++ (see below).
 
     def log_response
-      filename = CantoConfig.config_info[:response_log]
+      filename = TessituraConfig.config_info[:response_log]
       File.open(filename, 'a+') {|file| file.puts response_log_entry }
     end
 

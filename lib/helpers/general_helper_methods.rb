@@ -21,7 +21,7 @@ module Sinatra
     # The ++santize_attributes++ method takes a ++hash++ as an argument and returns
     # a copy of the hash with the keys ++:id++, ++:created_at++, ++:updated_at++, and
     # ++:owner_id++, if present, removed. These are attributes that are not allowed to
-    # be set on Canto models and will raise exceptions if they are passed to a Sequel
+    # be set on Tessitura models and will raise exceptions if they are passed to a Sequel
     # model. For this reason, ++sanitize_attributes++ is used to prevent such predictable
     # errors from coming up.
 
@@ -31,7 +31,7 @@ module Sinatra
 
     # The ++santize_attributes!++ method takes a ++hash++ as an argument and modifies the 
     # hash in place, deleting the  ++:id++, ++:created_at++, ++:updated_at++, and ++:owner_id++ 
-    # keys. These are attributes that are not allowed to be set on Canto models and will raise 
+    # keys. These are attributes that are not allowed to be set on Tessitura models and will raise 
     # exceptions if they are passed to a Sequel model.
 
     def sanitize_attributes!(hash)

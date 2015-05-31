@@ -27,7 +27,7 @@ nginx
 
 mkdir /var/www && cd /var/www
 apt-get install -y git
-git clone https://github.com/danascheider/canto && cd canto
+git clone https://github.com/danascheider/tessitura && cd tessitura
 
 exit # Don't run bundle install with root privileges
 bundle install
