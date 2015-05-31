@@ -26,6 +26,7 @@ namespace :travis do
 
   desc 'Run RSpec and Cucumber tests'
   task :run do 
+    Rake::Task['travis:prepare'].invoke
     Rake::Task['travis:migrate'].invoke
     Rake::Task['spec'].invoke
     Rake::Task['travis:cucumber'].invoke
