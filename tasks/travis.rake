@@ -13,7 +13,7 @@ namespace :travis do
 
   desc 'Migrate the database'
   task :migrate do
-    Rake::Task['schema:load'].invoke
+    Rake::Task['db:schema:load'].invoke
   end
 
   desc 'Create, migrate, and clean the test database'
