@@ -53,7 +53,7 @@ namespace :db do
 
     desc 'Migrate the production database'
     task :migrate, [:PATH] => ['db:production:create'] do |t, args|
-      db = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['production']))
+      db = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['production'], 'production'))
       path = args[:path] || MIGRATION_PATH
       Sequel::Migrator.run(db, path)
       STDOUT.puts 'Database \'production\' migrated successfully.'.green
@@ -85,7 +85,7 @@ namespace :db do
 
     desc 'Migrate the test database'
     task :migrate, [:PATH] => ['db:test:create'] do |t, args|
-      db = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['test']))
+      db = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['test'], 'test'))
       path = args[:path] || MIGRATION_PATH
       Sequel::Migrator.run(db, path)
       STDOUT.puts 'Database \'test\' migrated successfully.'.green
