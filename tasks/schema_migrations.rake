@@ -1,8 +1,6 @@
 require 'mysql2'
 require 'sequel'
 
-DB ||= Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['defaults'], 'defaults'))
-
 namespace :db do 
   desc 'Create new migration, required arg NAME, default PATH /db/migrate'
   task :create_migration, [:NAME, :PATH] do |t, args|
@@ -24,9 +22,13 @@ EOF
   end
 
   namespace :schema do
+    prod = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['production'], 'production'))
+    test = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['test'], 'test'))
+
     desc 'Load schema into database'
     task :load, :PATH do |t, args|
-      DB.extension :schema_caching
+      prod.extension :schema_caching
+      test.extension :schema_caching
       path = args[:path] || SCHEMA_PATH
       Rake::Task["db:migrate"].invoke(path)
       puts 'Success!'.green
@@ -37,8 +39,9 @@ EOF
       timestamp = Time.now.getutc.to_s.gsub(/\D/, '')
       path      = args[:path] || SCHEMA_PATH
 
-      DB.extension :schema_dumper
-      schema = DB.dump_schema_migration
+      prod.extension :schema_dumper
+
+      schema = prod.dump_schema_migration
       bad    = /\s*create_table\(:schema(.*) do\s+\w+(.*)\s+(primary_key(.*))?\s+end/
       schema.gsub!(bad, '')
 

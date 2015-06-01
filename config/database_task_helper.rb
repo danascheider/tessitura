@@ -19,6 +19,6 @@ module DatabaseTaskHelper
   #         # => "mysql2://root:rootpassword@localhost:3306/test"
 
   def self.get_string(hash, env)
-    "#{hash[:adapter]}://#{hash[:username]}:#{hash[:password]}@#{hash[:host]}:#{hash[:port]}/#{env}"
+    "#{hash['adapter']}://#{hash['username']}:#{hash['password']}@#{hash['host']}:#{hash['port']}/#{env}"
   end
 end
