@@ -2,6 +2,7 @@
 
 require 'rack'
 require 'optparse'
+require 'fileutils'
 
 # By default, the port is 3000. It gets overridden by the option parser if the
 # user specifies a port using the -p or --port option.
@@ -13,6 +14,10 @@ OptionParser.new do |opts|
 
   opts.on('-pPORT', '--port=PORT', 'Specify the port to bind Tessitura (default 3000)') do |p|
     options[:port] = p
+  end
+
+  opts.on('-fFILE', '--database-file=FILE', 'Specify the database YAML file') do |file|
+    FileUtils.cp file, File.expand_path('../../config/database.yml', __FILE__)
   end
 end.parse!
 
