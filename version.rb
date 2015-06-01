@@ -7,7 +7,7 @@ module TessituraPackage
     MAJOR = '0'
     MINOR = '0'
     PATCH = '1'
-    PRE   = 'alpha6'
+    PRE   = 'alpha6-test'
 
     STRING = [MAJOR, MINOR, PATCH, PRE].join('.').chomp('.')
   end
