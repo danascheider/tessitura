@@ -3,6 +3,6 @@ defaults: &defaults
   host: 127.0.0.1
   port: 3306
   username: tessitura 
-  password: CiEpr3ePrOCRI7xoUX
+  password: hunter2
   pool: 5
   timeout: 5000
