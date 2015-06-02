@@ -45,7 +45,7 @@ class Tessitura < Sinatra::Base
   slogger = Slogger::Logger.new 'tessitura', :info, :local0
   use Slogger::Rack::RequestLogger, slogger
 
-  db_loggers = TessituraConfig.FILES[:db_loggers].map {|filename| Logger.new(File.expand_path(filename, __FILE__)) }
+  db_loggers = TessituraConfig::FILES[:db_loggers].map {|filename| Logger.new(File.expand_path(filename, __FILE__)) }
   db_loggers << Logger.new(STDOUT) if ENV['LOG'] === true
   DB = Sequel.connect(database, loggers: db_loggers)
 
