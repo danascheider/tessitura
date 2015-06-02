@@ -4,7 +4,7 @@ module DatabaseTaskHelper
   
   def self.get_yaml(file)
     yaml = (File.open(file, 'r+') {|file| YAML.load_file(file) }).to_h
-    yaml.map! {|key, val| val.to_h }
+    yaml.each {|key, val| val = val.to_h }
   end
 
   # Example:
