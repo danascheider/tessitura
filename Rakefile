@@ -7,7 +7,7 @@ require File.expand_path '../lib/tessitura', __FILE__
 
 MIGRATION_PATH = File.expand_path('../db/migrate', __FILE__)
 SCHEMA_PATH    = File.expand_path('../db/schema_migrations', __FILE__)
-YAML_DATA      = DatabaseTaskHelper.get_yaml(File.expand_path('config/database.yml', __FILE__))
+YAML_DATA      = DatabaseTaskHelper.get_yaml(File.expand_path('../config/database.yml', __FILE__))
 
 Dir['tasks/*.rake'].each {|file| load file }
 
