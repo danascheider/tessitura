@@ -17,7 +17,7 @@ OptionParser.new do |opts|
   end
 
   opts.on('-fFILE', '--database-file=FILE', 'Specify the database YAML file') do |file|
-    ENV['DB_YAML_FILE'] = file
+    ENV['DB_YAML_FILE'] = File.expand_path(file, FileUtils.pwd)
   end
 end.parse!
 
