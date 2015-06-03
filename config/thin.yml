@@ -1,5 +1,4 @@
 environment: production
 rackup: ../config.ru
 pid: ~/tmp/pids/tessitura.pid
-log: ../log/requests.log
 daemonize: true
