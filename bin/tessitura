@@ -35,10 +35,10 @@ end.parse!
 
 begin
   path = File.expand_path('../../config.ru', __FILE__)
-  system "thin start -R #{path} #{options.chomp}"
+  system "thin start -R #{path} #{options.chomp} -dP ~/tmp/pids/tessitura.pid"
 rescue LoadError => e
   require 'rubygems'
   path = File.expand_path('../../', __FILE__)
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
-  system "thin start -R #{path}/config.ru #{options.chomp}"
+  system "thin start -R #{path}/config.ru #{options.chomp} -dP ~/tmp/pids/tessitura.pid"
 end
