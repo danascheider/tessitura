@@ -25,6 +25,13 @@ class Tessitura < Sinatra::Base
   set :database, db_location
   set :data, TessituraConfig::FILES[:data] || ''
 
+
+  #==============================#
+  # Rack::SSL permits use of SSL #
+  #==============================#
+
+  use Rack::SSL
+  
   #========================================#
   # Rack::Cors manages cross-origin issues #
   #========================================#
@@ -35,7 +42,7 @@ class Tessitura < Sinatra::Base
       resource '/*', methods: [:get, :put, :post, :delete, :options], headers: :any
     end
   end
-  
+
   #============================================#
   # Enable logging for database and web server #
   #============================================#
