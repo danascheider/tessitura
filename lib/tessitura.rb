@@ -32,6 +32,7 @@ require File.expand_path '../routes/user_routes.rb', __FILE__
 class Tessitura < Sinatra::Base
 
   set :static, true
+  use Rack::SSL
 
   register Sinatra::Tessitura::Routing::Filters
   register Sinatra::Tessitura::Routing::AdminRoutes

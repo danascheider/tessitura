@@ -35,13 +35,7 @@ class Tessitura < Sinatra::Base
       resource '/*', methods: [:get, :put, :post, :delete, :options], headers: :any
     end
   end
-
-  #==============================#
-  # Rack::SSL permits use of SSL #
-  #==============================#
-
-  use Rack::SSL
-
+  
   #============================================#
   # Enable logging for database and web server #
   #============================================#
