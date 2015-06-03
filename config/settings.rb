@@ -30,8 +30,8 @@ class Tessitura < Sinatra::Base
   # Rack::SSL permits use of SSL #
   #==============================#
 
-  use Rack::SSL
-  
+  use Rack::SslEnforcer
+
   #========================================#
   # Rack::Cors manages cross-origin issues #
   #========================================#

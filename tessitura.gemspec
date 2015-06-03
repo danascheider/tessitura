@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency     'json', '~> 1.8.1'
   s.add_runtime_dependency     'mysql2', '~> 0.3', '>= 0.3.16'
   s.add_runtime_dependency     'rack-cors', '~> 0.4'
-  s.add_runtime_dependency     'rack-ssl', '~> 1.4'
+  s.add_runtime_dependency     'rack-ssl-enforcer', '~> 0.2', '>= 0.2.8'
   s.add_runtime_dependency     'reactive_extensions', '~> 0.5'
   s.add_runtime_dependency     'reactive_support', '~> 0.5'
   s.add_runtime_dependency     'sequel', '~> 4.21'
