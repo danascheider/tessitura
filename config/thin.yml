@@ -1,4 +1,0 @@
-environment: production
-rackup: ../config.ru
-pid: ~/tmp/pids/tessitura.pid
-daemonize: true

@@ -34,11 +34,11 @@ OptionParser.new do |opts|
 end.parse!
 
 begin
-  path = File.expand_path('../../config/thin.yml', __FILE__)
-  system "thin start -C #{path} #{options.chomp}"
+  path = File.expand_path('../../config.ru', __FILE__)
+  system "thin start -R #{path} #{options.chomp}"
 rescue LoadError => e
   require 'rubygems'
   path = File.expand_path('../../', __FILE__)
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
-  system "thin start -C #{path}/config/thin.yml #{options.chomp}"
+  system "thin start -R #{path}/config.ru #{options.chomp}"
 end
