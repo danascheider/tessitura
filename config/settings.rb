@@ -25,9 +25,9 @@ class Tessitura < Sinatra::Base
   set :database, db_location
   set :data, TessituraConfig::FILES[:data] || ''
 
-  # =======================================#
+  #========================================#
   # Rack::Cors manages cross-origin issues #
-  # =======================================#
+  #========================================#
 
   use Rack::Cors do 
     allow do 
@@ -36,9 +36,15 @@ class Tessitura < Sinatra::Base
     end
   end
 
-  # ===========================================#
+  #==============================#
+  # Rack::SSL permits use of SSL #
+  #==============================#
+
+  use Rack::SSL
+
+  #============================================#
   # Enable logging for database and web server #
-  # ===========================================#
+  #============================================#
 
   enable :logging
 

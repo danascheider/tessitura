@@ -5,12 +5,13 @@ PATH
       json (~> 1.8.1)
       mysql2 (~> 0.3, >= 0.3.16)
       rack-cors (~> 0.4)
-      reactive_extensions (~> 0.5.0)
-      reactive_support (~> 0.5.0)
+      rack-ssl (~> 1.4)
+      reactive_extensions (~> 0.5)
+      reactive_support (~> 0.5)
       sequel (~> 4.21)
-      sinatra (~> 1.4.6)
-      slogger (~> 0.0.11)
-      thin (~> 1.6.3)
+      sinatra (~> 1.4, >= 1.4.6)
+      slogger (~> 0.0, >= 0.0.11)
+      thin (~> 1.6, >= 1.6.3)
 
 GEM
   remote: https://rubygems.org/
@@ -31,7 +32,7 @@ GEM
     capybara-webkit (1.5.1)
       capybara (>= 2.3.0, < 2.5.0)
       json
-    colorize (0.7.7)
+    colorize (0.7.0)
     coveralls (0.8.1)
       json (~> 1.8)
       rest-client (>= 1.6.8, < 2)
@@ -80,6 +81,8 @@ GEM
     rack (1.6.1)
     rack-cors (0.4.0)
     rack-protection (1.5.3)
+      rack
+    rack-ssl (1.4.1)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -142,9 +145,9 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.7)
-  capybara (~> 2.4.4)
-  capybara-webkit (~> 1.5.1)
-  colorize (= 0.7.7)
+  capybara (~> 2.4)
+  capybara-webkit (~> 1.5)
+  colorize (= 0.7)
   coveralls (~> 0.7, >= 0.7.2)
   cucumber (~> 2.0)
   cucumber-sinatra (~> 0.5.0)
