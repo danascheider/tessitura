@@ -30,7 +30,7 @@ class Tessitura < Sinatra::Base
   # Rack::SSL permits use of SSL #
   #==============================#
 
-  use Rack::SslEnforcer
+  use Rack::SslEnforcer, except_environments: 'test', redirect_to: 'https://tessitura.io', http_port: 4567
 
   #========================================#
   # Rack::Cors manages cross-origin issues #
