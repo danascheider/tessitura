@@ -42,8 +42,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara', '~> 2.4'
   s.add_development_dependency 'rack-test', '~> 0.6.3'
   s.add_development_dependency 'capybara-webkit', '~> 1.5'
-  s.add_development_dependency 'factory_girl', '~>4.5'
-  s.add_development_dependency 'colorize', '0.7'
+  s.add_development_dependency 'factory_girl', '~> 4.5'
+  s.add_development_dependency 'colorize', '~> 0.7'
 
   s.has_rdoc         = true
   s.homepage         = 'http://github.com/danascheider/tessitura'

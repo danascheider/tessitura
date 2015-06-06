@@ -3,7 +3,7 @@ test: &test
   host: 127.0.0.1
   port: 3306
   username: tessitura
-  password: thespu6!X+gew$zu6up5
+  password: hunter2
   pool: 5
   timeout: 0
 
@@ -12,6 +12,6 @@ production: &production
   host: 127.0.0.1
   port: 3306
   username: tessitura 
-  password: thespu6!X+gew$zu6up5
+  password: hunter2
   pool: 5
   timeout: 5000
