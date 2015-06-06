@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'sequel'
 require 'rack/cors'
+require 'rack/ssl-enforcer'
 require 'reactive_support/core_ext/object'
 require 'reactive_extensions/object'
 require 'reactive_extensions/hash'

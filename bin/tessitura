@@ -2,26 +2,43 @@
 
 require 'rack'
 require 'optparse'
+require 'fileutils'
 
 # By default, the port is 3000. It gets overridden by the option parser if the
 # user specifies a port using the -p or --port option.
 
-options = {port: 3000}
+options = ''
 
 OptionParser.new do |opts|
   opts.banner = "Usage: tessitura [options]"
 
   opts.on('-pPORT', '--port=PORT', 'Specify the port to bind Tessitura (default 3000)') do |p|
-    options[:port] = p
+    options << "-p #{p} "
+  end
+
+  opts.on('-fFILE', '--database-file=FILE', 'Specify the database YAML file') do |file|
+    ENV['DB_YAML_FILE'] = File.expand_path(file, FileUtils.pwd)
+  end
+
+  opts.on('--ssl') do
+    options << '--ssl '
+  end
+
+  opts.on('--ssl-key-file=FILE', 'Path to the SSL private key') do |file|
+    options << "--ssl-key-file #{File.expand_path(file, FileUtils.pwd)} "
+  end
+
+  opts.on('--ssl-cert-file=FILE', 'Path to certificate') do |file|
+    options << "--ssl-cert-file #{File.expand_path(file, FileUtils.pwd)} "
   end
 end.parse!
 
 begin
   path = File.expand_path('../../config.ru', __FILE__)
-  system "thin start -R #{path} -p #{options[:port]}"
+  system "thin start -R #{path} #{options.chomp} -dP ~/tmp/pids/tessitura.pid"
 rescue LoadError => e
   require 'rubygems'
   path = File.expand_path('../../', __FILE__)
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
-  system "thin start -R #{path}/config.ru -p #{options[:port]}"
+  system "thin start -R #{path}/config.ru #{options.chomp} -dP ~/tmp/pids/tessitura.pid"
 end

@@ -1,10 +1,18 @@
-defaults: &defaults 
+test: &test 
+  adapter: mysql2
+  host: 127.0.0.1
+  port: 3306
+  username: tessitura
+  password: thespu6!X+gew$zu6up5
+  pool: 5
+  timeout: 0
+
+production: &production 
   adapter: mysql2
   host: 127.0.0.1
   port: 3306
   username: tessitura 
-  database: test
-  password: hunter2
+  password: thespu6!X+gew$zu6up5
   pool: 5
   timeout: 5000
 
