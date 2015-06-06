@@ -17,14 +17,15 @@ DB_CONFIG_INFO = DatabaseTaskHelper.get_yaml(DB_YAML_FILE)
 
 class Tessitura < Sinatra::Base
 
-  ENV['RACK_ENV'] = 'test' unless ENV['RACK_ENV'] == 'production'
+  ENV['RACK_ENV'] ||= 'test'
   db_location = ENV['TRAVIS'] ? 'mysql2://travis@127.0.0.1:3306/test' : DatabaseTaskHelper.get_string(DB_CONFIG_INFO[ENV['RACK_ENV']], ENV['RACK_ENV'])
+
+  puts "RACK_ENV IS SET TO '" + ENV['RACK_ENV'] + "'"
 
   set :app_file, TessituraConfig::FILES[:app_file]
   set :root, File.dirname(app_file)
   set :database, db_location
   set :data, TessituraConfig::FILES[:data] || ''
-
 
   #==============================#
   # Rack::SSL permits use of SSL #
