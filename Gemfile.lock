@@ -5,7 +5,7 @@ PATH
       json (~> 1.8.1)
       mysql2 (~> 0.3, >= 0.3.16)
       rack-cors (~> 0.4)
-      rack-ssl (~> 1.4)
+      rack-ssl-enforcer (~> 0.2, >= 0.2.8)
       reactive_extensions (~> 0.5)
       reactive_support (~> 0.5)
       sequel (~> 4.21)
@@ -82,8 +82,7 @@ GEM
     rack-cors (0.4.0)
     rack-protection (1.5.3)
       rack
-    rack-ssl (1.4.1)
-      rack
+    rack-ssl-enforcer (0.2.8)
     rack-test (0.6.3)
       rack (>= 1.0)
     rake (10.4.2)
@@ -158,3 +157,6 @@ DEPENDENCIES
   rspec (~> 3.2)
   simplecov (~> 0.10)
   tessitura!
+
+BUNDLED WITH
+   1.10.2
