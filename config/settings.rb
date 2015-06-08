@@ -17,7 +17,7 @@ DB_CONFIG_INFO = DatabaseTaskHelper.get_yaml(DB_YAML_FILE)
 
 class Tessitura < Sinatra::Base
 
-  ENV['RACK_ENV'] ||= 'test'
+  ENV['RACK_ENV'] = 'test' unless ENV['RACK_ENV'] == 'production'
   db_location = ENV['TRAVIS'] ? 'mysql2://travis@127.0.0.1:3306/test' : DatabaseTaskHelper.get_string(DB_CONFIG_INFO[ENV['RACK_ENV']], ENV['RACK_ENV'])
 
   puts "RACK_ENV IS SET TO '" + ENV['RACK_ENV'] + "'"
