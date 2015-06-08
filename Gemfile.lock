@@ -157,6 +157,3 @@ DEPENDENCIES
   rspec (~> 3.2)
   simplecov (~> 0.10)
   tessitura!
-
-BUNDLED WITH
-   1.10.2
