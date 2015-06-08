@@ -29,6 +29,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   DB = Sequel::DATABASES.first
+  Sequel.extension :migration
 
   config.before(:suite) do
     if ENV['TRAVIS']
