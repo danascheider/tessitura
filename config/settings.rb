@@ -20,6 +20,7 @@ class Tessitura < Sinatra::Base
   ENV['RACK_ENV'] = 'test' unless ENV['RACK_ENV'] == 'production'
   db_location = ENV['TRAVIS'] ? 'mysql2://travis@127.0.0.1:3306/test' : DatabaseTaskHelper.get_string(DB_CONFIG_INFO[ENV['RACK_ENV']], ENV['RACK_ENV'])
 
+  # Log the rack environment to STDOUT, useful for diagnostic purposes
   puts "RACK_ENV IS SET TO '" + ENV['RACK_ENV'] + "'"
 
   set :app_file, TessituraConfig::FILES[:app_file]
@@ -39,7 +40,7 @@ class Tessitura < Sinatra::Base
 
   use Rack::Cors do 
     allow do 
-      origins 'null', /localhost(.*)/
+      origins 'null', /localhost(.*)/, /tessitura\.io/
       resource '/*', methods: [:get, :put, :post, :delete, :options], headers: :any
     end
   end
