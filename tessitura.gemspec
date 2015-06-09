@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.executables               = ['tessitura']
   s.default_executable        = 'tessitura'
 
+  s.add_runtime_dependency     'google-api-client', '~> 0.8', '>= 0.8.6'
   s.add_runtime_dependency     'json', '~> 1.8.1'
   s.add_runtime_dependency     'mysql2', '~> 0.3', '>= 0.3.16'
   s.add_runtime_dependency     'rack-cors', '~> 0.4'
