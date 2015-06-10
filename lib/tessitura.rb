@@ -6,6 +6,9 @@ require 'reactive_support/core_ext/object'
 require 'reactive_extensions/object'
 require 'reactive_extensions/hash'
 require 'reactive_extensions/array'
+require 'google/api_client'
+require 'google/api_client/client_secrets'
+require 'google/api_client/auth/file_storage'
 require 'json'
 
 require File.expand_path('../../config/settings', __FILE__)
@@ -22,7 +25,9 @@ require File.expand_path '../models/user.rb', __FILE__
 require File.expand_path '../routes/routing.rb', __FILE__
 require File.expand_path '../routes/filters.rb', __FILE__
 require File.expand_path '../routes/admin_routes.rb', __FILE__
+require File.expand_path '../routes/google_routes.rb', __FILE__
 require File.expand_path '../routes/listing_routes.rb', __FILE__
+require File.expand_path '../routes/oauth2_routes.rb', __FILE__
 require File.expand_path '../routes/organization_routes.rb', __FILE__
 require File.expand_path '../routes/program_routes.rb', __FILE__
 require File.expand_path '../routes/season_routes.rb', __FILE__
@@ -35,7 +40,9 @@ class Tessitura < Sinatra::Base
 
   register Sinatra::Tessitura::Routing::Filters
   register Sinatra::Tessitura::Routing::AdminRoutes
+  register Sinatra::Tessitura::Routing::GoogleAPIRoutes
   register Sinatra::Tessitura::Routing::ListingRoutes
+  register Sinatra::Tessitura::Routing::Oauth2Routes
   register Sinatra::Tessitura::Routing::OrganizationRoutes
   register Sinatra::Tessitura::Routing::ProgramRoutes
   register Sinatra::Tessitura::Routing::SeasonRoutes

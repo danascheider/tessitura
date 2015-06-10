@@ -95,14 +95,14 @@ namespace :db do
     task :prepare, :PATH do |t, args|
       path = args[:path] || SCHEMA_PATH
       client.query('SET FOREIGN_KEY_CHECKS = 0')
-      client.query('TRUNCATE TABLE tasks')
-      client.query('TRUNCATE TABLE task_lists')
-      client.query('TRUNCATE TABLE users')
-      client.query('TRUNCATE TABLE organizations')
-      client.query('TRUNCATE TABLE programs')
-      client.query('TRUNCATE TABLE seasons')
-      client.query('TRUNCATE TABLE auditions')
-      client.query('TRUNCATE TABLE listings')
+      client.query('TRUNCATE TABLE test.tasks')
+      client.query('TRUNCATE TABLE test.task_lists')
+      client.query('TRUNCATE TABLE test.users')
+      client.query('TRUNCATE TABLE test.organizations')
+      client.query('TRUNCATE TABLE test.programs')
+      client.query('TRUNCATE TABLE test.seasons')
+      client.query('TRUNCATE TABLE test.auditions')
+      client.query('TRUNCATE TABLE test.listings')
       client.query('SET FOREIGN_KEY_CHECKS = 1')
       puts "Success!".green
     end

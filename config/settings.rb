@@ -7,6 +7,7 @@ require File.expand_path '../../lib/helpers/authorization_helper.rb', __FILE__
 require File.expand_path '../../lib/helpers/error_handling.rb', __FILE__
 require File.expand_path '../../lib/helpers/general_helper_methods.rb', __FILE__
 require File.expand_path '../../lib/helpers/log_helper.rb', __FILE__
+require File.expand_path '../../lib/helpers/oauth2_helper.rb', __FILE__
 
 Dir['./config/**/*.rb'].each {|f| require f }
 Dir['./lib/*.rb'].each {|f| require f }
@@ -27,12 +28,6 @@ class Tessitura < Sinatra::Base
   set :root, File.dirname(app_file)
   set :database, db_location
   set :data, TessituraConfig::FILES[:data] || ''
-
-  #==============================#
-  # Rack::SSL permits use of SSL #
-  #==============================#
-
-  use Rack::SslEnforcer, redirect_to: 'https://api.tessitura.io', http_port: 4567 unless ENV['RACK_ENV'] == 'test'
 
   #========================================#
   # Rack::Cors manages cross-origin issues #
@@ -76,4 +71,5 @@ class Tessitura < Sinatra::Base
   helpers Sinatra::ErrorHandling
   helpers Sinatra::GeneralHelperMethods
   helpers Sinatra::LogHelper
+  helpers Sinatra::OAuth2Helper
 end

@@ -7,6 +7,7 @@ module Sinatra
           Sinatra::Tessitura::Routing::Filters.admin_auth_filter(app)
           Sinatra::Tessitura::Routing::Filters.proprietary_auth_filters(app)
           Sinatra::Tessitura::Routing::Filters.communal_auth_filter(app)
+          Sinatra::Tessitura::Routing::Filters.oauth_filter(app)
         end
 
         def self.logging_filters(app)
@@ -32,8 +33,27 @@ module Sinatra
           end
         end
 
+        def self.oauth_filter(app)
+          app.before /\/users\/(\d+)\/calendar/ do 
+            # Ensure the user has authorized the app
+            unless oauth2_credentials.access_token || request.path_info =~ /\A\/oauth2/
+              redirect to: '/oauth2authorize'
+            end
+          end
+
+          app.after /\/users\/(\d+)\/calendar/ do 
+            session[:access_token] = oauth2_credentials.access_token
+            session[:refresh_token] = oauth2_credentials.refresh_token
+            session[:expires_in] = oauth2_credentials.expires_in
+            session[:issued_at] = oauth2_credentials.issued_at
+
+            file_storage = Google::APIClient::FileStorage.new(TessituraConfig::FILES[:credential_store_file])
+            file_storage.write_credentials(oauth2_credentials)
+          end
+        end
+
         def self.proprietary_auth_filters(app)
-          app.before /^\/users\/(\d+)\/tasks(\/)?/ do 
+          app.before /^\/users\/(\d+)\/(tasks)(\/)?/ do 
             request.put? ? protect_collection(request_body) : protect(User)
           end
 
