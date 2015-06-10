@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tessitura (0.0.1.alpha6)
+    tessitura (0.0.1.alpha6.pre.test)
       json (~> 1.8.1)
       mysql2 (~> 0.3, >= 0.3.16)
       rack-cors (~> 0.4)
