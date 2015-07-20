@@ -10,6 +10,7 @@ require 'json'
 
 require File.expand_path('../../config/settings', __FILE__)
 
+require File.expand_path '../models/fach.rb', __FILE__
 require File.expand_path '../models/audition.rb', __FILE__
 require File.expand_path '../models/listing.rb', __FILE__
 require File.expand_path '../models/organization.rb', __FILE__

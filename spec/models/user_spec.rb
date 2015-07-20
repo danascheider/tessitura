@@ -10,7 +10,7 @@ describe User, users: true do
     it { is_expected.to respond_to(:birthdate) }
     it { is_expected.to respond_to(:city) }
     it { is_expected.to respond_to(:country) }
-    it { is_expected.to respond_to(:fach) }
+    it { is_expected.to respond_to(:fach_id) }
     it { is_expected.to respond_to(:admin) }
     it { is_expected.to respond_to(:to_json) }
   end
@@ -106,7 +106,7 @@ describe User, users: true do
   end
 
   describe 'instance methods' do
-    let(:user) { FactoryGirl.create(:user, first_name: 'Jacob', last_name: 'Smith') }
+    let(:user) { FactoryGirl.create(:user_with_fach, first_name: 'Jamie', last_name: 'Smith') }
 
     describe '#admin?' do 
       context 'when the user is not an admin' do 
@@ -202,8 +202,14 @@ describe User, users: true do
         { id:         user.id,
           username:   user.username,
           email:      user.email,
-          first_name: 'Jacob', 
+          first_name: 'Jamie', 
           last_name:  'Smith', 
+          fach: {
+            id: user.fach_id,
+            type: 'soprano',
+            quality: 'lyric',
+            coloratura: true
+          },
           country:    'USA',
           created_at: user.created_at
         }
@@ -214,7 +220,7 @@ describe User, users: true do
       end
 
       it 'doesn\'t include blank or nil attributes' do 
-        expect(user.to_hash).not_to have_key(:fach)
+        expect(user.to_hash).not_to have_key(:city)
       end
 
       it 'doesn\'t include the password' do 

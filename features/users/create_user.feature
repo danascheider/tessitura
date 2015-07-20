@@ -1,3 +1,4 @@
+@users
 Feature: Create a new user
 
   Scenario: Normal user creation
@@ -9,6 +10,15 @@ Feature: Create a new user
       | username  | password      | email            | first_name | last_name | admin |
       | johndoe3  | johnspassword | jdoe@example.com | John       | Doe       | false |
     And the response should indicate the user was saved successfully
+
+  Scenario: Assigning a valid fach
+    When the client submits a POST request to /users with:
+      """
+        {"email":"jdoe@example.com", "username":"janedoe3", "password":"janespassword", "first_name":"Jane", "last_name":"Doe", "fach":{"type":"soprano", "quality":"lyric","coloratura":true}}
+      """
+    Then a new user should be created with the following attributes:
+      | username | password      | email            | first_name | last_name | fach_id | admin |
+      | janedoe3 | janespassword | jdoe@example.com | Jane       | Doe       | 1       | false |
 
   Scenario: Unauthorized attempt to create an admin
     When the client submits a POST request to /users with:

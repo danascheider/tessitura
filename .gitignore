@@ -31,3 +31,6 @@
 /lib/routes/test_routes.rb
 .gems
 .rbenv-gemsets
+
+# Ignore Oauth2 credential store files
+/oauth2/*
