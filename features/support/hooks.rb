@@ -1,3 +1,5 @@
+require_relative './fachs.rb'
+
 Before do
   User.dataset = User.dataset
   FactoryGirl.create(:admin, id: 1, email: 'admin@example.com', username: 'abcd1234', password: 'abcde12345')
@@ -42,3 +44,8 @@ Before('@organizations, @programs, @seasons') { FactoryGirl.create(:organization
 Before('@programs, @seasons') { FactoryGirl.create(:program, id: 1, organization: Organization[1]) }
 Before('@seasons', '~@bulk') { FactoryGirl.create(:season, id: 1, program: Program[1]) }
 Before('@seasons', '@bulk') { FactoryGirl.create(:program_with_everything, id: 2, organization: Organization[1]) }
+Before('@users') do 
+  Fachs.fachs.each do |fach|
+    FactoryGirl.create(:fach, fach)
+  end
+end

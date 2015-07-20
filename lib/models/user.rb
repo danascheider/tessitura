@@ -1,5 +1,6 @@
 class User < Sequel::Model
   one_to_many :task_lists
+  many_to_one :fach
   many_to_many :programs, left_key: :user_id, right_key: :program_id, join_table: :programs_users
 
   # The ++#owner_id++ method returns the user's ++:id++ attribute, since the 
@@ -75,7 +76,9 @@ class User < Sequel::Model
   # For security reasons, the password is not returned in the hash.
 
   def to_hash
-    super.reject {|k,v| v.blank? || k === :password }
+    h = super.reject {|k,v| v.blank? || k === :password || k === :fach_id }
+    h[:fach] = Fach[fach_id].to_h if fach_id
+    h
   end
 
   alias_method :to_h, :to_hash

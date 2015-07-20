@@ -7,7 +7,13 @@ module Sinatra
           # Create a new user
           app.post '/users' do  
             access_denied if setting_admin?
-            Routing.post(User, request_body)
+
+            if (body = request_body).has_key? :fach
+              body[:fach_id] = Fach.infer(body[:fach]).id
+              body.delete :fach
+            end
+
+            Routing.post(User, body)
           end
 
           app.get '/users/:id' do |id|
@@ -17,7 +23,13 @@ module Sinatra
           # `@resource` is defined in the authorization filters
 
           app.put '/users/:id' do |id|
-            update_resource(request_body, @resource)
+
+            if (body = request_body).has_key? :fach
+              body[:fach_id] = Fach.infer(body[:fach]).id
+              body.delete :fach
+            end
+
+            update_resource(body, @resource)
           end
 
           app.delete '/users/:id' do |id|

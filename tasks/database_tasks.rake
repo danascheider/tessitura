@@ -94,8 +94,10 @@ namespace :db do
     desc 'Reset the test database' 
     task :prepare, :PATH do |t, args|
       path = args[:path] || SCHEMA_PATH
+      client.query('use test')
       client.query('SET FOREIGN_KEY_CHECKS = 0')
       client.query('TRUNCATE TABLE tasks')
+      client.query('TRUNCATE TABLE fachs')
       client.query('TRUNCATE TABLE task_lists')
       client.query('TRUNCATE TABLE users')
       client.query('TRUNCATE TABLE organizations')
