@@ -148,7 +148,13 @@ FactoryGirl.define do
     end
   end
 
-  factory :user do 
+  factory :fach do 
+    type 'soprano'
+    quality 'lyric'
+    coloratura true
+  end
+
+  factory :user do     
     sequence(:email) {|n| "user#{n}@example.com"}
     sequence(:username) {|n| "user-25#{n}"}
     sequence(:password) {|n| "p4ssw0rd#{n}"}
@@ -159,6 +165,10 @@ FactoryGirl.define do
 
     factory :admin do 
       admin true
+    end
+
+    factory :user_with_fach do 
+      association :fach
     end
 
     factory :user_with_task_lists do 

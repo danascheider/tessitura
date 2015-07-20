@@ -5,7 +5,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ]
-SimpleCov.start if ENV["COVERAGE"]
+SimpleCov.start if ENV['COVERAGE']
 
 ENV['RACK_ENV'] = 'test'
 
