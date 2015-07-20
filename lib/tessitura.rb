@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'sequel'
 require 'rack/cors'
+require 'rack/ssl-enforcer'
 require 'reactive_support/core_ext/object'
 require 'reactive_extensions/object'
 require 'reactive_extensions/hash'
@@ -9,6 +10,7 @@ require 'json'
 
 require File.expand_path('../../config/settings', __FILE__)
 
+require File.expand_path '../models/fach.rb', __FILE__
 require File.expand_path '../models/audition.rb', __FILE__
 require File.expand_path '../models/listing.rb', __FILE__
 require File.expand_path '../models/organization.rb', __FILE__
@@ -49,5 +51,28 @@ class Tessitura < Sinatra::Base
 
   post '/login' do
     login
+  end
+
+  get '/ping' do 
+    db_writable = false
+
+    DB.transaction(rollback: :always) do 
+      user = User.new
+
+      begin
+        db_writable = true if user.save(validate: false)
+      rescue Sequel::UniqueConstraintViolation
+        db_writable = true
+      end
+    end
+
+    {
+      :environment    => ENV['RACK_ENV'],
+      :db_url         => DB.url,
+      :schema_current => Sequel::Migrator.is_current?(DB, File.expand_path('../../db/migrate', __FILE__)),
+      :db_online      => !!DB,
+      :db_readable    => !!User.first,
+      :db_writable    => db_writable
+    }.to_json
   end
 end

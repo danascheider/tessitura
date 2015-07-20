@@ -1,13 +1,13 @@
-== Tessitura {<img src="https://travis-ci.org/danascheider/tessitura.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/danascheider/tessitura] {<img src="https://codeclimate.com/github/danascheider/canto.png" />}[https://codeclimate.com/github/danascheider/canto] {<img src="https://coveralls.io/repos/danascheider/canto/badge.png?branch=master" />}[https://coveralls.io/r/danascheider/canto] {<img src="https://gemnasium.com/danascheider/canto.svg" alt="Dependency Status" />}[https://gemnasium.com/danascheider/canto] 
+== Tessitura {<img src="https://travis-ci.org/danascheider/tessitura.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/danascheider/tessitura] {<img src="https://codeclimate.com/github/danascheider/canto.png" />}[https://codeclimate.com/github/danascheider/canto] {<img src="https://coveralls.io/repos/danascheider/canto/badge.png?branch=master" />}[https://coveralls.io/r/danascheider/canto] {<img src="https://gemnasium.com/danascheider/tessitura.svg" alt="Dependency Status" />}[https://gemnasium.com/danascheider/tessitura]
 
-Tessitura is a web-based career management app for classical singers. It provides a variety of functionality tailored to the specific needs of opera singers. This repo contains the code for the back-end Sinatra API. The API uses MySQL with the Mysql2 adapter and with the Sequel gem handling ORM functions. The front end is being developed in [another repo](https://github.com/danascheider/tessitura-front-end) using Backbone.js. 
+Tessitura is a web-based career management app for classical singers. It provides a variety of functionality tailored to the specific needs of opera singers. This repo contains the code for the back-end Sinatra API. The API uses MySQL with the Mysql2 adapter and with the Sequel gem handling ORM functions. The front end is being developed in {another repo}[https://github.com/danascheider/tessitura-front-end] using Backbone.js. 
 
 === Models
 For the most up-to-date information about models and their attributes, see the most recent schema file in the +/db/schema_migrations+ directory. 
 
 ==== Users
 
-Users can be regular users or admins. Users own task lists (and by extension, the tasks on the lists), and have a many-to-many relationship to programs (which act in this context as recommendations). Users are assumed to be classical singers and have the following attributes:
+Users can be regular users or admins. Users own task lists (and by extension, the tasks on the lists), and have a many-to-many relationship to programs (which act in this context as recommendations). They also have a many-to-one association with Fachs. Users are assumed to be classical singers and have the following attributes:
 * ID
 * Username
 * Password
@@ -15,7 +15,7 @@ Users can be regular users or admins. Users own task lists (and by extension, th
 * First name
 * Last name
 * Birthdate
-* Fach
+* Fach ID
 * City 
 * Country
 * Created at
@@ -144,29 +144,41 @@ Auditions are representations of physical audition times and places. They also s
 * Created at
 * Updated at
 
+==== Fachs
+
+Fachs store the characteristics of voices. They have the following attributes:
+* Type (soprano, mezzo-soprano, contralto, countertenor, tenor, baritone, or bass)
+* Quality (lyric or dramatic)
+* Coloratura (boolean)
+
+Fachs belong to users and will also eventually be associated with repertoire. The
+nature of fachs is such that they will not be created dynamically and, in fact,
+Tessitura does not provide endpoints for creating, editing, or deleting them.
+Instead, they are entered into the database as seed data.
+
 === Development Approach
 
 This app is being developed using a rigorous behavior-driven approach, meaning test-first, agile work-flows. I aim for 100% test coverage and Code Climate rating >= 3.8 for classes and modules other than Tessitura itself\*. Refactoring both app code and tests is a major part of the workflow on this project. Everything should stay as DRY as possible.
 
-At this point, development is happening on the following git branches:
+At this point, development is happening on the following git branches. Additional temporary branches may be created and destroyed along the way, particularly if things get messy when adding new features or modifying architecture.
 ==== not_passing
-This is the branch where new tests are written. The code stays here until either all the tests pass\* or something gets ugly. If tests pass, the code is merged to +master+ and refactoring begins. If something gets ugly, the code is merged to +messy+.
-==== messy
-This is where code goes when it becomes clear that implementation of a certain feature will be non-trivial. One sign that this may be the case is if, on the +not_passing+ branch, implementing one feature causes another test to break, or something like that.
+This is the branch where new tests are written. The code stays here until all the tests pass\*.
 ==== refactoring
 This is the branch where passing code gets refactored. Non-passing code should not be committed to +refactoring+.\* After each iteration, both the app and the tests should be refactored.
 ==== master
 When code passes, it gets merged to +master+. Non-passing code should not be merged.\*
+
+There is an additional branch for each versioned release. I do not change things on these branches after the release.
 
 \* At this point in development, it should be noted that Cucumber tests marked `@integration` are 
 permitted and expected to fail due to problems with the test configuration that don't appear to 
 reflect the functionality. These tests should be marked pending so as not to break Travis builds.
 
 === Contributing
-While contributions are welcome and appreciated, I ask contributors to keep in mind that this app will most likely be taken closed-source in the not-so-distant future. As the app grows, I will spin off helper modules into gems as I am able, which will then be made open-source and available on https://rubygems.org. Since these will continue to be available to the community, they are where I recommend you focus if you would like to contribute.
+While contributions are welcome and appreciated, I ask contributors to keep in mind that this app will most likely be taken closed-source in the future. As the app grows, I will spin off helper modules into gems as I am able, which will then be made open-source and available on https://rubygems.org. Since these will continue to be available to the community, they are where I recommend you focus if you would like to contribute.
 
 \* CodeClimate support has informed me that CodeClimate does not recognize DSLs. Consequently, the rating of the Tessitura class may be worse than is deserved. The rating has been improved - quite appropriately - by separating routes into their own modules that are then registered on the +Tessitura+ class. 
 
 === Versioning
 
-Version 0.0.1.alpha5; no stable release available.
+Version 0.1.0.alpha1; no stable release available.

@@ -5,7 +5,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ]
-SimpleCov.start if ENV["COVERAGE"]
+SimpleCov.start if ENV['COVERAGE']
 
 ENV['RACK_ENV'] = 'test'
 
@@ -29,6 +29,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   DB = Sequel::DATABASES.first
+  Sequel.extension :migration
 
   config.before(:suite) do
     if ENV['TRAVIS']

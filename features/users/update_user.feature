@@ -10,9 +10,22 @@ Feature: Updating user profiles
     And the response should indicate the user was updated successfully
 
       Examples: 
-        | id | num1 | attribute | value          | num2 |
-        | 3  | 3rd  | fach      | lyric baritone | 3rd  |
-        | 3  | 1st  | fach      | heldentenor    | 3rd  | 
+        | id | num1 | attribute | value     | num2 |
+        | 3  | 3rd  | city      | Cleveland | 3rd  |
+        | 3  | 1st  | city      | Ann Arbor | 3rd  | 
+
+  Scenario Outline: Update fach
+    When the client submits a PUT request to /users/<id> with the <num1> user's credentials and:
+      """
+        {"fach":{"type":"soprano","quality":"dramatic"}}
+      """
+    Then the <num2> user's fach_id should be changed to 4
+    And the response should indicate the user was updated successfully
+
+      Examples:
+        | id | num1 | num2 |
+        | 3  | 3rd  | 3rd  |
+        | 3  | 1st  | 3rd  |
 
   Scenario: User updates their own profile with invalid attributes
     When the client submits a PUT request to /users/3 with the 3rd user's credentials and:

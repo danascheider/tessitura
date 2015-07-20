@@ -26,3 +26,11 @@
 
 # Ignore gem
 /*.gem
+
+# Ignore the test routes, which are only present on the test server
+/lib/routes/test_routes.rb
+.gems
+.rbenv-gemsets
+
+# Ignore Oauth2 credential store files
+/oauth2/*

@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
 
   s.name                      = 'tessitura'
   s.version                   = TessituraPackage::Version::STRING
-  s.date                      = '2015-05-30'
-  s.summary                   = 'Tessitura task management for opera singers - test version'
+  s.date                      = '2015-07-20'
+  s.summary                   = 'Tessitura task management for opera singers'
   s.authors                   = ['Dana Scheider']
 
   s.files                     = TessituraPackage::Files::FILES
@@ -20,15 +20,17 @@ Gem::Specification.new do |s|
   s.executables               = ['tessitura-test']
   s.default_executable        = 'tessitura-test'
 
+  s.add_runtime_dependency     'google-api-client', '~> 0.8', '>= 0.8.6'
   s.add_runtime_dependency     'json', '~> 1.8.1'
   s.add_runtime_dependency     'mysql2', '~> 0.3', '>= 0.3.16'
   s.add_runtime_dependency     'rack-cors', '~> 0.4'
-  s.add_runtime_dependency     'reactive_extensions', '~> 0.5.0'
-  s.add_runtime_dependency     'reactive_support', '~> 0.5.0'
+  s.add_runtime_dependency     'rack-ssl-enforcer', '~> 0.2', '>= 0.2.8'
+  s.add_runtime_dependency     'reactive_extensions', '~> 0.5'
+  s.add_runtime_dependency     'reactive_support', '~> 0.5'
   s.add_runtime_dependency     'sequel', '~> 4.21'
-  s.add_runtime_dependency     'sinatra', '~> 1.4.6'
-  s.add_runtime_dependency     'slogger', '~> 0.0.11'
-  s.add_runtime_dependency     'thin', '~> 1.6.3'
+  s.add_runtime_dependency     'sinatra', '~> 1.4', '>= 1.4.6'
+  s.add_runtime_dependency     'slogger', '~> 0.0', '>= 0.0.11'
+  s.add_runtime_dependency     'thin', '~> 1.6', '>= 1.6.3'
 
   s.add_development_dependency 'rspec', '~> 3.2'
   s.add_development_dependency 'bundler', '~> 1.7'
@@ -38,11 +40,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'json_spec', '~> 1.1'
   s.add_development_dependency 'cucumber', '~> 2.0'
   s.add_development_dependency 'cucumber-sinatra', '~> 0.5.0'
-  s.add_development_dependency 'capybara', '~> 2.4.4'
+  s.add_development_dependency 'capybara', '~> 2.4'
   s.add_development_dependency 'rack-test', '~> 0.6.3'
-  s.add_development_dependency 'capybara-webkit', '~> 1.5.1'
-  s.add_development_dependency 'factory_girl', '~>4.5'
-  s.add_development_dependency 'colorize', '0.7.7'
+  s.add_development_dependency 'capybara-webkit', '~> 1.5'
+  s.add_development_dependency 'factory_girl', '~> 4.5'
+  s.add_development_dependency 'colorize', '~> 0.7'
 
   s.has_rdoc         = true
   s.homepage         = 'http://github.com/danascheider/tessitura'

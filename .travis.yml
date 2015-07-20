@@ -3,6 +3,7 @@ rvm:
 - "2.2.2"
 env: COVERAGE=true
 install: 'bundle install'
+sudo: false
 before_install: 
   - mkdir log; touch log/requests.log log/responses.log
   - rm tasks/database_tasks.rake
