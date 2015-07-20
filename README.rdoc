@@ -7,7 +7,7 @@ For the most up-to-date information about models and their attributes, see the m
 
 ==== Users
 
-Users can be regular users or admins. Users own task lists (and by extension, the tasks on the lists), and have a many-to-many relationship to programs (which act in this context as recommendations). Users are assumed to be classical singers and have the following attributes:
+Users can be regular users or admins. Users own task lists (and by extension, the tasks on the lists), and have a many-to-many relationship to programs (which act in this context as recommendations). They also have a many-to-one association with Fachs. Users are assumed to be classical singers and have the following attributes:
 * ID
 * Username
 * Password
@@ -15,7 +15,7 @@ Users can be regular users or admins. Users own task lists (and by extension, th
 * First name
 * Last name
 * Birthdate
-* Fach
+* Fach ID
 * City 
 * Country
 * Created at
@@ -143,6 +143,18 @@ Auditions are representations of physical audition times and places. They also s
 * Pianist fee
 * Created at
 * Updated at
+
+==== Fachs
+
+Fachs store the characteristics of voices. They have the following attributes:
+* Type (soprano, mezzo-soprano, contralto, countertenor, tenor, baritone, or bass)
+* Quality (lyric or dramatic)
+* Coloratura (boolean)
+
+Fachs belong to users and will also eventually be associated with repertoire. The
+nature of fachs is such that they will not be created dynamically and, in fact,
+Tessitura does not provide endpoints for creating, editing, or deleting them.
+Instead, they are entered into the database as seed data.
 
 === Development Approach
 
