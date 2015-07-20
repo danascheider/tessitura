@@ -13,7 +13,7 @@ OptionParser.new do |opts|
   opts.banner = "Usage: tessitura [options]"
 
   opts.on('-pPORT', '--port=PORT', 'Specify the port to bind Tessitura (default 3000)') do |p|
-    options << "-p #{p}"
+    options << "-p #{p} "
   end
 
   opts.on('-fFILE', '--database-file=FILE', 'Specify the database YAML file') do |file|
@@ -35,10 +35,10 @@ end.parse!
 
 begin
   path = File.expand_path('../../config.ru', __FILE__)
-  system "thin start -R #{path} #{options.chomp} -d"
+  system "thin start -R #{path} #{options.chomp} -dP ~/tmp/pids/tessitura.pid"
 rescue LoadError => e
   require 'rubygems'
   path = File.expand_path('../../', __FILE__)
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
-  system "thin start -R #{path}/config.ru #{options.chomp} -d"
+  system "thin start -R #{path} #{options.chomp} -dP ~/tmp/pids/tessitura.pid"
 end

@@ -28,12 +28,6 @@ class Tessitura < Sinatra::Base
   set :database, db_location
   set :data, TessituraConfig::FILES[:data] || ''
 
-  #==============================#
-  # Rack::SSL permits use of SSL #
-  #==============================#
-
-  use Rack::SslEnforcer, redirect_to: 'https://api.tessitura.io', http_port: 4567 unless ENV['RACK_ENV'] == 'test'
-
   #========================================#
   # Rack::Cors manages cross-origin issues #
   #========================================#
