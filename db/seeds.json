@@ -40,4 +40,107 @@
       "position":5
     }
   ]
+
+  "fachs": [
+    {
+      "type":"soprano",
+      "quality":"lyric",
+      "coloratura":true
+    },
+    {
+      "type":"soprano",
+      "quality":"lyric",
+      "coloratura":false
+    },
+    {
+      "type":"soprano",
+      "quality":"dramatic",
+      "coloratura":true
+    },
+    {
+      "type":"soprano",
+      "quality":"dramatic",
+      "coloratura":false
+    },
+    {
+      "type":"mezzo-soprano",
+      "quality":"lyric",
+      "coloratura":true
+    },
+    {
+      "type":"mezzo-soprano",
+      "quality":"lyric",
+      "coloratura":false
+    },
+    {
+      "type":"mezzo-soprano",
+      "quality":"dramatic",
+      "coloratura":true
+    },
+    {
+      "type":"mezzo-soprano",
+      "quality":"dramatic",
+      "coloratura":true
+    },
+    {
+      "type":"contralto",
+      "coloratura":true
+    },
+    {
+      "type":"contralto",
+      "coloratura":false
+    },
+    {
+      "type":"countertenor"
+    },
+    {
+      "type":"tenor",
+      "quality":"lyric",
+      "coloratura":true
+    },
+    {
+      "type":"tenor",
+      "quality":"lyric",
+      "coloratura":false
+    },
+    {
+      "type":"tenor",
+      "quality":"dramatic"
+    },
+    {
+      "type":"baritone",
+      "quality":"lyric",
+      "coloratura":true
+    },
+    {
+      "type":"baritone",
+      "quality":"lyric",
+      "coloratura":false
+    },
+    {
+      "type":"baritone",
+      "quality":"dramatic",
+      "coloratura":true
+    },
+    {
+      "type":"baritone",
+      "quality":"dramatic",
+      "coloratura":false
+    },
+    {
+      "type":"bass",
+      "quality": "lyric",
+      "coloratura":true,
+    },
+    {
+      "type":"bass",
+      "quality": "dramatic",
+      "coloratura": true
+    },
+    {
+      "type":"bass",
+      "quality":"dramatic",
+      "coloratura": false
+    }
+  ]
 }
