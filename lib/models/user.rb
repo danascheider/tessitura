@@ -76,8 +76,7 @@ class User < Sequel::Model
   # For security reasons, the password is not returned in the hash.
 
   def to_hash
-    h = super.reject {|k,v| v.blank? || k === :password || k === :fach_id }
-    h[:fach] = Fach[fach_id].to_h if fach_id
+    h = super.reject {|k,v| v.blank? || k === :password }
     h
   end
 
