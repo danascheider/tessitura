@@ -1,7 +1,13 @@
 Sequel.migration do
   change do
-    create_table(:organizations) do
+    create_table(:fachs) do
+      String :type, :size=>255
+      String :quality, :size=>255
+      TrueClass :coloratura
       primary_key :id
+    end
+    
+    create_table(:organizations) do
       String :name, :size=>255
       String :address_1, :size=>255
       String :address_2, :size=>255
@@ -18,10 +24,10 @@ Sequel.migration do
       String :fax, :size=>255
       String :created_at, :size=>255
       String :updated_at, :size=>255
+      primary_key :id
     end
     
     create_table(:programs) do
-      primary_key :id
       Integer :organization_id
       String :type, :size=>255
       Integer :min_age
@@ -36,6 +42,8 @@ Sequel.migration do
       String :country, :size=>255
       String :region, :size=>255
       String :city, :size=>255
+      
+      primary_key :id
     end
     
     create_table(:users, :ignore_index_errors=>true) do
@@ -114,7 +122,7 @@ Sequel.migration do
     
     create_table(:listings, :ignore_index_errors=>true) do
       primary_key :id
-      String :title, :size=>255, :null=>false
+      String :title, :size=>255
       DateTime :created_at
       DateTime :updated_at
       foreign_key :season_id, :seasons, :key=>[:id]
@@ -125,9 +133,9 @@ Sequel.migration do
     create_table(:tasks, :ignore_index_errors=>true) do
       primary_key :id
       foreign_key :task_list_id, :task_lists, :key=>[:id]
-      String :title, :size=>255, :null=>false
-      String :status, :default=>"new", :size=>255, :null=>false
-      String :priority, :default=>"normal", :size=>255, :null=>false
+      String :title, :size=>255
+      String :status, :default=>"new", :size=>255
+      String :priority, :default=>"normal", :size=>255
       DateTime :deadline
       String :description, :text=>true
       Integer :owner_id
