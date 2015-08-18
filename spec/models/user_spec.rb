@@ -204,12 +204,7 @@ describe User, users: true do
           email:      user.email,
           first_name: 'Jamie', 
           last_name:  'Smith', 
-          fach: {
-            id: user.fach_id,
-            type: 'soprano',
-            quality: 'lyric',
-            coloratura: true
-          },
+          fach_id: user.fach_id,
           country:    'USA',
           created_at: user.created_at
         }
