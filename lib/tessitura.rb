@@ -57,10 +57,10 @@ class Tessitura < Sinatra::Base
     db_writable = false
 
     DB.transaction(rollback: :always) do 
-      user = User.new
+      fach = Fach.new()
 
       begin
-        db_writable = true if user.save(validate: false)
+        db_writable = true if fach.save(validate: false)
       rescue Sequel::UniqueConstraintViolation
         db_writable = true
       end

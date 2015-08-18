@@ -54,22 +54,16 @@ describe Tessitura do
       end
 
       it 'tells you the database is not readable' do 
-        allow(User).to receive(:first).and_return(nil)
+        allow(Fach).to receive(:first).and_return(nil)
         get path
         expect(JSON.parse(last_response.body)['db_readable']).to be false
       end
 
       it 'tells you the database is not writable' do 
-        allow_any_instance_of(User).to receive(:save).and_return(nil)
+        allow_any_instance_of(Fach).to receive(:save).and_return(nil)
         get path
         expect(JSON.parse(last_response.body)['db_writable']).to be false
       end
     end
-    #
-    # Database connection works?
-    # Can read and write to the database?
-    # Does the database have the right schema?
-    # ENV['RACK_ENV']
-    #
   end
 end
