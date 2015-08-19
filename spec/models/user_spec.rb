@@ -8,11 +8,7 @@ describe User, users: true do
     it { is_expected.to respond_to(:last_name) }
     it { is_expected.to respond_to(:email) }
     it { is_expected.to respond_to(:birthdate) }
-    it { is_expected.to respond_to(:address_1) }
-    it { is_expected.to respond_to(:address_2) }
     it { is_expected.to respond_to(:city) }
-    it { is_expected.to respond_to(:state) }
-    it { is_expected.to respond_to(:zip) }
     it { is_expected.to respond_to(:country) }
     it { is_expected.to respond_to(:fach_id) }
     it { is_expected.to respond_to(:admin) }
