@@ -106,7 +106,7 @@ describe User, users: true do
   end
 
   describe 'instance methods' do
-    let(:user) { FactoryGirl.create(:user_with_fach, first_name: 'Jamie', last_name: 'Smith', address_1: '2002 NW Johnson St. #7', city: 'Portland') }
+    let(:user) { FactoryGirl.create(:user_with_fach, first_name: 'Jamie', last_name: 'Smith') }
 
     describe '#admin?' do 
       context 'when the user is not an admin' do 
@@ -204,10 +204,8 @@ describe User, users: true do
           email:      user.email,
           first_name: 'Jamie', 
           last_name:  'Smith', 
-          address_1: '2002 NW Johnson St. #7',
-          city: 'Portland',
-          country:    'USA',
           fach_id: user.fach_id,
+          country:    'USA',
           created_at: user.created_at
         }
       }
@@ -217,7 +215,7 @@ describe User, users: true do
       end
 
       it 'doesn\'t include blank or nil attributes' do 
-        expect(user.to_hash).not_to have_key(:zip)
+        expect(user.to_hash).not_to have_key(:city)
       end
 
       it 'doesn\'t include the password' do 

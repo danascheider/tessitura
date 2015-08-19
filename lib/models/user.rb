@@ -128,7 +128,11 @@ class User < Sequel::Model
     validates_min_length 8, :username
     validates_min_length 8, :password
 <<<<<<< HEAD
+<<<<<<< HEAD
     validates_includes Data::STATES, :state if state
+=======
+    validates_includes Data::STATES, :state
+>>>>>>> parent of 5385e5b... Verify that address details are included in the user's to_hash method
     validates_format /^\d{5}$/, :zip if zip
 =======
 >>>>>>> parent of 838b1b8... Add validations for new fields
