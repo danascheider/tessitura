@@ -31,7 +31,7 @@ namespace :db do
         client.query('CREATE DATABASE production;')
         STDOUT.puts 'Database \'production\' created.'.green
       rescue Mysql2::Error
-        STDOUT.puts 'Database \'production\' exists...'.blue
+        STDERR.puts 'Database \'production\' exists...'.blue
       end
     end
 
@@ -44,7 +44,7 @@ namespace :db do
           client.query('DROP DATABASE production;')
           STDOUT.puts 'The target has been neutralized.'.green
         rescue Mysql2::Error
-          STDOUT.puts 'Database \'production\' was not found.'.yellow
+          STDERR.puts 'Database \'production\' was not found.'.yellow
         end
       else
         STDOUT.puts 'Request canceled.'.blue
@@ -55,7 +55,7 @@ namespace :db do
     task :migrate, [:PATH] => ['db:production:create'] do |t, args|
       db = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['production'], 'production'))
       path = args[:path] || MIGRATION_PATH
-      Sequel::Migrator.run(db, path)
+      Sequel::Migrator.run(db, path, allow_missing_migration_files: true)
       STDOUT.puts 'Database \'production\' migrated successfully.'.green
     end
   end
@@ -69,7 +69,7 @@ namespace :db do
         client.query('CREATE DATABASE test;')
         STDOUT.puts 'Database \'test\' created.'.green
       rescue Mysql2::Error
-        STDOUT.puts 'Database \'test\' exists...'.blue
+        STDERR.puts 'Database \'test\' exists...'.blue
       end
     end
 
@@ -79,7 +79,7 @@ namespace :db do
         client.query('DROP DATABASE test;')
         STDOUT.puts 'The target has been neutralized.'.green
       rescue Mysql2::Error
-        STDOUT.puts 'Database \'test\' was not found.'.yellow
+        STDERR.puts 'Database \'test\' was not found.'.yellow
       end
     end
 
@@ -87,7 +87,7 @@ namespace :db do
     task :migrate, [:PATH] => ['db:test:create'] do |t, args|
       db = Sequel.connect(DatabaseTaskHelper.get_string(YAML_DATA['test'], 'test'))
       path = args[:path] || MIGRATION_PATH
-      Sequel::Migrator.run(db, path)
+      Sequel::Migrator.run(db, path, allow_missing_migration_files: true)
       STDOUT.puts 'Database \'test\' migrated successfully.'.green
     end
 
