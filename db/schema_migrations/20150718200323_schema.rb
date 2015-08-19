@@ -4,9 +4,7 @@ Sequel.migration do
       String :type, :size=>255
       String :quality, :size=>255
       TrueClass :coloratura
-      Integer :id, :null=>false
-      
-      primary_key [:id]
+      primary_key :id
     end
     
     create_table(:organizations) do
@@ -26,9 +24,7 @@ Sequel.migration do
       String :fax, :size=>255
       String :created_at, :size=>255
       String :updated_at, :size=>255
-      Integer :id, :null=>false
-      
-      primary_key [:id]
+      primary_key :id
     end
     
     create_table(:programs) do
@@ -40,7 +36,6 @@ Sequel.migration do
       String :contact_name, :size=>255
       String :contact_phone, :size=>255
       String :contact_email, :size=>255
-      Integer :id, :null=>false
       DateTime :created_at
       DateTime :updated_at
       String :name, :size=>255
@@ -48,7 +43,7 @@ Sequel.migration do
       String :region, :size=>255
       String :city, :size=>255
       
-      primary_key [:id]
+      primary_key :id
     end
     
     create_table(:users, :ignore_index_errors=>true) do

@@ -18,6 +18,7 @@
 #   * mezzo-soprano/dramatic
 #   * contralto/coloratura
 #   * contralto
+#   * countertenor/coloratura
 #   * countertenor
 #   * tenor/lyric/coloratura
 #   * tenor/lyric
