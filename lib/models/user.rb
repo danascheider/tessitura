@@ -21,8 +21,7 @@ class User < Sequel::Model
       'NM', 'NV', 'NY', 'OH', 'OK',
       'OR', 'PA', 'RI', 'SC', 'SD',
       'TN', 'TX', 'UT', 'VA', 'VT',
-      'WA', 'WI', 'WV', 'WY', 'MA',
-      nil
+      'WA', 'WI', 'WV', 'WY', 'MA'
     ]
   end
 
@@ -143,7 +142,7 @@ class User < Sequel::Model
     validates_format /@/, :email, message: 'is not a valid e-mail address'
     validates_min_length 8, :username
     validates_min_length 8, :password
-    validates_includes Data::STATES, :state
+    validates_includes Data::STATES, :state if state
     validates_format /^\d{5}$/, :zip if zip
   end
 end
