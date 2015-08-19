@@ -10,6 +10,22 @@ class User < Sequel::Model
 
   alias_method :owner_id, :id
 
+  module Data
+    STATES = [
+      'AL', 'AK', 'AR', 'AZ', 'CA',
+      'CO', 'CT', 'DE', 'FL', 'GA',
+      'HI', 'ID', 'IL', 'IN', 'IA',
+      'KS', 'KY', 'LA', 'MD', 'ME',
+      'MI', 'MN', 'MO', 'MT', 'NC',
+      'ND', 'ND', 'NE', 'NH', 'NJ', 
+      'NM', 'NV', 'NY', 'OH', 'OK',
+      'OR', 'PA', 'RI', 'SC', 'SD',
+      'TN', 'TX', 'UT', 'VA', 'VT',
+      'WA', 'WI', 'WV', 'WY', 'MA',
+      nil
+    ]
+  end
+
   # The ++#admin?++ method aliases the ++#admin++ attribute - a boolean returning
   # true if the user is an admin.
 
@@ -127,5 +143,7 @@ class User < Sequel::Model
     validates_format /@/, :email, message: 'is not a valid e-mail address'
     validates_min_length 8, :username
     validates_min_length 8, :password
+    validates_includes Data::STATES, :state
+    validates_format /^\d{5}$/, :zip if zip
   end
 end

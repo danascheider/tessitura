@@ -8,7 +8,11 @@ describe User, users: true do
     it { is_expected.to respond_to(:last_name) }
     it { is_expected.to respond_to(:email) }
     it { is_expected.to respond_to(:birthdate) }
+    it { is_expected.to respond_to(:address_1) }
+    it { is_expected.to respond_to(:address_2) }
     it { is_expected.to respond_to(:city) }
+    it { is_expected.to respond_to(:state) }
+    it { is_expected.to respond_to(:zip) }
     it { is_expected.to respond_to(:country) }
     it { is_expected.to respond_to(:fach_id) }
     it { is_expected.to respond_to(:admin) }
@@ -98,6 +102,40 @@ describe User, users: true do
 
           it 'is invalid without a last_name' do 
             user.last_name = nil 
+            expect(user).not_to be_valid
+          end
+        end
+
+        context 'state validations' do 
+          it 'accepts abbreviated states' do 
+            user.state = 'OR'
+            expect(user).to be_valid
+          end
+
+          it 'doesn\'t accept full-length states' do 
+            user.state = 'Oregon'
+            expect(user).not_to be_valid
+          end
+
+          it 'doesn\'t accept non-states' do 
+            user.state = 'ZZ'
+            expect(user).not_to be_valid
+          end
+        end
+
+        context 'zip code validations' do 
+          it 'accepts 5-digit numbers' do 
+            user.zip = 12345
+            expect(user).to be_valid
+          end
+
+          it 'doesn\'t accept shorter numbers' do 
+            user.zip = 1234
+            expect(user).not_to be_valid
+          end
+
+          it 'doesn\'t accept longer numbers' do 
+            user.zip = 123456
             expect(user).not_to be_valid
           end
         end
