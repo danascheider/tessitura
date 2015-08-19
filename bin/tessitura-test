@@ -40,5 +40,5 @@ rescue LoadError => e
   require 'rubygems'
   path = File.expand_path('../../', __FILE__)
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
-  system "thin start -R #{path} #{options.chomp} -dP ~/tmp/pids/tessitura.pid"
+  system "thin start -R #{path}/config.ru #{options.chomp} -dP ~/tmp/pids/tessitura.pid"
 end
