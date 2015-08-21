@@ -44,15 +44,15 @@ When(/^the client submits a POST request to (\/organizations|\/churches) with ad
   post path, string.to_s, 'CONTENT_TYPE' => 'application/json'
 end
 
-When(/^the client submits a POST request to \/organizations with no credentials and:$/) do |string|
-  @count = Organization.count 
+When(/^the client submits a POST request to (\/organizations|\/churches) with no credentials and:$/) do |path, string|
+  @count = path.match(/church/) ? Church.count : Organization.count
   post 'organizations', string.to_s, 'CONTENT_TYPE' => 'application/json'
 end
 
-When(/^the client submits a POST request to \/organizations with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |uid, string|
-  @count = Organization.count
+When(/^the client submits a POST request to (\/organizations|\/churches) with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |path, uid, string|
+  @count = path.match(/church/) ? Church.count : Organization.count
   authorize_with(User[uid])
-  post '/organizations', string.to_s, 'CONTENT_TYPE' => 'application/json'
+  post path, string.to_s, 'CONTENT_TYPE' => 'application/json'
 end
 
 # Create Program

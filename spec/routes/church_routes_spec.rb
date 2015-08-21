@@ -16,5 +16,15 @@ describe Tessitura, churches: true do
         let(:agent) { FactoryGirl.create(:admin) }
       end
     end
+
+    context 'with user authorization' do 
+      it_behaves_like 'an unauthorized POST request' do 
+        let(:agent) { FactoryGirl.create(:user) }
+      end
+    end
+
+    context 'with no authorization' do 
+      it_behaves_like 'a POST request without credentials'
+    end
   end
 end
