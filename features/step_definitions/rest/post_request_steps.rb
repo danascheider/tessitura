@@ -38,10 +38,10 @@ end
 
 # Create Organization
 # ===================
-When(/^the client submits a POST request to \/organizations with admin credentials and:$/) do |string|
-  @count = Organization.count
+When(/^the client submits a POST request to (\/organizations|\/churches) with admin credentials and:$/) do |path, string|
+  @count = path.match(/churches/) ? Church.count : Organization.count
   authorize_with(User[1])
-  post '/organizations', string.to_s, 'CONTENT_TYPE' => 'application/json'
+  post path, string.to_s, 'CONTENT_TYPE' => 'application/json'
 end
 
 When(/^the client submits a POST request to \/organizations with no credentials and:$/) do |string|
