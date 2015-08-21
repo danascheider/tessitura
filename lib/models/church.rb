@@ -1,0 +1,2 @@
+class Church < Organization
+end
