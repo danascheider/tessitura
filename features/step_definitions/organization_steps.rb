@@ -1,3 +1,8 @@
+Given(/^there are (\d+) churches$/) do |count|
+  # Subtract 1 because there is already one church, from the before hook
+  FactoryGirl.create_list(:church, count.to_i - 1)
+end
+
 Given(/^there are (\d+) organizations$/) do |count|
   # Subtract 1 because there is already one organization, from the hook
   FactoryGirl.create_list(:organization, count.to_i - 1)
