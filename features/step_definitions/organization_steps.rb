@@ -52,15 +52,19 @@ Then(/^the organization should not be destroyed$/) do
   expect(Organization[1]).to be_an(Organization)
 end
 
-Then(/^the organization's name should not be empty$/) do
+Then(/^the (organization|church)'s name should not be empty$/) do |org|
   expect(@organization.name).not_to be_blank
+end
+
+Then(/^the church's (.*) should be "(.*?)"$/) do |attr, val|
+  expect(@organization.refresh.send(attr.to_sym)).to eql val
 end
 
 Then(/^the organization's (.*) should be "(.*?)"$/) do |attr,val|
   expect(@organization.refresh.send(attr.to_sym)).to eql val
 end
 
-Then(/^the organization's (.*) should not be "(.*?)"$/) do |attr, val|
+Then(/^the (organization|church)'s (.*) should not be "(.*?)"$/) do |org, attr, val|
   expect(@organization.refresh.send(attr.to_sym)).not_to eql val
 end
 

@@ -34,8 +34,8 @@ end
 # Updating Organizations
 # ======================
 
-When(/^the client submits a PUT request to \/organizations\/(\d+) with (.*) credentials and:$/) do |id, type, string|
-  @organization = Organization[id]
+When(/^the client submits a PUT request to \/(organizations|churches)\/(\d+) with (.*) credentials and:$/) do |path, id, type, string|
+  @organization = path.match(/church/) ? Church[id] : Organization[id]
   authorize_with User[type === 'admin' ? 1 : 2] unless type === 'no'
   put "organizations/#{id}", string.to_s, 'CONTENT_TYPE' => 'application/json'
 end

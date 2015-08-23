@@ -16,8 +16,8 @@ shared_examples 'an authorized PUT request' do
     end
 
     it 'returns the updated resource as a JSON object' do 
-      updated = resource.update(JSON.parse(valid_attributes))
       put path, valid_attributes, 'CONTENT_TYPE' => 'application/json'
+      updated = resource.update(JSON.parse(valid_attributes))
       expect(last_response.body).to eql(updated.to_json);
     end
   end

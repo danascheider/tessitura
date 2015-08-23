@@ -8,11 +8,15 @@ module Sinatra
           end
 
           app.get '/churches' do 
-            Church.all.to_json
+            (Church.all || []).to_json
           end
 
           app.get '/churches/:id' do |id|
             Routing.get_single(Church, id)
+          end
+
+          app.put '/churches/:id' do |id|
+            update_resource(request_body, Church[id]) || 404
           end
 
           app.delete '/churches/:id' do |id|
