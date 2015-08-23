@@ -6,6 +6,10 @@ module Sinatra
           app.post '/churches' do 
             Routing.post(Church, request_body)
           end
+
+          app.delete '/churches/:id' do |id|
+            Routing.delete(Church, id)
+          end
         end
       end
     end

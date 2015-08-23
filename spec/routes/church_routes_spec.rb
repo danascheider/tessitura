@@ -27,4 +27,21 @@ describe Tessitura, churches: true do
       it_behaves_like 'a POST request without credentials'
     end
   end
+
+  describe 'DELETE' do 
+    let(:path) { "/churches/#{church.id}" }
+    let(:nonexistent_resource_path) { "/churches/8372311" }
+
+    context 'with admin authorization' do
+      it_behaves_like 'an authorized DELETE request' do 
+        let(:agent) { FactoryGirl.create(:admin) }
+      end
+    end
+
+    context 'with user authorization' do 
+      it_behaves_like 'an unauthorized DELETE request' do 
+        let(:agent) { FactoryGirl.create(:user) }
+      end
+    end
+  end
 end

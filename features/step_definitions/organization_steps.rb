@@ -31,8 +31,16 @@ Then(/^the new church should be called "(.*?)"$/) do |name|
   expect(Church.last.name).to eql name
 end
 
+Then(/^the church should be destroyed$/) do
+  expect(Church[@church.id]).to be nil
+end
+
 Then(/^the organization should be destroyed$/) do
   expect(Organization[@organization.id]).to be nil
+end
+
+Then(/^the church should not be destroyed$/) do 
+  expect(Church[2]).to be_a(Church)
 end
 
 Then(/^the organization should not be destroyed$/) do

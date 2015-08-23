@@ -41,6 +41,7 @@ Before('@position') do
 end
 
 Before('@organizations, @programs, @seasons') { FactoryGirl.create(:organization, id: 1) }
+Before('@churches') { FactoryGirl.create(:church, id: 2) }
 Before('@programs, @seasons') { FactoryGirl.create(:program, id: 1, organization: Organization[1]) }
 Before('@seasons', '~@bulk') { FactoryGirl.create(:season, id: 1, program: Program[1]) }
 Before('@seasons', '@bulk') { FactoryGirl.create(:program_with_everything, id: 2, organization: Organization[1]) }

@@ -22,6 +22,12 @@ When(/^the client submits a DELETE request to \/organizations\/(\d+) with (admin
   delete "/organizations/#{id}"
 end
 
+When(/^the client submits a DELETE request to \/churches\/(\d+) with (admin|user) credentials$/) do |id, type|
+  @church = Church[id]
+  authorize_with User[type === 'admin' ? 1 : 2]
+  delete "/churches/#{id}"
+end
+
 # Delete Program
 # ==============
 When(/^the client submits a DELETE request to \/programs\/(\d+) with admin credentials$/) do |id|
