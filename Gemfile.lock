@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/danascheider/geofilter
+  revision: 1a68ab50630c0200b8c2dcef7d3b0a71db057b14
+  specs:
+    geofilter (0.0.1)
+      sequel (~> 4.21)
+
 PATH
   remote: .
   specs:
@@ -193,6 +200,7 @@ DEPENDENCIES
   cucumber (~> 2.0)
   cucumber-sinatra (~> 0.5.0)
   factory_girl (~> 4.5)
+  geofilter (~> 0.0.1)!
   json_spec (~> 1.1)
   rack-test (~> 0.6.3)
   rake (~> 10.4)
