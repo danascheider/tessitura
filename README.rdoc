@@ -162,9 +162,9 @@ This app is being developed using a rigorous behavior-driven approach, meaning t
 
 At this point, development is happening on the following git branches. Additional temporary branches may be created and destroyed along the way, particularly if things get messy when adding new features or modifying architecture.
 ==== not_passing
-This is the branch where new tests are written. The code stays here until all the tests pass\*.
-==== refactoring
-This is the branch where passing code gets refactored. Non-passing code should not be committed to +refactoring+.\* After each iteration, both the app and the tests should be refactored.
+This is the branch where new tests are written. The code stays here until all the tests pass\*. Refactoring also happens on this branch
+==== staging
+This is the branch where code gets pushed to verify it is passing before it gets pushed to +master+.
 ==== master
 When code passes, it gets merged to +master+. Non-passing code should not be merged.\*
 
