@@ -26,6 +26,7 @@ require File.expand_path '../routes/routing.rb', __FILE__
 require File.expand_path '../routes/filters.rb', __FILE__
 require File.expand_path '../routes/admin_routes.rb', __FILE__
 require File.expand_path '../routes/fach_routes.rb', __FILE__
+require File.expand_path '../routes/geofilter_routes.rb', __FILE__
 require File.expand_path '../routes/listing_routes.rb', __FILE__
 require File.expand_path '../routes/organization_routes.rb', __FILE__
 require File.expand_path '../routes/church_routes.rb', __FILE__
@@ -48,6 +49,7 @@ class Tessitura < Sinatra::Base
   register Sinatra::Tessitura::Routing::TaskRoutes
   register Sinatra::Tessitura::Routing::UserRoutes
   register Sinatra::Tessitura::Routing::FachRoutes
+  register Sinatra::Tessitura::Routing::GeoFilterRoutes
 
   not_found do 
     [404, '' ]

@@ -53,6 +53,10 @@ Then(/^the JSON response should include all the program's season data$/) do
   expect(last_response.body).to eql @program.seasons.to_json
 end
 
+Then(/^the JSON response should include (\d+) organization(?:s?)$/) do |number|
+  expect(JSON.parse(last_response.body).length).to eql number
+end
+
 Then(/^the response should not include any data$/) do 
   ok_values = [nil, '', 'null', false, "Authorization Required\n"]
   expect(ok_values).to include last_response.body
@@ -94,6 +98,10 @@ end
 
 Then(/^the response should return status (\d{3})$/) do |status|
   expect(last_response.status).to eql status
+end
+
+Then(/^the response status should be (\d{3})$/) do |status|
+  step "the response should return status #{status}"
 end
 
 Then(/^the response should indicate the (?:.*) was deleted successfully$/) do

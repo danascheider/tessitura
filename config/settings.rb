@@ -67,7 +67,7 @@ class Tessitura < Sinatra::Base
   Sequel::Model.plugin :validation_helpers
 
   class Sequel::Dataset
-    def to_json
+    def to_json(opts={})
       all.to_json
     end
   end
