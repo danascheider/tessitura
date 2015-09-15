@@ -6,7 +6,7 @@ describe Organization, organizations: true do
     it { is_expected.to respond_to(:address_1) }
     it { is_expected.to respond_to(:address_2) }
     it { is_expected.to respond_to(:city) }
-    it { is_expected.to respond_to(:region) }
+    it { is_expected.to respond_to(:state) }
     it { is_expected.to respond_to(:postal_code) }
     it { is_expected.to respond_to(:country) }
     it { is_expected.to respond_to(:website) }

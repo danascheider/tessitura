@@ -38,7 +38,7 @@ Feature: Update church profile
   Scenario: User attempts to update church without logging in
     When the client submits a PUT request to /churches/2 with no credentials and:
       """json
-      {"region":"WV"}
+      {"state":"WV"}
       """
-    Then the church's region should not be "WV"
+    Then the church's state should not be "WV"
     And the response should indicate the request was unauthorized
