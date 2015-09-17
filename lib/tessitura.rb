@@ -7,6 +7,7 @@ require 'reactive_extensions/object'
 require 'reactive_extensions/hash'
 require 'reactive_extensions/array'
 require 'json'
+require 'geofilter'
 
 require File.expand_path('../../config/settings', __FILE__)
 
