@@ -1,7 +1,7 @@
 test: &test 
   adapter: mysql2
   host: 127.0.0.1
-  port: 3306
+  port: 3307
   username: tessitura
   password: hunter2
   pool: 5
@@ -10,7 +10,7 @@ test: &test
 production: &production 
   adapter: mysql2
   host: 127.0.0.1
-  port: 3306
+  port: 3307
   username: tessitura 
   password: hunter2
   pool: 5

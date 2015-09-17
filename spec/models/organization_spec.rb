@@ -6,7 +6,7 @@ describe Organization, organizations: true do
     it { is_expected.to respond_to(:address_1) }
     it { is_expected.to respond_to(:address_2) }
     it { is_expected.to respond_to(:city) }
-    it { is_expected.to respond_to(:region) }
+    it { is_expected.to respond_to(:state) }
     it { is_expected.to respond_to(:postal_code) }
     it { is_expected.to respond_to(:country) }
     it { is_expected.to respond_to(:website) }
@@ -24,10 +24,11 @@ describe Organization, organizations: true do
     describe '#to_h' do 
       let(:hash) {
         {
-          id: organization.id,
           name: organization.name,
           website: organization.website,
-          created_at: organization.created_at
+          created_at: organization.created_at,
+          id: organization.id,
+          type: 'Organization'
         }
       }
 
@@ -60,9 +61,9 @@ describe Organization, organizations: true do
       expect(org).not_to be_valid
     end
 
-    it 'is invalid without a web site' do 
+    it 'is valid without a web site' do 
       org.website = nil
-      expect(org).not_to be_valid
+      expect(org).to be_valid
     end
 
     it 'is invalid with web site in a wrong format' do 

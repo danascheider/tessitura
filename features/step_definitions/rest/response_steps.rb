@@ -6,7 +6,8 @@ Then(/^the JSON response should include the (\d+)(?:[a-z]{2}) user's incomplete 
   expect(last_response.body).to eql User[id].tasks.where_not(:status, 'Complete').to_json
 end
 
-Then(/^the JSON response should include all the (\w+)s$/) do |model|
+Then(/^the JSON response should include all the (\w+)(?:e?)s$/) do |model|
+  model = model === 'churche' ? 'church' : model # this feels like such a ridiculous hack
   expect(last_response.body).to eql eval(model.capitalize).all.to_json
 end
 
@@ -39,12 +40,21 @@ Then(/^the JSON response should include the program's fresh seasons$/) do
   expect(last_response.body).to eql seasons.to_json
 end
 
+Then(/^the JSON response should include the church's profile information$/) do 
+  church = @church || @organization
+  expect(last_response.body).to eql church.to_json
+end
+
 Then(/^the JSON response should include the organization's profile information$/) do
   expect(last_response.body).to eql @organization.to_json
 end
 
 Then(/^the JSON response should include all the program's season data$/) do
   expect(last_response.body).to eql @program.seasons.to_json
+end
+
+Then(/^the JSON response should include (\d+) organization(?:s?)$/) do |number|
+  expect(JSON.parse(last_response.body).length).to eql number
 end
 
 Then(/^the response should not include any data$/) do 
@@ -88,6 +98,10 @@ end
 
 Then(/^the response should return status (\d{3})$/) do |status|
   expect(last_response.status).to eql status
+end
+
+Then(/^the response status should be (\d{3})$/) do |status|
+  step "the response should return status #{status}"
 end
 
 Then(/^the response should indicate the (?:.*) was deleted successfully$/) do
