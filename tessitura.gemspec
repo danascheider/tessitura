@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
 
   s.name                      = 'tessitura'
   s.version                   = TessituraPackage::Version::STRING
-  s.date                      = '2015-07-20'
+  s.date                      = '2015-09-17'
   s.summary                   = 'Tessitura task management for opera singers'
   s.authors                   = ['Dana Scheider']
 
@@ -38,7 +38,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '~> 0.10'
   s.add_development_dependency 'rake', '~> 10.4'
   s.add_development_dependency 'json_spec', '~> 1.1'
-  s.add_development_dependency 'cucumber', '~> 2.0'
+  s.add_development_dependency 'cucumber', '~> 2.1'
   s.add_development_dependency 'cucumber-sinatra', '~> 0.5.0'
   s.add_development_dependency 'capybara', '~> 2.4'
   s.add_development_dependency 'rack-test', '~> 0.6.3'
