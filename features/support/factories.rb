@@ -26,6 +26,10 @@ FactoryGirl.define do
         create_list(:program_with_everything, evaluator.program_count, organization: org)
       end
     end
+
+    factory :church do
+      type 'Church'
+    end
   end
 
   factory :program do 

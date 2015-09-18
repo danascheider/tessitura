@@ -6,6 +6,7 @@
 class Organization < Sequel::Model
   one_to_many :programs
   self.plugin :association_dependencies, programs: :destroy
+  self.plugin :single_table_inheritance, :type
 
   # The ++#to_hash++ or ++#to_h++ method returns all non-empty attributes in a hash
   # with symbol keys.
@@ -36,7 +37,7 @@ class Organization < Sequel::Model
 
   def validate
     super
-    validates_presence [:name, :website]
-    validates_format /http(s?)\:\/\/\w+\..*/, :website, message: 'not a valid web site URL'
+    validates_presence [:name]
+    validates_format /http(s?)\:\/\/\w+\..*/, :website, message: 'not a valid web site URL' if website
   end
 end

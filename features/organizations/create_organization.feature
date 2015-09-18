@@ -8,7 +8,7 @@ Feature: Create organization
   Scenario: Admin creates valid organization
     When the client submits a POST request to /organizations with admin credentials and:
       """json
-      {"name":"Chicago Lyric Opera", "website":"http://lyricopera.org"}
+      {"name":"Chicago Lyric Opera"}
       """
     Then a new organization should be created
     And the new organization should be called "Chicago Lyric Opera"

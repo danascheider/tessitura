@@ -1,3 +1,10 @@
+# Create Geofilter
+# ================
+When(/^the client submits a POST request to \/geofilter with user credentials and:$/) do |string|
+  authorize_with User[1]
+  post "/geofilter", string.to_s, 'CONTENT_TYPE' => 'application/json'
+end
+
 # Create Task
 # ===========
 When(/^the client submits a POST request to \/users\/(\d+)\/tasks with the (\d+)(?:[a-z]{2}) user\'s credentials and:$/) do |id1, id2, string|
@@ -38,26 +45,25 @@ end
 
 # Create Organization
 # ===================
-When(/^the client submits a POST request to \/organizations with admin credentials and:$/) do |string|
-  @count = Organization.count
+When(/^the client submits a POST request to (\/organizations|\/churches) with admin credentials and:$/) do |path, string|
+  @count = path.match(/churches/) ? Church.count : Organization.count
   authorize_with(User[1])
-  post '/organizations', string.to_s, 'CONTENT_TYPE' => 'application/json'
+  post path, string.to_s, 'CONTENT_TYPE' => 'application/json'
 end
 
-When(/^the client submits a POST request to \/organizations with no credentials and:$/) do |string|
-  @count = Organization.count 
+When(/^the client submits a POST request to (\/organizations|\/churches) with no credentials and:$/) do |path, string|
+  @count = path.match(/church/) ? Church.count : Organization.count
   post 'organizations', string.to_s, 'CONTENT_TYPE' => 'application/json'
 end
 
-When(/^the client submits a POST request to \/organizations with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |uid, string|
-  @count = Organization.count
+When(/^the client submits a POST request to (\/organizations|\/churches) with the (\d+)(?:[a-z]{2}) user's credentials and:$/) do |path, uid, string|
+  @count = path.match(/church/) ? Church.count : Organization.count
   authorize_with(User[uid])
-  post '/organizations', string.to_s, 'CONTENT_TYPE' => 'application/json'
+  post path, string.to_s, 'CONTENT_TYPE' => 'application/json'
 end
 
 # Create Program
 # ==============
-
 When(/^the client submits a POST request to \/organizations\/(\d+)\/programs with (.*) credentials and:$/) do |id, type, string|
   @count= Program.count
   authorize_with User[type === 'admin' ? 1 : 2]

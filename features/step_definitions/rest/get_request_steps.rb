@@ -44,18 +44,18 @@ When(/^the client submits a GET request to its individual endpoint with (.*) cre
   get "/organizations/#{@organization.id}"
 end
 
-When(/^the client submits a GET request to \/organizations\/(\d+) with (user|admin) credentials$/) do |id, type|
-  @organization = Organization[id]
+When(/^the client submits a GET request to \/(organizations|churches)\/(\d+) with (user|admin) credentials$/) do |path, id, type|
+  @organization = path.match(/church/) ? Church[id] : Organization[id]
   authorize_with User[type === 'admin' ? 1 : 2]
-  get "/organizations/#{id}"
+  get "/#{path}/#{id}"
 end
 
 # View All Organizations
 # ======================
 
-When(/^the client submits a GET request to \/organizations with user credentials$/) do
+When(/^the client submits a GET request to \/(organizations|churches) with user credentials$/) do |path|
   authorize_with User[2]
-  get '/organizations'
+  get "/#{path}"
 end
 
 # View Program
