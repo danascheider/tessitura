@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
 
   s.name                      = 'tessitura'
   s.version                   = TessituraPackage::Version::STRING
-  s.date                      = '2015-09-17'
+  s.date                      = '2015-10-18'
   s.summary                   = 'Tessitura task management for opera singers'
   s.authors                   = ['Dana Scheider']
 
