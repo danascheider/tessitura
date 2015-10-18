@@ -60,6 +60,7 @@ class Tessitura < Sinatra::Base
   end
 
   get '/ping' do 
+    Sequel.extension :migration, :core_extensions
     db_writable = false
 
     DB.transaction(rollback: :always) do 
