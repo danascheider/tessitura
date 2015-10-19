@@ -9,7 +9,6 @@ require File.expand_path '../../lib/helpers/general_helper_methods.rb', __FILE__
 require File.expand_path '../../lib/helpers/log_helper.rb', __FILE__
 
 Dir['./config/**/*.rb'].each {|f| require f }
-Dir['./lib/*.rb'].each {|f| require f }
 
 DB_YAML_FILE = ENV['DB_YAML_FILE'] || File.expand_path('../database.yml', __FILE__)
 
@@ -58,6 +57,8 @@ class Tessitura < Sinatra::Base
   db_loggers << Logger.new(STDOUT) if ENV['LOG'] === true
 
   DB = Sequel.connect(database, loggers: db_loggers)
+
+  Dir['./lib/*.rb'].each {|f| require f }
 
   # ================================== #
   # Sequel settings and modifications  #
